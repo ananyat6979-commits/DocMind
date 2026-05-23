@@ -13,6 +13,7 @@ The loop:
 Building this from scratch is intentional: it shows you understand what
 LangChain is actually doing under the hood, which matters in MLE interviews.
 """
+from pyexpat.errors import messages
 import re
 import time
 import logging
@@ -75,11 +76,20 @@ class ReActAgent:
 
             logger.debug(f"LLM response:\n{response_text}")
 
-            # Check if we have a Final Answer
+            # Check if we have a Final Answer, but only allow it if we've retrieved something
             final_match = FINAL_ANSWER_PATTERN.search(response_text)
             if final_match:
-                final_answer = final_match.group(1).strip()
-                break
+                if all_sources or iteration >= self.max_iterations - 1:
+                    final_answer = final_match.group(1).strip()
+                    break
+            else:
+                # Model tried to answer without searching, force a retrieval
+                messages.append({"role": "assistant", "content": response_text})
+                messages.append({
+                    "role": "user",
+                    "content": "You must call search_documents before providing a Final Answer. Search the document corpus first."
+                })
+            continue
 
             # Check if we have an Action to execute
             action_match = ACTION_PATTERN.search(response_text)
