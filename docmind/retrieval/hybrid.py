@@ -20,7 +20,7 @@ from docmind.models import Chunk, SearchResult
 from docmind.retrieval.dense import DenseRetriever
 from docmind.retrieval.sparse import SparseRetriever
 from docmind.retrieval.reranker import CrossEncoderReranker
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 

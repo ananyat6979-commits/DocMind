@@ -22,7 +22,7 @@ import logging
 import numpy as np
 from typing import List
 from docmind.models import Document, Chunk
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 _embedding_model = None  # module-level singleton; loaded lazily
