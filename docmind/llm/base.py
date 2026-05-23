@@ -5,6 +5,6 @@ from typing import List, Dict
 
 class BaseLLM(ABC):
     @abstractmethod
-    def complete(self, messages: List[Dict[str, str]], **kwargs) -> str:
+    def complete(self, messages: List[Dict[str, str]], stop=None, **kwargs) -> str:
         """Send a list of messages and return the assistant reply as a string."""
         ...
