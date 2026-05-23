@@ -31,7 +31,10 @@ from docmind.retrieval.hybrid import HybridRetriever
 logger = logging.getLogger(__name__)
 
 # Regex patterns for parsing LLM output
-ACTION_PATTERN = re.compile(r'Action:\s*(\w+)\("([^"]+)"\)', re.IGNORECASE)
+ACTION_PATTERN = re.compile(
+    r'Action:\s*(\w+)\(["\']?([^"\')\n]+)["\']?\)',
+    re.IGNORECASE
+)
 FINAL_ANSWER_PATTERN = re.compile(r'Final Answer:\s*(.*)', re.DOTALL | re.IGNORECASE)
 
 
@@ -71,7 +74,8 @@ class ReActAgent:
             logger.debug(f"ReAct iteration {iteration + 1}/{self.max_iterations}")
 
             # Get next step from LLM
-            response_text = self.llm.complete(messages)
+            response_text = self.llm.complete(messages, stop=["\nObservation:", "Observation:"])
+            print(f"\n[DEBUG LLM OUTPUT]\n{response_text}\n[/DEBUG]\n")
             reasoning_trace.append(response_text)
 
             logger.debug(f"LLM response:\n{response_text}")

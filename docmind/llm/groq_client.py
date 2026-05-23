@@ -22,7 +22,7 @@ class GroqLLM(BaseLLM):
         self._client = Groq(api_key=CONFIG.llm.groq_api_key)
         self._model = CONFIG.llm.groq_model
 
-    def complete(self, messages: List[Dict[str, str]], **kwargs) -> str:
+    def complete(self, messages, stop=None, **kwargs) -> str:
         temperature = kwargs.get("temperature", CONFIG.llm.temperature)
         max_tokens = kwargs.get("max_tokens", CONFIG.llm.max_tokens)
 
@@ -31,6 +31,7 @@ class GroqLLM(BaseLLM):
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
+            stop=stop,
         )
         return response.choices[0].message.content
 
