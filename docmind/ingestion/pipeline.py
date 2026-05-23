@@ -15,7 +15,7 @@ from tqdm import tqdm
 from docmind.models import Document, Chunk
 from docmind.ingestion.loader import load_document, load_directory
 from docmind.ingestion.chunker import chunk_document
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 

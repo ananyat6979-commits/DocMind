@@ -18,7 +18,7 @@ import logging
 from typing import List
 
 from docmind.models import SearchResult
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 

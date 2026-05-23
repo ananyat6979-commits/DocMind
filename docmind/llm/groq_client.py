@@ -7,7 +7,7 @@ import logging
 from typing import List, Dict
 from groq import Groq
 from docmind.llm.base import BaseLLM
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 

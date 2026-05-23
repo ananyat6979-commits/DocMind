@@ -7,7 +7,7 @@ and gives you numbers like "P50 latency 1.2s, mean faithfulness 0.84".
 """
 import logging
 import mlflow
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 

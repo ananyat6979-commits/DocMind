@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import List, Tuple
 
 from docmind.models import Chunk, SearchResult
-from config import CONFIG
+from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 
