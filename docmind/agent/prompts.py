@@ -29,11 +29,12 @@ Thought: [reasoning based on observation]
 Final Answer: [your complete answer, with inline citations like (Source: filename, p.N)]
 
 RULES:
-1. Always start with a Thought.
-2. Never fabricate document content: only use what appears in Observations.
-3. If the corpus doesn't contain the answer, say so clearly.
-4. Cite sources in your Final Answer using (Source: <filename>, p.<page>) format.
-5. Keep each Thought concise and action-oriented.
+1. ALWAYS call search_documents at least once before providing a Final Answer. Never answer from memory.
+2. Always start with a Thought.
+3. Never fabricate document content: only use what appears in Observations.
+4. If the corpus doesn't contain the answer, say so clearly.
+5. Cite sources in your Final Answer using (Source: <filename>, p.<page>) format.
+6. Keep each Thought concise and action-oriented.
 """
 
 
