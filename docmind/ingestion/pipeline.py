@@ -81,47 +81,45 @@ def ingest(
     rebuild_index: bool = False,
 ) -> List[Chunk]:
     """
-    Full ingestion pipeline for a file or directory.
-
-    Steps:
-      1. Load raw Documents.
-      2. Chunk each Document semantically.
-      3. Save chunks to SQLite.
-      4. Build/update the FAISS and BM25 indexes (done by retrieval layer).
-
-    Returns the list of all Chunk objects ingested in this run.
+    Full ingestion pipeline. Skips chunking if indexes already exist
+    and rebuild_index=False — this makes repeated runs instant.
     """
+    from docmind.retrieval.dense import FAISS_INDEX_PATH
+    from docmind.retrieval.hybrid import HybridRetriever
+
     path = Path(path)
+
+    # Fast path: indexes exist and we're not rebuilding
+    if not rebuild_index and FAISS_INDEX_PATH.exists():
+        logger.info("Indexes already exist. Skipping ingestion. Use --rebuild to re-ingest.")
+        conn = _init_db()
+        existing_chunks = load_all_chunks(conn)
+        conn.close()
+        return existing_chunks
 
     # Load
     logger.info(f"Loading documents from: {path}")
-    if path.is_dir():
-        documents = load_directory(path)
-    else:
-        documents = load_document(path)
+    documents = load_directory(path) if path.is_dir() else load_document(path)
 
     if not documents:
-        logger.warning("No documents loaded — check file format and content")
+        logger.warning("No documents loaded.")
         return []
 
     # Chunk
     all_chunks: List[Chunk] = []
     for doc in tqdm(documents, desc="Chunking", unit="doc"):
-        chunks = chunk_document(doc)
-        all_chunks.extend(chunks)
+        all_chunks.extend(chunk_document(doc))
 
     logger.info(f"Produced {len(all_chunks)} chunks from {len(documents)} documents")
 
-    # Persist chunk metadata to SQLite
+    # Persist
     conn = _init_db()
     _save_chunks(conn, all_chunks)
     conn.close()
 
-    # Build retrieval indexes
-    # Import here to avoid circular imports
-    from docmind.retrieval.hybrid import HybridRetriever
+    # Build indexes
     retriever = HybridRetriever()
-    retriever.build_index(all_chunks, force_rebuild=rebuild_index)
+    retriever.build_index(all_chunks, force_rebuild=True)
 
     logger.info("Ingestion complete.")
     return all_chunks

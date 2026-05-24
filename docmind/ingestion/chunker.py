@@ -23,21 +23,13 @@ import numpy as np
 from typing import List
 from docmind.models import Document, Chunk
 from docmind.config import CONFIG
+from docmind.embeddings import get_embedding_model
 
 logger = logging.getLogger(__name__)
 _embedding_model = None  # module-level singleton; loaded lazily
 
 
-def _get_model():
-    global _embedding_model
-    if _embedding_model is None:
-        from sentence_transformers import SentenceTransformer
-        logger.info(f"Loading embedding model '{CONFIG.embedding.model_name}' (one-time)")
-        _embedding_model = SentenceTransformer(
-            CONFIG.embedding.model_name,
-            device=CONFIG.embedding.device,
-        )
-    return _embedding_model
+
 
 
 def _tokenize(text: str) -> List[str]:
@@ -55,31 +47,22 @@ def _tokenize(text: str) -> List[str]:
 
 
 def _find_breakpoints(sentences: List[str]) -> List[int]:
-    """
-    Returns indices i such that a new chunk should start AFTER sentence[i].
-    Empty list means the whole content is one chunk.
-    """
     if len(sentences) < 2:
         return []
 
-    model = _get_model()
-    # Normalize embeddings → dot product equals cosine similarity
+    model = get_embedding_model()   # was: _get_model()
     embeddings = model.encode(
         sentences,
         batch_size=CONFIG.embedding.batch_size,
         normalize_embeddings=True,
         show_progress_bar=False,
     )
-
-    # Pairwise similarity between consecutive sentences
     similarities = np.array([
         float(np.dot(embeddings[i], embeddings[i + 1]))
         for i in range(len(embeddings) - 1)
     ])
-
-    distances = 1.0 - similarities  # high distance = topic shift
+    distances = 1.0 - similarities
     threshold = float(np.percentile(distances, CONFIG.chunker.breakpoint_percentile))
-
     return [i for i, d in enumerate(distances) if d >= threshold]
 
 
