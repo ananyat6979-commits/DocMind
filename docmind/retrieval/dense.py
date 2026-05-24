@@ -11,6 +11,7 @@ import numpy as np
 from pathlib import Path
 from typing import List, Tuple
 
+from docmind.embeddings import get_embedding_model
 from docmind.models import Chunk, SearchResult
 from docmind.config import CONFIG
 
@@ -24,16 +25,9 @@ class DenseRetriever:
     def __init__(self):
         self._index = None
         self._chunks: List[Chunk] = []
-        self._model = None
+        
 
-    def _get_model(self):
-        if self._model is None:
-            from sentence_transformers import SentenceTransformer
-            self._model = SentenceTransformer(
-                CONFIG.embedding.model_name,
-                device=CONFIG.embedding.device,
-            )
-        return self._model
+   
 
     def build(self, chunks: List[Chunk]) -> None:
         """Embed all chunks and build a FAISS index. Persists to disk."""
@@ -43,7 +37,7 @@ class DenseRetriever:
             raise ValueError("Cannot build index from empty chunk list")
 
         logger.info(f"Embedding {len(chunks)} chunks for FAISS index...")
-        model = self._get_model()
+        model = self._get_embedding_model()
         texts = [c.content for c in chunks]
 
         embeddings = model.encode(
@@ -88,7 +82,7 @@ class DenseRetriever:
                 raise RuntimeError("FAISS index not found. Run ingestion first.")
 
         top_k = top_k or CONFIG.retriever.top_k_dense
-        model = self._get_model()
+        model = self._get_embedding_model()
 
         query_embedding = model.encode(
             [query],
