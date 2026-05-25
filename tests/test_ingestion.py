@@ -1,4 +1,4 @@
-"""Basic smoke tests for the ingestion pipeline."""
+"""Tests for ingestion pipeline."""
 import pytest
 from pathlib import Path
 import tempfile
@@ -12,7 +12,6 @@ def test_load_text_file():
     with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
         f.write("This is a test document. It has multiple sentences. Here is a third one.")
         tmp_path = Path(f.name)
-
     docs = load_text(tmp_path)
     assert len(docs) == 1
     assert "test document" in docs[0].content
@@ -39,10 +38,24 @@ def test_chunk_document_returns_chunks():
 
 
 def test_chunk_preserves_content():
-    """Verify no content is lost during chunking (roughly)."""
     content = "Sentence one. Sentence two. Sentence three. " * 10
     doc = Document(content=content, source="test", metadata={})
     chunks = chunk_document(doc)
     recovered = " ".join(c.content for c in chunks)
-    # All original words should appear somewhere in the chunks
     assert "Sentence one" in recovered
+
+
+def test_document_has_required_fields():
+    doc = Document(content="hello world", source="test.txt", metadata={})
+    assert doc.doc_id is not None
+    assert doc.content == "hello world"
+
+
+def test_chunk_has_required_fields():
+    doc = Document(content="First sentence. Second sentence. Third sentence.", source="test.txt", metadata={})
+    chunks = chunk_document(doc)
+    for chunk in chunks:
+        assert chunk.chunk_id is not None
+        assert chunk.doc_id == doc.doc_id
+        assert chunk.source == "test.txt"
+        assert len(chunk.content) > 0
