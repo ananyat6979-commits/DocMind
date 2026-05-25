@@ -17,16 +17,18 @@ DocMind doesn't just stuff your document into a context window. It implements a 
 
 ## Architecture
 
+
+```
 Document (PDF/DOCX/TXT)
-│
-▼
+        │
+        ▼
 ┌─────────────────┐
 │  Semantic        │  NLTK sentence tokenization
 │  Chunker         │  bge-small-en-v1.5 embeddings
 │                  │  Cosine similarity breakpoints
 └────────┬────────┘
-│ Chunks
-▼
+         │ Chunks
+         ▼
 ┌─────────────────┐    ┌─────────────────┐
 │  FAISS Dense     │    │  BM25 Sparse     │
 │  Retriever       │    │  Retriever       │
@@ -34,7 +36,7 @@ Document (PDF/DOCX/TXT)
 └────────┬────────┘    └────────┬────────┘
 │                      │
 └──────────┬───────────┘
-	      ▼
+	         ▼
 ┌─────────────────┐
 │  RRF Fusion      │  Reciprocal Rank Fusion
 │  (k=60)          │  Cormack et al. 2009
@@ -54,6 +56,7 @@ Document (PDF/DOCX/TXT)
 │
 ▼
 Cited answer with source pages
+```
 
 ## Why each component matters
 
@@ -140,25 +143,26 @@ python scripts/evaluate.py --testset data/testset.json
 
 ## Project structure
 
+```
 DocMind/
 ├── docmind/
 │   ├── embeddings.py       # Shared model singleton
-│   ├── models.py           # Core data types (Document, Chunk, SearchResult)
+│   ├── models.py           # Core data types
 │   ├── config.py           # Central configuration
 │   ├── ingestion/
 │   │   ├── loader.py       # PDF, DOCX, TXT/MD loaders
 │   │   ├── chunker.py      # Semantic chunker
-│   │   └── pipeline.py     # End-to-end ingestion orchestration
+│   │   └── pipeline.py     # Ingestion orchestration
 │   ├── retrieval/
 │   │   ├── dense.py        # FAISS retriever
 │   │   ├── sparse.py       # BM25 retriever
 │   │   ├── reranker.py     # Cross-encoder reranker
-│   │   └── hybrid.py       # RRF fusion + pipeline orchestration
+│   │   └── hybrid.py       # RRF fusion + orchestration
 │   ├── llm/
 │   │   ├── base.py         # Abstract LLM interface
 │   │   └── groq_client.py  # Groq implementation
 │   ├── agent/
-│   │   ├── prompts.py      # ReAct system prompt + formatters
+│   │   ├── prompts.py      # ReAct system prompt
 │   │   └── react.py        # ReAct loop (no LangChain)
 │   ├── api/
 │   │   └── main.py         # FastAPI endpoints
@@ -171,9 +175,11 @@ DocMind/
 │   └── evaluate.py         # RAGAS eval runner
 ├── tests/
 │   ├── test_ingestion.py
-│   └── test_retrieval.py
+│   ├── test_retrieval.py
+│   └── test_models.py
 ├── app.py                  # Streamlit UI
 └── requirements.txt
+```
 ---
 
 ## Evaluation
