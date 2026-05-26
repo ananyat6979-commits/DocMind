@@ -37,7 +37,7 @@ class DenseRetriever:
             raise ValueError("Cannot build index from empty chunk list")
 
         logger.info(f"Embedding {len(chunks)} chunks for FAISS index...")
-        model = self._get_embedding_model()
+        model = get_embedding_model()
         texts = [c.content for c in chunks]
 
         embeddings = model.encode(
@@ -82,7 +82,7 @@ class DenseRetriever:
                 raise RuntimeError("FAISS index not found. Run ingestion first.")
 
         top_k = top_k or CONFIG.retriever.top_k_dense
-        model = self._get_embedding_model()
+        model = get_embedding_model()
 
         query_embedding = model.encode(
             [query],
