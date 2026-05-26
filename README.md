@@ -15,6 +15,12 @@ DocMind doesn't just stuff your document into a context window. It implements a 
 
 ---
 
+## Demo
+
+![DocMind demo](assets/demo.png)
+
+---
+
 ## Architecture
 
 
