@@ -21,20 +21,22 @@ st.markdown("""
 .main-header { font-size: 2.2rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0; }
 .sub-header  { font-size: 1rem; color: #666; margin-top: 0; margin-bottom: 2rem; }
 .source-card {
-    background: #f8f9ff;
+    background: var(--secondary-background-color, #f8f9ff);
     border-left: 4px solid #4361ee;
     padding: 0.8rem 1rem;
     margin: 0.4rem 0;
     border-radius: 0 8px 8px 0;
     font-size: 0.88rem;
+    color: var(--text-color, #262730);
 }
 .answer-box {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
+    background: var(--background-color, #ffffff);
+    border: 1px solid var(--secondary-background-color, #e0e0e0);
     border-radius: 10px;
     padding: 1.2rem 1.5rem;
     margin: 1rem 0;
     line-height: 1.7;
+    color: var(--text-color, #262730);
 }
 .metric-chip {
     display: inline-block;
@@ -62,7 +64,7 @@ if "history" not in st.session_state:
 # ── Header ─────────────────────────────────────────────────────────────────
 st.markdown('<p class="main-header">🧠 DocMind</p>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="sub-header">Intelligent document intelligence — '
+    '<p class="sub-header">Intelligent document intelligence '
     'hybrid retrieval · ReAct agent · cross-encoder reranking</p>',
     unsafe_allow_html=True
 )
