@@ -94,10 +94,26 @@ class ReActAgent:
             })
 
         if final_answer is None:
-            final_answer = (
-                reasoning_trace[-1] if reasoning_trace
-                else "I was unable to find a satisfactory answer in the document corpus."
-            )
+            # Try to extract Final Answer from the last reasoning step
+            if reasoning_trace:
+                last = reasoning_trace[-1]
+                last_match = FINAL_ANSWER_PATTERN.search(last)
+                if last_match:
+                    final_answer = last_match.group(1).strip()
+            elif all_sources:
+                # We have sources but no clean Final Answer — synthesize from last thought
+                # Strip out Action: lines, keep only Thought content
+                thought_lines = [
+                    line for line in last.split('\n')
+                    if not line.strip().startswith('Action:')
+                    and not line.strip().startswith('Thought:')
+                    and line.strip()
+                ]
+                final_answer = ' '.join(thought_lines).strip() or last
+            else:
+                final_answer = "I was unable to find a satisfactory answer in the document corpus."
+        else:
+            final_answer = "I was unable to find a satisfactory answer in the document corpus."
 
         latency_ms = (time.time() - start_time) * 1000
         logger.info(f"ReAct completed in {latency_ms:.0f}ms, {iteration + 1} iterations")
