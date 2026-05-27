@@ -27,3 +27,13 @@ def test_agent_response_fields():
     assert resp.answer == "The answer is 42."
     assert len(resp.sources) == 1
     assert resp.latency_ms == 1234.5
+
+
+def test_chunk_metadata_preserved():
+    doc = Document(
+        content="test",
+        source="test.pdf",
+        metadata={"filename": "test.pdf", "page": 3}
+    )
+    assert doc.metadata["page"] == 3
+    assert doc.metadata["filename"] == "test.pdf"

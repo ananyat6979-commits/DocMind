@@ -161,8 +161,18 @@ with col_main:
             st.markdown(f"**Q: {q}**")
 
             # Answer
+            # Strip any leaked Thought:/Action: lines from the displayed answer
+            raw = r.answer or "I was unable to find a satisfactory answer in the document corpus."
+            clean_answer = '\n'.join(
+                line for line in raw.split('\n')
+                if not line.strip().startswith(('Thought:', 'Action:', 'Observation:'))
+            ).strip()
+            if not clean_answer:
+                clean_answer = raw
+            if not clean_answer:
+                clean_answer = r.answer  # fallback to raw if stripping removed everything
             st.markdown(
-                f'<div class="answer-box">{r.answer}</div>',
+                f'<div class="answer-box">{clean_answer}</div>',
                 unsafe_allow_html=True
             )
 
@@ -215,6 +225,8 @@ with col_sidebar:
         latencies = [h["response"].latency_ms for h in st.session_state.history]
         avg_lat = sum(latencies) / len(latencies)
         st.metric("Questions asked", len(st.session_state.history))
-        st.metric("Avg latency", f"{avg_lat/1000:.1f}s")
+        actual_label = "Avg latency (incl. rate limit waits)"
+        st.metric(actual_label, f"{avg_lat/1000:.1f}s")
+        st.caption("*Groq free tier: ~1-3s query time + rate limit waits. Paid tier: consistent <3s.")
         total_sources = sum(len(h["response"].sources) for h in st.session_state.history)
         st.metric("Total sources retrieved", total_sources)
