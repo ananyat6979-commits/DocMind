@@ -92,7 +92,25 @@ class ReActAgent:
                 "role": "user",
                 "content": "Use the search_documents tool to find relevant information, then provide your Final Answer."
             })
-
+        # If we have sources but exhausted iterations without Final Answer,
+        # make one explicit synthesis call without a stop sequence
+        if final_answer is None and all_sources:
+            synthesis_prompt = (
+                "Based on your research so far, provide your Final Answer now. "
+                "You must begin your response with 'Final Answer:' and cite sources."
+            )
+            messages.append({"role": "user", "content": synthesis_prompt})
+            synthesis_response = self.llm.complete(messages)  # no stop sequence
+            reasoning_trace.append(synthesis_response)
+            final_match = FINAL_ANSWER_PATTERN.search(synthesis_response)
+            if final_match:
+                final_answer = final_match.group(1).strip()
+            else:
+                # Strip reasoning lines and use whatever the model said
+                final_answer = '\n'.join(
+                    line for line in synthesis_response.split('\n')
+                    if not line.strip().startswith(('Thought:', 'Action:', 'Observation:'))
+                ).strip() or synthesis_response
         if final_answer is None:
             # Try to extract Final Answer from the last reasoning step
             if reasoning_trace:
