@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is the main thesis of The Refrigeration Problem?",
+    "ground_truth": "The Refrigeration Problem is a thermodynamic audit of civilization's hidden telos, presenting five experiments with real empirical data to test its claims."
+  },
+  {
+    "question": "How many experiments are presented in the document?",
+    "ground_truth": "Five experiments are presented."
+  },
+  {
+    "question": "What kind of data does the document use?",
+    "ground_truth": "The document uses real empirical data produced by Python scripts, with all findings falsifiable."
+  },
+  {
+    "question": "What does CAPEX vs federal infrastructure refer to in the document?",
+    "ground_truth": "It refers to a comparison between hyperscaler capital expenditure and US federal infrastructure spending, cited as 1.31x in 2024."
+  },
+  {
+    "question": "What is meant by neutral nations mobilizing in the document?",
+    "ground_truth": "It refers to 7 nations with low or no geopolitical rivalry motive being the strongest attractor in the dataset."
+  }
+]

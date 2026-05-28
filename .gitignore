@@ -10,3 +10,7 @@ mlruns/
 .DS_Store
 venv/
 .venv/
+
+data/*
+!data/testset.json
+!data/.gitkeep
