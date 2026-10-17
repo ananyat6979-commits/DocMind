@@ -4,9 +4,12 @@ Usage: python scripts/demo.py --doc data/your_document.pdf
 """
 import argparse
 import logging
+import sys
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s - %(message)s")
 
 from docmind.ingestion.pipeline import ingest
 from docmind.agent.react import ReActAgent
@@ -19,16 +22,17 @@ def main():
     args = parser.parse_args()
 
     print(f"\n{'='*60}")
-    print("DocMind — Intelligent Document Intelligence")
+    print("DocMind - Intelligent Document Intelligence")
     print(f"{'='*60}\n")
 
     # Ingest
     print(f"Ingesting: {args.doc}")
-    chunks = ingest(args.doc, rebuild_index=args.rebuild)
-    print(f"✓ Ingested {len(chunks)} semantic chunks\n")
+    report = ingest(args.doc, rebuild_index=args.rebuild)
+    print(f"Ingested {report.chunks_added} new chunks ({report.n_cached} files already cached)\n")
 
     # Interactive Q&A
     agent = ReActAgent()
+    file_ids = report.file_ids or None
     print("Ask questions about your document. Type 'quit' to exit.\n")
 
     while True:
@@ -39,9 +43,11 @@ def main():
             continue
 
         print("\nThinking...\n")
-        response = agent.run(question)
+        response = agent.run(question, file_ids=file_ids)
 
         print(f"Answer: {response.answer}\n")
+        if response.needs_review:
+            print(f"[flagged for human review: {', '.join(response.review_reasons)}]\n")
         print(f"Sources ({len(response.sources)}):")
         for s in response.sources:
             meta = s.chunk.metadata
