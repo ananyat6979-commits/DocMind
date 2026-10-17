@@ -1,33 +1,17 @@
-# Embeddings and retrieval
-sentence-transformers>=2.6.0
+# Runtime only (app, API, CLI). Light enough for a laptop or a free notebook.
+# CPU-only torch is much smaller on Windows/Linux:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+sentence-transformers>=2.6.0,<6
 faiss-cpu>=1.7.4
-rank-bm25>=0.2.2
-
-# Document parsing
-pdfplumber>=0.10.0
-python-docx>=1.0.0
-
-# LLM
-groq>=0.9.0
-
-# API
-fastapi>=0.110.0
-uvicorn[standard]>=0.29.0
-pydantic>=2.0.0
-
-# Evaluation
-ragas>=0.1.14
-datasets>=2.18.0
-
-# Tracking
-mlflow>=2.12.0
-
-# Utilities
-numpy>=1.24.0
-scipy>=1.11.0
-nltk>=3.8.0
-tqdm>=4.66.0
-loguru>=0.7.0
-python-dotenv>=1.0.0
-httpx>=0.27.0
-streamlit>=1.33.0
+numpy>=1.24
+nltk>=3.8
+pdfplumber>=0.10
+python-docx>=1.0
+groq>=0.9
+fastapi>=0.110
+python-multipart>=0.0.9
+uvicorn[standard]>=0.29
+pydantic>=2.0
+streamlit>=1.33
+python-dotenv>=1.0
+tqdm>=4.66
