@@ -1,232 +1,252 @@
 """
-DocMind Streamlit UI.
-Run with: streamlit run app.py
+DocMind Streamlit UI.   Run: streamlit run app.py
+
+Fixes vs the original:
+  * Multiple documents live in one library; uploading a second file no longer
+    reuses the first file's index. You choose which documents to search.
+  * "Rebuild index" is a button, not a sticky checkbox (the checkbox re-ingested
+    and wiped history on every rerun).
+  * Model output is rendered as markdown, never as raw HTML.
+  * Flagged answers enter a human review queue (Review tab).
+  * Every query, feedback and time estimate is logged for the pilot.
 """
-import streamlit as st
-import tempfile
-import shutil
+import hmac
+import hashlib
+import os
+import uuid
 from pathlib import Path
-import time
 
-st.set_page_config(
-    page_title="DocMind",
-    page_icon="🧠",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+import streamlit as st
 
-# ── Styling ────────────────────────────────────────────────────────────────
-st.markdown("""
-<style>
-.main-header { font-size: 2.2rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0; }
-.sub-header  { font-size: 1rem; color: #666; margin-top: 0; margin-bottom: 2rem; }
-.source-card {
-    background: var(--secondary-background-color, #f8f9ff);
-    border-left: 4px solid #4361ee;
-    padding: 0.8rem 1rem;
-    margin: 0.4rem 0;
-    border-radius: 0 8px 8px 0;
-    font-size: 0.88rem;
-    color: var(--text-color, #262730);
-}
-.answer-box {
-    background: var(--background-color, #ffffff);
-    border: 1px solid var(--secondary-background-color, #e0e0e0);
-    border-radius: 10px;
-    padding: 1.2rem 1.5rem;
-    margin: 1rem 0;
-    line-height: 1.7;
-    color: var(--text-color, #262730);
-}
-.metric-chip {
-    display: inline-block;
-    background: #e8f4fd;
-    color: #1565c0;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 0.78rem;
-    margin-right: 6px;
-}
-.stAlert { border-radius: 8px; }
-</style>
-""", unsafe_allow_html=True)
+from docmind.config import CONFIG
+from docmind.ingestion.loader import LOADERS
+from docmind.ingestion.pipeline import ingest
+from docmind.review.store import ReviewStore
+from docmind.store import CorpusStore
+from docmind.telemetry.events import EventLog
 
+st.set_page_config(page_title="DocMind", page_icon="🧠", layout="wide", initial_sidebar_state="expanded")
 
-# ── Session state ──────────────────────────────────────────────────────────
-if "agent" not in st.session_state:
-    st.session_state.agent = None
-if "ingested_file" not in st.session_state:
-    st.session_state.ingested_file = None
-if "history" not in st.session_state:
-    st.session_state.history = []
-
-
-# ── Header ─────────────────────────────────────────────────────────────────
-st.markdown('<p class="main-header">🧠 DocMind</p>', unsafe_allow_html=True)
-st.markdown(
-    '<p class="sub-header">Intelligent document intelligence '
-    'hybrid retrieval · ReAct agent · cross-encoder reranking</p>',
-    unsafe_allow_html=True
-)
-
-col_main, col_sidebar = st.columns([2, 1])
-
-# ── Sidebar: document ingestion ────────────────────────────────────────────
-with st.sidebar:
-    st.header("📄 Document")
-
-    uploaded = st.file_uploader(
-        "Upload a document",
-        type=["pdf", "docx", "txt", "md"],
-        help="Supported formats: PDF, DOCX, TXT, Markdown"
-    )
-
-    rebuild = st.checkbox("Rebuild index", value=False,
-                          help="Force re-ingestion even if index exists")
-
-    if uploaded:
-        if (st.session_state.ingested_file != uploaded.name) or rebuild:
-            with st.spinner(f"Ingesting {uploaded.name}..."):
-                # Save upload to data/ dir
-                data_dir = Path("data")
-                data_dir.mkdir(exist_ok=True)
-                save_path = data_dir / uploaded.name
-
-                with open(save_path, "wb") as f:
-                    f.write(uploaded.getbuffer())
-
-                try:
-                    from docmind.ingestion.pipeline import ingest
-                    from docmind.agent.react import ReActAgent
-                    from docmind.retrieval.hybrid import HybridRetriever
-
-                    chunks = ingest(save_path, rebuild_index=rebuild)
-                    retriever = HybridRetriever()
-                    st.session_state.agent = ReActAgent(retriever=retriever)
-                    st.session_state.ingested_file = uploaded.name
-                    st.session_state.history = []
-
-                    st.success(f"✓ Ingested **{len(chunks) or '(cached)'}** chunks")
-                except Exception as e:
-                    st.error(f"Ingestion failed: {e}")
+# Password gate. Set DOCMIND_APP_PASSWORD before exposing the app through any tunnel or host:
+# otherwise anyone with the URL can spend your Groq quota and read every uploaded document.
+_APP_PASSWORD = os.getenv("DOCMIND_APP_PASSWORD", "")
+if _APP_PASSWORD and not st.session_state.get("authed"):
+    st.title("DocMind")
+    entered = st.text_input("Password", type="password", key="app_pw")
+    if entered:
+        if hmac.compare_digest(entered.encode(), _APP_PASSWORD.encode()):
+            st.session_state.authed = True
+            st.rerun()
         else:
-            st.success(f"✓ **{uploaded.name}** loaded")
+            st.error("Wrong password.")
+    st.stop()
+
+STATUS_BADGE = {
+    "auto_approved": "Auto-approved",
+    "pending": "Awaiting human review",
+    "approved": "Approved by reviewer",
+    "edited": "Corrected by reviewer",
+    "rejected": "Rejected by reviewer",
+}
+
+
+@st.cache_resource
+def get_services():
+    from docmind.agent.react import ReActAgent
+    from docmind.retrieval.hybrid import HybridRetriever
+    store = CorpusStore()
+    return {"store": store, "agent": ReActAgent(retriever=HybridRetriever(store)),
+            "reviews": ReviewStore(), "events": EventLog()}
+
+
+svc = get_services()
+store, agent, reviews, events = svc["store"], svc["agent"], svc["reviews"], svc["events"]
+
+if "session_id" not in st.session_state:
+    st.session_state.session_id = uuid.uuid4().hex[:12]
+    st.session_state.history = []
+    st.session_state.processed = set()
+    st.session_state.logged_start = False
+
+
+def user() -> str:
+    return (st.session_state.get("user_name") or "anonymous").strip() or "anonymous"
+
+
+# ---------------------------------------------------------------- sidebar
+with st.sidebar:
+    st.header("DocMind")
+    st.text_input("Your name (for the pilot log)", key="user_name")
+    if not st.session_state.logged_start and user() != "anonymous":
+        events.log("session_start", user(), st.session_state.session_id)
+        st.session_state.logged_start = True
+
+    if getattr(agent.llm, "is_demo", False):
+        st.warning("Demo mode: no GROQ_API_KEY, answers are extractive snippets, not model output.")
+
+    uploads = st.file_uploader("Add documents", type=[e.lstrip(".") for e in LOADERS], accept_multiple_files=True)
+    for up in uploads or []:
+        key = (up.name, up.size)
+        if key in st.session_state.processed:
+            continue
+        if up.size > CONFIG.max_upload_mb * 1024 * 1024:
+            st.error(f"{up.name}: larger than {CONFIG.max_upload_mb} MB")
+            st.session_state.processed.add(key)
+            continue
+        content = bytes(up.getbuffer())
+        digest = hashlib.sha256(content).hexdigest()
+        dest = CONFIG.data_dir / "uploads" / digest / Path(up.name).name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(content)
+        with st.spinner(f"Ingesting {up.name}..."):
+            try:
+                rep = ingest(dest, store=store)
+                f = rep.files[0]
+                st.success(f"{up.name}: {f.status} ({f.n_chunks} chunks)")
+                events.log("upload", user(), st.session_state.session_id, filename=up.name, status=f.status, n_chunks=f.n_chunks)
+            except Exception as exc:
+                st.error(f"{up.name}: {exc}")
+        st.session_state.processed.add(key)
+
+    st.subheader("Library")
+    docs = store.list_documents()
+    selected = []
+    if not docs:
+        st.caption("No documents yet.")
+    for d in docs:
+        c1, c2 = st.columns([5, 1])
+        if c1.checkbox(f"{d['filename']} ({d['n_chunks']} chunks)", value=True, key=f"sel_{d['file_id']}"):
+            selected.append(d["file_id"])
+        if c2.button("x", key=f"del_{d['file_id']}", help="Remove from library"):
+            store.delete_document(d["file_id"])
+            st.rerun()
+    if docs and st.button("Re-index selected documents"):
+        for d in docs:
+            if d["file_id"] in selected and Path(d["source"]).exists():
+                ingest(d["source"], rebuild_index=True, store=store)
+        st.rerun()
 
     st.divider()
-
-    # Pipeline info
-    st.caption("**Pipeline**")
-    st.caption("• Semantic chunker (bge-small-en-v1.5)")
-    st.caption("• FAISS dense retrieval")
-    st.caption("• BM25 sparse retrieval")
-    st.caption("• RRF fusion (k=60)")
-    st.caption("• Cross-encoder reranking")
-    st.caption("• ReAct agent (Groq llama-3.1-8b)")
-
-    if st.button("🗑️ Clear history"):
+    st.caption("Pipeline: semantic chunks, FAISS + BM25, RRF, cross-encoder rerank, ReAct agent with citation verification.")
+    if st.button("Clear history"):
         st.session_state.history = []
         st.rerun()
 
+tab_ask, tab_review = st.tabs(["Ask", "Review queue"])
 
-# ── Main: Q&A interface ────────────────────────────────────────────────────
-with col_main:
-    if st.session_state.agent is None:
-        st.info("👈 Upload a document to get started.")
+
+# ------------------------------------------------------------ feedback hooks
+def _feedback(response_id: str, helpful: bool):
+    events.log("feedback", user(), st.session_state.session_id, response_id=response_id, helpful=helpful)
+
+
+def _estimate(response_id: str):
+    minutes = st.session_state.get(f"est_{response_id}")
+    if minutes:
+        events.log("manual_estimate", user(), st.session_state.session_id, response_id=response_id, manual_minutes=minutes)
+
+
+# -------------------------------------------------------------------- Ask
+with tab_ask:
+    if not docs:
+        st.info("Add a document in the sidebar to get started.")
+    elif not selected:
+        st.warning("Select at least one document in the library.")
     else:
-        # Question input
-        with st.form("question_form", clear_on_submit=True):
-            question = st.text_input(
-                "Ask a question",
-                placeholder="What are the main findings? How many experiments? ...",
-                label_visibility="collapsed",
-            )
-            submitted = st.form_submit_button("Ask →", use_container_width=False)
-
-        if submitted and question.strip():
-            with st.spinner("Thinking..."):
+        with st.form("q", clear_on_submit=True):
+            question = st.text_input("Ask a question", placeholder="What are the termination conditions?",
+                                     label_visibility="collapsed")
+            go = st.form_submit_button("Ask")
+        if go and question.strip():
+            with st.spinner("Searching and reasoning..."):
                 try:
-                    response = st.session_state.agent.run(question)
-                    st.session_state.history.append({
-                        "question": question,
-                        "response": response,
-                    })
-                except Exception as e:
-                    st.error(f"Agent error: {e}")
+                    resp = agent.run(question.strip(), file_ids=selected)
+                    status = reviews.record(resp, user=user())
+                    events.log("query", user(), st.session_state.session_id, response_id=resp.response_id,
+                               latency_ms=round(resp.latency_ms), llm_calls=resp.llm_calls, abstained=resp.abstained,
+                               needs_review=resp.needs_review, n_sources=len(resp.sources), finish=resp.finish_reason,
+                               citation_validity=resp.citation_report.get("validity"), n_docs=len(selected))
+                    st.session_state.history.append(resp)
+                except Exception as exc:
+                    st.error(f"Agent error: {exc}")
 
-        # Display history (newest first)
-        for item in reversed(st.session_state.history):
-            q = item["question"]
-            r = item["response"]
+        for resp in reversed(st.session_state.history):
+            status = reviews.status_of(resp.response_id) or "auto_approved"
+            st.markdown(f"**Q: {resp.query}**")
+            hold = CONFIG.review.hold_until_approved and status == "pending"
+            if hold:
+                st.info("This answer is waiting for human review and is hidden until a reviewer decides.")
+            else:
+                item = reviews.get(resp.response_id) or {}
+                text = item.get("edited_answer") or resp.answer
+                if status == "pending":
+                    st.warning(f"{STATUS_BADGE[status]}: treat as unverified. Reasons: {', '.join(resp.review_reasons)}")
+                elif status == "rejected":
+                    st.error(STATUS_BADGE[status])
+                st.markdown(text)               # markdown only, never unsafe HTML
+            v = resp.citation_report.get("validity")
+            st.caption(f"{resp.latency_ms / 1000:.1f}s | {resp.llm_calls} LLM calls | {len(resp.sources)} passages | "
+                       f"{STATUS_BADGE.get(status, status)}"
+                       + (f" | citation validity {v:.0%}" if v is not None else ""))
 
-            st.markdown(f"**Q: {q}**")
-
-            # Answer
-            # Strip any leaked Thought:/Action: lines from the displayed answer
-            raw = r.answer or "I was unable to find a satisfactory answer in the document corpus."
-            clean_answer = '\n'.join(
-                line for line in raw.split('\n')
-                if not line.strip().startswith(('Thought:', 'Action:', 'Observation:'))
-            ).strip()
-            if not clean_answer:
-                clean_answer = raw
-            if not clean_answer:
-                clean_answer = r.answer  # fallback to raw if stripping removed everything
-            st.markdown(
-                f'<div class="answer-box">{clean_answer}</div>',
-                unsafe_allow_html=True
-            )
-
-            # Metrics
-            latency = f"{r.latency_ms/1000:.1f}s"
-            steps = f"{len(r.reasoning_trace)} reasoning steps"
-            sources_count = f"{len(r.sources)} sources"
-            st.markdown(
-                f'<span class="metric-chip">⏱ {latency}</span>'
-                f'<span class="metric-chip">🔍 {sources_count}</span>'
-                f'<span class="metric-chip">💭 {steps}</span>',
-                unsafe_allow_html=True
-            )
-
-            # Sources
-            if r.sources:
-                with st.expander(f"📚 Sources ({len(r.sources)})", expanded=True):
-                    seen = set()
-                    for s in r.sources:
-                        meta = s.chunk.metadata
-                        fname = meta.get("filename", s.chunk.source)
-                        loc = f"p.{meta['page']}" if "page" in meta else meta.get("section", "")
-                        key = f"{fname}_{loc}"
-                        if key in seen:
-                            continue
-                        seen.add(key)
-                        preview = s.chunk.content[:250].replace("\n", " ")
-                        st.markdown(
-                            f'<div class="source-card">'
-                            f'<strong>{fname}</strong> {loc} '
-                            f'<span style="color:#999">score: {s.score:.3f}</span><br>'
-                            f'<span style="color:#444">{preview}...</span>'
-                            f'</div>',
-                            unsafe_allow_html=True
-                        )
-
-            # Reasoning trace
-            with st.expander("🧠 Reasoning trace", expanded=False):
-                for i, step in enumerate(r.reasoning_trace, 1):
-                    st.markdown(f"**Step {i}**")
+            if resp.sources:
+                with st.expander(f"Evidence ({len(resp.cited_sources)} cited of {len(resp.sources)} retrieved)"):
+                    cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
+                    for s in resp.sources:
+                        mark = "CITED" if s.chunk.chunk_id in cited_ids else "retrieved"
+                        st.markdown(f"**{s.chunk.filename()}** {s.chunk.citation()[1:-1]} | {mark} | score {s.score:.2f}")
+                        st.text(s.chunk.content[:600])
+            with st.expander("Reasoning trace"):
+                for i, step in enumerate(resp.reasoning_trace, 1):
+                    st.markdown(f"Step {i}")
                     st.code(step, language=None)
 
+            c1, c2, c3 = st.columns([1, 1, 3])
+            c1.button("Helpful", key=f"up_{resp.response_id}", on_click=_feedback, args=(resp.response_id, True))
+            c2.button("Not helpful", key=f"dn_{resp.response_id}", on_click=_feedback, args=(resp.response_id, False))
+            c3.number_input("Minutes this would have taken by hand (optional)", min_value=0.0, step=1.0,
+                            key=f"est_{resp.response_id}", on_change=_estimate, args=(resp.response_id,))
             st.divider()
 
 
-# ── Right column: stats ────────────────────────────────────────────────────
-with col_sidebar:
-    if st.session_state.history:
-        st.subheader("Session stats")
-        latencies = [h["response"].latency_ms for h in st.session_state.history]
-        avg_lat = sum(latencies) / len(latencies)
-        st.metric("Questions asked", len(st.session_state.history))
-        actual_label = "Avg latency (incl. rate limit waits)"
-        st.metric(actual_label, f"{avg_lat/1000:.1f}s")
-        st.caption("*Groq free tier: ~1-3s query time + rate limit waits. Paid tier: consistent <3s.")
-        total_sources = sum(len(h["response"].sources) for h in st.session_state.history)
-        st.metric("Total sources retrieved", total_sources)
+# ----------------------------------------------------------------- Review
+with tab_review:
+    pin_required = CONFIG.review.reviewer_pin
+    ok = True
+    if pin_required:
+        ok = st.text_input("Reviewer PIN", type="password", key="pin") == pin_required
+    if not ok:
+        st.info("Enter the reviewer PIN to open the queue.")
+    else:
+        st.caption(f"Queue stats: {reviews.stats()}")
+        reviewer = st.text_input("Reviewer name", key="reviewer_name") or "reviewer"
+        pending = reviews.pending(limit=20)
+        if not pending:
+            st.success("Nothing waiting for review.")
+        for item in pending:
+            with st.container(border=True):
+                st.markdown(f"**Q:** {item['question']}")
+                st.caption(f"Asked by {item['user']} | flagged: {', '.join(item['reasons'])}")
+                st.markdown(item["answer"])
+                with st.expander("Evidence the model saw"):
+                    for s in item["sources"]:
+                        st.markdown(f"**{s['filename']}** p.{s.get('page') or '-'} | {'CITED' if s['cited'] else 'retrieved'}")
+                        st.text(s["content"][:600])
+                rid = item["response_id"]
+                edited = st.text_area("Corrected answer (only for 'Correct and approve')", key=f"ed_{rid}")
+                note = st.text_input("Note", key=f"nt_{rid}")
+                b1, b2, b3 = st.columns(3)
+                decision = None
+                if b1.button("Approve", key=f"ap_{rid}"):
+                    decision = ("approved", None)
+                if b2.button("Correct and approve", key=f"ce_{rid}") and edited.strip():
+                    decision = ("edited", edited)
+                if b3.button("Reject", key=f"rj_{rid}"):
+                    decision = ("rejected", None)
+                if decision:
+                    reviews.decide(rid, decision[0], reviewer, decision[1], note)
+                    events.log("review_decision", reviewer, st.session_state.session_id, response_id=rid, decision=decision[0])
+                    st.rerun()
+        if st.button("Export reviewed answers as testset"):
+            n = reviews.export_testset(str(CONFIG.data_dir / "reviewed_testset.json"))
+            st.success(f"Wrote {n} items to data/reviewed_testset.json")
