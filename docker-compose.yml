@@ -1,0 +1,40 @@
+# UI:   docker compose up --build ui          then open http://localhost:8501
+# API:  docker compose --profile api up --build api     then http://localhost:8000/docs
+# Secrets come from your shell or a local .env file (never baked into the image):
+#   GROQ_API_KEY, DOCMIND_APP_PASSWORD, DOCMIND_REVIEWER_PIN
+services:
+  ui:
+    build: .
+    image: docmind:local
+    ports:
+      - "8501:8501"
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      DOCMIND_APP_PASSWORD: ${DOCMIND_APP_PASSWORD:-}
+      DOCMIND_REVIEWER_PIN: ${DOCMIND_REVIEWER_PIN:-}
+    volumes:
+      - docmind-data:/data
+    restart: unless-stopped
+
+  api:
+    build: .
+    image: docmind:local
+    profiles: ["api"]
+    command: ["uvicorn", "docmind.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      DOCMIND_API_KEY: ${DOCMIND_API_KEY:-}
+      DOCMIND_REVIEWER_PIN: ${DOCMIND_REVIEWER_PIN:-}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    volumes:
+      - docmind-data:/data
+
+volumes:
+  docmind-data:

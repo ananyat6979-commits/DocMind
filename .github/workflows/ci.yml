@@ -1,0 +1,16 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install (offline test deps only, no model downloads)
+        run: |
+          pip install numpy faiss-cpu nltk pdfplumber python-docx fastapi httpx python-multipart \
+                      streamlit python-dotenv tqdm pytest pyyaml
+          python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
+      - name: Tests (hash embedder, lexical reranker, demo LLM)
+        run: python -m pytest -q --ignore=tests/test_ragas_plumbing.py
