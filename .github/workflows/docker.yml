@@ -1,0 +1,78 @@
+name: docker
+# Builds the image on GitHub's machines (no Docker needed on your laptop), smoke-tests it, and
+# publishes it to GitHub Container Registry (ghcr.io). Run manually from the Actions tab at any time.
+on:
+  push:
+    branches: [main]
+    paths: ["Dockerfile", "requirements.txt", "docmind/**", "app.py", "scripts/**", ".streamlit/**", ".github/workflows/docker.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lowercase image name (registry requires it)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/docmind" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build (loaded locally for smoke tests)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: ${{ env.IMAGE }}:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke 1, both models load with the network disabled (proves they are baked in)
+        run: |
+          docker run --rm --network none ${{ env.IMAGE }}:ci python -c "
+          from docmind.embeddings import embed_query
+          from docmind.retrieval.reranker import _get_model
+          print('embedding shape', embed_query('hello').shape)
+          _get_model(); print('reranker loaded')"
+
+      - name: Smoke 2, full ingest and agent run inside the image (offline demo mode)
+        run: |
+          docker run --rm -e DOCMIND_TEST_MODE=1 -e DOCMIND_HOME=/tmp/dm ${{ env.IMAGE }}:ci python -c "
+          import pathlib
+          from docmind.ingestion.pipeline import ingest
+          from docmind.agent.react import ReActAgent
+          pathlib.Path('/tmp/a.txt').write_text('Coolant must stay below 300 degrees during startup. Operators verify the pump every shift. ' * 4)
+          ingest('/tmp/a.txt')
+          r = ReActAgent().run('coolant limit during startup')
+          print(r.answer)
+          assert '(Source:' in r.answer, 'no verified citation in answer'"
+
+      - name: Smoke 3, the UI starts and reports healthy
+        run: |
+          docker run -d --name dm -p 8501:8501 ${{ env.IMAGE }}:ci
+          for i in $(seq 1 40); do curl -fs http://localhost:8501/_stcore/health && break; sleep 3; done
+          curl -fs http://localhost:8501/_stcore/health | grep -q ok || { docker logs dm; exit 1; }
+          docker logs dm | tail -n 15
+
+      - name: Log in to GitHub Container Registry
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
