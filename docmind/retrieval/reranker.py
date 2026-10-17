@@ -1,67 +1,68 @@
 """
 Cross-encoder reranker.
 
-The key insight: a bi-encoder (used in dense retrieval) encodes query and
-document SEPARATELY, then compares embeddings. This is fast but loses
-interaction signals between query tokens and document tokens.
+A bi-encoder embeds query and passage separately. A cross-encoder reads
+[CLS] query [SEP] passage [SEP] jointly, which is slower (so we only run it on
+the ~20 fused candidates) but a much stronger relevance signal.
 
-A cross-encoder sees both query and document concatenated as a single input:
-  [CLS] query [SEP] document [SEP]
-
-This lets attention heads cross-attend between query and document, capturing
-"does this document specifically answer this question?" much more accurately.
-
-Tradeoff: cross-encoders are ~50x slower than bi-encoders per pair.
-Solution: only rerank the ~20 candidates from stage 1, not the full corpus.
+The model is a process-wide singleton: the old code reloaded the 90MB model for
+every HybridRetriever instance (e.g. on every upload in the UI).
 """
 import logging
-from typing import List
+import re
+import threading
+from typing import List, Optional
 
-from docmind.models import SearchResult
 from docmind.config import CONFIG
+from docmind.models import SearchResult
 
 logger = logging.getLogger(__name__)
 
+_MODEL = None
+_LOCK = threading.Lock()
+
+
+def _lexical_scores(query: str, passages: List[str]) -> List[float]:
+    """Offline stand-in used only when reranker_model == 'lexical' (tests/CI)."""
+    q = set(re.findall(r"\w+", query.lower()))
+    out = []
+    for p in passages:
+        toks = set(re.findall(r"\w+", p.lower()))
+        out.append(10.0 * (len(q & toks) / max(len(q), 1)) - 5.0)
+    return out
+
+
+def _get_model():
+    global _MODEL
+    if _MODEL is None:
+        with _LOCK:
+            if _MODEL is None:
+                from sentence_transformers import CrossEncoder
+                logger.info(f"Loading cross-encoder '{CONFIG.retriever.reranker_model}' (one-time)")
+                _MODEL = CrossEncoder(CONFIG.retriever.reranker_model, device=CONFIG.embedding.device)
+    return _MODEL
+
 
 class CrossEncoderReranker:
-    def __init__(self):
-        self._model = None
-
-    def _get_model(self):
-        if self._model is None:
-            from sentence_transformers import CrossEncoder
-            logger.info(f"Loading cross-encoder '{CONFIG.retriever.reranker_model}'")
-            self._model = CrossEncoder(CONFIG.retriever.reranker_model)
-        return self._model
-
-    def rerank(self, query: str, results: List[SearchResult], top_k: int = None) -> List[SearchResult]:
-        """
-        Score each (query, document) pair with the cross-encoder and
-        return top_k results sorted by reranker score.
-        """
+    def rerank(self, query: str, results: List[SearchResult], top_k: Optional[int] = None,
+               min_score: Optional[float] = None) -> List[SearchResult]:
+        """Score (query, passage) pairs, sort descending, keep top_k, and drop
+        anything under min_score (the abstention gate)."""
         if not results:
             return []
-
         top_k = top_k or CONFIG.retriever.top_k_rerank
-        model = self._get_model()
+        passages = [r.chunk.content for r in results]
 
-        # Cross-encoder expects list of [query, document] pairs
-        pairs = [[query, r.chunk.content] for r in results]
-        scores = model.predict(pairs)
+        if CONFIG.retriever.reranker_model == "lexical":
+            scores = _lexical_scores(query, passages)
+        else:
+            scores = _get_model().predict([[query, p] for p in passages], batch_size=16)
 
-        # Zip scores back onto results and sort descending
-        scored = sorted(
-            zip(scores, results),
-            key=lambda x: x[0],
-            reverse=True,
-        )
-
-        reranked = []
-        for score, result in scored[:top_k]:
-            reranked.append(SearchResult(
-                chunk=result.chunk,
-                score=float(score),
-                retriever="reranker",
-            ))
-
-        return reranked
+        scored = sorted(zip(scores, results), key=lambda x: float(x[0]), reverse=True)
+        out = [
+            SearchResult(chunk=r.chunk, score=float(s), retriever="reranker")
+            for s, r in scored[:top_k]
+        ]
+        if min_score is not None:
+            out = [r for r in out if r.score >= min_score]
+        return out
