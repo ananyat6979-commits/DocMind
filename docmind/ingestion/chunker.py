@@ -19,6 +19,7 @@ into the start of the next. This preserves context at boundaries: crucial
 for questions that span a chunk boundary.
 """
 import logging
+import re
 import numpy as np
 from typing import List
 from docmind.models import Document, Chunk
@@ -26,23 +27,29 @@ from docmind.config import CONFIG
 from docmind.embeddings import get_embedding_model
 
 logger = logging.getLogger(__name__)
-_embedding_model = None  # module-level singleton; loaded lazily
+
+_REGEX_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[])|\n{2,}")
 
 
-
+def _regex_sentences(text: str) -> List[str]:
+    return [s.strip() for s in _REGEX_SPLIT.split(text) if s and s.strip()]
 
 
 def _tokenize(text: str) -> List[str]:
-    """NLTK sentence tokenizer with automatic corpus download on first run."""
-    import nltk
+    """NLTK sentence tokenizer. Downloads punkt once; if that is impossible
+    (offline machine), falls back to a regex splitter instead of crashing."""
     try:
+        import nltk
         from nltk.tokenize import sent_tokenize
-        sentences = sent_tokenize(text)
-    except LookupError:
-        nltk.download("punkt", quiet=True)
-        nltk.download("punkt_tab", quiet=True)
-        from nltk.tokenize import sent_tokenize
-        sentences = sent_tokenize(text)
+        try:
+            sentences = sent_tokenize(text)
+        except LookupError:
+            nltk.download("punkt", quiet=True)
+            nltk.download("punkt_tab", quiet=True)
+            sentences = sent_tokenize(text)
+    except Exception as exc:
+        logger.warning(f"NLTK unavailable ({exc}); using regex sentence splitter")
+        sentences = _regex_sentences(text)
     return [s.strip() for s in sentences if s.strip()]
 
 
@@ -50,7 +57,7 @@ def _find_breakpoints(sentences: List[str]) -> List[int]:
     if len(sentences) < 2:
         return []
 
-    model = get_embedding_model()   # was: _get_model()
+    model = get_embedding_model()
     embeddings = model.encode(
         sentences,
         batch_size=CONFIG.embedding.batch_size,
@@ -95,28 +102,36 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
     pending_sents: List[str] = []
 
     for group in groups:
-        candidate = " ".join(pending_sents + group)
-
-        if len(candidate) < cfg.min_chunk_size:
-            # Too small — absorb into pending buffer
-            pending_sents = pending_sents + group
+        # Fold any pending tiny fragment INTO this group. The old code emitted
+        # the fragment as its own sub-minimum chunk and then the group separately.
+        merged = pending_sents + group
+        if len(" ".join(merged)) < cfg.min_chunk_size:
+            pending_sents = merged
             continue
+        pending_sents = []
 
-        if pending_sents:
-            # Flush pending buffer first
-            _emit(chunks, " ".join(pending_sents), doc)
-            pending_sents = []
-
-        if len(" ".join(group)) > cfg.max_chunk_size:
-            # Too large — hard-split by accumulating sentences
-            _emit_large(chunks, group, doc, cfg.max_chunk_size)
+        if len(" ".join(merged)) > cfg.max_chunk_size:
+            _emit_large(chunks, merged, doc, cfg.max_chunk_size)
         else:
-            _emit(chunks, " ".join(group), doc)
+            _emit(chunks, " ".join(merged), doc)
 
     if pending_sents:
-        _emit(chunks, " ".join(pending_sents), doc)
+        tail = " ".join(pending_sents).strip()
+        if chunks and len(chunks[-1].content) + 1 + len(tail) <= cfg.max_chunk_size:
+            # Trailing fragment (often a page-number footer): attach to the previous chunk.
+            prev = chunks[-1]
+            prev.content = f"{prev.content} {tail}"
+            prev.metadata["char_count"] = len(prev.content)
+        elif not _is_noise(tail):
+            _emit(chunks, tail, doc)
+        # else: drop pure noise such as a lone "14"
 
     return chunks
+
+
+def _is_noise(text: str) -> bool:
+    """Short fragments with no real word in them: page numbers, rules, stray bullets."""
+    return len(text) < 20 and not re.search(r"[A-Za-z]{3,}", text)
 
 
 def _emit(chunks: List[Chunk], content: str, doc: Document) -> None:
@@ -131,11 +146,31 @@ def _emit(chunks: List[Chunk], content: str, doc: Document) -> None:
         ))
 
 
+def _split_oversized(sentence: str, max_size: int) -> List[str]:
+    """A single 'sentence' longer than max_size (tables, code, OCR junk) would
+    be silently truncated by the 512-token embedder. Split it on whitespace."""
+    if len(sentence) <= max_size:
+        return [sentence]
+    parts, buf = [], ""
+    for word in sentence.split():
+        if buf and len(buf) + 1 + len(word) > max_size:
+            parts.append(buf)
+            buf = word
+        else:
+            buf = f"{buf} {word}".strip()
+    if buf:
+        parts.append(buf)
+    return parts
+
+
 def _emit_large(chunks: List[Chunk], sentences: List[str], doc: Document, max_size: int) -> None:
-    """Accumulate sentences until we'd exceed max_size, then emit."""
+    """Accumulate sentences until we would exceed max_size, then emit."""
     current: List[str] = []
     current_len = 0
+    expanded: List[str] = []
     for sent in sentences:
+        expanded.extend(_split_oversized(sent, max_size))
+    for sent in expanded:
         if current_len + len(sent) > max_size and current:
             _emit(chunks, " ".join(current), doc)
             current = [sent]

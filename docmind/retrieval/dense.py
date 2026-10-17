@@ -1,105 +1,58 @@
 """
-Dense retrieval via FAISS.
+Dense retrieval via FAISS IndexFlatIP (exact cosine on L2-normalized vectors).
 
-We use IndexFlatIP (inner product on L2-normalized vectors = cosine similarity).
-For a corpus up to ~100k chunks, exact search is fast enough on a laptop CPU.
-If you scale beyond that, swap to IndexIVFFlat with nprobe tuning on Kaggle.
+The index is an in-memory cache built from the corpus store. Filtering to a
+subset of files uses FAISS's IDSelector, so scoped search stays exact.
 """
 import logging
-import pickle
-import numpy as np
-from pathlib import Path
-from typing import List, Tuple
+from typing import Iterable, List, Optional, Sequence
 
-from docmind.embeddings import get_embedding_model
-from docmind.models import Chunk, SearchResult
+import numpy as np
+
 from docmind.config import CONFIG
+from docmind.embeddings import embed_query
+from docmind.models import Chunk, SearchResult
 
 logger = logging.getLogger(__name__)
-
-FAISS_INDEX_PATH = CONFIG.index_dir / "faiss.index"
-CHUNK_MAP_PATH   = CONFIG.index_dir / "chunk_map.pkl"   # maps FAISS int id → Chunk
 
 
 class DenseRetriever:
     def __init__(self):
         self._index = None
         self._chunks: List[Chunk] = []
-        
+        self._file_ids: Optional[np.ndarray] = None
 
-   
-
-    def build(self, chunks: List[Chunk]) -> None:
-        """Embed all chunks and build a FAISS index. Persists to disk."""
+    def fit(self, chunks: Sequence[Chunk], matrix: np.ndarray) -> None:
         import faiss
+        self._chunks = list(chunks)
+        if not self._chunks:
+            self._index, self._file_ids = None, None
+            return
+        self._index = faiss.IndexFlatIP(matrix.shape[1])
+        self._index.add(np.ascontiguousarray(matrix, dtype="float32"))
+        self._file_ids = np.array([c.file_id for c in self._chunks])
+        logger.info(f"Dense index ready: {self._index.ntotal} vectors, dim={matrix.shape[1]}")
 
-        if not chunks:
-            raise ValueError("Cannot build index from empty chunk list")
-
-        logger.info(f"Embedding {len(chunks)} chunks for FAISS index...")
-        model = get_embedding_model()
-        texts = [c.content for c in chunks]
-
-        embeddings = model.encode(
-            texts,
-            batch_size=CONFIG.embedding.batch_size,
-            normalize_embeddings=True,
-            show_progress_bar=True,
-            convert_to_numpy=True,
-        ).astype("float32")
-
-        dim = embeddings.shape[1]
-        # IndexFlatIP: exact inner product search; correct for normalized vectors
-        self._index = faiss.IndexFlatIP(dim)
-        self._index.add(embeddings)
-        self._chunks = chunks
-
-        # Persist
-        faiss.write_index(self._index, str(FAISS_INDEX_PATH))
-        with open(CHUNK_MAP_PATH, "wb") as f:
-            pickle.dump(chunks, f)
-
-        logger.info(f"FAISS index built: {self._index.ntotal} vectors, dim={dim}")
-
-    def load(self) -> bool:
-        """Load an existing FAISS index from disk. Returns True if successful."""
-        import faiss
-
-        if not FAISS_INDEX_PATH.exists() or not CHUNK_MAP_PATH.exists():
-            return False
-
-        self._index = faiss.read_index(str(FAISS_INDEX_PATH))
-        with open(CHUNK_MAP_PATH, "rb") as f:
-            self._chunks = pickle.load(f)
-
-        logger.info(f"FAISS index loaded: {self._index.ntotal} vectors")
-        return True
-
-    def search(self, query: str, top_k: int = None) -> List[SearchResult]:
-        """Embed the query and return top-k nearest chunks by cosine similarity."""
+    def search(self, query: str, top_k: Optional[int] = None,
+               file_ids: Optional[Iterable[str]] = None) -> List[SearchResult]:
         if self._index is None:
-            if not self.load():
-                raise RuntimeError("FAISS index not found. Run ingestion first.")
-
+            return []
+        import faiss
         top_k = top_k or CONFIG.retriever.top_k_dense
-        model = get_embedding_model()
+        k = min(top_k, self._index.ntotal)
+        qv = embed_query(query)
 
-        query_embedding = model.encode(
-            [query],
-            normalize_embeddings=True,
-            convert_to_numpy=True,
-        ).astype("float32")
+        if file_ids:
+            allowed = np.nonzero(np.isin(self._file_ids, list(file_ids)))[0].astype("int64")
+            if allowed.size == 0:
+                return []
+            params = faiss.SearchParameters()
+            params.sel = faiss.IDSelectorBatch(allowed)
+            scores, idxs = self._index.search(qv, min(k, allowed.size), params=params)
+        else:
+            scores, idxs = self._index.search(qv, k)
 
-        scores, indices = self._index.search(query_embedding, top_k)
-
-        results = []
-        for score, idx in zip(scores[0], indices[0]):
-            if idx == -1:   # FAISS returns -1 for padding
-                continue
-            results.append(SearchResult(
-                chunk=self._chunks[idx],
-                score=float(score),
-                retriever="dense",
-            ))
-
-        return results
+        return [
+            SearchResult(chunk=self._chunks[i], score=float(s), retriever="dense")
+            for s, i in zip(scores[0], idxs[0]) if i != -1
+        ]
