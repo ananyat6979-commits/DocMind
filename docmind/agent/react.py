@@ -1,152 +1,195 @@
 """
-ReAct agent loop — Reasoning + Acting without any framework dependency.
+ReAct agent loop: reasoning + acting with no framework dependency.
+
+Control flow summary (the old version overwrote every successful answer with
+the failure message because of a dangling `else`; this version has exactly one
+place where the answer is decided, `_decide_answer`, and one place where the
+response is assembled):
+
+  loop (max N steps)
+    LLM -> Action?  execute tool, append Observation, continue
+        -> Final Answer? accept only if evidence was retrieved
+        -> neither: nudge
+  no clean final answer but evidence exists -> one synthesis call
+  verify citations against retrieved evidence, strip invalid ones
+  decide abstention, review routing, assemble AgentResponse
 """
+import logging
 import re
 import time
-import logging
-from typing import List, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
+from docmind.agent.citations import verify_citations
+from docmind.agent.prompts import NOT_FOUND_TOKEN, REACT_SYSTEM_PROMPT, build_user_message
+from docmind.agent.tools import TOOL_NAMES, ToolBox
+from docmind.config import CONFIG
+from docmind.llm.base import BaseLLM
 from docmind.models import AgentResponse, SearchResult
-from docmind.agent.prompts import (
-    REACT_SYSTEM_PROMPT,
-    build_user_message,
-    format_observation,
-)
-from docmind.llm.groq_client import get_llm
 from docmind.retrieval.hybrid import HybridRetriever
+from docmind.review.policy import review_reasons
 
 logger = logging.getLogger(__name__)
 
-ACTION_PATTERN = re.compile(
-    r'Action:\s*search_documents\s*\(\s*["\']?([^"\')\r\n]+?)["\']?\s*\)',
-    re.IGNORECASE
+ACTION_RE = re.compile(
+    r"^\s*Action:\s*(" + "|".join(TOOL_NAMES) + r")\s*\((.*)\)\s*$",
+    re.IGNORECASE | re.MULTILINE,
 )
-FINAL_ANSWER_PATTERN = re.compile(r'Final Answer:\s*(.*)', re.DOTALL | re.IGNORECASE)
+FINAL_RE = re.compile(r"Final Answer:\s*(.*)", re.DOTALL | re.IGNORECASE)
+ABSTAIN_RE = re.compile(rf"^\s*{NOT_FOUND_TOKEN}\b[:\-\s]*", re.IGNORECASE)
+SOFT_ABSTAIN_RE = re.compile(
+    r"\b(?:could not|couldn't|cannot|can't|unable to|does not|doesn't|do not|don't)\b[^.\n]{0,60}"
+    r"\b(?:find|contain|mention|provide|include|state|say|address|cover)\b",
+    re.IGNORECASE,
+)
+LEAK_PREFIXES = ("Thought:", "Action:", "Observation:")
+NO_ANSWER_MESSAGE = "I could not find this in the selected documents."
+STOP = ["Observation:"]
+
+
+def parse_action(text: str) -> Optional[Tuple[str, str]]:
+    m = ACTION_RE.search(text)
+    if not m:
+        return None
+    name = m.group(1).lower()
+    arg = m.group(2).strip()
+    arg = re.sub(r"^\w+\s*=\s*", "", arg)          # tolerate query="..." / chunk_id="..."
+    arg = arg.strip().strip("\"'").strip()
+    return (name, arg) if arg else None
+
+
+def strip_leaks(text: str) -> str:
+    kept = [ln for ln in text.split("\n") if not ln.strip().startswith(LEAK_PREFIXES)]
+    return "\n".join(kept).strip()
 
 
 class ReActAgent:
-    def __init__(self, retriever: Optional[HybridRetriever] = None):
-        self.llm = get_llm()
+    def __init__(self, retriever: Optional[HybridRetriever] = None, llm: Optional[BaseLLM] = None,
+                 max_iterations: Optional[int] = None):
+        if llm is None:
+            from docmind.llm.groq_client import get_llm
+            llm = get_llm()
+        self.llm = llm
         self.retriever = retriever or HybridRetriever()
-        self.max_iterations = 5
+        self.max_iterations = max_iterations or CONFIG.max_agent_iterations
 
-    def _execute_action(self, argument: str):
-        results = self.retriever.search(argument)
-        
-        return results, format_observation(results)
+    # ------------------------------------------------------------------ helpers
+    def _complete(self, messages, timings, counter, stop=None) -> str:
+        t = time.perf_counter()
+        text = self.llm.complete(messages, stop=stop) if stop else self.llm.complete(messages)
+        timings["llm_ms"] += (time.perf_counter() - t) * 1000
+        counter[0] += 1
+        return text or ""
 
-    def run(self, question: str) -> AgentResponse:
-        start_time = time.time()
+    @staticmethod
+    def _decide_answer(raw: str, has_valid_citation: bool) -> Tuple[str, bool]:
+        """Return (final_text, abstained). Single source of truth for abstention."""
+        text = strip_leaks(raw) or raw.strip()
+        m = ABSTAIN_RE.match(text)
+        if m:
+            detail = text[m.end():].strip()
+            return (f"{NO_ANSWER_MESSAGE} {detail}".strip(), True)
+        if not has_valid_citation and SOFT_ABSTAIN_RE.search(text):
+            return (text, True)
+        return (text, False)
 
+    # --------------------------------------------------------------------- run
+    def run(self, question: str, file_ids: Optional[Iterable[str]] = None) -> AgentResponse:
+        t0 = time.perf_counter()
+        tools = ToolBox(self.retriever, file_ids=file_ids)
         messages = [
             {"role": "system", "content": REACT_SYSTEM_PROMPT},
             {"role": "user", "content": build_user_message(question)},
         ]
+        trace: List[str] = []
+        sources: Dict[str, SearchResult] = {}
+        timings = {"llm_ms": 0.0, "retrieval_ms": 0.0}
+        calls = [0]
+        searched = False
+        raw_final: Optional[str] = None
+        finish = "final_answer"
 
-        reasoning_trace: List[str] = []
-        all_sources: List[SearchResult] = []
-        final_answer = None
-        iteration = 0
+        for step in range(self.max_iterations):
+            text = self._complete(messages, timings, calls, stop=STOP)
+            trace.append(text)
 
-        for iteration in range(self.max_iterations):
-            logger.debug(f"ReAct iteration {iteration + 1}/{self.max_iterations}")
-
-            response_text = self.llm.complete(
-                messages,
-                stop=["\nObservation:", "Observation:"]
-            )
-            
-            reasoning_trace.append(response_text)
-
-            # Priority 1: check for action
-            action_match = ACTION_PATTERN.search(response_text)
-            if action_match:
-                argument = action_match.group(1).strip().strip('"\'')
-                
-                sources, observation_text = self._execute_action(argument)
-                all_sources.extend(sources)
-                messages.append({"role": "assistant", "content": response_text})
+            action = parse_action(text)
+            if action:
+                name, arg = action
+                t = time.perf_counter()
+                results, observation = tools.execute(name, arg)
+                timings["retrieval_ms"] += (time.perf_counter() - t) * 1000
+                searched = searched or name == "search_documents"
+                for r in results:
+                    sources.setdefault(r.chunk.chunk_id, r)
+                messages.append({"role": "assistant", "content": text})
                 messages.append({
                     "role": "user",
-                    "content": f"Observation: {observation_text}\n\nContinue your reasoning. If you have enough information, provide your Final Answer."
+                    "content": f"Observation: {observation}\n\nContinue. If you have enough evidence, give your Final Answer.",
                 })
                 continue
 
-            # Priority 2: check for final answer
-            final_match = FINAL_ANSWER_PATTERN.search(response_text)
-            if final_match:
-                if all_sources or iteration >= self.max_iterations - 1:
-                    final_answer = final_match.group(1).strip()
+            final = FINAL_RE.search(text)
+            if final:
+                if sources:
+                    raw_final = final.group(1).strip()
                     break
+                if searched:
+                    # Searched, nothing relevant came back: never trust an ungrounded answer.
+                    raw_final = f"{NOT_FOUND_TOKEN}: the searches returned no relevant passages."
+                    break
+                messages.append({"role": "assistant", "content": text})
+                messages.append({"role": "user",
+                                 "content": "You must call search_documents before a Final Answer. Search first."})
+                continue
+
+            messages.append({"role": "assistant", "content": text})
+            messages.append({"role": "user",
+                             "content": "Reply with either an Action (search_documents or get_chunk_context) or a Final Answer."})
+
+        # Loop ended without a clean Final Answer.
+        if raw_final is None:
+            if sources:
+                messages.append({"role": "user", "content": (
+                    "Using only the Observations above, write your Final Answer now. "
+                    "Start with 'Final Answer:' and copy citations exactly from cite_as.")})
+                synth = self._complete(messages, timings, calls)       # no stop sequence
+                trace.append(synth)
+                m = FINAL_RE.search(synth)
+                if m:
+                    raw_final, finish = m.group(1).strip(), "synthesis"
                 else:
-                    messages.append({"role": "assistant", "content": response_text})
-                    messages.append({
-                        "role": "user",
-                        "content": "You must call search_documents before providing a Final Answer. Search the document corpus first."
-                    })
-                    continue
-
-            # Priority 3: neither action nor final answer — nudge
-            messages.append({"role": "assistant", "content": response_text})
-            messages.append({
-                "role": "user",
-                "content": "Use the search_documents tool to find relevant information, then provide your Final Answer."
-            })
-        # If we have sources but exhausted iterations without Final Answer,
-        # make one explicit synthesis call without a stop sequence
-        if final_answer is None and all_sources:
-            synthesis_prompt = (
-                "Based on your research so far, provide your Final Answer now. "
-                "You must begin your response with 'Final Answer:' and cite sources."
-            )
-            messages.append({"role": "user", "content": synthesis_prompt})
-            synthesis_response = self.llm.complete(messages)  # no stop sequence
-            reasoning_trace.append(synthesis_response)
-            final_match = FINAL_ANSWER_PATTERN.search(synthesis_response)
-            if final_match:
-                final_answer = final_match.group(1).strip()
+                    raw_final, finish = (strip_leaks(synth) or synth), "fallback"
             else:
-                # Strip reasoning lines and use whatever the model said
-                final_answer = '\n'.join(
-                    line for line in synthesis_response.split('\n')
-                    if not line.strip().startswith(('Thought:', 'Action:', 'Observation:'))
-                ).strip() or synthesis_response
-        if final_answer is None:
-            # Try to extract Final Answer from the last reasoning step
-            if reasoning_trace:
-                last = reasoning_trace[-1]
-                last_match = FINAL_ANSWER_PATTERN.search(last)
-                if last_match:
-                    final_answer = last_match.group(1).strip()
-            elif all_sources:
-                # We have sources but no clean Final Answer — synthesize from last thought
-                # Strip out Action: lines, keep only Thought content
-                thought_lines = [
-                    line for line in last.split('\n')
-                    if not line.strip().startswith('Action:')
-                    and not line.strip().startswith('Thought:')
-                    and line.strip()
-                ]
-                final_answer = ' '.join(thought_lines).strip() or last
-            else:
-                final_answer = "I was unable to find a satisfactory answer in the document corpus."
-        else:
-            final_answer = "I was unable to find a satisfactory answer in the document corpus."
+                raw_final, finish = f"{NOT_FOUND_TOKEN}: no relevant passages were retrieved.", "abstained"
 
-        latency_ms = (time.time() - start_time) * 1000
-        logger.info(f"ReAct completed in {latency_ms:.0f}ms, {iteration + 1} iterations")
+        # Citation verification, then abstention decision (one place each).
+        ordered = list(sources.values())
+        cleaned, report, cited_ids = verify_citations(raw_final, ordered)
+        answer, abstained = self._decide_answer(cleaned, has_valid_citation=bool(report.valid))
+        if abstained:
+            finish = "abstained"
 
-        seen = set()
-        unique_sources = []
-        for s in all_sources:
-            if s.chunk.chunk_id not in seen:
-                seen.add(s.chunk.chunk_id)
-                unique_sources.append(s)
+        cited = [s for s in ordered if s.chunk.chunk_id in cited_ids]
+        rest = [s for s in ordered if s.chunk.chunk_id not in cited_ids]
+        latency_ms = (time.perf_counter() - t0) * 1000
+        timings["total_ms"] = latency_ms
 
-        return AgentResponse(
-            answer=final_answer,
-            sources=unique_sources,
-            reasoning_trace=reasoning_trace,
+        resp = AgentResponse(
+            answer=answer,
+            sources=cited + rest,
+            reasoning_trace=trace,
             query=question,
             latency_ms=latency_ms,
+            cited_sources=cited,
+            citation_report=report.to_dict(),
+            abstained=abstained,
+            finish_reason=finish,
+            timings=timings,
+            llm_calls=calls[0],
         )
+        if CONFIG.review.enabled:
+            resp.review_reasons = review_reasons(resp)
+            resp.needs_review = bool(resp.review_reasons)
+        logger.info(f"ReAct done in {latency_ms:.0f}ms, {calls[0]} LLM calls, finish={finish}, "
+                    f"abstained={abstained}, review={resp.review_reasons}")
+        return resp
