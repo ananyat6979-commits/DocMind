@@ -1,0 +1,10 @@
+# Evaluation extras (RAGAS with a Groq judge). Install on top of requirements.txt:
+#   pip install -r requirements.txt -r requirements-eval.txt
+# RAGAS 0.3.9 needs the LangChain 0.3 line; RAGAS 0.4.x fails to import against LangChain 1.x.
+ragas==0.3.9
+langchain-core>=0.3.60,<1
+langchain-community>=0.3.20,<0.4
+langchain-groq>=0.3,<0.4
+langchain>=0.3.20,<1
+datasets>=2.18
+mlflow-skinny>=2.12

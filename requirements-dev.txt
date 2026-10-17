@@ -1,0 +1,6 @@
+# Everything, plus test tools. Use `python -m pytest` (not bare `pytest`) so the venv's interpreter is used.
+-r requirements.txt
+-r requirements-eval.txt
+pytest>=8
+pyyaml>=6
+httpx>=0.27
