@@ -1,229 +1,89 @@
-# DocMind 🧠
+# DocMind
 
-**Intelligent document intelligence**: hybrid retrieval, cross-encoder reranking, and a from-scratch ReAct agent for grounded, cited answers over your documents.
+Question answering over your PDF, DOCX and text files. Hybrid retrieval, cross-encoder reranking, a from-scratch ReAct agent, **verified citations**, and a **human review queue**.
 
-![Python](https://img.shields.io/badge/python-3.10+-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+> Status: the measured results below are filled in by scripts from real runs. A section that says "Not yet run" means exactly that.
 
----
-
-## What it does
-
-Upload a PDF, DOCX, or text file. Ask questions in natural language. Get answers cited to exact pages, with no hallucinated sources.
-
-DocMind doesn't just stuff your document into a context window. It implements a production-grade two-stage retrieval pipeline, then routes each query through a ReAct reasoning loop that calls real search tools before synthesizing an answer.
-
----
-
-## Demo
-
-![DocMind demo](assets/demo.png)
-
----
+## What is different from a generic RAG demo
+- Every `(Source: file, p.N)` in an answer is checked against the passages actually retrieved. Invalid citations are removed and counted.
+- The agent abstains (`NOT_FOUND`) instead of guessing, and abstentions go to a human.
+- Answers are routed to a review queue by policy (uncited, invalid citation, low confidence, abstained, plus a random audit sample). Reviewer corrections export back into the evaluation set.
+- Multi-document library with per-query scoping. Ingestion is hash-addressed and idempotent.
+- Evaluation is built in: RAGAS with a Groq judge, a free retrieval ablation, bootstrap confidence intervals.
 
 ## Architecture
-
-
 ```
-Document (PDF/DOCX/TXT)
-        │
-        ▼
-┌─────────────────┐
-│  Semantic        │  NLTK sentence tokenization
-│  Chunker         │  bge-small-en-v1.5 embeddings
-│                  │  Cosine similarity breakpoints
-└────────┬────────┘
-         │ Chunks
-         ▼
-┌─────────────────┐    ┌─────────────────┐
-│  FAISS Dense     │    │  BM25 Sparse     │
-│  Retriever       │    │  Retriever       │
-│  (bi-encoder)    │    │  (keyword)       │
-└────────┬────────┘    └────────┬────────┘
-│                      │
-└──────────┬───────────┘
-	         ▼
-┌─────────────────┐
-│  RRF Fusion      │  Reciprocal Rank Fusion
-│  (k=60)          │  Cormack et al. 2009
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│  Cross-Encoder   │  ms-marco-MiniLM-L-6-v2
-│  Reranker        │  Query × document scoring
-└────────┬────────┘
-│ Top-5 chunks
-▼
-┌─────────────────┐
-│  ReAct Agent     │  Thought → Action → Observation
-│  (from scratch)  │  No LangChain dependency
-└────────┬────────┘
-│
-▼
-Cited answer with source pages
+file -> loader (PDF pages / DOCX sections+tables / TXT)
+     -> semantic chunker (NLTK + bge-small, percentile breakpoints)
+     -> embeddings + chunks stored in SQLite (single source of truth)
+                  |
+                  +-- derived in-memory caches, rebuilt when corpus_version changes:
+                      FAISS IndexFlatIP (dense)    BM25 inverted index (sparse)
+                              \                      /
+                               RRF fusion (k=60) -> cross-encoder rerank -> abstention gate
+                                                |
+                    ReAct agent (search_documents, get_chunk_context), Groq llama-3.1-8b
+                                                |
+                    citation verifier -> abstention decision -> review policy
+                                                |
+              Streamlit UI / FastAPI  <->  review queue + usage events (SQLite)
 ```
 
-## Why each component matters
-
-| Component | Naive alternative | Why this is better |
-|-----------|-------------------|-------------------|
-| Semantic chunker | Fixed-size chunks | Boundaries follow topic shifts, not character counts |
-| FAISS + BM25 hybrid | Dense-only | BM25 catches exact keyword matches dense retrieval misses |
-| RRF fusion | Score normalization | Rank-based, no need to normalize incompatible score scales |
-| Cross-encoder reranker | Bi-encoder only | Sees query+document together; 40-60% precision improvement |
-| ReAct loop | Single-shot QA | Multi-step reasoning; searches until it has enough evidence |
-
----
-
-## Setup
-
-```bash
-# 1. Clone and create virtualenv
-git clone https://github.com/ananyat6979-commits/DocMind.git
-cd DocMind
+## Setup (Windows PowerShell)
+```powershell
+cd D:\Code\Projects\MachineLearning\DocMind
 python -m venv venv
-venv\Scripts\activate   # Windows
-# source venv/bin/activate  # Mac/Linux
-
-# 2. Install
+venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt      # runtime + evaluation + tests
 pip install -e .
-pip install -r requirements.txt
-
-# 3. NLTK data
 python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
-
-# 4. Set your Groq API key (free at https://console.groq.com)
-cp .env.example .env
-# Edit .env: GROQ_API_KEY=gsk_...
+copy .env.example .env      # then put GROQ_API_KEY=gsk_... in .env
 ```
+Mac/Linux: `source venv/bin/activate` and `cp .env.example .env`.
 
----
-
-## Usage
-
-### Streamlit UI (recommended)
-```bash
-streamlit run app.py
-# Open http://localhost:8501
-# Upload any PDF/DOCX, ask questions
+## Run
+```powershell
+streamlit run app.py                                   # UI
+uvicorn docmind.api.main:app --reload                  # API, docs at /docs
+python scripts/demo.py --doc data\your.pdf             # CLI
+python -m pytest -q --ignore=tests/test_ragas_plumbing.py   # 70+ offline tests, no downloads, no API key (use python -m, not bare pytest)
 ```
+Offline demo without a key: `$env:DOCMIND_TEST_MODE="1"` (hash embedder, extractive demo LLM, never for evaluation).
 
-### CLI demo
-```bash
-python scripts/demo.py --doc data/your_document.pdf
-# Add --rebuild to force re-ingestion
+## No Docker, or a weak laptop?
+- Container without local Docker: GitHub Actions builds and tests the image, Codespaces runs it: [docs/DOCKER_CLOUD.md](docs/DOCKER_CLOUD.md).
+- Heavy steps (ingest, ablation, RAGAS) free on Kaggle or Colab, results copied back: [docs/CLOUD.md](docs/CLOUD.md) and `notebooks/docmind_cloud.ipynb`.
+
+## Evaluate (run in this order)
+```powershell
+python scripts/make_testset.py --docs data\your.pdf --n 40 --unanswerable 10 --out data\testset.json   # you verify each item
+python scripts/ablation.py --testset data\testset.json --docs data\your.pdf --chunkers                  # free, no LLM
+python scripts/evaluate.py --testset data\testset.json --docs data\your.pdf                             # RAGAS, Groq judge, resumable
+python scripts/update_readme.py                                                                         # writes the blocks below
 ```
+Only human-verified questions are used by default (`--include-unverified` for trial runs). Groq free-tier limits are 6K tokens/min (8B) and 12K tokens/min plus 100K tokens/day (70B judge). `evaluate.py` checkpoints and resumes, so a daily cap only delays you.
 
-### FastAPI
-```bash
-uvicorn docmind.api.main:app --reload
-# POST /ingest  {"path": "data/your_doc.pdf"}
-# POST /query   {"question": "What are the main findings?"}
-# GET  /health
-```
+### Results: RAGAS and answer-level
+<!-- RAGAS:START -->
+Not yet run. Execute `python scripts/evaluate.py --testset data/testset.json`.
+<!-- RAGAS:END -->
 
-### Evaluation (run on Kaggle for large testsets)
-```bash
-python scripts/evaluate.py --testset data/testset.json
-# testset format: [{"question": "...", "ground_truth": "..."}, ...]
-```
+### Results: retrieval ablation
+<!-- RETRIEVAL:START -->
+Not yet run. Execute `python scripts/ablation.py --testset data/testset.json --docs <your docs>`.
+<!-- RETRIEVAL:END -->
 
----
+### Pilot
+Not yet run. Protocol in [docs/PILOT.md](docs/PILOT.md); requirements and success metrics in [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md).
 
-## Tech stack
+## Human review
+Flags: `abstained`, `no_citations`, `invalid_citation`, `low_retrieval_confidence`, `no_clean_final_answer`, `random_audit` (rate `DOCMIND_REVIEW_AUDIT_RATE`, default 0.10). Reviewers approve, correct or reject in the Review tab or via `GET /review/pending` and `POST /review/{id}`. Set `DOCMIND_REVIEWER_PIN` to protect it. Approved and corrected items export to `data/reviewed_testset.json`.
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Embeddings | BAAI/bge-small-en-v1.5 | Outperforms all-MiniLM on MTEB at same parameter count |
-| Vector index | FAISS IndexFlatIP | Exact cosine search; no approximation error at corpus size |
-| Sparse index | BM25Okapi (rank-bm25) | Captures exact keyword matches; complementary to dense |
-| Reranker | ms-marco-MiniLM-L-6-v2 | Cross-encoder; 90MB, fast on CPU |
-| LLM | Groq llama-3.1-8b-instant | 100k tok/min free tier; ~1s response time |
-| Metadata store | SQLite | Zero-dependency persistence |
-| Experiment tracking | MLflow | Query latency, source count logged per run |
-| API | FastAPI + Pydantic v2 | Typed endpoints; auto-generated docs at /docs |
-| UI | Streamlit | Rapid iteration; file upload + conversation history |
+## Configuration (environment)
+`GROQ_API_KEY`, `DOCMIND_HOME`, `DOCMIND_MIN_RERANK_SCORE`, `DOCMIND_REVIEW_MIN_SCORE`, `DOCMIND_REVIEW_AUDIT_RATE`, `DOCMIND_REVIEWER_PIN`, `DOCMIND_API_KEY`, `DOCMIND_JUDGE_MODEL`. All other knobs are in `docmind/config.py`.
 
----
-
-## Project structure
-
-```
-DocMind/
-├── docmind/
-│   ├── embeddings.py       # Shared model singleton
-│   ├── models.py           # Core data types
-│   ├── config.py           # Central configuration
-│   ├── ingestion/
-│   │   ├── loader.py       # PDF, DOCX, TXT/MD loaders
-│   │   ├── chunker.py      # Semantic chunker
-│   │   └── pipeline.py     # Ingestion orchestration
-│   ├── retrieval/
-│   │   ├── dense.py        # FAISS retriever
-│   │   ├── sparse.py       # BM25 retriever
-│   │   ├── reranker.py     # Cross-encoder reranker
-│   │   └── hybrid.py       # RRF fusion + orchestration
-│   ├── llm/
-│   │   ├── base.py         # Abstract LLM interface
-│   │   └── groq_client.py  # Groq implementation
-│   ├── agent/
-│   │   ├── prompts.py      # ReAct system prompt
-│   │   └── react.py        # ReAct loop (no LangChain)
-│   ├── api/
-│   │   └── main.py         # FastAPI endpoints
-│   ├── evaluation/
-│   │   └── harness.py      # RAGAS evaluation
-│   └── tracking/
-│       └── tracker.py      # MLflow logging
-├── scripts/
-│   ├── demo.py             # CLI demo
-│   └── evaluate.py         # RAGAS eval runner
-├── tests/
-│   ├── test_ingestion.py
-│   ├── test_retrieval.py
-│   └── test_models.py
-├── app.py                  # Streamlit UI
-└── requirements.txt
-```
----
-
-## Evaluation
-
-Run RAGAS evaluation on Kaggle (GPU, no RAM constraints):
-
-```python
-# data/testset.json format
-[
-  {"question": "What is the main thesis?", "ground_truth": "..."},
-  {"question": "How many experiments are described?", "ground_truth": "5"}
-]
-```
-
-```bash
-python scripts/evaluate.py --testset data/testset.json
-```
-
-Target metrics (to be updated after full eval run):
-
-| Metric | Target | Description |
-|--------|--------|-------------|
-| Faithfulness | > 0.80 | Claims in answer supported by retrieved context |
-| Answer relevancy | > 0.75 | Answer addresses the question asked |
-| Context precision | > 0.70 | Retrieved chunks are relevant to the question |
-
----
-
-## Design decisions
-
-**Why not LangChain?** The ReAct agent is built from scratch. This was intentional: it demonstrates understanding of what the framework does, not just which import to use. 
-
-**Why Groq instead of a paid provider?** Free tier at 100k tokens/minute with no credit card. The `BaseLLM` interface makes swapping providers a one-line config change.
-
-**Why FAISS over a vector database?** For a corpus under 100k chunks, exact search with `IndexFlatIP` is fast enough on CPU and adds zero infrastructure. The retrieval layer is designed so `DenseRetriever` can be swapped for Qdrant or Pinecone by implementing the same interface.
-
----
+## Limitations
+Scanned PDFs need OCR first. English text only. Free-tier Groq sends retrieved text off-machine, so do not use confidential documents. SQLite is single-node. Full list: [docs/AUDIT.md](docs/AUDIT.md). Next steps: [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## License
-
 MIT
