@@ -1,5 +1,5 @@
 name: docker
-# Builds the image on GitHub's machines (no Docker needed on your laptop), smoke-tests it, and
+# Builds the image on GitHub's machines (no local Docker needed), smoke-tests it, and
 # publishes it to GitHub Container Registry (ghcr.io). Run manually from the Actions tab at any time.
 on:
   push:

@@ -8,7 +8,7 @@ items are written. Unverified synthetic questions are not a benchmark.
   python scripts/make_testset.py --docs data/mydoc.pdf --n 40 --out data/testset.json
   python scripts/make_testset.py --docs data/mydoc.pdf --unanswerable 10 --out data/testset.json
 
-Cloud workflow (no typing prompts in a notebook): draft there, verify on your laptop.
+Cloud workflow (no typing prompts in a notebook): draft there, verify locally.
   python scripts/make_testset.py --docs data/mydoc.pdf --n 40 --unanswerable 10 --draft-only --out data/testset.draft.json
   python scripts/verify_testset.py --in data/testset.draft.json --out data/testset.json
 

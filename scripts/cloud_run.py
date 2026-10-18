@@ -9,8 +9,8 @@ Does, in order: ingest -> retrieval ablation (free) -> RAGAS with Groq judge (re
 Exit codes: 0 done | 2 Groq daily cap hit (progress saved, just run the same command again later)
             1 error
 
-The bundle contains reports/ and indexes/docmind.db. Unzip it into your laptop's project
-folder and the UI there reuses the embeddings computed in the cloud (no re-embedding).
+The bundle contains reports/ and indexes/docmind.db. Unzip it into the project
+folder on a local machine and the UI there reuses the embeddings computed in the cloud (no re-embedding).
 """
 import argparse
 import json

@@ -1,6 +1,6 @@
 # Pilot protocol: 2 to 3 real users, 2 weeks
 
-I cannot run this for you, and the numbers must come from real people. This kit makes it quick and defensible.
+The numbers in a pilot report must come from real users. This kit makes the measurements quick and defensible.
 
 ## Before you start (30 minutes)
 1. Pick 2 or 3 people who genuinely read long documents. Tell them: it is a free pilot, text of their questions and retrieved passages is sent to Groq, no confidential documents.

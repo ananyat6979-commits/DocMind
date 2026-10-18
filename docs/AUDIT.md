@@ -1,6 +1,6 @@
 # DocMind audit: bottlenecks and gaps
 
-Read from source: all 1,994 lines of the uploaded zip. "Fixed" means the change is in this repo with a test. "Measure" means it needs your data or your Groq key.
+Reviewed against commit `abd4c51` of the original repository (about 2,000 lines of Python). "Fixed" means the change is in this repo with a test. "Measure" means it needs your data or your Groq key.
 
 ## A. Correctness bugs
 
@@ -17,7 +17,7 @@ Read from source: all 1,994 lines of the uploaded zip. "Fixed" means the change 
 | 9 | `ingestion/chunker.py` | A tiny leading fragment was emitted alone below `min_chunk_size`; one oversized sentence was silently truncated by the 512-token embedder. | Fixed |
 | 10 | `ingestion/loader.py` | `.doc` mapped to a loader that cannot read it; DOCX tables ignored; scanned PDFs vanished silently. | Fixed (clear errors, tables flattened) |
 | 11 | `README.md` | `pip install -e .` with no `pyproject.toml`; unpinned `ragas>=0.1.14`. RAGAS 0.4.3 fails to import against current LangChain. | Fixed (pyproject, pins) |
-| 12 | `evaluation/harness.py` | No judge configured (RAGAS defaults to a paid provider); `result["metric"]` changed meaning across RAGAS versions; Groq rejects `n>1` used by answer relevancy. | Fixed (Groq judge, `to_pandas`, `bypass_n`) |
+| 12 | `evaluation/harness.py` | No judge configured (RAGAS falls back to its default provider and fails without that provider's key); `result["metric"]` changed meaning across RAGAS versions; Groq rejects `n>1` used by answer relevancy. | Fixed (Groq judge, `to_pandas`, `bypass_n`) |
 
 ## B. Security
 
@@ -51,7 +51,7 @@ Read from source: all 1,994 lines of the uploaded zip. "Fixed" means the change 
 | RAGAS scores | Never run; testset is 5 questions about a document not in the repo | `scripts/make_testset.py` (human-verified), `scripts/evaluate.py` |
 | bge-small "outperforms MiniLM" | MTEB is not your corpus | Optional: add `--embedder` ablation (see ROADMAP) |
 
-## E. Remaining gaps I did not close
+## E. Remaining gaps
 
 - Scanned PDFs need OCR (`ocrmypdf`). Tables inside PDFs are plain text only.
 - 8B model compliance with the format is imperfect; the review queue exists because of that.
