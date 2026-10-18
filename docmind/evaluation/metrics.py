@@ -88,6 +88,24 @@ def best_f1_threshold(scores: Sequence[float], labels: Sequence[bool]) -> Dict[s
     return {"threshold": best[1], "f1": best[0]}
 
 
+def _mean_timing(records, key):
+    vals = [r.get("timings", {}).get(key) for r in records if r.get("timings", {}).get(key) is not None]
+    return float(np.mean(vals)) if vals else None
+
+
+def _total_tokens(records):
+    vals = [(r.get("timings", {}).get("prompt_tokens") or 0) + (r.get("timings", {}).get("completion_tokens") or 0)
+            for r in records if r.get("timings", {}).get("prompt_tokens") is not None]
+    return float(sum(vals)) if vals else None
+
+
+def _count_by(records, fn):
+    out = {}
+    for r in records:
+        out[fn(r)] = out.get(fn(r), 0) + 1
+    return out
+
+
 def answer_level_stats(records: List[Dict]) -> Dict:
     """Citation validity, abstention behaviour and latency from generation records."""
     answered = [r for r in records if not r["abstained"]]
@@ -116,5 +134,9 @@ def answer_level_stats(records: List[Dict]) -> Dict:
             sum(not r["abstained"] for r in unanswerable) / len(unanswerable)) if unanswerable else None,
         "latency_p50_ms": pct(50), "latency_p95_ms": pct(95),
         "mean_llm_calls": float(np.mean([r["llm_calls"] for r in records])) if records else None,
+        "mean_prompt_tokens": _mean_timing(records, "prompt_tokens"),
+        "mean_completion_tokens": _mean_timing(records, "completion_tokens"),
+        "total_tokens": _total_tokens(records),
+        "finish_reasons": _count_by(records, lambda r: r.get("finish_reason", "unknown")),
         "review_rate": (sum(1 for r in records if r["needs_review"]) / len(records)) if records else None,
     }

@@ -103,6 +103,7 @@ class ReActAgent:
         trace: List[str] = []
         sources: Dict[str, SearchResult] = {}
         timings = {"llm_ms": 0.0, "retrieval_ms": 0.0}
+        tok0 = (getattr(self.llm, "prompt_tokens", None), getattr(self.llm, "completion_tokens", None))
         calls = [0]
         searched = False
         raw_final: Optional[str] = None
@@ -173,6 +174,9 @@ class ReActAgent:
         rest = [s for s in ordered if s.chunk.chunk_id not in cited_ids]
         latency_ms = (time.perf_counter() - t0) * 1000
         timings["total_ms"] = latency_ms
+        if tok0[0] is not None:       # token deltas for this answer (not exact if several runs share one agent)
+            timings["prompt_tokens"] = float(self.llm.prompt_tokens - tok0[0])
+            timings["completion_tokens"] = float(self.llm.completion_tokens - tok0[1])
 
         resp = AgentResponse(
             answer=answer,
