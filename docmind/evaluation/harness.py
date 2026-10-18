@@ -2,8 +2,9 @@
 RAGAS evaluation harness, configured to use Groq as the judge.
 
 Why this file looks the way it does:
-  * RAGAS defaults to a paid provider. We pass a Groq judge (ChatGroq) and a local
-    embedding model explicitly, otherwise evaluate() fails on a missing the default provider API key.
+  * RAGAS falls back to its own default judge provider, which needs a different API key.
+    We pass a Groq judge (ChatGroq) and a local embedding model explicitly, otherwise
+    evaluate() fails on that missing key.
   * Judge model is NOT the generator model (self-preference bias). Default judge:
     llama-3.3-70b-versatile. Generator: llama-3.1-8b-instant.
   * Groq rejects n>1, which RAGAS answer-relevancy requests. We set bypass_n=True

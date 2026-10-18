@@ -28,7 +28,7 @@ Commit `reports/ragas_latest.json`. Add a workflow step that runs `python script
 docker build -t docmind .
 docker run -p 8501:8501 -p 8000:8000 -e GROQ_API_KEY=gsk_xxx -v docmind-data:/data docmind
 ```
-Docker is optional (see docs/CLOUD.md for the no-Docker path). Correction to an earlier version of this file: Hugging Face Spaces is no longer a free container host, since creating Gradio or Docker Spaces now needs a paid plan. For hosting, see docs/CLOUD.md. Then load test the API and record p50/p95:
+Docker is optional (see docs/CLOUD.md for the no-Docker path). Hugging Face Spaces is no longer a free container host: creating Docker Spaces now requires a paid plan. For hosting options, see docs/CLOUD.md. Then load test the API and record p50/p95:
 ```powershell
 pip install locust
 # locustfile: POST /query with 20 questions from the testset, 3 users
