@@ -59,9 +59,16 @@ Offline demo without a key: `$env:DOCMIND_TEST_MODE="1"` (hash embedder, extract
 python scripts/make_testset.py --docs data\your.pdf --n 40 --unanswerable 10 --out data\testset.json   # you verify each item
 python scripts/ablation.py --testset data\testset.json --docs data\your.pdf --chunkers                  # free, no LLM
 python scripts/evaluate.py --testset data\testset.json --docs data\your.pdf                             # RAGAS, Groq judge, resumable
+python scripts/stack_check.py                                                                           # proves the real models run
+python scripts/record_metrics.py                                                                        # writes reports/METRICS.md
 python scripts/update_readme.py                                                                         # writes the blocks below
 ```
 Only human-verified questions are used by default (`--include-unverified` for trial runs). Groq free-tier limits are 6K tokens/min (8B) and 12K tokens/min plus 100K tokens/day (70B judge). `evaluate.py` checkpoints and resumes, so a daily cap only delays you.
+
+### Stack verification
+<!-- STACK:START -->
+Not yet run. Execute `python scripts/stack_check.py`.
+<!-- STACK:END -->
 
 ### Results: RAGAS and answer-level
 <!-- RAGAS:START -->

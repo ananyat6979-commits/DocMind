@@ -38,6 +38,20 @@ def ragas_block():
     return "\n".join(rows)
 
 
+def stack_block():
+    p = ROOT / "reports" / "stack_check.json"
+    if not p.exists():
+        return "Not yet run. Execute `python scripts/stack_check.py`."
+    s = json.loads(p.read_text())
+    v = s["versions"]
+    rows = [f"Real stack verified: **{s['real_stack']}** ({s['scope']}), commit `{s['git_commit']}`, {s['generated_at']}.", "",
+            "| Component | Result |", "|---|---|"]
+    rows += [f"| {c['name']} | {c['status']}: {c['detail'][:100]} |" for c in s["checks"]]
+    rows += ["", f"torch {v.get('torch')}, sentence-transformers {v.get('sentence-transformers')}, faiss-cpu {v.get('faiss-cpu')}, "
+             f"ragas {v.get('ragas')}, Python {s['python']}. Full report: `reports/METRICS.md`."]
+    return "\n".join(rows)
+
+
 def retrieval_block():
     p = ROOT / "reports" / "retrieval_latest.md"
     return p.read_text() if p.exists() else "Not yet run. Execute `python scripts/ablation.py --testset data/testset.json --docs <your docs>`."
@@ -54,6 +68,8 @@ def replace(text, tag, body):
 
 def main():
     t = README.read_text(encoding="utf-8")
+    if "<!-- STACK:START -->" in t:
+        t = replace(t, "STACK", stack_block())
     t = replace(t, "RAGAS", ragas_block())
     t = replace(t, "RETRIEVAL", retrieval_block())
     README.write_text(t, encoding="utf-8")
