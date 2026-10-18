@@ -23,7 +23,6 @@ data/*.draft.json
 *.pkl
 *.egg-info/
 get-pip.py
-reports/
 .ruff_cache/
 .mypy_cache/
 .pytest_cache/
