@@ -23,7 +23,10 @@ from dataclasses import dataclass, field
 from typing import Literal, Optional
 from dotenv import load_dotenv
 
-load_dotenv()
+# Offline test mode must never read a developer's real .env: tests would otherwise pick up a live
+# API key and send traffic to the real service.
+if os.getenv("DOCMIND_TEST_MODE", "") != "1":
+    load_dotenv()
 
 
 def _env_float(name: str, default: Optional[float]) -> Optional[float]:
@@ -75,7 +78,7 @@ class RetrieverConfig:
 
 @dataclass
 class LLMConfig:
-    provider: Literal["groq", "demo"] = "demo" if (TEST_MODE and not os.getenv("GROQ_API_KEY")) else "groq"
+    provider: Literal["groq", "demo"] = "demo" if TEST_MODE else "groq"   # test mode never calls the live API
     groq_model: str = "llama-3.1-8b-instant"
     temperature: float = 0.1
     max_tokens: int = 1024
