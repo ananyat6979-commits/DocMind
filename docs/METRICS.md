@@ -14,7 +14,7 @@ Run `python scripts/record_metrics.py` to consolidate everything into `reports/M
 | Offline tests | pass and fail counts (stand-ins only) | `record_metrics.py --run-tests` | `reports/metrics_latest.json` |
 
 ## Order of a complete measurement
-1. `python scripts/stack_check.py` on a machine that can run the real models (Codespaces or a Kaggle notebook). Requires `GROQ_API_KEY`. If it does not report `REAL STACK VERIFIED`, none of the later numbers describe the real system.
+1. `python scripts/list_models.py`, set `DOCMIND_LLM_MODEL` and `DOCMIND_JUDGE_MODEL`, then `python scripts/stack_check.py` on a machine that can run the real models (Codespaces or a Kaggle notebook). Requires `GROQ_API_KEY`. If it does not report `REAL STACK VERIFIED`, none of the later numbers describe the real system.
 2. `python scripts/make_testset.py` (or the draft and verify workflow), producing at least 50 verified questions, at least 10 of them unanswerable.
 3. `python scripts/ablation.py --testset data/testset.json --docs <files> --chunkers`
 4. `python scripts/evaluate.py --testset data/testset.json --docs <files>`

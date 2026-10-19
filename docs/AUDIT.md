@@ -33,7 +33,7 @@ Reviewed against commit `abd4c51` of the original repository (about 2,000 lines 
 
 | Bottleneck | Evidence | Status |
 |---|---|---|
-| Groq free tier is 6K tokens/min (8B) and 12K tokens/min, 100K tokens/day (70B). README claimed 100K tokens/min. | console.groq.com/docs/rate-limits | Retries honour `Retry-After`; fail fast on daily cap |
+| Groq free-tier token caps are small and model-specific; the original README claimed 100K tokens/min, and the models it named were shut down on 2026-08-16. | console.groq.com/docs/rate-limits, /docs/deprecations | Retries honour `Retry-After`; fail fast on daily cap; model ids are configuration with a clear `model not found` error listing available models |
 | Prompt grows each ReAct step; same chunks re-sent on repeated searches | code | Fixed: seen chunks listed by id only |
 | Reranker model reloaded per `HybridRetriever()` (every upload) | code | Fixed: process singleton |
 | Every sentence embedded for chunking, then every chunk embedded again; rebuild re-embedded | code | Rebuild no longer re-embeds (stored vectors). Sentence-then-chunk double pass remains: Measure |
@@ -54,7 +54,7 @@ Reviewed against commit `abd4c51` of the original repository (about 2,000 lines 
 ## E. Remaining gaps
 
 - Scanned PDFs need OCR (`ocrmypdf`). Tables inside PDFs are plain text only.
-- 8B model compliance with the format is imperfect; the review queue exists because of that.
+- Small-model compliance with the ReAct format is imperfect; the review queue exists because of that.
 - Abstention threshold `DOCMIND_MIN_RERANK_SCORE` needs calibration on your labels (the ablation prints a suggestion).
 - Single-process SQLite is fine for a pilot; not for dozens of concurrent writers.
 - Free-tier Groq sends passages off-machine.

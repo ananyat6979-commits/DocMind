@@ -37,6 +37,6 @@ Out (v1): scanned PDFs without OCR, identity-based multi-user authorization, ima
 Targets are goals, not results. A target is never reported as achieved until the Result column is filled from a measured run.
 
 ## Constraints and risks
-- Groq free tier: 6K tokens/min for the 8B model, 12K tokens/min and 100K tokens/day for the 70B judge. A ReAct run can exceed 6K tokens, so latency includes rate-limit waits.
+- Groq free plan: per-model caps on requests and tokens per minute and per day (see console.groq.com/docs/rate-limits). A ReAct run uses several thousand tokens, so latency includes rate-limit waits.
 - Privacy: text of retrieved passages leaves the machine. Do not pilot with confidential documents.
 - Small-sample pilot: with 2 to 3 users, report counts and ranges, never population claims.
