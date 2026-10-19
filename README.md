@@ -22,7 +22,7 @@ file -> loader (PDF pages / DOCX sections+tables / TXT)
                               \                      /
                                RRF fusion (k=60) -> cross-encoder rerank -> abstention gate
                                                 |
-                    ReAct agent (search_documents, get_chunk_context), Groq llama-3.1-8b
+                    ReAct agent (search_documents, get_chunk_context), Groq-hosted LLM
                                                 |
                     citation verifier -> abstention decision -> review policy
                                                 |
@@ -63,7 +63,7 @@ python scripts/stack_check.py                                                   
 python scripts/record_metrics.py                                                                        # writes reports/METRICS.md
 python scripts/update_readme.py                                                                         # writes the blocks below
 ```
-Only human-verified questions are used by default (`--include-unverified` for trial runs). Groq free-tier limits are 6K tokens/min (8B) and 12K tokens/min plus 100K tokens/day (70B judge). `evaluate.py` checkpoints and resumes, so a daily cap only delays you.
+Only human-verified questions are used by default (`--include-unverified` for trial runs). Groq's free plan has small per-minute and per-day token caps that depend on the model (see console.groq.com/docs/rate-limits), and hosted models are retired from time to time, so model ids are configuration: run `python scripts/list_models.py`, then set `DOCMIND_LLM_MODEL` and `DOCMIND_JUDGE_MODEL`. `evaluate.py` checkpoints and resumes, so a daily cap only delays you.
 
 ### Stack verification
 <!-- STACK:START -->
@@ -87,7 +87,7 @@ Not yet run. Protocol in [docs/PILOT.md](docs/PILOT.md); requirements and succes
 Flags: `abstained`, `no_citations`, `invalid_citation`, `low_retrieval_confidence`, `no_clean_final_answer`, `random_audit` (rate `DOCMIND_REVIEW_AUDIT_RATE`, default 0.10). Reviewers approve, correct or reject in the Review tab or via `GET /review/pending` and `POST /review/{id}`. Set `DOCMIND_REVIEWER_PIN` to protect it. Approved and corrected items export to `data/reviewed_testset.json`.
 
 ## Configuration (environment)
-`GROQ_API_KEY`, `DOCMIND_HOME`, `DOCMIND_MIN_RERANK_SCORE`, `DOCMIND_REVIEW_MIN_SCORE`, `DOCMIND_REVIEW_AUDIT_RATE`, `DOCMIND_REVIEWER_PIN`, `DOCMIND_API_KEY`, `DOCMIND_JUDGE_MODEL`. All other knobs are in `docmind/config.py`.
+`GROQ_API_KEY`, `DOCMIND_LLM_MODEL`, `DOCMIND_REASONING_EFFORT`, `DOCMIND_MAX_TOKENS`, `DOCMIND_HOME`, `DOCMIND_MIN_RERANK_SCORE`, `DOCMIND_REVIEW_MIN_SCORE`, `DOCMIND_REVIEW_AUDIT_RATE`, `DOCMIND_REVIEWER_PIN`, `DOCMIND_API_KEY`, `DOCMIND_JUDGE_MODEL`. All other knobs are in `docmind/config.py`.
 
 ## Limitations
 Scanned PDFs need OCR first. English text only. Free-tier Groq sends retrieved text off-machine, so do not use confidential documents. SQLite is single-node. Full list: [docs/AUDIT.md](docs/AUDIT.md). Next steps: [docs/ROADMAP.md](docs/ROADMAP.md).

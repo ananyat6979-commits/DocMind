@@ -18,7 +18,7 @@ python scripts/ablation.py --testset data/testset.json --docs data/public/paper.
 python scripts/evaluate.py --testset data/testset.json --docs data/public/paper.pdf
 python scripts/update_readme.py
 ```
-If the 70B judge hits the 100K tokens/day cap, rerun the same command tomorrow: it resumes. Or add a payment method on Groq for one cheap run.
+If the judge model hits its daily token cap, rerun the same command tomorrow: it resumes. Or add a payment method on Groq for one cheap run.
 
 ## 3. Regression gate in CI
 Commit `reports/ragas_latest.json`. Add a workflow step that runs `python scripts/evaluate.py --limit 15` on a schedule (needs `GROQ_API_KEY` as a repo secret) and fails if faithfulness or citation validity drops more than 0.05 from the committed value. This is how eval-driven development is shown, not described.
