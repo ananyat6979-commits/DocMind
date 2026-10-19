@@ -74,9 +74,15 @@ def c_mode(args):
         problems.append("reranker disabled by DOCMIND_USE_RERANKER=0")
     if not args.skip_llm and l.provider != "groq":
         problems.append(f"LLM provider is '{l.provider}' (demo stand-in). Set GROQ_API_KEY and unset DOCMIND_TEST_MODE")
+    if not args.skip_llm and l.provider == "groq" and not l.groq_model:
+        problems.append("DOCMIND_LLM_MODEL is not set (run python scripts/list_models.py)")
+    if not args.skip_llm and l.provider == "groq" and not CONFIG.eval.judge_model:
+        problems.append("DOCMIND_JUDGE_MODEL is not set (run python scripts/list_models.py)")
     cfg = {"embedding_model": e.model_name, "embedding_backend": e.backend, "reranker_model": r.reranker_model,
            "use_reranker": r.use_reranker, "llm_provider": l.provider, "llm_model": l.groq_model,
-           "judge_model": CONFIG.eval.judge_model, "chunker": CONFIG.chunker.strategy,
+           "judge_model": CONFIG.eval.judge_model, "reasoning_effort": l.reasoning_effort,
+           "judge_reasoning_effort": CONFIG.eval.judge_reasoning_effort, "max_tokens": l.max_tokens,
+           "chunker": CONFIG.chunker.strategy,
            "top_k_rerank": r.top_k_rerank, "device_setting": e.device, "test_mode": os.getenv("DOCMIND_TEST_MODE") == "1"}
     if problems:
         return ("warn" if args.allow_stand_ins else "fail"), "; ".join(problems), cfg
@@ -173,7 +179,7 @@ def c_llm(args):
         return "skip", f"provider is '{CONFIG.llm.provider}'", {}
     from docmind.llm.groq_client import get_llm
     llm = get_llm()
-    t0 = time.perf_counter(); out = llm.complete([{"role": "user", "content": "Reply with exactly the word: OK"}], max_tokens=8)
+    t0 = time.perf_counter(); out = llm.complete([{"role": "user", "content": "Reply with exactly the word: OK"}])
     dt = time.perf_counter() - t0
     m = {"model": CONFIG.llm.groq_model, "latency_ms": round(dt * 1000), "reply": out.strip()[:40],
          "prompt_tokens": getattr(llm, "prompt_tokens", None), "completion_tokens": getattr(llm, "completion_tokens", None)}
@@ -190,8 +196,10 @@ def c_judge(args):
     except ImportError as exc:
         return "fail", f"{exc}. Run: pip install -r requirements-eval.txt", {}
     from docmind.llm.groq_client import GroqLLM
-    j = GroqLLM(model=CONFIG.eval.judge_model)
-    t0 = time.perf_counter(); out = j.complete([{"role": "user", "content": "Reply with exactly the word: OK"}], max_tokens=8)
+    if not CONFIG.eval.judge_model:
+        return "fail", "DOCMIND_JUDGE_MODEL is not set (run python scripts/list_models.py)", {}
+    j = GroqLLM(model=CONFIG.eval.judge_model, reasoning_effort=CONFIG.eval.judge_reasoning_effort)
+    t0 = time.perf_counter(); out = j.complete([{"role": "user", "content": "Reply with exactly the word: OK"}])
     dt = time.perf_counter() - t0
     return ("pass" if "ok" in out.lower() else "fail"), f"judge {CONFIG.eval.judge_model} replied in {dt * 1000:.0f} ms", \
         {"model": CONFIG.eval.judge_model, "latency_ms": round(dt * 1000)}
