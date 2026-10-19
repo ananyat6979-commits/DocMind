@@ -1,15 +1,18 @@
 """
-Groq LLM client with rate-limit-aware retries.
+Groq LLM client: rate-limit-aware retries, reasoning-model support, and actionable errors.
 
-Groq free-tier limits (console.groq.com/docs/rate-limits, checked Oct 2026):
-  llama-3.1-8b-instant     30 RPM | 6K TPM  | 500K tokens/day
-  llama-3.3-70b-versatile  30 RPM | 12K TPM | 100K tokens/day
-A multi-step ReAct run can burn 5-8K tokens, so 429s are normal, not an error.
-This client honours the Retry-After header, backs off with jitter, and fails
-fast (instead of sleeping for hours) when a daily cap is hit.
+Groq's free-tier limits are small and change, and hosted model ids are retired from time to time. So:
+  * the model id is configuration (DOCMIND_LLM_MODEL), never a hidden default;
+  * a "model not found" error lists the models your key can actually use;
+  * 429s honour Retry-After, back off with jitter, and fail fast when a daily cap is hit
+    (check console.groq.com/docs/rate-limits for the current limits of your model).
+Reasoning models spend completion tokens on hidden reasoning. If the budget is too small the visible
+answer comes back empty, which is reported as EmptyCompletion with the fix, instead of failing later
+in a confusing way.
 """
 import logging
 import random
+import re
 import time
 from typing import Dict, List, Optional
 
@@ -19,6 +22,20 @@ from docmind.llm.base import BaseLLM
 logger = logging.getLogger(__name__)
 
 _RETRYABLE = {"RateLimitError", "APIConnectionError", "APITimeoutError", "InternalServerError"}
+_NOT_CHAT = ("whisper", "tts", "playai", "guard", "safeguard", "embed", "orpheus")
+_THINK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+
+
+class RateLimitExhausted(RuntimeError):
+    """Groq asked us to wait longer than max_sleep_seconds (usually the daily token cap)."""
+
+
+class ModelUnavailable(RuntimeError):
+    """The configured model id does not exist for this key (retired, misspelled, or no access)."""
+
+
+class EmptyCompletion(RuntimeError):
+    """The model produced no visible text, typically because reasoning used the whole token budget."""
 
 
 def _retry_after(exc: Exception) -> Optional[float]:
@@ -35,12 +52,22 @@ def _retry_after(exc: Exception) -> Optional[float]:
     return None
 
 
-class RateLimitExhausted(RuntimeError):
-    """Groq asked us to wait longer than max_sleep_seconds (usually the daily token cap)."""
+def clean_completion(text: str) -> str:
+    """Remove inline <think>...</think> blocks some models emit. An unterminated block means the
+    budget ran out mid-thought, so there is no usable answer."""
+    text = _THINK.sub("", text or "")
+    if "<think>" in text.lower():
+        return ""
+    return text.strip()
+
+
+def list_chat_models(client) -> List[str]:
+    ids = sorted(m.id for m in client.models.list().data)
+    return [i for i in ids if not any(k in i.lower() for k in _NOT_CHAT)]
 
 
 class GroqLLM(BaseLLM):
-    def __init__(self, model: Optional[str] = None):
+    def __init__(self, model: Optional[str] = None, reasoning_effort: Optional[str] = None):
         if not CONFIG.llm.groq_api_key:
             raise ValueError(
                 "GROQ_API_KEY not set. Add it to .env or the environment.\n"
@@ -49,30 +76,60 @@ class GroqLLM(BaseLLM):
         from groq import Groq
         self._client = Groq(api_key=CONFIG.llm.groq_api_key, max_retries=0)
         self._model = model or CONFIG.llm.groq_model
+        self._reasoning_effort = reasoning_effort if reasoning_effort is not None else CONFIG.llm.reasoning_effort
+        if not self._model:
+            raise ValueError(self._missing_model_message())
         self.prompt_tokens = 0
         self.completion_tokens = 0
         self.calls = 0
 
+    # ------------------------------------------------------------------ helpers
+    def _available(self) -> str:
+        try:
+            return ", ".join(list_chat_models(self._client)) or "(none returned)"
+        except Exception as exc:
+            return f"(could not list models: {type(exc).__name__})"
+
+    def _missing_model_message(self) -> str:
+        return ("No model configured. Set DOCMIND_LLM_MODEL (generator) and DOCMIND_JUDGE_MODEL (evaluation judge) "
+                "to ids your key can use.\nModels available to this key: " + self._available() +
+                "\nExample (bash): export DOCMIND_LLM_MODEL=<id>   PowerShell: $env:DOCMIND_LLM_MODEL=\"<id>\"")
+
+    # ---------------------------------------------------------------------- API
     def complete(self, messages: List[Dict[str, str]], stop=None, **kwargs) -> str:
         temperature = kwargs.get("temperature", CONFIG.llm.temperature)
         max_tokens = kwargs.get("max_tokens", CONFIG.llm.max_tokens)
+        request = dict(model=self._model, messages=messages, temperature=temperature,
+                       max_tokens=max_tokens, stop=stop)
+        if self._reasoning_effort:
+            request["reasoning_effort"] = self._reasoning_effort
         last_exc: Optional[Exception] = None
 
         for attempt in range(CONFIG.llm.max_retries + 1):
             try:
-                resp = self._client.chat.completions.create(
-                    model=self._model, messages=messages, temperature=temperature,
-                    max_tokens=max_tokens, stop=stop,
-                )
+                resp = self._client.chat.completions.create(**request)
                 self.calls += 1
                 usage = getattr(resp, "usage", None)
                 if usage:
                     self.prompt_tokens += getattr(usage, "prompt_tokens", 0) or 0
                     self.completion_tokens += getattr(usage, "completion_tokens", 0) or 0
-                return resp.choices[0].message.content or ""
+                choice = resp.choices[0]
+                text = clean_completion(choice.message.content or "")
+                if not text and getattr(choice, "finish_reason", "") == "length":
+                    raise EmptyCompletion(
+                        f"{self._model} used its whole {max_tokens}-token budget before writing an answer "
+                        "(hidden reasoning). Raise DOCMIND_MAX_TOKENS (try 4096) or lower reasoning with "
+                        "DOCMIND_REASONING_EFFORT=low.")
+                return text
             except Exception as exc:
                 last_exc = exc
-                if type(exc).__name__ not in _RETRYABLE or attempt == CONFIG.llm.max_retries:
+                name = type(exc).__name__
+                if name == "NotFoundError" or getattr(exc, "status_code", None) == 404:
+                    raise ModelUnavailable(
+                        f"Model '{self._model}' does not exist for this key (retired, misspelled, or no access).\n"
+                        f"Models available to this key: {self._available()}\n"
+                        "Set DOCMIND_LLM_MODEL / DOCMIND_JUDGE_MODEL to one of them.") from exc
+                if name not in _RETRYABLE or attempt == CONFIG.llm.max_retries:
                     raise
                 wait = _retry_after(exc)
                 if wait is None:
@@ -80,9 +137,9 @@ class GroqLLM(BaseLLM):
                 if wait > CONFIG.llm.max_sleep_seconds:
                     raise RateLimitExhausted(
                         f"Groq asked us to wait {wait:.0f}s (likely the daily token cap). "
-                        "Try again later, or switch model / upgrade the plan."
+                        "Try again later, switch model, or upgrade the plan."
                     ) from exc
-                logger.warning(f"Groq {type(exc).__name__}; retry {attempt + 1} in {wait:.1f}s")
+                logger.warning(f"Groq {name}; retry {attempt + 1} in {wait:.1f}s")
                 time.sleep(wait)
         raise last_exc  # pragma: no cover
 

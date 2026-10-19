@@ -5,12 +5,12 @@ Why this file looks the way it does:
   * RAGAS falls back to its own default judge provider, which needs a different API key.
     We pass a Groq judge (ChatGroq) and a local embedding model explicitly, otherwise
     evaluate() fails on that missing key.
-  * Judge model is NOT the generator model (self-preference bias). Default judge:
-    llama-3.3-70b-versatile. Generator: llama-3.1-8b-instant.
+  * The judge should NOT be the generator model (self-preference bias): use a different, preferably
+    larger model. Both ids are configuration (DOCMIND_LLM_MODEL, DOCMIND_JUDGE_MODEL).
   * Groq rejects n>1, which RAGAS answer-relevancy requests. We set bypass_n=True
     and strictness=1.
-  * Groq's free tier is 12K TPM and 100K tokens/day for the 70B judge. A full run
-    can exceed the daily cap, so BOTH phases checkpoint to JSONL and resume:
+  * Groq's free tier has per-minute and per-day token caps (see console.groq.com/docs/rate-limits).
+    A full run can exceed the daily cap, so BOTH phases checkpoint to JSONL and resume:
         generate  -> reports/generations.jsonl   (agent answers; resumable)
         score     -> reports/ragas_scores.jsonl  (per-sample RAGAS scores; resumable)
   * Abstained answers are excluded from RAGAS (faithfulness of "I could not find
@@ -103,6 +103,9 @@ def build_judge():
 
     if not CONFIG.llm.groq_api_key:
         raise ValueError("GROQ_API_KEY not set; it is needed for the RAGAS judge.")
+    if not CONFIG.eval.judge_model:
+        raise ValueError("DOCMIND_JUDGE_MODEL is not set. Run `python scripts/list_models.py` to see the ids "
+                         "your key can use, then set it (a larger model than the generator is preferable).")
 
     class _LocalEmbeddings(Embeddings):
         def embed_documents(self, texts):
@@ -113,8 +116,9 @@ def build_judge():
 
     run_config = RunConfig(timeout=CONFIG.eval.judge_timeout, max_retries=CONFIG.eval.judge_max_retries,
                            max_workers=CONFIG.eval.judge_max_workers)
+    extra = {"reasoning_effort": CONFIG.eval.judge_reasoning_effort} if CONFIG.eval.judge_reasoning_effort else {}
     chat = ChatGroq(model=CONFIG.eval.judge_model, temperature=0.0,
-                    api_key=CONFIG.llm.groq_api_key, max_retries=6)
+                    api_key=CONFIG.llm.groq_api_key, max_retries=6, **extra)
     return (LangchainLLMWrapper(chat, run_config=run_config, bypass_n=True),
             LangchainEmbeddingsWrapper(_LocalEmbeddings()), run_config)
 

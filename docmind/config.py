@@ -15,7 +15,11 @@ Environment overrides (all optional):
   DOCMIND_REVIEW_AUDIT_RATE fraction of confident answers sampled for human audit
   DOCMIND_REVIEWER_PIN      PIN required to open the review queue (UI and API)
   DOCMIND_API_KEY           API key required by the FastAPI service
-  DOCMIND_JUDGE_MODEL       RAGAS judge model on Groq
+  DOCMIND_LLM_MODEL         generator model id on Groq (required; run scripts/list_models.py)
+  DOCMIND_JUDGE_MODEL       RAGAS judge model id on Groq (required for evaluation)
+  DOCMIND_REASONING_EFFORT  low | medium | high, only for reasoning models (generator)
+  DOCMIND_JUDGE_REASONING_EFFORT  same, for the judge
+  DOCMIND_MAX_TOKENS        completion budget per call (default 2048; reasoning models need room)
 """
 import os
 from pathlib import Path
@@ -79,9 +83,12 @@ class RetrieverConfig:
 @dataclass
 class LLMConfig:
     provider: Literal["groq", "demo"] = "demo" if TEST_MODE else "groq"   # test mode never calls the live API
-    groq_model: str = "llama-3.1-8b-instant"
+    # No default model id on purpose: hosted model ids get retired (the original defaults were shut down
+    # on 2026-08-16) and a silent default rots. Set DOCMIND_LLM_MODEL; scripts/list_models.py shows choices.
+    groq_model: str = field(default_factory=lambda: os.getenv("DOCMIND_LLM_MODEL", ""))
     temperature: float = 0.1
-    max_tokens: int = 1024
+    max_tokens: int = field(default_factory=lambda: int(os.getenv("DOCMIND_MAX_TOKENS", "2048")))
+    reasoning_effort: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_REASONING_EFFORT") or None)
     groq_api_key: str = field(default_factory=lambda: os.getenv("GROQ_API_KEY", ""))
     max_retries: int = 6
     max_sleep_seconds: float = 120.0   # if Groq asks us to wait longer (daily cap), fail fast
@@ -90,7 +97,8 @@ class LLMConfig:
 @dataclass
 class EvalConfig:
     # A different, stronger model than the generator avoids self-preference bias.
-    judge_model: str = field(default_factory=lambda: os.getenv("DOCMIND_JUDGE_MODEL", "llama-3.3-70b-versatile"))
+    judge_model: str = field(default_factory=lambda: os.getenv("DOCMIND_JUDGE_MODEL", ""))
+    judge_reasoning_effort: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_JUDGE_REASONING_EFFORT") or None)
     judge_max_workers: int = 2          # Groq free tier: keep low
     judge_timeout: int = 180
     judge_max_retries: int = 10
