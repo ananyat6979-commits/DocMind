@@ -27,3 +27,4 @@ get-pip.py
 .mypy_cache/
 .pytest_cache/
 uploads/
+*.zip
