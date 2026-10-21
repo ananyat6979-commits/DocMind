@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-10-21 06:34:33 +0000",
+  "git_commit": "d5132f4",
+  "git_dirty": false,
+  "python": "3.14.2",
+  "platform": "Linux-6.8.0-1064-azure-x86_64-with-glibc2.39",
+  "cpu_count": 2,
+  "versions": {
+    "torch": "2.14.1+cpu",
+    "sentence-transformers": "5.7.0",
+    "faiss-cpu": "1.15.1",
+    "numpy": "2.5.4",
+    "ragas": "0.3.9",
+    "langchain-groq": "0.3.8",
+    "groq": "0.37.1",
+    "streamlit": "1.66.0",
+    "fastapi": "0.149.0",
+    "pdfplumber": "0.11.10",
+    "python-docx": "1.2.0",
+    "nltk": "3.10.3",
+    "torch_cuda_available": false
+  },
+  "scope": "full",
+  "real_stack": true,
+  "failed": [],
+  "checks": [
+    {
+      "name": "mode",
+      "status": "pass",
+      "detail": "real embedder, real reranker, Groq LLM",
+      "metrics": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "embedding_backend": "sentence-transformers",
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "use_reranker": true,
+        "llm_provider": "groq",
+        "llm_model": "qwen/qwen3.8-27b",
+        "judge_model": "openai/gpt-oss-120b",
+        "reasoning_effort": null,
+        "judge_reasoning_effort": "low",
+        "max_tokens": 4096,
+        "chunker": "semantic",
+        "top_k_rerank": 5,
+        "device_setting": "cpu",
+        "test_mode": false
+      },
+      "seconds": 0.0,
+      "required": true
+    },
+    {
+      "name": "versions",
+      "status": "pass",
+      "detail": "core packages present",
+      "metrics": {
+        "torch": "2.14.1+cpu",
+        "sentence-transformers": "5.7.0",
+        "faiss-cpu": "1.15.1",
+        "numpy": "2.5.4",
+        "ragas": "0.3.9",
+        "langchain-groq": "0.3.8",
+        "groq": "0.37.1",
+        "streamlit": "1.66.0",
+        "fastapi": "0.149.0",
+        "pdfplumber": "0.11.10",
+        "python-docx": "1.2.0",
+        "nltk": "3.10.3",
+        "torch_cuda_available": false
+      },
+      "seconds": 1.33,
+      "required": true
+    },
+    {
+      "name": "embedder",
+      "status": "pass",
+      "detail": "dim=384, median 105.5 sentences/s (runs 89 to 111)",
+      "metrics": {
+        "dim": 384,
+        "load_seconds": 19.31,
+        "sentences_per_second": 105.5,
+        "sentences_per_second_runs": [
+          88.7,
+          110.7,
+          105.5
+        ],
+        "norm_min": 0.9999999403953552,
+        "norm_max": 1.0000001192092896,
+        "sim_related": 0.962,
+        "sim_unrelated": 0.39,
+        "device": "cpu"
+      },
+      "seconds": 26.06,
+      "required": true
+    },
+    {
+      "name": "reranker",
+      "status": "pass",
+      "detail": "relevant passage ranked first (8.92 vs -11.36)",
+      "metrics": {
+        "scores": {
+          "Coolant temperature ": 8.92,
+          "The cafeteria serves": -11.359
+        },
+        "latency_ms_2_pairs": 21.8
+      },
+      "seconds": 7.56,
+      "required": true
+    },
+    {
+      "name": "retrieval_smoke",
+      "status": "pass",
+      "detail": "ingest ok, 2 chunks, top-1 correct for 3/3 queries",
+      "metrics": {
+        "chunks": 2,
+        "embedding_dim": 384,
+        "ingest_seconds": 1.03,
+        "hit_at_1": 1.0
+      },
+      "seconds": 1.93,
+      "required": true
+    },
+    {
+      "name": "llm",
+      "status": "pass",
+      "detail": "qwen/qwen3.8-27b replied in 251 ms",
+      "metrics": {
+        "model": "qwen/qwen3.8-27b",
+        "latency_ms": 251,
+        "reply": "OK",
+        "prompt_tokens": 19,
+        "completion_tokens": 2
+      },
+      "seconds": 0.5,
+      "required": true
+    },
+    {
+      "name": "judge",
+      "status": "pass",
+      "detail": "judge openai/gpt-oss-120b replied in 393 ms",
+      "metrics": {
+        "model": "openai/gpt-oss-120b",
+        "latency_ms": 393
+      },
+      "seconds": 2.07,
+      "required": true
+    },
+    {
+      "name": "end_to_end",
+      "status": "pass",
+      "detail": "answered with 1 verified citation(s) in 437 ms",
+      "metrics": {
+        "latency_ms": 437,
+        "llm_calls": 2,
+        "finish_reason": "final_answer",
+        "citation_validity": 1.0,
+        "timings": {
+          "llm_ms": 366.5,
+          "retrieval_ms": 69.9,
+          "total_ms": 436.7,
+          "prompt_tokens": 953.0,
+          "completion_tokens": 62.0
+        },
+        "answer_preview": "The coolant temperature must stay below 300 degrees during startup (Source: sample.txt)."
+      },
+      "seconds": 1.2,
+      "required": true
+    }
+  ]
+}
