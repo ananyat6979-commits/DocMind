@@ -4,6 +4,7 @@ All tunable parameters live here. Nothing is hardcoded in pipeline code.
 
 Environment overrides (all optional):
   GROQ_API_KEY              generator + judge key
+  DOCMIND_CHUNKER=fixed     skip sentence-level embedding when chunking (fast on very long documents)
   DOCMIND_USE_RERANKER=0    skip the cross-encoder (low-RAM laptops)
   DOCMIND_MAX_ITERATIONS    ReAct steps per question (default 5; 3 saves tokens)
   DOCMIND_DEVICE            cpu | cuda (embedding + reranker device)
@@ -58,7 +59,9 @@ class EmbeddingConfig:
 
 @dataclass
 class ChunkerConfig:
-    strategy: Literal["semantic", "fixed"] = "semantic"
+    # "fixed" skips per-sentence embedding: much faster on long documents (a novel can take many minutes
+    # with "semantic"), at some cost in chunk coherence. Compare them with scripts/ablation.py --chunkers.
+    strategy: Literal["semantic", "fixed"] = field(default_factory=lambda: "fixed" if os.getenv("DOCMIND_CHUNKER", "semantic") == "fixed" else "semantic")
     min_chunk_size: int = 150
     max_chunk_size: int = 1200
     overlap_sentences: int = 1

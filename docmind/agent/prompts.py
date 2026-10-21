@@ -33,6 +33,7 @@ RULES:
 4. Every factual statement in the Final Answer must be followed by a citation. Copy the cite_as string from the Observation EXACTLY, for example (Source: report.pdf, p.3). Never invent or edit a citation.
 5. If the Observations do not contain the answer, your Final Answer must be exactly: {NOT_FOUND_TOKEN}: <one sentence on what you searched for>. Do not guess.
 6. Keep each Thought to one or two sentences.
+7. Write every Action as plain text on its own line, exactly as in the format above. Do NOT use the API's native tool or function calling.
 """
 
 
