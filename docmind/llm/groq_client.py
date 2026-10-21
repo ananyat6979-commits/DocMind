@@ -10,6 +10,7 @@ Reasoning models spend completion tokens on hidden reasoning. If the budget is t
 answer comes back empty, which is reported as EmptyCompletion with the fix, instead of failing later
 in a confusing way.
 """
+import json
 import logging
 import random
 import re
@@ -24,6 +25,54 @@ logger = logging.getLogger(__name__)
 _RETRYABLE = {"RateLimitError", "APIConnectionError", "APITimeoutError", "InternalServerError"}
 _NOT_CHAT = ("whisper", "tts", "playai", "guard", "safeguard", "embed", "orpheus")
 _THINK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+
+
+# Must match docmind.agent.tools.TOOL_NAMES (checked by a test); duplicated to keep this module independent.
+_KNOWN_TOOLS = ("search_documents", "get_chunk_context")
+
+
+def _failed_generation(exc: Exception) -> Optional[str]:
+    """The text a model produced when the API rejected it with code tool_use_failed, if any."""
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict):
+        err = body.get("error", body)
+        if isinstance(err, dict) and err.get("code") == "tool_use_failed":
+            fg = err.get("failed_generation")
+            return fg if isinstance(fg, str) else None
+    return None
+
+
+def tool_call_to_react(raw: str) -> Optional[str]:
+    """Convert a native tool call such as {"name": "search_documents", "arguments": {"query": "x"}}
+    into the ReAct text the agent understands. Returns None if it is not one of our tools."""
+    name, args = None, None
+    try:
+        data = json.loads(raw)
+        if isinstance(data, list) and data:
+            data = data[0]
+        if isinstance(data, dict):
+            name = data.get("name") or (data.get("function") or {}).get("name")
+            args = data.get("arguments", data.get("parameters"))
+    except (ValueError, TypeError):
+        m = re.search(r"<function=(\w+)>\s*(\{.*?\})", raw, re.DOTALL)
+        if m:
+            name = m.group(1)
+            try:
+                args = json.loads(m.group(2))
+            except ValueError:
+                args = None
+    if isinstance(args, str):
+        try:
+            args = json.loads(args)
+        except ValueError:
+            args = None
+    if name not in _KNOWN_TOOLS or not isinstance(args, dict):
+        return None
+    value = next((v for v in args.values() if isinstance(v, str) and v.strip()), None)
+    if value is None:
+        return None
+    value = value.replace('"', "'").replace("\n", " ").strip()
+    return f'Thought: I should use {name}.\nAction: {name}("{value}")'
 
 
 class RateLimitExhausted(RuntimeError):
@@ -129,6 +178,13 @@ class GroqLLM(BaseLLM):
                         f"Model '{self._model}' does not exist for this key (retired, misspelled, or no access).\n"
                         f"Models available to this key: {self._available()}\n"
                         "Set DOCMIND_LLM_MODEL / DOCMIND_JUDGE_MODEL to one of them.") from exc
+                # Models trained for native function calling may emit a tool call even though we
+                # declare no tools. The API rejects that, but the intended call is in the error: recover it.
+                recovered = tool_call_to_react(_failed_generation(exc) or "")
+                if recovered is not None:
+                    self.calls += 1
+                    logger.info("Recovered a native tool call into ReAct text")
+                    return recovered
                 if name not in _RETRYABLE or attempt == CONFIG.llm.max_retries:
                     raise
                 wait = _retry_after(exc)
