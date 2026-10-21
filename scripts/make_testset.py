@@ -64,7 +64,7 @@ def main():
     chunks, _ = store.load_corpus(file_ids)
     chunks = [c for c in chunks if len(c.content) > 300]
     random.Random(args.seed).shuffle(chunks)
-    llm = GroqLLM(model=CONFIG.eval.judge_model)
+    llm = GroqLLM(model=CONFIG.eval.judge_model, reasoning_effort=CONFIG.eval.judge_reasoning_effort)
 
     out_path = Path(args.out)
     items = json.loads(out_path.read_text()) if out_path.exists() else []

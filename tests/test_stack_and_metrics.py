@@ -37,6 +37,8 @@ def test_stack_check_plumbing_passes_with_stand_ins_but_is_never_real(tmp_path):
     by = {c["name"]: c for c in rep["checks"]}
     assert by["mode"]["status"] == "warn"
     assert by["embedder"]["status"] == "pass" and by["retrieval_smoke"]["status"] == "pass"
+    assert len(by["embedder"]["metrics"]["sentences_per_second_runs"]) == 3 and "median" in by["embedder"]["detail"]
+    assert rep["git_dirty"] in (True, False)
     assert by["llm"]["status"] == "skip" and rep["real_stack"] is False
     assert rep["scope"].startswith("partial") and by["retrieval_smoke"]["metrics"]["hit_at_1"] == 1.0
 
@@ -107,3 +109,18 @@ def test_update_readme_fills_stack_block(tmp_path, monkeypatch):
     assert "Real stack verified: **True**" in ur.stack_block() and "embedder | pass" in ur.stack_block()
     (tmp_path / "reports" / "stack_check.json").unlink()
     assert ur.stack_block().startswith("Not yet run")
+
+
+def test_untracked_report_does_not_mark_the_tree_dirty(tmp_path):
+    """git_dirty must reflect modified tracked files only; the report itself is untracked output."""
+    import subprocess as sp
+    repo = tmp_path / "r"; repo.mkdir()
+    for cmd in (["git", "init", "-q"], ["git", "config", "user.email", "t@t"], ["git", "config", "user.name", "t"]):
+        sp.run(cmd, cwd=repo, check=True)
+    (repo / "a.txt").write_text("x"); sp.run(["git", "add", "a.txt"], cwd=repo, check=True)
+    sp.run(["git", "commit", "-q", "-m", "m"], cwd=repo, check=True)
+    (repo / "report.json").write_text("{}")                                  # untracked
+    clean = sp.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=repo, capture_output=True, text=True).stdout
+    (repo / "a.txt").write_text("changed")                                   # tracked and modified
+    dirty = sp.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=repo, capture_output=True, text=True).stdout
+    assert clean == "" and dirty != ""

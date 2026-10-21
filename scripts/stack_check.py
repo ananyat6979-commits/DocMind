@@ -108,13 +108,19 @@ def c_versions(_):
 def c_embedder(_):
     from docmind.embeddings import embed_texts, get_embedding_model
     t0 = time.perf_counter(); get_embedding_model(); load_s = time.perf_counter() - t0
-    t0 = time.perf_counter(); a = embed_texts(SENTENCES); dt = time.perf_counter() - t0
+    embed_texts(SENTENCES[:8])                               # warm-up: first calls are slower than steady state
+    rates = []
+    for _ in range(3):                                       # a single timing is too noisy on shared CPUs
+        t0 = time.perf_counter(); a = embed_texts(SENTENCES); dt = time.perf_counter() - t0
+        rates.append(len(SENTENCES) / dt)
     b = embed_texts(SENTENCES)
+    sps = float(np.median(rates))
     norms = np.linalg.norm(a, axis=1)
     pair = embed_texts(["Coolant must stay below 300 degrees.", "The coolant temperature should not exceed 300 degrees.",
                         "The cafeteria serves soup on Mondays."])
     sim_rel, sim_irr = float(pair[0] @ pair[1]), float(pair[0] @ pair[2])
-    m = {"dim": int(a.shape[1]), "load_seconds": round(load_s, 2), "sentences_per_second": round(len(SENTENCES) / dt, 1),
+    m = {"dim": int(a.shape[1]), "load_seconds": round(load_s, 2), "sentences_per_second": round(sps, 1),
+         "sentences_per_second_runs": [round(r, 1) for r in rates],
          "norm_min": float(norms.min()), "norm_max": float(norms.max()), "sim_related": round(sim_rel, 3),
          "sim_unrelated": round(sim_irr, 3), "device": CONFIG.embedding.device}
     errs = []
@@ -126,7 +132,7 @@ def c_embedder(_):
         errs.append("non-deterministic encodings")
     if not sim_rel > sim_irr:
         errs.append("related pair not closer than unrelated pair")
-    return ("fail" if errs else "pass"), ("; ".join(errs) or f"dim={a.shape[1]}, {m['sentences_per_second']} sentences/s"), m
+    return ("fail" if errs else "pass"), ("; ".join(errs) or f"dim={a.shape[1]}, median {m['sentences_per_second']} sentences/s (runs {min(rates):.0f} to {max(rates):.0f})"), m
 
 
 def c_reranker(_):
@@ -139,7 +145,10 @@ def c_reranker(_):
     bad = SearchResult(Chunk("The cafeteria serves soup on Mondays and Thursdays.", "d", "s", 1), 0.0, "hybrid")
     rr = CrossEncoderReranker()
     rr.rerank(q, [good, bad], top_k=2)                      # warm-up (model load)
-    t0 = time.perf_counter(); out = rr.rerank(q, [good, bad], top_k=2); dt = time.perf_counter() - t0
+    times = []
+    for _ in range(5):
+        t0 = time.perf_counter(); out = rr.rerank(q, [good, bad], top_k=2); times.append(time.perf_counter() - t0)
+    dt = float(np.median(times))
     scores = {r.chunk.content[:20]: round(r.score, 3) for r in out}
     ok = out[0].chunk is good.chunk and out[0].score > out[1].score
     return ("pass" if ok else "fail"), (f"relevant passage ranked first ({out[0].score:.2f} vs {out[1].score:.2f})" if ok
@@ -247,7 +256,7 @@ def main() -> int:
     report = {
         "generated_at": time.strftime("%Y-%m-%d %H:%M:%S %z"),
         "git_commit": _git("rev-parse", "--short", "HEAD") or None,
-        "git_dirty": bool(_git("status", "--porcelain")),
+        "git_dirty": bool(_git("status", "--porcelain", "--untracked-files=no")),
         "python": platform.python_version(), "platform": platform.platform(), "cpu_count": os.cpu_count(),
         "versions": versions,
         "scope": "partial (no LLM checks)" if args.skip_llm else "full",
