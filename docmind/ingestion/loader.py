@@ -6,6 +6,7 @@ headings survive into citations.
 """
 import hashlib
 import logging
+import os
 from pathlib import Path
 from typing import List, Union
 
@@ -26,6 +27,16 @@ def file_sha256(path: Union[str, Path], block: int = 1 << 20) -> str:
     return h.hexdigest()
 
 
+def _pdf_x_tolerance() -> float:
+    """Horizontal gap (in points) above which pdfplumber inserts a space. The default of 3 glues words
+    together in tightly kerned PDFs ('WeevaluateAgentS4'), which breaks word-based search. Choose a value
+    with scripts/check_pdf_text.py and set DOCMIND_PDF_X_TOLERANCE. Re-ingest after changing it."""
+    try:
+        return float(os.getenv("DOCMIND_PDF_X_TOLERANCE", "3"))
+    except ValueError:
+        return 3.0
+
+
 def load_pdf(path: Path) -> List[Document]:
     """Extract text page by page using pdfplumber."""
     import pdfplumber
@@ -34,7 +45,7 @@ def load_pdf(path: Path) -> List[Document]:
     with pdfplumber.open(path) as pdf:
         total = len(pdf.pages)
         for page_num, page in enumerate(pdf.pages):
-            text = page.extract_text()
+            text = page.extract_text(x_tolerance=_pdf_x_tolerance())
             if text and text.strip():
                 docs.append(Document(
                     content=text.strip(),
