@@ -33,6 +33,9 @@ PROMPT = """From the passage below, write ONE question a reader of the whole doc
 ONLY from this passage, plus the short answer and the exact verbatim span (max 25 words) that contains the answer.
 Return strict JSON: {{"question": "...", "ground_truth": "...", "gold_span": "..."}}
 
+Prefer questions about the document's main ideas, methods, findings or procedures. Do NOT ask about
+table cells, example prompts, file names, figure labels or formatting details.
+
 Passage:
 {passage}"""
 
@@ -41,6 +44,18 @@ UNANSWERABLE_PROMPT = """Here is a sample of passages from a document:
 
 Write ONE plausible question that a reader might ask about this document's topic but that the passages do
 NOT answer. Return strict JSON: {{"question": "..."}}"""
+
+
+def is_prose(text: str) -> bool:
+    """True for running text, False for table dumps, reference lists and code-like chunks. Questions drafted
+    from those are trivia ('what is the value in the third column'), not a useful benchmark."""
+    n = len(text)
+    if n < 400:
+        return False
+    letters = sum(ch.isalpha() for ch in text)
+    digits = sum(ch.isdigit() for ch in text)
+    sentences = len(re.findall(r"[.!?](?:\s|$)", text))
+    return letters / n >= 0.78 and digits / n <= 0.05 and sentences >= 3
 
 
 def _json(text):
@@ -55,6 +70,7 @@ def main():
     ap.add_argument("--unanswerable", type=int, default=8)
     ap.add_argument("--out", default="data/testset.json")
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--include-tables", action="store_true", help="also draft from table-like and numeric chunks")
     ap.add_argument("--draft-only", action="store_true", help="no prompts: write unverified drafts for scripts/verify_testset.py")
     args = ap.parse_args()
 
@@ -62,7 +78,12 @@ def main():
     for d in args.docs:
         file_ids += ingest(d, store=store).file_ids
     chunks, _ = store.load_corpus(file_ids)
-    chunks = [c for c in chunks if len(c.content) > 300]
+    total = len(chunks)
+    chunks = [c for c in chunks if (len(c.content) > 300 if args.include_tables else is_prose(c.content))]
+    print(f"{len(chunks)} of {total} chunks are running prose and eligible for drafting"
+          + ("" if args.include_tables else " (pass --include-tables to widen)"))
+    if len(chunks) < args.n:
+        print(f"Only {len(chunks)} eligible chunks, so at most that many questions will be drafted. Add more documents for a bigger testset.")
     random.Random(args.seed).shuffle(chunks)
     llm = GroqLLM(model=CONFIG.eval.judge_model, reasoning_effort=CONFIG.eval.judge_reasoning_effort)
 
