@@ -55,6 +55,7 @@ Offline demo without a key: `$env:DOCMIND_TEST_MODE="1"` (hash embedder, extract
 - Heavy steps (ingest, ablation, RAGAS) free on Kaggle or Colab, results copied back: [docs/CLOUD.md](docs/CLOUD.md) and `notebooks/docmind_cloud.ipynb`.
 
 ## Evaluate (run in this order)
+First check PDF text quality: `python scripts/check_pdf_text.py <pdf>` (tightly kerned PDFs glue words together; it tells you which `DOCMIND_PDF_X_TOLERANCE` to set). Decide this before ingesting and before building a testset.
 ```powershell
 python scripts/make_testset.py --docs data\your.pdf --n 40 --unanswerable 10 --out data\testset.json   # you verify each item
 python scripts/ablation.py --testset data\testset.json --docs data\your.pdf --chunkers                  # free, no LLM
@@ -87,7 +88,7 @@ Not yet run. Protocol in [docs/PILOT.md](docs/PILOT.md); requirements and succes
 Flags: `abstained`, `no_citations`, `invalid_citation`, `low_retrieval_confidence`, `no_clean_final_answer`, `random_audit` (rate `DOCMIND_REVIEW_AUDIT_RATE`, default 0.10). Reviewers approve, correct or reject in the Review tab or via `GET /review/pending` and `POST /review/{id}`. Set `DOCMIND_REVIEWER_PIN` to protect it. Approved and corrected items export to `data/reviewed_testset.json`.
 
 ## Configuration (environment)
-`GROQ_API_KEY`, `DOCMIND_LLM_MODEL`, `DOCMIND_REASONING_EFFORT`, `DOCMIND_MAX_TOKENS`, `DOCMIND_CHUNKER`, `DOCMIND_HOME`, `DOCMIND_MIN_RERANK_SCORE`, `DOCMIND_REVIEW_MIN_SCORE`, `DOCMIND_REVIEW_AUDIT_RATE`, `DOCMIND_REVIEWER_PIN`, `DOCMIND_API_KEY`, `DOCMIND_JUDGE_MODEL`. All other knobs are in `docmind/config.py`.
+`GROQ_API_KEY`, `DOCMIND_LLM_MODEL`, `DOCMIND_REASONING_EFFORT`, `DOCMIND_MAX_TOKENS`, `DOCMIND_CHUNKER`, `DOCMIND_PDF_X_TOLERANCE`, `DOCMIND_HOME`, `DOCMIND_MIN_RERANK_SCORE`, `DOCMIND_REVIEW_MIN_SCORE`, `DOCMIND_REVIEW_AUDIT_RATE`, `DOCMIND_REVIEWER_PIN`, `DOCMIND_API_KEY`, `DOCMIND_JUDGE_MODEL`. All other knobs are in `docmind/config.py`.
 
 ## Limitations
 Scanned PDFs need OCR first. English text only. Free-tier Groq sends retrieved text off-machine, so do not use confidential documents. SQLite is single-node. Full list: [docs/AUDIT.md](docs/AUDIT.md). Next steps: [docs/ROADMAP.md](docs/ROADMAP.md).
