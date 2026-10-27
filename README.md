@@ -56,6 +56,7 @@ Offline demo without a key: `$env:DOCMIND_TEST_MODE="1"` (hash embedder, extract
 
 ## Evaluate (run in this order)
 First check PDF text quality: `python scripts/check_pdf_text.py <pdf>` (tightly kerned PDFs glue words together; it tells you which `DOCMIND_PDF_X_TOLERANCE` to set). Decide this before ingesting and before building a testset.
+When building a testset, use `--max-page N` to leave out appendices and reference lists; questions drafted from example prompts and tables make a poor benchmark.
 ```powershell
 python scripts/make_testset.py --docs data\your.pdf --n 40 --unanswerable 10 --out data\testset.json   # you verify each item
 python scripts/ablation.py --testset data\testset.json --docs data\your.pdf --chunkers                  # free, no LLM
