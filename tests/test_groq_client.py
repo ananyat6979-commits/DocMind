@@ -1,4 +1,5 @@
 """GroqLLM behaviour against a fake client: retired models, reasoning models, empty completions."""
+import sys
 import types
 
 import pytest
@@ -36,8 +37,10 @@ class FakeGroq:
 
 @pytest.fixture
 def groq(monkeypatch):
-    import groq as real
-    monkeypatch.setattr(real, "Groq", FakeGroq)
+    # Inject a fake module so the tests never need the real SDK (CI installs only light test dependencies).
+    fake_module = types.ModuleType("groq")
+    fake_module.Groq = FakeGroq
+    monkeypatch.setitem(sys.modules, "groq", fake_module)
     monkeypatch.setattr(CONFIG.llm, "groq_api_key", "k")
     monkeypatch.setattr(CONFIG.llm, "groq_model", "model-a")
     monkeypatch.setattr(CONFIG.llm, "reasoning_effort", None)
