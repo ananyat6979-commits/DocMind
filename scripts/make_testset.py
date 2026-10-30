@@ -8,7 +8,7 @@ items are written. Unverified synthetic questions are not a benchmark.
   python scripts/make_testset.py --docs data/mydoc.pdf --n 40 --out data/testset.json
   python scripts/make_testset.py --docs data/mydoc.pdf --unanswerable 10 --out data/testset.json
 
-Keys at every prompt: a accept, e edit the answer, s skip, q save and quit. Anything else re-asks.
+Keys at every prompt: a accept, e edit question and answer, s skip this one, q save and quit the whole tool. Anything else re-asks.
 Draft only the unanswerable part later with --n 0. Use --max-page N to exclude appendices and references.
 
 Cloud workflow (no typing prompts in a notebook): draft there, verify locally.
@@ -38,6 +38,8 @@ Return strict JSON: {{"question": "...", "ground_truth": "...", "gold_span": "..
 
 Prefer questions about the document's main ideas, methods, findings or procedures. Do NOT ask about
 table cells, example prompts, file names, figure labels or formatting details.
+The question must stand alone, as a real user would ask it without seeing the passage: never write
+"the passage", "the text", "the excerpt", "this section" or "according to the passage". Name the topic instead.
 
 Passage:
 {passage}"""
@@ -67,6 +69,17 @@ def _json(text):
         return json.loads(m.group(0)) if m else {}
     except ValueError:
         return {}
+
+
+_PASSAGE_REFERENCE = re.compile(
+    r"\b(?:the|this|that|above|following)\s+(?:passage|excerpt|paragraph|snippet)\b"
+    r"|\baccording to the (?:text|section|document)\b|\bin the (?:text|section) above\b", re.IGNORECASE)
+
+
+def refers_to_passage(question: str) -> bool:
+    """True if the question only makes sense next to its source passage ('According to the passage, ...').
+    A real user never asks that, so such a question is an unfair retrieval test."""
+    return bool(_PASSAGE_REFERENCE.search(question))
 
 
 def select_chunks(chunks, include_tables=False, max_page=None):
@@ -162,10 +175,11 @@ def main():
 
     try:
         if not args.draft_only:
-            print("Keys: a accept | e edit the answer | s skip | q save and quit\n")
+            print("Keys: a accept | e edit question and answer | s skip this one | q SAVE AND QUIT the whole tool\n")
         for c in chunks[: args.n]:
             d = _json(llm.complete([{"role": "user", "content": PROMPT.format(passage=c.content)}], temperature=0.2))
-            if not d.get("question") or d.get("gold_span", "") not in c.content or too_similar(d["question"], seen_questions):
+            if (not d.get("question") or d.get("gold_span", "") not in c.content or refers_to_passage(d["question"])
+                    or too_similar(d["question"], seen_questions)):
                 continue
             if args.draft_only:
                 add({"question": d["question"], "ground_truth": d["ground_truth"], "answerable": True,
@@ -177,7 +191,8 @@ def main():
             if k == "s":
                 continue
             if k == "e":
-                d["ground_truth"] = input("answer > ").strip() or d["ground_truth"]
+                d["question"] = input("question (Enter keeps it) > ").strip() or d["question"]
+                d["ground_truth"] = input("answer (Enter keeps it) > ").strip() or d["ground_truth"]
             add({"question": d["question"], "ground_truth": d["ground_truth"], "answerable": True,
                  "gold_substrings": [d["gold_span"]], "file": c.filename(), "verified": True})
 
@@ -187,7 +202,7 @@ def main():
             pool = random.Random(args.seed * 1000 + i).sample(chunks, min(6, len(chunks)))
             sample = "\n---\n".join(c.content[:300] for c in pool)
             d = _json(llm.complete([{"role": "user", "content": UNANSWERABLE_PROMPT.format(passages=sample)}], temperature=0.8))
-            if not d.get("question") or too_similar(d["question"], seen_questions):
+            if not d.get("question") or refers_to_passage(d["question"]) or too_similar(d["question"], seen_questions):
                 continue
             if args.draft_only:
                 add({"question": d["question"], "ground_truth": "", "answerable": False, "gold_substrings": [],
