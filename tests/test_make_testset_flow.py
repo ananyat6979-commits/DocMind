@@ -87,9 +87,10 @@ def run(tmp_path, monkeypatch, capsys):
 
 
 def test_accept_edit_skip_then_quit_saves_exactly_the_accepted_items(run):
-    items, out = run(["a", "e", "better answer", "s", "q"], ["--n", "10", "--unanswerable", "0"])
+    items, out = run(["a", "e", "A better standalone question?", "better answer", "s", "q"], ["--n", "10", "--unanswerable", "0"])
     assert len(items) == 2 and all(i["verified"] and i["answerable"] and i["gold_substrings"] for i in items)
-    assert items[1]["ground_truth"] == "better answer" and items[0]["ground_truth"] == "an answer"
+    assert items[1]["ground_truth"] == "better answer" and items[1]["question"] == "A better standalone question?"
+    assert items[0]["ground_truth"] == "an answer"
     assert "Progress so far is saved" in out and "2 verified answerable" in out
 
 
@@ -144,3 +145,38 @@ def test_too_similar_flags_rephrasings_but_not_different_questions():
     seen = ["What specific criteria determine the priority order for handling interruption episodes?"]
     assert mod.too_similar("What specific criteria are used to determine the priority of interruption episodes?", seen)
     assert not mod.too_similar("Who designed the calibration procedure for the cooling loop?", seen)
+
+
+def test_edit_keeps_question_and_answer_when_enter_is_pressed(run):
+    items, _ = run(["e", "", "", "q"], ["--n", "10", "--unanswerable", "0"])
+    assert len(items) == 1 and items[0]["ground_truth"] == "an answer" and items[0]["question"].endswith("?")
+
+
+@pytest.mark.parametrize("q, expected", [
+    ("According to the passage, what three components are included in the revised function?", True),
+    ("What does this paragraph say about latency?", True),
+    ("In the following excerpt, who is the reviewer?", True),
+    ("According to the text, which loop is stronger?", True),
+    ("What three components does the revised attractor function include?", False),
+    ("How does the meta-agent avoid specializing to the benchmark tasks?", False),
+    ("What passage of time separates the two measurements?", False),
+])
+def test_questions_that_refer_to_their_source_passage_are_rejected(q, expected):
+    assert _script().refers_to_passage(q) is expected
+
+
+def test_drafts_referring_to_the_passage_are_never_shown(run):
+    class Leaky(FakeLLM):
+        def complete(self, messages, **kw):
+            text = messages[0]["content"]
+            if "Passage:" in text:
+                passage = text.split("Passage:\n", 1)[1]
+                FakeLLM.calls += 1
+                n = FakeLLM.calls
+                q = f"According to the passage, what is {WORDS[n % 20]} {WORDS[(n + 3) % 20]}?" if n % 2 else \
+                    f"What is {WORDS[n % 20]} {WORDS[(n + 3) % 20]} {WORDS[(n + 9) % 20]}?"
+                return json.dumps({"question": q, "ground_truth": "x", "gold_span": passage[:50]})
+            return super().complete(messages, **kw)
+    items, out = run(["a", "a", "q"], ["--n", "12", "--unanswerable", "0"], llm=Leaky)
+    assert items and not any("the passage" in i["question"].lower() for i in items)
+    assert "According to the passage" not in out
