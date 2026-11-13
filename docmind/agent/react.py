@@ -61,7 +61,7 @@ def parse_action(text: str) -> Optional[Tuple[str, str]]:
 
 
 def strip_leaks(text: str) -> str:
-    kept = [ln for ln in text.split("\n") if not ln.strip().startswith(LEAK_PREFIXES)]
+    kept = [ln for ln in text.split("\n") if not re.match(r"^\s*(?:Thought|Action|Observation):",ln,re.IGNORECASE)]
     return "\n".join(kept).strip()
 
 
@@ -87,7 +87,9 @@ class ReActAgent:
     @staticmethod
     def _decide_answer(raw: str, has_valid_citation: bool) -> Tuple[str, bool]:
         """Return (final_text, abstained). Single source of truth for abstention."""
-        text = strip_leaks(raw) or raw.strip()
+        text = strip_leaks(raw)
+        if not text:
+            return NO_ANSWER_MESSAGE,True
         m = ABSTAIN_RE.match(text)
         if m:
             detail = text[m.end():].strip()
@@ -171,7 +173,10 @@ class ReActAgent:
                 if m:
                     raw_final, finish = m.group(1).strip(), "synthesis"
                 else:
-                    raw_final, finish = (strip_leaks(synth) or synth), "fallback"
+                    if re.search(r"^\s*(?:Thought|Action|Observation):",synth,re.IGNORECASE|re.MULTILINE):
+                        raw_final,finish=f"{NOT_FOUND_TOKEN}: no clean supported answer was produced.","abstained"
+                    else:
+                        raw_final,finish=strip_leaks(synth) or NOT_FOUND_TOKEN,"fallback"
             else:
                 raw_final, finish = f"{NOT_FOUND_TOKEN}: no relevant passages were retrieved.", "abstained"
 

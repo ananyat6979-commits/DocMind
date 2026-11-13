@@ -19,6 +19,7 @@ from docmind.models import SearchResult
 logger = logging.getLogger(__name__)
 
 _MODEL = None
+_MODEL_KEY = None
 _LOCK = threading.Lock()
 
 
@@ -33,13 +34,17 @@ def _lexical_scores(query: str, passages: List[str]) -> List[float]:
 
 
 def _get_model():
-    global _MODEL
-    if _MODEL is None:
+    global _MODEL,_MODEL_KEY
+    cfg=CONFIG.retriever
+    key=(cfg.reranker_model,cfg.reranker_revision,CONFIG.embedding.device)
+    if _MODEL is None or _MODEL_KEY!=key:
         with _LOCK:
-            if _MODEL is None:
+            if _MODEL is None or _MODEL_KEY!=key:
+                if not cfg.reranker_revision:
+                    raise ValueError("Pin DOCMIND_RERANKER_REVISION before changing rerankers")
                 from sentence_transformers import CrossEncoder
-                logger.info(f"Loading cross-encoder '{CONFIG.retriever.reranker_model}' (one-time)")
-                _MODEL = CrossEncoder(CONFIG.retriever.reranker_model, device=CONFIG.embedding.device)
+                _MODEL=CrossEncoder(cfg.reranker_model,device=CONFIG.embedding.device,revision=cfg.reranker_revision)
+                _MODEL_KEY=key
     return _MODEL
 
 

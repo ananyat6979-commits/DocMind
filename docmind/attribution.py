@@ -6,7 +6,7 @@ Every evidence offset indexes the original retrieved chunk, never normalized tex
 import re
 import os
 from dataclasses import dataclass, asdict
-from docmind.agent.citations import CITATION_RE, _items, allowed_citations
+from docmind.agent.citations import CITATION_RE, _items, allowed_citations, source_citations
 
 
 @dataclass
@@ -24,6 +24,8 @@ class NLIJudge:
     def __init__(self, model="typeform/distilbert-base-uncased-mnli", revision=None, local_files_only=True, device="cpu", batch_size=2):
         import torch
         from transformers import AutoTokenizer, AutoModelForSequenceClassification
+        if revision is None and model=="typeform/distilbert-base-uncased-mnli":
+            revision="cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
         self.torch = torch
         self.device, self.batch_size = device, batch_size
         self.tokenizer = AutoTokenizer.from_pretrained(model, revision=revision, local_files_only=local_files_only)
@@ -57,7 +59,7 @@ def evidence_spans(text):
             yield match.start(), end, text[match.start():end]
 
 
-def attribute(answer, sources, judge, threshold=0.8):
+def attribute(answer, sources, judge, threshold=0.8, claim_units=None):
     allowed = allowed_citations(sources)
     claims = []
     # Citations bind to the immediately preceding sentence. Uncited sentences remain unsupported.
@@ -69,6 +71,8 @@ def attribute(answer, sources, judge, threshold=0.8):
     masked = CITATION_RE.sub(protect, answer)
     parts = re.split(r"(?<=[.!?])\s+|\n+", masked)
     parts = [re.sub(r"CITEREF\d+TOKEN", lambda m: citations_by_token[m.group(0)], part) for part in parts]
+    if claim_units is not None:
+        parts=list(claim_units)
     for part in parts:
         citations = [item for m in CITATION_RE.finditer(part) for item in _items(m.group(1))]
         claim = CITATION_RE.sub("", part).strip()
@@ -76,8 +80,10 @@ def attribute(answer, sources, judge, threshold=0.8):
             continue
         candidates = []
         for source in sources:
-            match = CITATION_RE.search(source.chunk.citation())
-            labels = _items(match.group(1)) if match else []
+            labels=[]
+            for citation in source_citations(source.chunk):
+                match=CITATION_RE.search(citation)
+                if match:labels.extend(_items(match.group(1)))
             if not any(c in allowed and c in labels for c in citations):
                 continue
             for start, end, quote in evidence_spans(source.chunk.content):

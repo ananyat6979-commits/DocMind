@@ -5,7 +5,9 @@ should come from here with a confidence interval, never a bare point estimate.
 import math
 import re
 import unicodedata
+import string
 from collections import Counter
+from docmind.agent.citations import CITATION_RE
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
@@ -126,9 +128,9 @@ def answer_level_stats(records: List[Dict]) -> Dict:
         "n_total": len(records),
         "n_failed": sum(bool(r.get("error")) for r in records),
         "failure_rate": sum(bool(r.get("error")) for r in records) / len(records) if records else None,
-        "answer_exact_match": float(np.mean([answer_em(r.get("answer", ""), r.get("ground_truth", ""))
+        "answer_exact_match": float(np.mean([max(answer_em(r.get("answer", ""),reference) for reference in (r.get("references") or [r.get("ground_truth", "")]))
             if not r.get("error") else 0.0 for r in answerable])) if answerable else None,
-        "answer_token_f1": float(np.mean([answer_f1(r.get("answer", ""), r.get("ground_truth", ""))
+        "answer_token_f1": float(np.mean([max(answer_f1(r.get("answer", ""),reference) for reference in (r.get("references") or [r.get("ground_truth", "")]))
             if not r.get("error") else 0.0 for r in answerable])) if answerable else None,
         "n_answerable": len(answerable),
         "n_unanswerable": len(unanswerable),
@@ -139,7 +141,7 @@ def answer_level_stats(records: List[Dict]) -> Dict:
         "false_abstention_rate": (sum(r["abstained"] for r in answerable) / len(answerable)) if answerable else None,
         "correct_abstention_rate": (sum(r["abstained"] for r in unanswerable) / len(unanswerable)) if unanswerable else None,
         "hallucinated_answer_rate_on_unanswerable": (
-            sum(not r["abstained"] for r in unanswerable) / len(unanswerable)) if unanswerable else None,
+            sum(not r["abstained"] and not r.get("error") for r in unanswerable) / len(unanswerable)) if unanswerable else None,
         "latency_p50_ms": pct(50), "latency_p95_ms": pct(95),
         "mean_llm_calls": float(np.mean([r["llm_calls"] for r in records])) if records else None,
         "mean_prompt_tokens": _mean_timing(records, "prompt_tokens"),
@@ -151,7 +153,8 @@ def answer_level_stats(records: List[Dict]) -> Dict:
 
 
 def _answer_tokens(text):
-    text = re.sub(r"[^\w\s]", " ", normalize(text))
+    text=normalize(CITATION_RE.sub("",text)).translate(str.maketrans("","",string.punctuation))
+    text="".join(c for c in text if not unicodedata.category(c).startswith("P"))
     return [t for t in text.split() if t not in {"a", "an", "the"}]
 
 

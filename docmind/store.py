@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS documents (
     sha256       TEXT NOT NULL,
     n_units      INTEGER NOT NULL,
     n_chunks     INTEGER NOT NULL,
-    ingested_at  REAL NOT NULL
+    ingested_at  REAL NOT NULL,
+    lineage      TEXT NOT NULL DEFAULT '{}'
 );
 CREATE TABLE IF NOT EXISTS chunks (
     chunk_id     TEXT PRIMARY KEY,
@@ -72,6 +73,9 @@ class CorpusStore:
         self.db_path = db_path
         with connect(self.db_path) as conn:
             conn.executescript(SCHEMA)
+            columns={row["name"] for row in conn.execute("PRAGMA table_info(documents)")}
+            if "lineage" not in columns:
+                conn.execute("ALTER TABLE documents ADD COLUMN lineage TEXT NOT NULL DEFAULT '{}'")
 
     # ---- meta / versioning -------------------------------------------------
     def _get_meta(self, conn, key: str, default: str = "") -> str:
@@ -91,7 +95,14 @@ class CorpusStore:
 
     def _embedding_signature(self) -> str:
         e = CONFIG.embedding
-        return f"{e.backend}:{e.model_name}:{e.normalize_embeddings}:{e.query_instruction}"
+        return f"{e.backend}:{e.model_name}:{e.model_revision}:{e.normalize_embeddings}:{e.query_instruction}"
+
+    def ensure_embedding_compatible(self):
+        with connect(self.db_path) as conn:
+            signature=self._get_meta(conn,"embedding_signature","")
+            count=conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+            if count and signature!=self._embedding_signature():
+                raise EmbeddingModelMismatch("The corpus embedding identity differs from the active configuration; rebuild an isolated corpus")
 
     # ---- documents ---------------------------------------------------------
     def has_file(self, file_id: str) -> bool:
@@ -101,12 +112,12 @@ class CorpusStore:
     def get_document(self, file_id: str) -> Optional[Dict]:
         with connect(self.db_path) as conn:
             row = conn.execute("SELECT * FROM documents WHERE file_id=?", (file_id,)).fetchone()
-            return dict(row) if row else None
+            return {**dict(row),"lineage":json.loads(row["lineage"])} if row else None
 
     def list_documents(self) -> List[Dict]:
         with connect(self.db_path) as conn:
             rows = conn.execute("SELECT * FROM documents ORDER BY ingested_at DESC").fetchall()
-            return [dict(r) for r in rows]
+            return [{**dict(r),"lineage":json.loads(r["lineage"])} for r in rows]
 
     def add_document(self, doc: Dict, chunks: Sequence[Chunk], embeddings: np.ndarray) -> None:
         if len(chunks) != len(embeddings):
@@ -120,13 +131,18 @@ class CorpusStore:
                     f"Corpus was embedded with '{existing_sig}' but the active model is '{sig}'. "
                     "Delete indexes/docmind.db (or re-ingest everything) to switch embedding models."
                 )
+            dimension=int(embeddings.shape[1])
+            prior_dimension=self._get_meta(conn,"embedding_dimension","")
+            if n_existing and prior_dimension and int(prior_dimension)!=dimension:
+                raise EmbeddingModelMismatch("Embedding dimensions changed; rebuild an isolated corpus")
+            self._set_meta(conn,"embedding_dimension",str(dimension))
             self._set_meta(conn, "embedding_signature", sig)
             conn.execute("DELETE FROM documents WHERE file_id=?", (doc["file_id"],))
             conn.execute(
-                "INSERT OR REPLACE INTO documents(file_id, filename, source, sha256, n_units, n_chunks, ingested_at)"
-                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT OR REPLACE INTO documents(file_id, filename, source, sha256, n_units, n_chunks, ingested_at, lineage)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (doc["file_id"], doc["filename"], doc["source"], doc["sha256"],
-                 doc["n_units"], len(chunks), time.time()),
+                 doc["n_units"], len(chunks), time.time(),json.dumps(doc.get("lineage",{}))),
             )
             conn.executemany(
                 "INSERT INTO chunks(chunk_id, file_id, doc_id, source, chunk_index, ord, content, metadata, embedding)"

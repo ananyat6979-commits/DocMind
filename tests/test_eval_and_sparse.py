@@ -81,7 +81,7 @@ def test_compare_chunkers_uses_throwaway_db(make_file):
     store, ts = _labeled(make_file)
     docs = [make_file("alpha2.txt", ALPHA), make_file("beta2.txt", BETA)]
     res = compare_chunkers(ts, docs, k=3)
-    assert set(res) == {"fixed", "semantic"}
+    assert set(res) == {"recursive", "semantic"}
     assert len(store.list_documents()) == 2          # real db untouched
 
 
@@ -126,3 +126,16 @@ def test_trailing_page_number_is_not_a_chunk():
 def test_pure_noise_tail_is_dropped():
     chunks = chunk_document(Document(content="Coolant pumps are inspected every shift by trained operators. " * 5 + "\n\n14", source="t", metadata={}))
     assert all(len(c.content) >= 20 for c in chunks)
+
+
+def test_evaluation_does_not_mutate_live_retrieval_threshold(make_file,monkeypatch):
+    from docmind.config import CONFIG
+    store,testset=_labeled(make_file)
+    retriever=HybridRetriever(store);original=retriever.search
+    monkeypatch.setattr(CONFIG.retriever,"min_rerank_score",999.0)
+    def check(*args,**kwargs):
+        assert CONFIG.retriever.min_rerank_score==999.0
+        return original(*args,**kwargs)
+    monkeypatch.setattr(retriever,"search",check)
+    result=evaluate_modes(testset,retriever,modes=("hybrid_rerank",))
+    assert result["modes"]["hybrid_rerank"]["hit"]["mean"]==1.0

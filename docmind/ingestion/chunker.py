@@ -19,6 +19,7 @@ into the start of the next. This preserves context at boundaries: crucial
 for questions that span a chunk boundary.
 """
 import logging
+from array import array
 import re
 import numpy as np
 from typing import List
@@ -52,11 +53,12 @@ def _tokenize(text: str) -> List[str]:
     return [s.strip() for s in sentences if s.strip()]
 
 
-def _find_breakpoints(sentences: List[str]) -> List[int]:
+def _find_breakpoints(sentences: List[str], config=None, embedding_model=None) -> List[int]:
     if len(sentences) < 2:
         return []
 
-    model = get_embedding_model()
+    cfg = config or CONFIG.chunker
+    model = embedding_model or get_embedding_model()
     embeddings = model.encode(
         sentences,
         batch_size=CONFIG.embedding.batch_size,
@@ -68,18 +70,18 @@ def _find_breakpoints(sentences: List[str]) -> List[int]:
         for i in range(len(embeddings) - 1)
     ])
     distances = 1.0 - similarities
-    threshold = float(np.percentile(distances, CONFIG.chunker.breakpoint_percentile))
+    threshold = float(np.percentile(distances, cfg.breakpoint_percentile))
     return [i for i, d in enumerate(distances) if d > threshold + 1e-8]
 
 
-def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -> List[Chunk]:
+def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document, config=None) -> List[Chunk]:
     """
     Group sentences into chunks at breakpoints, then:
     - merge chunks smaller than min_chunk_size
     - split chunks larger than max_chunk_size
     Apply sentence-level overlap at boundaries.
     """
-    cfg = CONFIG.chunker
+    cfg = config or CONFIG.chunker
     bp_set = set(breakpoints)
 
     # Step 1: split into raw sentence groups at breakpoints
@@ -125,6 +127,8 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
             prev = chunks[-1]
             prev.content = f"{prev.content} {tail}"
             prev.metadata["char_count"] = len(prev.content)
+            spans,ambiguous=_source_spans(prev.content,doc)
+            prev.metadata.update(source_spans=spans,source_span_ambiguous=ambiguous)
         elif not _is_noise(tail):
             _emit(chunks, tail, doc)
         # else: drop pure noise such as a lone "14"
@@ -137,15 +141,31 @@ def _is_noise(text: str) -> bool:
     return len(text) < 20 and not any(c.isalpha() for c in text)
 
 
+def _source_spans(content,doc):
+    cached=getattr(doc,"_source_span_index",None)
+    if cached is None:
+        positions=array("I",(i for i,c in enumerate(doc.content) if not c.isspace()))
+        compact="".join(doc.content[i] for i in positions)
+        cached=(compact,positions);doc._source_span_index=cached
+    compact,positions=cached
+    needle="".join(c for c in content if not c.isspace())
+    start=compact.find(needle) if needle else -1
+    if start<0:return [],False
+    if compact.find(needle,start+1)>=0:return [],True
+    origin=int(doc.metadata.get("source_offset",0))
+    return [{"start":origin+positions[start],"end":origin+positions[start+len(needle)-1]+1}],False
+
+
 def _emit(chunks: List[Chunk], content: str, doc: Document) -> None:
     content = content.strip()
     if content:
+        spans,ambiguous=_source_spans(content,doc)
         chunks.append(Chunk(
             content=content,
             doc_id=doc.doc_id,
             source=doc.source,
             chunk_index=len(chunks),
-            metadata={**doc.metadata, "char_count": len(content)},
+            metadata={**doc.metadata, "char_count": len(content),"source_spans":spans,"source_span_ambiguous":ambiguous},
         ))
 
 
@@ -188,17 +208,20 @@ def _emit_large(chunks: List[Chunk], sentences: List[str], doc: Document, max_si
         _emit(chunks, " ".join(current), doc)
 
 
-def chunk_document(doc: Document) -> List[Chunk]:
+def chunk_document(doc: Document, config=None, embedding_model=None) -> List[Chunk]:
     """Public API: take a Document, return a list of semantic Chunks."""
-    if CONFIG.chunker.strategy == "fixed":
-        return _fixed_chunk(doc)
+    cfg = config or CONFIG.chunker
+    if cfg.strategy == "recursive":
+        return _recursive_chunk(doc,cfg)
+    if cfg.strategy == "fixed":
+        return _fixed_chunk(doc,cfg)
 
     sentences = _tokenize(doc.content)
     if not sentences:
         return []
 
-    breakpoints = _find_breakpoints(sentences)
-    chunks = _build_chunks(sentences, breakpoints, doc)
+    breakpoints = _find_breakpoints(sentences,cfg,embedding_model)
+    chunks = _build_chunks(sentences, breakpoints, doc,cfg)
 
     logger.debug(
         f"Chunked '{doc.metadata.get('filename', '?')}' "
@@ -207,9 +230,9 @@ def chunk_document(doc: Document) -> List[Chunk]:
     return chunks
 
 
-def _fixed_chunk(doc: Document) -> List[Chunk]:
+def _fixed_chunk(doc: Document, config=None) -> List[Chunk]:
     """Simple fixed-size chunking. Used as baseline for evaluation comparisons."""
-    cfg = CONFIG.chunker
+    cfg = config or CONFIG.chunker
     content = doc.content
     chunks: List[Chunk] = []
     overlap_chars = 100
@@ -229,4 +252,32 @@ def _fixed_chunk(doc: Document) -> List[Chunk]:
 
         start = max(start + 1, end - min(overlap_chars, cfg.max_chunk_size // 4)) if end < len(content) else end
 
+    return chunks
+
+
+def _recursive_chunk(doc, config=None):
+    """Recursive paragraph, line, sentence, word and character splitting."""
+    cfg=config or CONFIG.chunker
+    if cfg.max_chunk_size<1:raise ValueError("max_chunk_size must be positive")
+    separators=("\n\n","\n",". "," ","")
+    def split(text,level=0):
+        if len(text)<=cfg.max_chunk_size:return [text]
+        separator=separators[level]
+        if not separator:
+            return [text[i:i+cfg.max_chunk_size] for i in range(0,len(text),cfg.max_chunk_size)]
+        if separator not in text:return split(text,level+1)
+        pieces=text.split(separator)
+        result=[]
+        for i,piece in enumerate(pieces):
+            piece+=separator if i<len(pieces)-1 else ""
+            result.extend(split(piece,level+1) if len(piece)>cfg.max_chunk_size else [piece])
+        return result
+    chunks=[];current="";overlap=min(100,cfg.max_chunk_size//4)
+    for part in split(doc.content):
+        if current and len(current)+len(part)>cfg.max_chunk_size:
+            _emit(chunks,current,doc)
+            tail=current[-overlap:] if overlap else ""
+            current=tail if len(tail)+len(part)<=cfg.max_chunk_size else ""
+        current+=part
+    _emit(chunks,current,doc)
     return chunks

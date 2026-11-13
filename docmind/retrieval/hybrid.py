@@ -22,6 +22,8 @@ from docmind.store import CorpusStore
 
 logger = logging.getLogger(__name__)
 
+_USE_CONFIG_THRESHOLD = object()
+
 MODES = ("dense", "sparse", "hybrid", "hybrid_rerank")
 
 
@@ -44,22 +46,26 @@ class HybridRetriever:
         self.sparse = SparseRetriever()
         self.reranker = CrossEncoderReranker() if CONFIG.retriever.use_reranker else None
         self._version = -1
+        self._embedding_identity = None
         self._lock = threading.RLock()
 
     def refresh(self, force: bool = False) -> None:
         """(Re)build in-memory indexes if the store changed."""
         v = self.store.version()
-        if not force and v == self._version:
+        identity=self.store._embedding_signature()
+        if not force and v == self._version and identity == self._embedding_identity:
             return
         with self._lock:
-            if not force and v == self._version:
+            if not force and v == self._version and identity == self._embedding_identity:
                 return
+            self.store.ensure_embedding_compatible()
             chunks, matrix = self.store.load_corpus()
             dense, sparse = DenseRetriever(), SparseRetriever()
             dense.fit(chunks, matrix)
             sparse.fit(chunks)
             self.dense, self.sparse = dense, sparse
             self._version = v
+            self._embedding_identity = identity
             logger.info(f"Indexes synced to corpus version {v} ({len(chunks)} chunks)")
 
     def is_empty(self) -> bool:
@@ -72,6 +78,7 @@ class HybridRetriever:
         top_k: Optional[int] = None,
         file_ids: Optional[Iterable[str]] = None,
         mode: str = "hybrid_rerank",
+        min_score=_USE_CONFIG_THRESHOLD,
     ) -> List[SearchResult]:
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}")
@@ -93,4 +100,4 @@ class HybridRetriever:
 
         if mode == "hybrid" or not (self.reranker and fused):
             return fused[:top_k]
-        return self.reranker.rerank(query, fused, top_k=top_k, min_score=cfg.min_rerank_score)
+        return self.reranker.rerank(query, fused, top_k=top_k, min_score=cfg.min_rerank_score if min_score is _USE_CONFIG_THRESHOLD else min_score)

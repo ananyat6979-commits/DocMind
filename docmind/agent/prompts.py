@@ -49,9 +49,13 @@ def format_observation(results, seen: Optional[Set[str]] = None, header: str = "
         return "No relevant documents found for this query."
     seen = seen or set()
     lines = [header] if header else []
+    identities={}
+    for result in results:
+        identities.setdefault(result.chunk.citation(),set()).add(result.chunk.file_id or result.chunk.source)
     for i, r in enumerate(results, 1):
         c = r.chunk
-        head = f"[{i}] cite_as: {c.citation()} | chunk_id: {c.chunk_id}"
+        citation=c.citation(include_id=len(identities[c.citation()])>1)
+        head = f"[{i}] cite_as: {citation} | chunk_id: {c.chunk_id}"
         if c.chunk_id in seen:
             lines.append(f"{head}\n(already shown above)\n")
         else:

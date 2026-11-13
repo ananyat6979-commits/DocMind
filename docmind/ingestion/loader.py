@@ -148,12 +148,17 @@ def load_text(path: Path) -> List[Document]:
     """Load plain text or markdown as a single Document."""
     raw = path.read_bytes()
     if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
-        content = raw.decode("utf-16").strip()
+        content = raw.decode("utf-16")
+        encoding="utf-16"
     else:
         try:
-            content = raw.decode("utf-8-sig").strip()
+            content = raw.decode("utf-8-sig")
+            encoding="utf-8-sig"
         except UnicodeDecodeError as exc:
             raise ValueError("Text must be UTF-8 or BOM-marked UTF-16; convert its encoding first") from exc
+    if len(content)>8000000:raise ValueError("Text exceeds the extracted character safety limit")
+    source_offset=len(content)-len(content.lstrip())
+    content=content.strip()
     if "\x00" in content or any(ord(c) < 32 and c not in "\t\n\r" for c in content):
         raise ValueError("Binary content is not accepted as text")
     if not content:
@@ -162,7 +167,7 @@ def load_text(path: Path) -> List[Document]:
     return [Document(
         content=content,
         source=str(path.resolve()),
-        metadata={"file_type": file_type, "filename": path.name},
+        metadata={"file_type": file_type, "filename": path.name,"encoding":encoding,"source_offset":source_offset},
     )]
 
 

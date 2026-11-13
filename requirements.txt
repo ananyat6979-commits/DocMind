@@ -1,7 +1,9 @@
 # Runtime only (app, API, CLI). Light enough for a laptop or a free notebook.
 # CPU-only torch is much smaller on Windows/Linux:
 #   pip install torch --index-url https://download.pytorch.org/whl/cpu
-sentence-transformers>=2.6.0,<6
+sentence-transformers==5.7.0
+transformers==4.57.6
+torch>=2.6,<3
 faiss-cpu>=1.7.4
 numpy>=1.24
 nltk>=3.8

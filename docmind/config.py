@@ -31,7 +31,7 @@ from dotenv import load_dotenv
 # Offline test mode must never read a developer's real .env: tests would otherwise pick up a live
 # API key and send traffic to the real service.
 if os.getenv("DOCMIND_TEST_MODE", "") != "1":
-    load_dotenv()
+    load_dotenv(os.getenv("DOCMIND_SECRETS_FILE") or None,encoding="utf-8-sig")
 
 
 def _env_float(name: str, default: Optional[float]) -> Optional[float]:
@@ -49,7 +49,9 @@ TEST_MODE = os.getenv("DOCMIND_TEST_MODE", "") == "1"
 class EmbeddingConfig:
     # bge-small-en-v1.5: ~33M params, 384 dims. Retrieval queries should be
     # prefixed with an instruction (see embeddings.embed_query).
-    model_name: str = "BAAI/bge-small-en-v1.5"
+    model_name: str = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_MODEL","BAAI/bge-small-en-v1.5"))
+    model_revision: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_REVISION") or
+        ("5c38ec7c405ec4b44b94cc5a9bb96e735b38267a" if os.getenv("DOCMIND_EMBEDDING_MODEL","BAAI/bge-small-en-v1.5")=="BAAI/bge-small-en-v1.5" else None))
     backend: Literal["sentence-transformers", "hash"] = "hash" if TEST_MODE else "sentence-transformers"
     device: str = field(default_factory=lambda: os.getenv("DOCMIND_DEVICE", "cpu"))   # "cuda" on Kaggle/Colab GPU
     batch_size: int = 32
@@ -61,7 +63,7 @@ class EmbeddingConfig:
 class ChunkerConfig:
     # "fixed" skips per-sentence embedding: much faster on long documents (a novel can take many minutes
     # with "semantic"), at some cost in chunk coherence. Compare them with scripts/ablation.py --chunkers.
-    strategy: Literal["semantic", "fixed"] = field(default_factory=lambda: "fixed" if os.getenv("DOCMIND_CHUNKER", "semantic") == "fixed" else "semantic")
+    strategy: Literal["semantic", "fixed", "recursive"] = field(default_factory=lambda: os.getenv("DOCMIND_CHUNKER", "semantic"))
     min_chunk_size: int = 150
     max_chunk_size: int = 1200
     overlap_sentences: int = 1
@@ -74,7 +76,9 @@ class RetrieverConfig:
     top_k_sparse: int = 10
     top_k_rerank: int = 5
     rrf_k: int = 60
-    reranker_model: str = "lexical" if TEST_MODE else "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    reranker_model: str = field(default_factory=lambda: "lexical" if TEST_MODE else os.getenv("DOCMIND_RERANKER_MODEL","cross-encoder/ms-marco-MiniLM-L-6-v2"))
+    reranker_revision: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_RERANKER_REVISION") or
+        ("233902d25c440f23af6f7d6e94d2946bac0bee0a" if os.getenv("DOCMIND_RERANKER_MODEL","cross-encoder/ms-marco-MiniLM-L-6-v2")=="cross-encoder/ms-marco-MiniLM-L-6-v2" else None))
     # Set DOCMIND_USE_RERANKER=0 on a low-RAM machine to skip the cross-encoder (saves ~0.5 GB).
     # Retrieval is then hybrid-only and the abstention gate cannot apply. Never evaluate in this mode.
     use_reranker: bool = field(default_factory=lambda: os.getenv("DOCMIND_USE_RERANKER", "1") != "0")

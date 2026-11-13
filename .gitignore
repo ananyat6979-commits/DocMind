@@ -48,3 +48,14 @@ reports/reader_workspace/
 .kaggle-run/
 
 reports/history_redaction.json
+
+reports/protocol_workspace/
+reports/selective_workspace/
+reports/judge_workspace/
+
+!data/public/
+!data/public/corpus.json
+!data/public/README.md
+data/public/documents/
+
+reports/hotpot/

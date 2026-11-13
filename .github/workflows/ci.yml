@@ -13,7 +13,11 @@ jobs:
       - name: Install (offline test deps only, no model downloads)
         run: |
           pip install numpy faiss-cpu nltk pdfplumber pypdfium2 python-docx fastapi httpx python-multipart \
-                      streamlit python-dotenv tqdm pytest pyyaml
+                      streamlit python-dotenv tqdm pytest pyyaml ruff
           python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
+      - name: Syntax and undefined-name checks
+        run: ruff check docmind scripts tests
       - name: Tests (hash embedder, lexical reranker, demo LLM)
-        run: python -m pytest -q --ignore=tests/test_ragas_plumbing.py
+        run: python -m pytest -q
+      - name: Verify published benchmark records
+        run: python scripts/verify_benchmark_reports.py

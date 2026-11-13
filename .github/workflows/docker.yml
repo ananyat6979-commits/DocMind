@@ -37,7 +37,9 @@ jobs:
           from docmind.embeddings import embed_query
           from docmind.retrieval.reranker import _get_model
           print('embedding shape', embed_query('hello').shape)
-          _get_model(); print('reranker loaded')"
+          _get_model(); print('reranker loaded')
+          from docmind.attribution import NLIJudge
+          NLIJudge(); print('attribution model loaded')"
 
       - name: Smoke 2, full ingest and agent run inside the image (offline demo mode)
         run: |

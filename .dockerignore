@@ -16,3 +16,11 @@ pilot
 .env
 *.zip
 *.db
+
+.venv*/
+.env*
+reports/
+data/
+indexes/
+*.zip
+*.7z

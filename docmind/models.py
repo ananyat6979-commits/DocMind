@@ -36,10 +36,12 @@ class Chunk:
     def filename(self) -> str:
         return str(self.metadata.get("filename") or Path(self.source).name)
 
-    def citation(self) -> str:
+    def citation(self, include_id: bool = False) -> str:
         """The exact citation string the agent must copy verbatim.
         Verified later against what was actually retrieved."""
         fn = self.filename()
+        if include_id and self.file_id:
+            fn += f", file:{self.file_id}"
         if "page" in self.metadata:
             return f"(Source: {fn}, p.{self.metadata['page']})"
         if "section" in self.metadata:

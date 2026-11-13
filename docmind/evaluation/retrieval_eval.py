@@ -46,6 +46,15 @@ def load_testset(path: str, verified_only: bool = False) -> List[Dict]:
     return items
 
 
+def _relevant(chunk,item):
+    identity=item.get("evidence_file_id")
+    if identity and chunk.file_id!=identity:return False
+    if item.get("gold_spans"):
+        return any(source["start"]<=gold["start"] and gold["end"]<=source["end"]
+            for source in chunk.metadata.get("source_spans",[]) for gold in item["gold_spans"])
+    return is_relevant(chunk.content,item["gold_substrings"])
+
+
 def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
                    modes: Sequence[str] = MODES, file_ids: Optional[List[str]] = None) -> Dict:
     if "hybrid_rerank" in modes and retriever.reranker is None:
@@ -56,29 +65,24 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
         raise ValueError("No answerable items with gold_substrings in the testset. "
                          "Run scripts/make_testset.py or add gold_substrings by hand.")
     corpus, _ = retriever.store.load_corpus(file_ids)
-    saved = CONFIG.retriever.min_rerank_score
-    CONFIG.retriever.min_rerank_score = None          # measure raw ranking, not the abstention gate
     per_mode: Dict[str, Dict[str, List[float]]] = {}
     calib_scores: List[float] = []
     calib_labels: List[bool] = []
-    try:
-        for mode in modes:
-            cols = {"precision": [], "hit": [], "mrr": [], "ndcg": [], "recall": []}
-            for item in labeled:
-                results = retriever.search(item["question"], top_k=k, file_ids=file_ids, mode=mode)
-                rel = [is_relevant(r.chunk.content, item["gold_substrings"]) for r in results]
-                cols["precision"].append(precision_at_k(rel, k))
-                cols["hit"].append(hit_at_k(rel, k))
-                cols["mrr"].append(mrr(rel, k))
-                total = sum(is_relevant(c.content, item["gold_substrings"]) for c in corpus)
-                cols["ndcg"].append(ndcg_at_k(rel, k, total_relevant=total))
-                cols["recall"].append(recall_at_k(rel, k, total))
-                if mode == "hybrid_rerank":
-                    calib_scores += [r.score for r in results]
-                    calib_labels += rel
-            per_mode[mode] = cols
-    finally:
-        CONFIG.retriever.min_rerank_score = saved
+    for mode in modes:
+        cols = {"precision": [], "hit": [], "mrr": [], "ndcg": [], "recall": []}
+        for item in labeled:
+            results = retriever.search(item["question"], top_k=k, file_ids=file_ids, mode=mode,min_score=None)
+            rel = [_relevant(r.chunk,item) for r in results]
+            cols["precision"].append(precision_at_k(rel, k))
+            cols["hit"].append(hit_at_k(rel, k))
+            cols["mrr"].append(mrr(rel, k))
+            total = sum(_relevant(c,item) for c in corpus)
+            cols["ndcg"].append(ndcg_at_k(rel, k, total_relevant=total))
+            cols["recall"].append(recall_at_k(rel, k, total))
+            if mode == "hybrid_rerank":
+                calib_scores += [r.score for r in results]
+                calib_labels += rel
+        per_mode[mode] = cols
 
     summary = {}
     for mode, cols in per_mode.items():
@@ -99,25 +103,20 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
 
 
 def compare_chunkers(testset: List[Dict], docs: Sequence[str], k: int = 5) -> Dict:
-    """Rebuild a throwaway corpus per chunking strategy and compare retrieval.
-    Never touches your real database."""
+    """Compare isolated corpora without mutating the process configuration."""
+    from dataclasses import replace
     from docmind.ingestion.pipeline import ingest
-    results = {}
-    original = CONFIG.chunker.strategy
-    try:
-        for strategy in ("fixed", "semantic"):
-            CONFIG.chunker.strategy = strategy
-            with tempfile.TemporaryDirectory() as tmp:
-                store = CorpusStore(db_path=Path(tmp) / "ablation.db")
-                n_chunks = 0
-                for d in docs:
-                    rep = ingest(d, store=store)
-                    n_chunks += rep.chunks_added
-                r = evaluate_modes(testset, HybridRetriever(store), k=k, modes=("hybrid_rerank",))
-                r["n_chunks"] = n_chunks
-                results[strategy] = r
-    finally:
-        CONFIG.chunker.strategy = original
+    results={}
+    for strategy in ("recursive","semantic"):
+        cfg=replace(CONFIG.chunker,strategy=strategy)
+        with tempfile.TemporaryDirectory() as tmp:
+            store=CorpusStore(db_path=Path(tmp)/"ablation.db")
+            n_chunks=0
+            for document in docs:
+                n_chunks+=ingest(document,store=store,chunker_config=cfg).chunks_added
+            result=evaluate_modes(testset,HybridRetriever(store),k=k,modes=("hybrid_rerank",))
+            result["n_chunks"]=n_chunks
+            results[strategy]=result
     return results
 
 

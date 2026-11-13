@@ -79,23 +79,26 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
     for item in testset:
         if item["id"] in done:
             continue
+        started=time.perf_counter()
+        prior_calls=getattr(getattr(agent,"llm",None),"calls",0)
         try:
             resp = agent.run(item["question"], file_ids=file_ids)
         except Exception as exc:
             logger.warning("Generation failed for %s: %s", item["id"], type(exc).__name__)
             _append_jsonl(out, [{"id": item["id"], "run_id": manifest["run_id"],
-                "question": item["question"], "ground_truth": item.get("ground_truth", ""),
+                "question": item["question"], "ground_truth": item.get("ground_truth", ""),"references":item.get("references",[]),
                 "answerable": item["answerable"], "answer": "", "contexts": [],
                 "abstained": False, "finish_reason": "error", "error": type(exc).__name__,
                 "citation_report": {}, "needs_review": True, "review_reasons": ["generation_failure"],
-                "latency_ms": 0.0, "llm_calls": 0, "timings": {}}])
+                "latency_ms": (time.perf_counter()-started)*1000,
+                "llm_calls":getattr(getattr(agent,"llm",None),"calls",prior_calls)-prior_calls,"timings": {}}])
             done.add(item["id"])
             if isinstance(exc, RateLimitExhausted):
                 raise
             continue
         _append_jsonl(out, [{
             "id": item["id"], "run_id": manifest["run_id"], "question": item["question"],
-            "ground_truth": item.get("ground_truth", ""),
+            "ground_truth": item.get("ground_truth", ""),"references":item.get("references",[]),
             "answerable": item["answerable"],
             "answer": resp.answer,
             "contexts": [s.chunk.content for s in resp.sources],
@@ -212,13 +215,24 @@ def summarize(records: List[Dict], scores: List[Dict]) -> Dict:
 def run_evaluation(testset_path: str, agent=None, output_path: Optional[str] = None,
                    skip_generate: bool = False, skip_score: bool = False, limit: Optional[int] = None,
                    file_ids: Optional[List[str]] = None, metrics: Optional[List[str]] = None,
-                   verified_only: bool = True) -> Dict:
+                   verified_only: bool = True,score_backend: str = "local") -> Dict:
     """Both phases, then summary JSON and an MLflow run."""
     reports = CONFIG.reports_dir
     gen_path = reports / "generations.jsonl"
     records = _read_jsonl(gen_path) if skip_generate else generate(testset_path, agent, str(gen_path), file_ids, limit, verified_only)
-    scores = _read_jsonl(reports / "ragas_scores.jsonl") if skip_score else score(records, metrics=metrics)
+    if score_backend not in {"local","ragas"}:raise ValueError("Unknown scoring backend")
+    scores=[] if score_backend=="local" else (_read_jsonl(reports/"ragas_scores.jsonl") if skip_score else score(records,metrics=metrics))
     summary = summarize(records, scores)
+    summary["scoring_backend"]=score_backend
+    if score_backend=="local":
+        summary["ragas"]={}
+        answered=[r for r in records if not r.get("abstained") and not r.get("error")]
+        evidence=[r.get("citation_report",{}).get("attribution") for r in answered]
+        available=[r["supported_fraction"] for r in evidence if r and r.get("supported_fraction") is not None]
+        summary["attribution"]={"n_answered":len(answered),"n_available":len(available),
+            "n_unavailable":len(answered)-len(available),
+            "model_support_fraction_mean":sum(available)/len(available) if available else None,
+            "note":"Model judgments; human-label accuracy is measured separately in the public attribution reports"}
     manifest_path = gen_path.with_suffix(".manifest.json")
     if manifest_path.exists():
         summary["provenance"] = json.loads(manifest_path.read_text())

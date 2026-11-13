@@ -18,6 +18,7 @@ from docmind.config import CONFIG
 
 logger = logging.getLogger(__name__)
 _model = None
+_model_key = None
 _lock = threading.Lock()
 
 
@@ -40,24 +41,28 @@ class HashEmbedder:
 
 
 def get_embedding_model():
-    global _model
-    if _model is None:
+    global _model,_model_key
+    cfg=CONFIG.embedding
+    key=(cfg.backend,cfg.model_name,cfg.model_revision,cfg.device)
+    if _model is None or _model_key!=key:
         with _lock:
-            if _model is None:
-                if CONFIG.embedding.backend == "hash":
-                    logger.info("Using HashEmbedder (test backend)")
-                    _model = HashEmbedder()
+            if _model is None or _model_key!=key:
+                if cfg.backend=="hash":
+                    _model=HashEmbedder()
                 else:
+                    if not cfg.model_revision:
+                        raise ValueError("Pin DOCMIND_EMBEDDING_REVISION before changing embedding models")
                     from sentence_transformers import SentenceTransformer
-                    logger.info(f"Loading embedding model '{CONFIG.embedding.model_name}' (one-time)")
-                    _model = SentenceTransformer(CONFIG.embedding.model_name, device=CONFIG.embedding.device)
+                    _model=SentenceTransformer(cfg.model_name,device=cfg.device,revision=cfg.model_revision)
+                _model_key=key
     return _model
 
 
 def reset_embedding_model() -> None:
     """Used by tests when the backend is switched."""
-    global _model
+    global _model,_model_key
     _model = None
+    _model_key = None
 
 
 def embed_texts(texts: List[str], show_progress: bool = False) -> np.ndarray:

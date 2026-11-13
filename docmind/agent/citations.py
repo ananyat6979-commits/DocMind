@@ -34,21 +34,23 @@ def _items(body: str) -> List[str]:
     return [_norm(x) for x in re.split(r"\s*;\s*", body) if x.strip()]
 
 
+def source_citations(chunk):
+    citations=[chunk.citation()]
+    if chunk.file_id:citations.append(chunk.citation(include_id=True))
+    return citations
+
+
 def allowed_citations(sources: Sequence[SearchResult]) -> Dict[str, str]:
-    """normalized citation body -> chunk_id of one chunk that supports it."""
-    out: Dict[str, str] = {}
-    identities = {}
-    ambiguous = set()
-    for s in sources:
-        m = CITATION_RE.search(s.chunk.citation())
-        body = m.group(1) if m else ""
-        for item in _items(body):
-            identity = s.chunk.file_id or s.chunk.source
-            if item in out and identities[item] != identity:
-                ambiguous.add(item)
-            out.setdefault(item, s.chunk.chunk_id)
-            identities[item] = identity
-    return {key: value for key, value in out.items() if key not in ambiguous}
+    """Accept unique labels and explicit file identities; reject ambiguous legacy labels."""
+    out={};identities={};ambiguous=set()
+    for source in sources:
+        identity=source.chunk.file_id or source.chunk.source
+        for citation in source_citations(source.chunk):
+            match=CITATION_RE.search(citation)
+            for item in _items(match.group(1) if match else ""):
+                if item in out and identities[item]!=identity:ambiguous.add(item)
+                out.setdefault(item,source.chunk.chunk_id);identities[item]=identity
+    return {key:value for key,value in out.items() if key not in ambiguous}
 
 
 @dataclass
@@ -85,9 +87,10 @@ def verify_citations(answer: str, sources: Sequence[SearchResult]) -> Tuple[str,
             (report.valid if i in allowed else report.invalid).append(i)
         for i in ok:
             for source in sources:
-                match_source = CITATION_RE.search(source.chunk.citation())
-                if match_source and i in _items(match_source.group(1)):
-                    cited_chunks.add(source.chunk.chunk_id)
+                for citation in source_citations(source.chunk):
+                    match_source=CITATION_RE.search(citation)
+                    if match_source and i in _items(match_source.group(1)):
+                        cited_chunks.add(source.chunk.chunk_id)
         if len(ok) == len(items):
             return match.group(0)
         if not ok:

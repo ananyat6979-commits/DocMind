@@ -27,6 +27,7 @@ def main():
     ap.add_argument("--limit", type=int)
     ap.add_argument("--skip-generate", action="store_true")
     ap.add_argument("--skip-score", action="store_true")
+    ap.add_argument("--score-backend",choices=["local","ragas"],default="local",help="Local reference metrics by default; legacy remote adapter is optional and unsupported")
     ap.add_argument("--metrics", nargs="*", choices=["faithfulness", "answer_relevancy", "context_precision", "context_recall"])
     ap.add_argument("--include-unverified", action="store_true", help="also use items no human has verified (trial runs only)")
     args = ap.parse_args()
@@ -42,7 +43,7 @@ def main():
         file_ids = (file_ids or []) + rep.file_ids
     summary = run_evaluation(args.testset, skip_generate=args.skip_generate, skip_score=args.skip_score,
                              limit=args.limit, file_ids=file_ids, metrics=args.metrics,
-                             verified_only=not args.include_unverified)
+                             verified_only=not args.include_unverified,score_backend=args.score_backend)
     print(json.dumps(summary, indent=2))
 
 

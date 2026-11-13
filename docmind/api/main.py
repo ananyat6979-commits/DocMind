@@ -1,20 +1,20 @@
 """
 FastAPI service.
 
-  GET  /health              liveness + corpus stats
+  GET  /health              liveness only
   GET  /documents           list ingested documents
   POST /upload              upload and ingest a file (multipart)
   POST /ingest              ingest a file already under the data directory
   POST /query               ask a question (optionally scoped to file_ids)
   POST /feedback            thumbs up/down on an answer
-  GET  /review/pending      human review queue          (reviewer PIN if configured)
-  POST /review/{id}         approve | edited | rejected (reviewer PIN if configured)
+  GET  /review/pending      human review queue          (reviewer PIN required)
+  POST /review/{id}         approve | edited | rejected (reviewer PIN required)
 
 Security notes:
   * /ingest only accepts paths inside CONFIG.data_dir. The old version accepted
     any server path, which let a caller ingest and then query /etc/passwd.
-  * Set DOCMIND_API_KEY to require an X-API-Key header on every route except /health.
-  * Set DOCMIND_REVIEWER_PIN to require X-Reviewer-Pin on review routes.
+  * Configure DOCMIND_API_KEY for the required X-API-Key header on every route except /health.
+  * Configure DOCMIND_REVIEWER_PIN for the required X-Reviewer-Pin on review routes.
 """
 import hmac
 import hashlib
@@ -113,7 +113,7 @@ def require_reviewer(x_reviewer_pin: Optional[str] = Header(default=None)) -> st
 
 
 class IngestRequest(BaseModel):
-    path: str
+    path: str = Field(min_length=1,max_length=1024)
     rebuild: bool = False
 
 
@@ -133,6 +133,7 @@ class QueryRequest(BaseModel):
 class SourceInfo(BaseModel):
     chunk_id: str
     filename: str
+    file_id: str = ""
     page: Optional[int] = None
     section: Optional[str] = None
     content_preview: str
@@ -265,7 +266,7 @@ def query(req: QueryRequest, request: Request):
         citation_validity=resp.citation_report.get("validity"),
         attribution=resp.citation_report.get("attribution"),
         sources=[SourceInfo(
-            chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),
+            chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),file_id=s.chunk.file_id,
             page=s.chunk.metadata.get("page"), section=s.chunk.metadata.get("section"),
             content_preview=(s.chunk.content[:200] + "...") if len(s.chunk.content) > 200 else s.chunk.content,
             score=round(s.score, 4), cited=s.chunk.chunk_id in cited_ids) for s in resp.sources],

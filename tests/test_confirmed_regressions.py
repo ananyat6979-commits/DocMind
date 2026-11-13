@@ -192,3 +192,76 @@ def test_docx_parser_worker_returns_bounded_results(tmp_path):
     path=tmp_path/"worker.docx";document.save(path)
     units=load_document(path)
     assert len(units)==1 and units[0].content=="Bounded parser test text."
+
+
+def test_same_name_sources_have_explicit_unambiguous_aliases():
+    from docmind.agent.prompts import format_observation
+    one,two=source(),source(file_id="two")
+    observation=format_observation([one,two])
+    assert "file:one" in observation and "file:two" in observation
+    _,report,ids=verify_citations("Fact "+two.chunk.citation(include_id=True),[one,two])
+    assert report.validity==1 and ids=={two.chunk.chunk_id}
+
+
+def test_rebuild_failure_preserves_old_document(make_file):
+    import sqlite3
+    from dataclasses import replace
+    store=CorpusStore()
+    first=ingest(make_file("first.txt",ALPHA),store=store).file_ids[0]
+    second=ingest(make_file("second.txt","A different document with enough distinct text for the test."),store=store).file_ids[0]
+    chunks,matrix=store.load_corpus()
+    index=next(i for i,c in enumerate(chunks) if c.file_id==second)
+    conflicting=replace(chunks[index],file_id=first,ord=0)
+    with pytest.raises(sqlite3.IntegrityError):
+        store.add_document(store.get_document(first),[conflicting],matrix[index:index+1])
+    old,_=store.load_corpus([first])
+    assert old and "Alpha Protocol" in old[0].content
+
+
+def test_cached_chunker_changes_require_explicit_rebuild(make_file,monkeypatch):
+    store=CorpusStore();path=make_file("cached.txt",ALPHA);ingest(path,store=store)
+    monkeypatch.setattr(CONFIG.chunker,"max_chunk_size",900)
+    with pytest.raises(ValueError,match="different chunker"):
+        ingest(path,store=store)
+
+
+def test_reference_metrics_strip_citations_and_accept_human_aliases():
+    from docmind.evaluation.metrics import answer_em
+    assert answer_em("The U.S. (Source: report.pdf, p.3)","US")==1
+    record={"answer":"US (Source: a.txt)","references":["United States","US"],"ground_truth":"United States",
+        "answerable":True,"abstained":False,"citation_report":{},"latency_ms":1,"llm_calls":1,"needs_review":False}
+    assert answer_level_stats([record])["answer_exact_match"]==1
+
+
+def test_reasoning_only_synthesis_abstains_instead_of_leaking(make_file,scripted):
+    from docmind.agent.react import ReActAgent
+    from docmind.retrieval.hybrid import HybridRetriever
+    store=CorpusStore();ingest(make_file("trace.txt",ALPHA),store=store)
+    llm=scripted(['Action: search_documents("coolant")','Thought: I am still analyzing this.'])
+    response=ReActAgent(HybridRetriever(store),llm,max_iterations=1).run("What is the limit?")
+    assert response.abstained and "Thought:" not in response.answer
+
+
+def test_original_source_spans_preserve_whitespace_offsets(make_file):
+    text="  The city is Paris.\n\nThe second sentence is different.  "
+    path=make_file("offsets.txt",text);store=CorpusStore()
+    fid=ingest(path,store=store).file_ids[0];chunks,_=store.load_corpus([fid])
+    assert chunks and chunks[0].metadata["source_spans"]
+    span=chunks[0].metadata["source_spans"][0]
+    assert text[span["start"]:span["end"]].startswith("The city is Paris.")
+    from docmind.evaluation.retrieval_eval import _relevant
+    gold={"evidence_file_id":fid,"gold_spans":[{"start":text.index("Paris"),"end":text.index("Paris")+5}],"gold_substrings":["Paris"]}
+    assert _relevant(chunks[0],gold)
+
+
+def test_span_labels_do_not_credit_an_answer_elsewhere_in_the_file():
+    from docmind.evaluation.retrieval_eval import _relevant
+    chunk=Chunk("Paris","d","x",0,metadata={"source_spans":[{"start":0,"end":20}]},file_id="same")
+    gold={"evidence_file_id":"same","gold_spans":[{"start":40,"end":45}],"gold_substrings":["Paris"]}
+    assert not _relevant(chunk,gold)
+
+
+def test_recursive_strategy_can_be_selected_by_environment(monkeypatch):
+    from docmind.config import ChunkerConfig
+    monkeypatch.setenv("DOCMIND_CHUNKER", "recursive")
+    assert ChunkerConfig().strategy == "recursive"

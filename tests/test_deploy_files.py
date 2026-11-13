@@ -13,7 +13,7 @@ def test_dockerfile_is_hardened():
     assert "\nUSER docmind" in DOCKERFILE                       # not root
     assert "HEALTHCHECK" in DOCKERFILE
     assert "HF_HOME=/opt/hf" in DOCKERFILE and "/data/hf" not in DOCKERFILE   # models not hidden by the volume
-    assert "SentenceTransformer('BAAI/bge-small-en-v1.5')" in DOCKERFILE      # models baked at build time
+    assert "SentenceTransformer('BAAI/bge-small-en-v1.5', revision=" in DOCKERFILE      # models baked at build time
     assert "pip install -e" not in DOCKERFILE and "build-essential" not in DOCKERFILE
     assert "whl/cpu" in DOCKERFILE                              # CPU-only torch
 

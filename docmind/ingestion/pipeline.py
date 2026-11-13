@@ -60,30 +60,31 @@ class IngestReport:
         return [f for f in self.files if f.status == "failed"]
 
 
-def _ingest_file(path: Path, store: CorpusStore, rebuild: bool) -> FileReport:
+def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=None) -> FileReport:
     sha = file_sha256(path)
     file_id = sha[:16]
 
     existed = store.has_file(file_id)
     if existed and not rebuild:
+        store.ensure_embedding_compatible()
         doc = store.get_document(file_id)
+        if doc.get("lineage",{}).get("chunker")!=asdict(chunker_config or CONFIG.chunker):
+            raise ValueError("Cached document uses a different chunker configuration; rebuild it explicitly")
         logger.info(f"'{path.name}' already ingested (file_id={file_id}); skipping")
         return FileReport(file_id, path.name, "cached", doc["n_chunks"] if doc else 0)
 
     units = load_document(path)
     if not units:
-        raise EmptyDocumentError(
-            f"No extractable text in '{path.name}'. If this is a scanned PDF, run OCR first "
-            "(e.g. `ocrmypdf in.pdf out.pdf`)."
-        )
+        hint=" Run OCR first if this is a scanned PDF." if path.suffix.lower()==".pdf" else ""
+        raise EmptyDocumentError(f"No extractable text in '{path.name}'."+hint)
 
-    lineage = {"chunker": asdict(CONFIG.chunker), "embedding": {
+    lineage = {"chunker": asdict(chunker_config or CONFIG.chunker), "embedding": {
         "backend": CONFIG.embedding.backend, "model": CONFIG.embedding.model_name,
-        "query_instruction": CONFIG.embedding.query_instruction},
+        "query_instruction": CONFIG.embedding.query_instruction,"revision":CONFIG.embedding.model_revision},
         "parsers": {name: importlib.metadata.version(name) for name in ("python-docx", "pypdfium2")}}
     chunks: List[Chunk] = []
     for unit in tqdm(units, desc=f"Chunking {path.name}", unit="unit", leave=False):
-        for c in chunk_document(unit):
+        for c in chunk_document(unit,config=chunker_config):
             c.file_id = file_id
             c.ord = len(chunks)           # global position within the file
             c.metadata = {**c.metadata, "file_id": file_id, "lineage": lineage}
@@ -94,9 +95,10 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool) -> FileReport:
 
     embeddings = embed_texts([c.content for c in chunks], show_progress=len(chunks) > 64)
 
+    lineage["embedding"]["dimension"]=int(embeddings.shape[1])
     store.add_document(
         {"file_id": file_id, "filename": path.name, "source": str(path.resolve()),
-         "sha256": sha, "n_units": len(units)},
+         "sha256": sha, "n_units": len(units),"lineage":lineage},
         chunks, embeddings,
     )
     logger.info(f"Ingested '{path.name}': {len(units)} units -> {len(chunks)} chunks (file_id={file_id})")
@@ -107,6 +109,7 @@ def ingest(
     path: Union[str, Path],
     rebuild_index: bool = False,
     store: Optional[CorpusStore] = None,
+    chunker_config=None,
 ) -> IngestReport:
     """Ingest a file or a directory (recursively). Safe to call repeatedly."""
     path = Path(path)
@@ -121,7 +124,7 @@ def ingest(
 
     for f in files:
         try:
-            report.files.append(_ingest_file(f, store, rebuild_index))
+            report.files.append(_ingest_file(f, store, rebuild_index,chunker_config))
         except Exception as exc:
             logger.warning(f"Failed to ingest {f.name}: {exc}")
             if path.is_file():
