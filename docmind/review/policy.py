@@ -20,7 +20,7 @@ from docmind.models import AgentResponse
 def _audit_hit(response_id: str, rate: float) -> bool:
     if rate <= 0:
         return False
-    bucket = int(hashlib.sha1(response_id.encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
+    bucket = int(hashlib.sha256(response_id.encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
     return bucket < rate
 
 
@@ -31,6 +31,12 @@ def review_reasons(resp: AgentResponse) -> List[str]:
         reasons.append("abstained")
     else:
         report = resp.citation_report or {}
+        attribution = report.get("attribution")
+        if attribution is not None:
+            if attribution.get("error"):
+                reasons.append("attribution_unavailable")
+            elif attribution.get("supported_fraction") != 1.0:
+                reasons.append("unsupported_claim")
         if not report.get("cited"):
             reasons.append("no_citations")
         if report.get("invalid"):

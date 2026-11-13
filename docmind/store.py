@@ -7,6 +7,7 @@ stale and nothing to deserialize unsafely. Embeddings are stored as float32
 blobs, so rebuilding an index never re-runs the embedding model.
 """
 import json
+import re
 import logging
 import time
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
@@ -90,7 +91,7 @@ class CorpusStore:
 
     def _embedding_signature(self) -> str:
         e = CONFIG.embedding
-        return f"{e.backend}:{e.model_name}"
+        return f"{e.backend}:{e.model_name}:{e.normalize_embeddings}:{e.query_instruction}"
 
     # ---- documents ---------------------------------------------------------
     def has_file(self, file_id: str) -> bool:
@@ -120,6 +121,7 @@ class CorpusStore:
                     "Delete indexes/docmind.db (or re-ingest everything) to switch embedding models."
                 )
             self._set_meta(conn, "embedding_signature", sig)
+            conn.execute("DELETE FROM documents WHERE file_id=?", (doc["file_id"],))
             conn.execute(
                 "INSERT OR REPLACE INTO documents(file_id, filename, source, sha256, n_units, n_chunks, ingested_at)"
                 " VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -168,11 +170,12 @@ class CorpusStore:
             return None
         with connect(self.db_path) as conn:
             row = conn.execute("SELECT * FROM chunks WHERE chunk_id=?", (key,)).fetchone()
-            if row is None:
-                safe = key.replace("%", "").replace("_", "")
-                row = conn.execute(
-                    "SELECT * FROM chunks WHERE chunk_id LIKE ? ORDER BY chunk_id LIMIT 1", (safe + "%",)
-                ).fetchone()
+            if row is None and re.fullmatch(r"[a-fA-F0-9-]{8,36}", key):
+                rows = conn.execute(
+                    "SELECT * FROM chunks WHERE chunk_id >= ? AND chunk_id < ? ORDER BY chunk_id LIMIT 2",
+                    (key, key + "\uffff"),
+                ).fetchall()
+                row = rows[0] if len(rows) == 1 else None
             return _row_to_chunk(row) if row else None
 
     def neighbors(self, chunk: Chunk, window: int = 1) -> List[Chunk]:

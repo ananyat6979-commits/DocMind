@@ -30,6 +30,9 @@ st.set_page_config(page_title="DocMind", page_icon="🧠", layout="wide", initia
 # Password gate. Set DOCMIND_APP_PASSWORD before exposing the app through any tunnel or host:
 # otherwise anyone with the URL can spend your Groq quota and read every uploaded document.
 _APP_PASSWORD = os.getenv("DOCMIND_APP_PASSWORD", "")
+if not _APP_PASSWORD and os.getenv("DOCMIND_TEST_MODE") != "1":
+    st.error("Set DOCMIND_APP_PASSWORD before starting DocMind.")
+    st.stop()
 if _APP_PASSWORD and not st.session_state.get("authed"):
     st.title("DocMind")
     entered = st.text_input("Password", type="password", key="app_pw")
@@ -109,6 +112,8 @@ with st.sidebar:
         st.session_state.processed.add(key)
 
     st.subheader("Library")
+    admin_pin = st.text_input("Library administrator PIN", type="password", key="library_pin")
+    can_admin = bool(CONFIG.review.reviewer_pin) and hmac.compare_digest(admin_pin.encode(), CONFIG.review.reviewer_pin.encode())
     docs = store.list_documents()
     selected = []
     if not docs:
@@ -117,10 +122,11 @@ with st.sidebar:
         c1, c2 = st.columns([5, 1])
         if c1.checkbox(f"{d['filename']} ({d['n_chunks']} chunks)", value=True, key=f"sel_{d['file_id']}"):
             selected.append(d["file_id"])
-        if c2.button("x", key=f"del_{d['file_id']}", help="Remove from library"):
-            store.delete_document(d["file_id"])
+        if c2.button("x", key=f"del_{d['file_id']}", help="Remove from library", disabled=not can_admin):
+            from docmind.services import erase_document
+            erase_document(d["file_id"], store=store)
             st.rerun()
-    if docs and st.button("Re-index selected documents"):
+    if docs and st.button("Re-index selected documents", disabled=not can_admin):
         for d in docs:
             if d["file_id"] in selected and Path(d["source"]).exists():
                 ingest(d["source"], rebuild_index=True, store=store)
@@ -196,10 +202,7 @@ with tab_ask:
                         mark = "CITED" if s.chunk.chunk_id in cited_ids else "retrieved"
                         st.markdown(f"**{s.chunk.filename()}** {s.chunk.citation()[1:-1]} | {mark} | score {s.score:.2f}")
                         st.text(s.chunk.content[:600])
-            with st.expander("Reasoning trace"):
-                for i, step in enumerate(resp.reasoning_trace, 1):
-                    st.markdown(f"Step {i}")
-                    st.code(step, language=None)
+
 
             c1, c2, c3 = st.columns([1, 1, 3])
             c1.button("Helpful", key=f"up_{resp.response_id}", on_click=_feedback, args=(resp.response_id, True))
@@ -212,9 +215,8 @@ with tab_ask:
 # ----------------------------------------------------------------- Review
 with tab_review:
     pin_required = CONFIG.review.reviewer_pin
-    ok = True
-    if pin_required:
-        ok = st.text_input("Reviewer PIN", type="password", key="pin") == pin_required
+    entered_pin = st.text_input("Reviewer PIN", type="password", key="pin")
+    ok = bool(pin_required) and hmac.compare_digest(entered_pin.encode(), pin_required.encode())
     if not ok:
         st.info("Enter the reviewer PIN to open the queue.")
     else:

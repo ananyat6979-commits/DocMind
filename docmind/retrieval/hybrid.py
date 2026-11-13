@@ -44,7 +44,7 @@ class HybridRetriever:
         self.sparse = SparseRetriever()
         self.reranker = CrossEncoderReranker() if CONFIG.retriever.use_reranker else None
         self._version = -1
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def refresh(self, force: bool = False) -> None:
         """(Re)build in-memory indexes if the store changed."""
@@ -55,8 +55,10 @@ class HybridRetriever:
             if not force and v == self._version:
                 return
             chunks, matrix = self.store.load_corpus()
-            self.dense.fit(chunks, matrix)
-            self.sparse.fit(chunks)
+            dense, sparse = DenseRetriever(), SparseRetriever()
+            dense.fit(chunks, matrix)
+            sparse.fit(chunks)
+            self.dense, self.sparse = dense, sparse
             self._version = v
             logger.info(f"Indexes synced to corpus version {v} ({len(chunks)} chunks)")
 
@@ -74,17 +76,19 @@ class HybridRetriever:
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}")
         self.refresh()
+        with self._lock:
+            dense, sparse = self.dense, self.sparse
         cfg = CONFIG.retriever
         top_k = top_k or cfg.top_k_rerank
         fids = list(file_ids) if file_ids else None
 
         if mode == "dense":
-            return self.dense.search(query, top_k=top_k, file_ids=fids)
+            return dense.search(query, top_k=top_k, file_ids=fids)
         if mode == "sparse":
-            return self.sparse.search(query, top_k=top_k, file_ids=fids)
+            return sparse.search(query, top_k=top_k, file_ids=fids)
 
-        dense_results = self.dense.search(query, top_k=cfg.top_k_dense, file_ids=fids)
-        sparse_results = self.sparse.search(query, top_k=cfg.top_k_sparse, file_ids=fids)
+        dense_results = dense.search(query, top_k=cfg.top_k_dense, file_ids=fids)
+        sparse_results = sparse.search(query, top_k=cfg.top_k_sparse, file_ids=fids)
         fused = reciprocal_rank_fusion([dense_results, sparse_results], k=cfg.rrf_k)
 
         if mode == "hybrid" or not (self.reranker and fused):

@@ -41,4 +41,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
 # CORS/XSRF protection is off because the app is reached through a forwarding proxy (Codespaces, tunnels),
 # where Streamlit's origin checks reject file uploads with a 403. Protect access with DOCMIND_APP_PASSWORD.
 CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501", \
-     "--server.enableCORS=false", "--server.enableXsrfProtection=false"]
+     "--server.enableCORS=true", "--server.enableXsrfProtection=true"]

@@ -47,15 +47,13 @@ def _load_script(name):
     return mod
 
 
-def test_default_tolerance_glues_tightly_kerned_words_and_the_setting_fixes_it(tmp_path, monkeypatch):
+def test_pdfium_extracts_normal_text_and_records_parser(tmp_path):
     from docmind.ingestion.loader import load_pdf
-    pdf = build_tight_pdf(tmp_path / "tight.pdf")
-    monkeypatch.setenv("DOCMIND_PDF_X_TOLERANCE", "3")
-    glued = load_pdf(pdf)[0].content
-    assert "Weevaluatethe" in glued.replace(" ", "") and "We evaluate the" not in glued
-    monkeypatch.setenv("DOCMIND_PDF_X_TOLERANCE", "0.5")
-    fixed = load_pdf(pdf)[0].content
-    assert "We evaluate the final selected repository" in fixed
+    pdf = build_tight_pdf(tmp_path / "normal.pdf", gap=6.0)
+    loaded = load_pdf(pdf)
+    assert len(loaded) == 1
+    assert "We evaluate the final selected repository" in loaded[0].content
+    assert loaded[0].metadata["parser"] == "pypdfium2"
 
 
 def test_invalid_tolerance_falls_back_to_default(tmp_path, monkeypatch):

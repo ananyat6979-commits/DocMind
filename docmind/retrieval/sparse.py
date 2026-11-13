@@ -12,6 +12,7 @@ always positive, and touches only the postings of the query terms.
 import logging
 import math
 import re
+import unicodedata
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import numpy as np
@@ -21,16 +22,16 @@ from docmind.models import Chunk, SearchResult
 
 logger = logging.getLogger(__name__)
 
-_TOKEN = re.compile(r"[a-z0-9]+(?:'[a-z]+)?")
+_TOKEN = re.compile(r"[\u3400-\u9fff]|[^\W_]+(?:'[^\W_]+)?")
 _STOP = frozenset(
     "a an and are as at be by for from has have in is it its of on or that the this to was were will with "
-    "what which who whom how when where why do does did not no yes can could should would about into than then".split()
+    "what which who whom how when where why do does did can could should would about into than then".split()
 )
 
 
 def tokenize(text: str) -> List[str]:
     """Lowercase, split on non-alphanumerics (so 'data,' matches 'data'), drop stopwords."""
-    return [t for t in _TOKEN.findall(text.lower()) if t not in _STOP]
+    return [t for t in _TOKEN.findall(unicodedata.normalize("NFC", text).casefold()) if t not in _STOP]
 
 
 class BM25Index:

@@ -7,6 +7,7 @@ headings survive into citations.
 import hashlib
 import logging
 import os
+import zipfile
 from pathlib import Path
 from typing import List, Union
 
@@ -38,28 +39,34 @@ def _pdf_x_tolerance() -> float:
 
 
 def load_pdf(path: Path) -> List[Document]:
-    """Extract text page by page using pdfplumber."""
-    import pdfplumber
+    """Extract bounded text with PDFium, closing each page immediately."""
+    import pypdfium2 as pdfium
 
     docs = []
-    with pdfplumber.open(path) as pdf:
-        total = len(pdf.pages)
-        for page_num, page in enumerate(pdf.pages):
-            text = page.extract_text(x_tolerance=_pdf_x_tolerance())
-            if text and text.strip():
-                docs.append(Document(
-                    content=text.strip(),
-                    source=str(path.resolve()),
-                    metadata={
-                        "file_type": "pdf",
-                        "page": page_num + 1,
-                        "total_pages": total,
-                        "filename": path.name,
-                    },
-                ))
-    if total and not docs:
-        logger.warning(f"PDF '{path.name}' has {total} pages but no text layer (scanned?). OCR is required.")
-    logger.info(f"PDF '{path.name}': loaded {len(docs)}/{total} non-empty pages")
+    total_chars = 0
+    with pdfium.PdfDocument(str(path)) as pdf:
+        total = len(pdf)
+        if total > 500:
+            raise ValueError("PDF exceeds 500-page safety limit")
+        for page_num in range(total):
+            page = pdf[page_num]
+            textpage = None
+            try:
+                textpage = page.get_textpage()
+                if textpage.count_chars() > 200000:
+                    raise ValueError("PDF page exceeds text safety limit")
+                text = textpage.get_text_range().strip()
+                total_chars += len(text)
+                if total_chars > 8000000:
+                    raise ValueError("PDF exceeds extracted text safety limit")
+                if text:
+                    docs.append(Document(content=text, source=str(path.resolve()), metadata={
+                        "file_type": "pdf", "page": page_num + 1, "total_pages": total,
+                        "filename": path.name, "parser": "pypdfium2"}))
+            finally:
+                if textpage is not None:
+                    textpage.close()
+                page.close()
     return docs
 
 
@@ -81,15 +88,28 @@ def load_docx(path: Path) -> List[Document]:
     from docx import Document as DocxDoc
     from docx.table import Table
 
+    with zipfile.ZipFile(path) as archive:
+        entries = archive.infolist()
+        if len(entries) > 2000 or sum(i.file_size for i in entries) > 32 * 1024 * 1024:
+            raise ValueError("DOCX expanded content exceeds 32 MiB or 2000 entries")
+        if any(i.file_size > 8 * 1024 * 1024 or i.file_size / max(i.compress_size, 1) > 200 for i in entries):
+            raise ValueError("DOCX entry exceeds expansion safety limits")
     docx = DocxDoc(str(path))
     sections: List[tuple] = []
     current_heading = "Preamble"
     current_lines: List[str] = []
 
+    seen_cells = set()
     for block in _iter_docx_blocks(docx):
         if isinstance(block, Table):
             for row in block.rows:
-                cells = [c.text.strip() for c in row.cells if c.text.strip()]
+                cells = []
+                for cell in row.cells:
+                    if cell._tc in seen_cells:
+                        continue
+                    seen_cells.add(cell._tc)
+                    if cell.text.strip():
+                        cells.append(cell.text.strip())
                 if cells:
                     current_lines.append(" | ".join(cells))
             continue
@@ -123,7 +143,16 @@ def load_docx(path: Path) -> List[Document]:
 
 def load_text(path: Path) -> List[Document]:
     """Load plain text or markdown as a single Document."""
-    content = path.read_text(encoding="utf-8", errors="replace").strip()
+    raw = path.read_bytes()
+    if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
+        content = raw.decode("utf-16").strip()
+    else:
+        try:
+            content = raw.decode("utf-8-sig").strip()
+        except UnicodeDecodeError as exc:
+            raise ValueError("Text must be UTF-8 or BOM-marked UTF-16; convert its encoding first") from exc
+    if "\x00" in content or any(ord(c) < 32 and c not in "\t\n\r" for c in content):
+        raise ValueError("Binary content is not accepted as text")
     if not content:
         return []
     file_type = "markdown" if path.suffix.lower() in (".md", ".markdown") else "text"
@@ -149,6 +178,14 @@ def load_document(path: Union[str, Path]) -> List[Document]:
     path = Path(path)
     if not path.exists():
         raise FileNotFoundError(f"Not found: {path}")
+    if path.stat().st_size > 50 * 1024 * 1024:
+        raise ValueError("File exceeds 50 MiB safety limit")
+    with path.open("rb") as stream:
+        magic = stream.read(8)
+    if path.suffix.lower() == ".pdf" and not magic.startswith(b"%PDF-"):
+        raise ValueError("Invalid PDF signature")
+    if path.suffix.lower() == ".docx" and not magic.startswith(b"PK"):
+        raise ValueError("Invalid DOCX signature")
     loader = LOADERS.get(path.suffix.lower())
     if not loader:
         raise ValueError(f"Unsupported extension: {path.suffix}. Supported: {sorted(LOADERS)}")

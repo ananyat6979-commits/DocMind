@@ -42,6 +42,7 @@ def _source_payload(resp: AgentResponse) -> List[Dict]:
     return [
         {
             "chunk_id": s.chunk.chunk_id,
+            "file_id": s.chunk.file_id,
             "filename": s.chunk.filename(),
             "page": s.chunk.metadata.get("page"),
             "section": s.chunk.metadata.get("section"),

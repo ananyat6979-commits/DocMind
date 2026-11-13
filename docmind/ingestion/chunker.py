@@ -28,7 +28,7 @@ from docmind.embeddings import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
-_REGEX_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[])|\n{2,}")
+_REGEX_SPLIT = re.compile(r"(?<=[.!?。！？])\s+(?=[A-Z0-9\"'(\[])|\n{2,}")
 
 
 def _regex_sentences(text: str) -> List[str]:
@@ -44,12 +44,11 @@ def _tokenize(text: str) -> List[str]:
         try:
             sentences = sent_tokenize(text)
         except LookupError:
-            nltk.download("punkt", quiet=True)
-            nltk.download("punkt_tab", quiet=True)
-            sentences = sent_tokenize(text)
+            sentences = _regex_sentences(text)
     except Exception as exc:
         logger.warning(f"NLTK unavailable ({exc}); using regex sentence splitter")
         sentences = _regex_sentences(text)
+    sentences = [part for sent in sentences for part in re.split(r"(?<=[。！？])", sent)]
     return [s.strip() for s in sentences if s.strip()]
 
 
@@ -70,7 +69,7 @@ def _find_breakpoints(sentences: List[str]) -> List[int]:
     ])
     distances = 1.0 - similarities
     threshold = float(np.percentile(distances, CONFIG.chunker.breakpoint_percentile))
-    return [i for i, d in enumerate(distances) if d >= threshold]
+    return [i for i, d in enumerate(distances) if d > threshold + 1e-8]
 
 
 def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -> List[Chunk]:
@@ -92,7 +91,7 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
         if i in bp_set and i < len(sentences) - 1:
             groups.append(current)
             # Overlap: seed next group with tail of current
-            current = current[-cfg.overlap_sentences:] if cfg.overlap_sentences else []
+            current = []
 
     if current:
         groups.append(current)
@@ -100,6 +99,7 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
     # Step 2: merge tiny groups, split giant ones, emit Chunks
     chunks: List[Chunk] = []
     pending_sents: List[str] = []
+    previous_tail: List[str] = []
 
     for group in groups:
         # Fold any pending tiny fragment INTO this group. The old code emitted
@@ -110,6 +110,9 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
             continue
         pending_sents = []
 
+        if previous_tail and len(" ".join(previous_tail + merged)) <= cfg.max_chunk_size:
+            merged = previous_tail + merged
+        previous_tail = merged[-cfg.overlap_sentences:] if cfg.overlap_sentences else []
         if len(" ".join(merged)) > cfg.max_chunk_size:
             _emit_large(chunks, merged, doc, cfg.max_chunk_size)
         else:
@@ -152,7 +155,10 @@ def _split_oversized(sentence: str, max_size: int) -> List[str]:
     if len(sentence) <= max_size:
         return [sentence]
     parts, buf = [], ""
-    for word in sentence.split():
+    words = [part for word in sentence.split() for part in (
+        [word[i:i + max_size] for i in range(0, len(word), max_size)]
+    )]
+    for word in words:
         if buf and len(buf) + 1 + len(word) > max_size:
             parts.append(buf)
             buf = word
@@ -221,6 +227,6 @@ def _fixed_chunk(doc: Document) -> List[Chunk]:
         if chunk_text:
             _emit(chunks, chunk_text, doc)
 
-        start = end - overlap_chars if end < len(content) else end
+        start = max(start + 1, end - min(overlap_chars, cfg.max_chunk_size // 4)) if end < len(content) else end
 
     return chunks

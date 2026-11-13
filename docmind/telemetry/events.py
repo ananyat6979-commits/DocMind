@@ -6,6 +6,7 @@ Event types written by the app:
 No document text is logged by default; only counts, latencies and flags.
 """
 import json
+import logging
 import time
 from typing import Dict, List, Optional
 
@@ -39,7 +40,7 @@ class EventLog:
                     (time.time(), user or "anonymous", session_id, type, json.dumps(payload, default=str)),
                 )
         except Exception:  # telemetry must never break the product
-            pass
+            logging.getLogger(__name__).exception("Event persistence failed")
 
     def rows(self, type: Optional[str] = None) -> List[Dict]:
         sql, params = "SELECT * FROM events", ()

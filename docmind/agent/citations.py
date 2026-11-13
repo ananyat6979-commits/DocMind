@@ -1,6 +1,5 @@
 """
-Citation verification: the mechanism behind a *measurable* "no hallucinated
-sources" claim.
+Citation label existence checks. These checks do not establish claim support.
 
 Every observation shows the model the exact citation string for each chunk
 (Chunk.citation()). After the model answers we parse every "(Source: ...)" in
@@ -9,6 +8,7 @@ retrieved in this run. Anything that does not match is removed from the answer
 and counted. The headline metric is `citation_validity = valid / cited`.
 """
 import re
+import unicodedata
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Sequence, Set, Tuple
 
@@ -21,7 +21,7 @@ REMOVED_MARK = "[unverified citation removed]"
 
 
 def _norm(item: str) -> str:
-    s = item.strip().lower()
+    s = unicodedata.normalize("NFC", item).strip().casefold()
     s = re.sub(r"\s+", " ", s)
     s = re.sub(r"\s*,\s*", ",", s)
     s = re.sub(r"\bp\.\s*", "p.", s)
@@ -37,12 +37,18 @@ def _items(body: str) -> List[str]:
 def allowed_citations(sources: Sequence[SearchResult]) -> Dict[str, str]:
     """normalized citation body -> chunk_id of one chunk that supports it."""
     out: Dict[str, str] = {}
+    identities = {}
+    ambiguous = set()
     for s in sources:
         m = CITATION_RE.search(s.chunk.citation())
         body = m.group(1) if m else ""
         for item in _items(body):
+            identity = s.chunk.file_id or s.chunk.source
+            if item in out and identities[item] != identity:
+                ambiguous.add(item)
             out.setdefault(item, s.chunk.chunk_id)
-    return out
+            identities[item] = identity
+    return {key: value for key, value in out.items() if key not in ambiguous}
 
 
 @dataclass
@@ -78,7 +84,10 @@ def verify_citations(answer: str, sources: Sequence[SearchResult]) -> Tuple[str,
             report.cited.append(i)
             (report.valid if i in allowed else report.invalid).append(i)
         for i in ok:
-            cited_chunks.add(allowed[i])
+            for source in sources:
+                match_source = CITATION_RE.search(source.chunk.citation())
+                if match_source and i in _items(match_source.group(1)):
+                    cited_chunks.add(source.chunk.chunk_id)
         if len(ok) == len(items):
             return match.group(0)
         if not ok:

@@ -116,7 +116,8 @@ def test_exhausted_daily_cap_stops_generation_and_keeps_checkpoint(tmp_path, scr
     out = tmp_path / "gen.jsonl"
     with pytest.raises(RateLimitExhausted):
         generate(str(ts), ReActAgent(retriever=HybridRetriever(store), llm=Boom()), str(out))
-    assert len(out.read_text().strip().splitlines()) == 1        # q0 saved, q1 stopped the run
+    rows = [json.loads(line) for line in out.read_text().strip().splitlines()]
+    assert len(rows) == 2 and rows[-1]["error"] == "RateLimitExhausted"  # failed attempt remains visible
 
 
 def test_app_password_gate(monkeypatch, make_file):

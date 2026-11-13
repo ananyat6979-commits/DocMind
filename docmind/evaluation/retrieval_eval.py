@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Sequence
 from docmind.config import CONFIG
 from docmind.evaluation.metrics import (
     best_f1_threshold, bootstrap_ci, hit_at_k, is_relevant, mrr, ndcg_at_k,
-    paired_relative_improvement, precision_at_k,
+    paired_relative_improvement, precision_at_k, recall_at_k,
 )
 from docmind.retrieval.hybrid import HybridRetriever, MODES
 from docmind.store import CorpusStore
@@ -53,6 +53,7 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
     if not labeled:
         raise ValueError("No answerable items with gold_substrings in the testset. "
                          "Run scripts/make_testset.py or add gold_substrings by hand.")
+    corpus, _ = retriever.store.load_corpus(file_ids)
     saved = CONFIG.retriever.min_rerank_score
     CONFIG.retriever.min_rerank_score = None          # measure raw ranking, not the abstention gate
     per_mode: Dict[str, Dict[str, List[float]]] = {}
@@ -60,14 +61,16 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
     calib_labels: List[bool] = []
     try:
         for mode in modes:
-            cols = {"precision": [], "hit": [], "mrr": [], "ndcg": []}
+            cols = {"precision": [], "hit": [], "mrr": [], "ndcg": [], "recall": []}
             for item in labeled:
                 results = retriever.search(item["question"], top_k=k, file_ids=file_ids, mode=mode)
                 rel = [is_relevant(r.chunk.content, item["gold_substrings"]) for r in results]
                 cols["precision"].append(precision_at_k(rel, k))
                 cols["hit"].append(hit_at_k(rel, k))
                 cols["mrr"].append(mrr(rel, k))
-                cols["ndcg"].append(ndcg_at_k(rel, k))
+                total = sum(is_relevant(c.content, item["gold_substrings"]) for c in corpus)
+                cols["ndcg"].append(ndcg_at_k(rel, k, total_relevant=total))
+                cols["recall"].append(recall_at_k(rel, k, total))
                 if mode == "hybrid_rerank":
                     calib_scores += [r.score for r in results]
                     calib_labels += rel
@@ -89,8 +92,7 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
     if "dense" in per_mode and "hybrid" in per_mode:
         out["hybrid_vs_dense_precision"] = paired_relative_improvement(
             per_mode["dense"]["precision"], per_mode["hybrid"]["precision"])
-    if calib_scores:
-        out["suggested_min_rerank_score"] = best_f1_threshold(calib_scores, calib_labels)
+    out["calibration_note"] = "No threshold fitted on test labels. Use a disjoint calibration set with negatives."
     return out
 
 

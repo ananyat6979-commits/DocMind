@@ -35,6 +35,7 @@ def isolated(tmp_path):
     CONFIG.retriever.min_rerank_score = None
     CONFIG.review.min_top_score = None
     CONFIG.review.audit_rate = 0.0
+    CONFIG.review.reviewer_pin = ""
     CONFIG.review.enabled = True
     CONFIG.max_agent_iterations = 5
     embeddings.reset_embedding_model()

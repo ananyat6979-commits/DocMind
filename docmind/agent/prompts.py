@@ -8,6 +8,7 @@ Format:
   ...
   Final Answer: <answer with citations>
 """
+import json
 from typing import Iterable, Optional, Set
 
 NOT_FOUND_TOKEN = "NOT_FOUND"
@@ -17,7 +18,7 @@ You answer ONLY from passages you retrieve with the tools below.
 
 TOOLS:
 - search_documents("query") : returns the most relevant passages for a query
-- get_chunk_context("chunk_id") : returns the passages immediately before and after a chunk, use the 8-character chunk_id shown in an Observation
+- get_chunk_context("chunk_id") : returns the passages immediately before and after a chunk, use the full chunk_id shown in an Observation
 
 FORMAT (follow exactly, one Action per turn, then stop and wait for the Observation):
 Thought: [short reasoning about what to do next]
@@ -50,9 +51,9 @@ def format_observation(results, seen: Optional[Set[str]] = None, header: str = "
     lines = [header] if header else []
     for i, r in enumerate(results, 1):
         c = r.chunk
-        head = f"[{i}] cite_as: {c.citation()} | chunk_id: {c.chunk_id[:8]}"
+        head = f"[{i}] cite_as: {c.citation()} | chunk_id: {c.chunk_id}"
         if c.chunk_id in seen:
             lines.append(f"{head}\n(already shown above)\n")
         else:
-            lines.append(f"{head}\n{c.content}\n")
+            lines.append(f"{head}\nuntrusted_document_json: {json.dumps(c.content, ensure_ascii=True)}\n")
     return "\n".join(lines)

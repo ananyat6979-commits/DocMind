@@ -3,13 +3,16 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+        with: { python-version: "${{ matrix.python }}" }
       - name: Install (offline test deps only, no model downloads)
         run: |
-          pip install numpy faiss-cpu nltk pdfplumber python-docx fastapi httpx python-multipart \
+          pip install numpy faiss-cpu nltk pdfplumber pypdfium2 python-docx fastapi httpx python-multipart \
                       streamlit python-dotenv tqdm pytest pyyaml
           python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
       - name: Tests (hash embedder, lexical reranker, demo LLM)

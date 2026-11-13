@@ -5,6 +5,7 @@ The index is an in-memory cache built from the corpus store. Filtering to a
 subset of files uses FAISS's IDSelector, so scoped search stays exact.
 """
 import logging
+import os
 from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
@@ -28,7 +29,13 @@ class DenseRetriever:
         if not self._chunks:
             self._index, self._file_ids = None, None
             return
-        self._index = faiss.IndexFlatIP(matrix.shape[1])
+        if os.getenv("DOCMIND_DENSE_INDEX", "flat") == "hnsw":
+            self._index = faiss.IndexHNSWFlat(matrix.shape[1], 32, faiss.METRIC_INNER_PRODUCT)
+            self._index.hnsw.efConstruction = 80
+            self._index.hnsw.efSearch = 64
+        else:
+            self._index = faiss.IndexFlatIP(matrix.shape[1])
+        self._matrix = np.ascontiguousarray(matrix, dtype="float32")
         self._index.add(np.ascontiguousarray(matrix, dtype="float32"))
         self._file_ids = np.array([c.file_id for c in self._chunks])
         logger.info(f"Dense index ready: {self._index.ntotal} vectors, dim={matrix.shape[1]}")
@@ -46,9 +53,10 @@ class DenseRetriever:
             allowed = np.nonzero(np.isin(self._file_ids, list(file_ids)))[0].astype("int64")
             if allowed.size == 0:
                 return []
-            params = faiss.SearchParameters()
-            params.sel = faiss.IDSelectorBatch(allowed)
-            scores, idxs = self._index.search(qv, min(k, allowed.size), params=params)
+            # Exact scoped search keeps access filters independent of ANN candidate depth.
+            values = self._matrix[allowed] @ qv[0]
+            chosen = np.argsort(-values, kind="stable")[:min(k, allowed.size)]
+            scores, idxs = values[chosen][None, :], allowed[chosen][None, :]
         else:
             scores, idxs = self._index.search(qv, k)
 

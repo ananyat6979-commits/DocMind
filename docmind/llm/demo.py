@@ -7,6 +7,7 @@ Behaviour: step 1 searches the question; step 2 quotes the best passage with its
 cite_as string, or answers NOT_FOUND if the observation had nothing.
 """
 import re
+import json
 from typing import Dict, List
 
 from docmind.llm.base import BaseLLM
@@ -25,8 +26,11 @@ class DemoLLM(BaseLLM):
         obs = observations[-1]
         if "No relevant documents found" in obs:
             return f"Thought: Nothing relevant came back.\nFinal Answer: {NOT_FOUND_TOKEN}: no matching passage was retrieved."
-        m = re.search(r"cite_as: (\(Source:[^\n]*?\)) \| chunk_id: [0-9a-f]+\n(.*?)(?:\n\n|\Z)", obs, re.S)
+        m = re.search(r"cite_as: (\(Source:[^\n]*?\)) \| chunk_id: [0-9a-f-]+\n(.*?)(?:\n\n|\Z)", obs, re.S)
         if not m:
             return f"Thought: I could not parse a passage.\nFinal Answer: {NOT_FOUND_TOKEN}: no usable passage."
-        cite, text = m.group(1), m.group(2).strip().replace("\n", " ")
+        cite, text = m.group(1), m.group(2).strip()
+        if text.startswith("untrusted_document_json: "):
+            text = json.loads(text.removeprefix("untrusted_document_json: "))
+        text = text.replace("\n", " ")
         return f"Thought: The top passage looks relevant.\nFinal Answer: {text[:400]} {cite}"

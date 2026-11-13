@@ -13,9 +13,9 @@ from tests.conftest import ALPHA, BETA
 def client(monkeypatch):
     import docmind.api.main as m
     monkeypatch.setattr(m, "_agent", ReActAgent(retriever=HybridRetriever(), llm=DemoLLM()))
-    monkeypatch.delenv("DOCMIND_API_KEY", raising=False)
-    CONFIG.review.reviewer_pin = ""
-    return TestClient(m.app)
+    monkeypatch.setenv("DOCMIND_API_KEY", "test-key")
+    CONFIG.review.reviewer_pin = "test-pin"
+    return TestClient(m.app, headers={"X-API-Key": "test-key", "X-Reviewer-Pin": "test-pin"})
 
 
 def _upload(client, name, text):
@@ -82,4 +82,4 @@ def test_reviewer_pin_enforced(client):
     CONFIG.review.reviewer_pin = "1234"
     assert client.get("/review/pending").status_code == 401
     assert client.get("/review/pending", headers={"X-Reviewer-Pin": "1234"}).status_code == 200
-    CONFIG.review.reviewer_pin = ""
+    CONFIG.review.reviewer_pin = "test-pin"

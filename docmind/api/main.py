@@ -27,7 +27,8 @@ import uuid
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
+from contextlib import asynccontextmanager
+from fastapi import Request, Query, Depends, FastAPI, File, Header, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
 from docmind.agent.react import ReActAgent
@@ -42,7 +43,22 @@ from docmind.telemetry.events import EventLog
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="DocMind", description="Hybrid retrieval + ReAct agent with human review", version="2.0.0")
+@asynccontextmanager
+async def lifespan(app):
+    from docmind.jobs import IngestionQueue
+    queue = IngestionQueue()
+    app.state.ingestion_queue = queue
+    queue.start()
+    yield
+    queue.close()
+
+
+app = FastAPI(lifespan=lifespan, title="DocMind", description="Hybrid retrieval + ReAct agent with human review", version="2.0.0")
+
+from docmind.observability import RequestMonitor
+_monitor = RequestMonitor(limit_per_minute=int(os.getenv("DOCMIND_REQUESTS_PER_MINUTE", "60")))
+app.middleware("http")(_monitor)
+
 
 _agent: Optional[ReActAgent] = None
 _lock = threading.Lock()
@@ -63,13 +79,17 @@ def _eq(a: str, b: str) -> bool:
 
 def require_api_key(x_api_key: Optional[str] = Header(default=None)) -> None:
     expected = os.getenv("DOCMIND_API_KEY", "")
-    if expected and not (x_api_key and _eq(x_api_key, expected)):
+    if not expected:
+        raise HTTPException(status_code=503, detail="Configure DOCMIND_API_KEY before serving requests")
+    if not (x_api_key and _eq(x_api_key, expected)):
         raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
 
 
 def require_reviewer(x_reviewer_pin: Optional[str] = Header(default=None)) -> str:
     pin = CONFIG.review.reviewer_pin
-    if pin and not (x_reviewer_pin and _eq(x_reviewer_pin, pin)):
+    if not pin:
+        raise HTTPException(status_code=503, detail="Configure DOCMIND_REVIEWER_PIN before reviewing")
+    if not (x_reviewer_pin and _eq(x_reviewer_pin, pin)):
         raise HTTPException(status_code=401, detail="Invalid or missing X-Reviewer-Pin")
     return "reviewer"
 
@@ -88,8 +108,8 @@ class IngestResponse(BaseModel):
 
 class QueryRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
-    file_ids: Optional[List[str]] = None
-    user: str = "anonymous"
+    file_ids: Optional[List[str]] = Field(default=None, max_length=100)
+    user: str = Field(default="anonymous", max_length=100)
 
 
 class SourceInfo(BaseModel):
@@ -110,6 +130,7 @@ class QueryResponse(BaseModel):
     review_status: str
     review_reasons: List[str]
     citation_validity: Optional[float]
+    attribution: Optional[dict] = None
     sources: List[SourceInfo]
     latency_ms: float
     llm_calls: int
@@ -118,15 +139,15 @@ class QueryResponse(BaseModel):
 class FeedbackRequest(BaseModel):
     response_id: str
     helpful: bool
-    user: str = "anonymous"
-    comment: str = ""
+    user: str = Field(default="anonymous", max_length=100)
+    comment: str = Field(default="", max_length=4000)
 
 
 class ReviewDecision(BaseModel):
     decision: str
-    reviewer: str = "reviewer"
-    edited_answer: Optional[str] = None
-    note: str = ""
+    reviewer: str = Field(default="reviewer", max_length=100)
+    edited_answer: Optional[str] = Field(default=None, max_length=20000)
+    note: str = Field(default="", max_length=4000)
 
 
 @app.get("/health")
@@ -166,8 +187,7 @@ def ingest_documents(req: IngestRequest):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
-@app.post("/upload", response_model=IngestResponse, dependencies=[Depends(require_api_key)])
-def upload(file: UploadFile = File(...)):
+def _persist_upload(file):
     name = Path(file.filename or "upload").name
     if Path(name).suffix.lower() not in LOADERS:
         raise HTTPException(status_code=415, detail=f"Unsupported type. Supported: {sorted(LOADERS)}")
@@ -191,6 +211,12 @@ def upload(file: UploadFile = File(...)):
         temp.unlink()
     else:
         temp.replace(dest)
+    return dest, name
+
+
+@app.post("/upload", response_model=IngestResponse, dependencies=[Depends(require_api_key)])
+def upload(file: UploadFile = File(...)):
+    dest, name = _persist_upload(file)
     try:
         return _ingest_response(ingest(dest), name)
     except Exception as exc:
@@ -206,10 +232,10 @@ def query(req: QueryRequest):
         resp = agent.run(req.question, file_ids=req.file_ids)
     except Exception as exc:
         logger.exception("Agent query failed")
-        raise HTTPException(status_code=500, detail=str(exc))
+        raise HTTPException(status_code=500, detail="Query failed; consult server logs")
 
-    status = ReviewStore().record(resp, user=req.user)
-    EventLog().log("query", user=req.user, response_id=resp.response_id, latency_ms=round(resp.latency_ms),
+    status = ReviewStore().record(resp, user="api-user")
+    EventLog().log("query", user="api-user", response_id=resp.response_id, latency_ms=round(resp.latency_ms),
                    llm_calls=resp.llm_calls, abstained=resp.abstained, needs_review=resp.needs_review,
                    n_sources=len(resp.sources), finish=resp.finish_reason,
                    citation_validity=resp.citation_report.get("validity"))
@@ -218,6 +244,7 @@ def query(req: QueryRequest):
         response_id=resp.response_id, question=req.question, answer=resp.answer, abstained=resp.abstained,
         review_status=status, review_reasons=resp.review_reasons,
         citation_validity=resp.citation_report.get("validity"),
+        attribution=resp.citation_report.get("attribution"),
         sources=[SourceInfo(
             chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),
             page=s.chunk.metadata.get("page"), section=s.chunk.metadata.get("section"),
@@ -231,12 +258,12 @@ def query(req: QueryRequest):
 def feedback(req: FeedbackRequest):
     if ReviewStore().get(req.response_id) is None:
         raise HTTPException(status_code=404, detail="Unknown response_id")
-    EventLog().log("feedback", user=req.user, response_id=req.response_id, helpful=req.helpful, comment=req.comment)
+    EventLog().log("feedback", user="api-user", response_id=req.response_id, helpful=req.helpful, comment=req.comment)
     return {"ok": True}
 
 
 @app.get("/review/pending", dependencies=[Depends(require_api_key)])
-def review_pending(_: str = Depends(require_reviewer), limit: int = 50):
+def review_pending(_: str = Depends(require_reviewer), limit: int = Query(default=50, ge=1, le=200)):
     return ReviewStore().pending(limit=limit)
 
 
@@ -245,10 +272,69 @@ def review_decide(response_id: str, body: ReviewDecision, _: str = Depends(requi
     if body.decision not in DECISIONS:
         raise HTTPException(status_code=400, detail=f"decision must be one of {sorted(DECISIONS)}")
     try:
-        ok = ReviewStore().decide(response_id, body.decision, body.reviewer, body.edited_answer, body.note)
+        ok = ReviewStore().decide(response_id, body.decision, "reviewer", body.edited_answer, body.note)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     if not ok:
         raise HTTPException(status_code=404, detail="Not found or already decided")
-    EventLog().log("review_decision", user=body.reviewer, response_id=response_id, decision=body.decision)
+    EventLog().log("review_decision", user="reviewer", response_id=response_id, decision=body.decision)
     return {"ok": True}
+
+
+@app.delete("/documents/{file_id}", dependencies=[Depends(require_api_key), Depends(require_reviewer)])
+def delete_document(file_id: str):
+    from docmind.services import erase_document
+    if not erase_document(file_id):
+        raise HTTPException(status_code=404, detail="Unknown document")
+    return {"ok": True}
+
+
+@app.post("/ingest/jobs", status_code=202, dependencies=[Depends(require_api_key)])
+def enqueue_ingestion(req: IngestRequest, request: Request):
+    root = CONFIG.data_dir.resolve()
+    path = (root / req.path).resolve()
+    if root not in path.parents or not path.is_file():
+        raise HTTPException(status_code=400, detail="Choose a file within the data directory")
+    if req.rebuild:
+        raise HTTPException(status_code=400, detail="Queued rebuild is not supported")
+    try:
+        return {"job_id": request.app.state.ingestion_queue.enqueue(path), "status": "queued"}
+    except ValueError as exc:
+        raise HTTPException(status_code=429, detail=str(exc))
+
+
+@app.get("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
+def ingestion_status(job_id: str, request: Request):
+    row = request.app.state.ingestion_queue.get(job_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Unknown ingestion job")
+    return row
+
+
+@app.delete("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
+def cancel_ingestion(job_id: str, request: Request):
+    if not request.app.state.ingestion_queue.cancel(job_id):
+        raise HTTPException(status_code=409, detail="Only queued jobs can be cancelled")
+    return {"ok": True}
+
+
+@app.get("/ready", dependencies=[Depends(require_api_key)])
+def readiness():
+    if not CONFIG.llm.groq_api_key and CONFIG.llm.provider != "demo":
+        raise HTTPException(status_code=503, detail="Generation provider is not configured")
+    return {"status": "ready", "corpus_version": CorpusStore().version()}
+
+
+@app.post("/uploads/jobs", status_code=202, dependencies=[Depends(require_api_key)])
+def enqueue_upload(request: Request, file: UploadFile = File(...)):
+    dest, name = _persist_upload(file)
+    try:
+        return {"job_id": request.app.state.ingestion_queue.enqueue(dest), "status":"queued", "filename":name}
+    except ValueError as exc:
+        raise HTTPException(status_code=429, detail=str(exc))
+
+
+@app.get("/metrics", dependencies=[Depends(require_api_key)])
+def metrics():
+    with _monitor.lock:
+        return {"requests_by_status":dict(_monitor.counts), "quota_per_minute":_monitor.limit}

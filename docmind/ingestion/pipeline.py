@@ -10,6 +10,8 @@ Design (fixes the old "second upload silently reuses the first file's index" bug
   * Indexes are derived from the store, so they cannot disagree with it.
 """
 import logging
+from dataclasses import asdict
+import importlib.metadata
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Union
@@ -75,12 +77,16 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool) -> FileReport:
             "(e.g. `ocrmypdf in.pdf out.pdf`)."
         )
 
+    lineage = {"chunker": asdict(CONFIG.chunker), "embedding": {
+        "backend": CONFIG.embedding.backend, "model": CONFIG.embedding.model_name,
+        "query_instruction": CONFIG.embedding.query_instruction},
+        "parsers": {name: importlib.metadata.version(name) for name in ("python-docx", "pypdfium2")}}
     chunks: List[Chunk] = []
     for unit in tqdm(units, desc=f"Chunking {path.name}", unit="unit", leave=False):
         for c in chunk_document(unit):
             c.file_id = file_id
             c.ord = len(chunks)           # global position within the file
-            c.metadata = {**c.metadata, "file_id": file_id}
+            c.metadata = {**c.metadata, "file_id": file_id, "lineage": lineage}
             chunks.append(c)
 
     if not chunks:
@@ -88,8 +94,6 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool) -> FileReport:
 
     embeddings = embed_texts([c.content for c in chunks], show_progress=len(chunks) > 64)
 
-    if existed:
-        store.delete_document(file_id)
     store.add_document(
         {"file_id": file_id, "filename": path.name, "source": str(path.resolve()),
          "sha256": sha, "n_units": len(units)},

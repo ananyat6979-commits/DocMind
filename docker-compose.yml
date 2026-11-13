@@ -16,7 +16,7 @@ services:
       DOCMIND_APP_PASSWORD: ${DOCMIND_APP_PASSWORD:-}
       DOCMIND_REVIEWER_PIN: ${DOCMIND_REVIEWER_PIN:-}
     volumes:
-      - docmind-data:/data
+      - docmind-ui-data:/data
     restart: unless-stopped
 
   api:
@@ -40,7 +40,8 @@ services:
       start_period: 60s
       retries: 3
     volumes:
-      - docmind-data:/data
+      - docmind-api-data:/data
 
 volumes:
-  docmind-data:
+  docmind-ui-data:
+  docmind-api-data:

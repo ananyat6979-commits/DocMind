@@ -28,6 +28,7 @@ from typing import Dict, List, Optional
 from docmind.config import CONFIG
 from docmind.evaluation.metrics import answer_level_stats, bootstrap_ci
 from docmind.evaluation.retrieval_eval import load_testset
+from docmind.evaluation.provenance import fingerprint
 from docmind.llm.groq_client import RateLimitExhausted
 
 logger = logging.getLogger(__name__)
@@ -63,19 +64,37 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
     out = Path(out_path or CONFIG.reports_dir / "generations.jsonl")
     out.parent.mkdir(parents=True, exist_ok=True)
     testset = load_testset(testset_path, verified_only=verified_only)[: limit or None]
+    manifest = fingerprint(testset_path, verified_only, file_ids,
+        runtime={"runner": type(agent).__module__ + "." + type(agent).__qualname__,
+                 "max_iterations": getattr(agent, "max_iterations", None),
+                 "corpus_version": getattr(getattr(agent, "retriever", None), "store", None).version()
+                    if getattr(getattr(agent, "retriever", None), "store", None) else None})
+    manifest.update(n_questions=len(testset), n_verified=sum(bool(x.get("verified")) for x in testset))
+    manifest_path = out.with_suffix(".manifest.json")
+    if out.exists() and out.stat().st_size:
+        if not manifest_path.exists() or json.loads(manifest_path.read_text())["run_id"] != manifest["run_id"]:
+            raise ValueError("Checkpoint provenance mismatch. Choose a new output path for this configuration.")
+    manifest_path.write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
     done = {r["id"] for r in _read_jsonl(out)}
     for item in testset:
         if item["id"] in done:
             continue
         try:
             resp = agent.run(item["question"], file_ids=file_ids)
-        except RateLimitExhausted:
-            raise            # daily cap: stop now; everything so far is already checkpointed
         except Exception as exc:
-            logger.warning(f"{item['id']} failed: {exc}")
+            logger.warning("Generation failed for %s: %s", item["id"], type(exc).__name__)
+            _append_jsonl(out, [{"id": item["id"], "run_id": manifest["run_id"],
+                "question": item["question"], "ground_truth": item.get("ground_truth", ""),
+                "answerable": item["answerable"], "answer": "", "contexts": [],
+                "abstained": False, "finish_reason": "error", "error": type(exc).__name__,
+                "citation_report": {}, "needs_review": True, "review_reasons": ["generation_failure"],
+                "latency_ms": 0.0, "llm_calls": 0, "timings": {}}])
+            done.add(item["id"])
+            if isinstance(exc, RateLimitExhausted):
+                raise
             continue
         _append_jsonl(out, [{
-            "id": item["id"], "question": item["question"],
+            "id": item["id"], "run_id": manifest["run_id"], "question": item["question"],
             "ground_truth": item.get("ground_truth", ""),
             "answerable": item["answerable"],
             "answer": resp.answer,
@@ -183,7 +202,8 @@ def summarize(records: List[Dict], scores: List[Dict]) -> Dict:
         vals = [s.get(short) for s in scores if s.get(short) is not None]
         mean, lo, hi = bootstrap_ci(vals, CONFIG.eval.bootstrap_resamples)
         out["ragas"][short] = {"mean": mean, "ci95": [lo, hi], "n": len(vals),
-                               "n_failed": len([s for s in scores if s.get(short) is None])}
+                               "n_failed": sum(1 for r in records if r.get("answerable") and not r.get("abstained") and
+                                   not any(s["id"] == r["id"] and s.get(short) is not None for s in scores))}
     out["n_scored"] = len(scores)
     out["generated_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
     return out
@@ -199,6 +219,11 @@ def run_evaluation(testset_path: str, agent=None, output_path: Optional[str] = N
     records = _read_jsonl(gen_path) if skip_generate else generate(testset_path, agent, str(gen_path), file_ids, limit, verified_only)
     scores = _read_jsonl(reports / "ragas_scores.jsonl") if skip_score else score(records, metrics=metrics)
     summary = summarize(records, scores)
+    manifest_path = gen_path.with_suffix(".manifest.json")
+    if manifest_path.exists():
+        summary["provenance"] = json.loads(manifest_path.read_text())
+    else:
+        summary["provenance"] = {"verified_only": False, "warning": "Missing generation manifest"}
     out = Path(output_path or reports / "ragas_latest.json")
     out.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 

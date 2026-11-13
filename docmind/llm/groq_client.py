@@ -200,6 +200,30 @@ class GroqLLM(BaseLLM):
         raise last_exc  # pragma: no cover
 
 
+    def complete_tools(self, messages, tools):
+        """Return the native assistant message, including tool call ids."""
+        request = dict(model=self._model, messages=messages, tools=tools,
+                       tool_choice="auto", temperature=0.0, max_tokens=CONFIG.llm.max_tokens)
+        if self._reasoning_effort:
+            request["reasoning_effort"] = self._reasoning_effort
+        for attempt in range(CONFIG.llm.max_retries + 1):
+            try:
+                response = self._client.chat.completions.create(**request)
+                self.calls += 1
+                if response.usage:
+                    self.prompt_tokens += response.usage.prompt_tokens or 0
+                    self.completion_tokens += response.usage.completion_tokens or 0
+                return response.choices[0].message.model_dump(exclude_none=True)
+            except Exception as exc:
+                if type(exc).__name__ not in _RETRYABLE or attempt == CONFIG.llm.max_retries:
+                    raise
+                delay = _retry_after(exc)
+                delay = min(2 ** attempt, 30) if delay is None else delay
+                if delay > min(CONFIG.llm.max_sleep_seconds, 60):
+                    raise RateLimitExhausted("Provider quota exhausted") from exc
+                time.sleep(delay)
+
+
 def get_llm(model: Optional[str] = None) -> BaseLLM:
     """Factory for the configured LLM."""
     if CONFIG.llm.provider == "demo":

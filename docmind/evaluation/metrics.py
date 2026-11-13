@@ -4,13 +4,15 @@ should come from here with a confidence interval, never a bare point estimate.
 """
 import math
 import re
+import unicodedata
+from collections import Counter
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
 
 def normalize(text: str) -> str:
-    return re.sub(r"\s+", " ", text.lower()).strip()
+    return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", text).casefold()).strip()
 
 
 def is_relevant(chunk_text: str, gold_substrings: Sequence[str]) -> bool:
@@ -35,9 +37,9 @@ def mrr(rel: Sequence[bool], k: int) -> float:
     return 0.0
 
 
-def ndcg_at_k(rel: Sequence[bool], k: int) -> float:
+def ndcg_at_k(rel: Sequence[bool], k: int, total_relevant: Optional[int] = None) -> float:
     gains = [1.0 / math.log2(i + 2) for i, r in enumerate(rel[:k]) if r]
-    n_rel = min(sum(rel), k)
+    n_rel = min(sum(rel) if total_relevant is None else total_relevant, k)
     ideal = sum(1.0 / math.log2(i + 2) for i in range(n_rel))
     return sum(gains) / ideal if ideal else 0.0
 
@@ -108,7 +110,7 @@ def _count_by(records, fn):
 
 def answer_level_stats(records: List[Dict]) -> Dict:
     """Citation validity, abstention behaviour and latency from generation records."""
-    answered = [r for r in records if not r["abstained"]]
+    answered = [r for r in records if not r["abstained"] and not r.get("error")]
     cited = sum(len(r["citation_report"].get("cited", [])) for r in answered)
     valid = sum(len(r["citation_report"].get("valid", [])) for r in answered)
     with_invalid = sum(1 for r in answered if r["citation_report"].get("invalid"))
@@ -122,6 +124,12 @@ def answer_level_stats(records: List[Dict]) -> Dict:
 
     return {
         "n_total": len(records),
+        "n_failed": sum(bool(r.get("error")) for r in records),
+        "failure_rate": sum(bool(r.get("error")) for r in records) / len(records) if records else None,
+        "answer_exact_match": float(np.mean([answer_em(r.get("answer", ""), r.get("ground_truth", ""))
+            if not r.get("error") else 0.0 for r in answerable])) if answerable else None,
+        "answer_token_f1": float(np.mean([answer_f1(r.get("answer", ""), r.get("ground_truth", ""))
+            if not r.get("error") else 0.0 for r in answerable])) if answerable else None,
         "n_answerable": len(answerable),
         "n_unanswerable": len(unanswerable),
         "citations_total": cited,
@@ -140,3 +148,24 @@ def answer_level_stats(records: List[Dict]) -> Dict:
         "finish_reasons": _count_by(records, lambda r: r.get("finish_reason", "unknown")),
         "review_rate": (sum(1 for r in records if r["needs_review"]) / len(records)) if records else None,
     }
+
+
+def _answer_tokens(text):
+    text = re.sub(r"[^\w\s]", " ", normalize(text))
+    return [t for t in text.split() if t not in {"a", "an", "the"}]
+
+
+def answer_em(answer, reference):
+    return float(_answer_tokens(answer) == _answer_tokens(reference))
+
+
+def answer_f1(answer, reference):
+    a, b = _answer_tokens(answer), _answer_tokens(reference)
+    if not a or not b:
+        return float(a == b)
+    overlap = sum((Counter(a) & Counter(b)).values())
+    return 2.0 * overlap / (len(a) + len(b))
+
+
+def recall_at_k(rel, k, total_relevant):
+    return sum(rel[:k]) / total_relevant if total_relevant else 0.0
