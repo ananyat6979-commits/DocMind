@@ -1,78 +1,29 @@
-# Docker without local Docker
+# Container deployment
 
-Two free GitHub services do the work. **Actions** builds and tests the image on GitHub's machines. **Codespaces** provides a cloud machine with Docker so the image can be run and reached by URL.
+The Docker image uses Python 3.11, CPU PyTorch, pinned retrieval and attribution weights under `/opt/hf`, and a non-root user. Runtime state belongs under `/data`. Network access is disabled in the model-loading smoke check, proving that the configured default weights were included during the build.
 
-## Status
-- The Dockerfile passes `hadolint`, the workflows pass `actionlint`, the compose file parses, and `tests/test_deploy_files.py` pins the Dockerfile's key properties (non-root user, health check, models baked in, CPU-only torch).
-- The image build itself is verified by the `docker` workflow, which runs on relevant pushes to `main` and can be started manually. It has three smoke tests that fail loudly.
-- Free limits (GitHub's billing documentation): personal free accounts get 120 core-hours and 15 GB of storage per month for Codespaces, so a 2-core codespace gives about 60 hours. Without a payment method on file, usage is blocked rather than billed. Actions minutes for private repositories are limited on the free plan; public repositories are free. See github.com/settings/billing.
+## Local run
 
-## Step 1: push the code
-From the folder that contains `.git`:
+Create `.env` from `.env.example` and privately fill the UI password, administrator PIN, reviewer PIN, provider key and a currently available model ID. Then run:
+
 ```powershell
-git status
-git add -A
-git status --short
-git commit -m "<message>"
-git push origin main
-```
-Check the `git status --short` output before committing: there must be no `.env`, `venv`, `indexes`, database files or PDFs. The repository's `.gitignore` excludes them.
-
-## Step 2: watch the cloud build
-GitHub, Actions tab, workflow **docker**. A push that touches the Dockerfile or the code triggers it, or use **Run workflow**. A green run means the image built, both models load with the network disabled, the full ingest and agent pipeline ran inside the image, and the UI reported healthy. On `main` it then publishes `ghcr.io/<owner>/docmind:latest`.
-
-## Step 3: run it in Codespaces
-1. Add secrets first: GitHub, Settings, Codespaces, **New secret**, with repository access to this repository. Create `GROQ_API_KEY`, `DOCMIND_APP_PASSWORD` and `DOCMIND_REVIEWER_PIN`. They must exist before the codespace is created (if added later, rebuild it).
-2. On the repository page choose **Code**, **Codespaces**, **Create codespace on main** (2-core is enough).
-3. In the codespace terminal:
-```bash
-docker version                      # should print a Client and a Server section
 docker compose up --build ui
 ```
-The first build takes several minutes (CPU torch download and model baking). Later starts are quick.
-4. Open port 8501 from the Ports tab. The URL looks like `https://<name>-8501.app.github.dev`. Ports are private by default. To admit pilot users, set Port Visibility to Public and keep the password enabled.
-5. API as well: `docker compose --profile api up --build api` and forward port 8000.
 
-### Running costs hours
-A codespace stops after an idle period (30 minutes by default, adjustable in Settings, Codespaces). Stop it manually when finished. Data survives stop and start, and is deleted when the codespace is deleted.
+For the API, set `DOCMIND_API_KEY` and run:
 
-### Back up and restore the database
-```bash
-docker compose stop ui
-docker compose cp ui:/data/indexes/docmind.db ./docmind_backup.db     # then download it from the Explorer
-```
-Load a database produced by the cloud notebook (its embeddings are reused, nothing is recomputed):
-```bash
-docker compose create ui              # harmless if it exists; cp needs the container to exist
-docker compose stop ui
-docker compose run --rm --no-deps --entrypoint "" ui mkdir -p /data/indexes
-docker compose cp ./docmind.db ui:/data/indexes/docmind.db
-docker compose run --rm --no-deps -u root --entrypoint "" ui chown docmind:docmind /data/indexes/docmind.db
-docker compose up ui
-```
-
-## Alternative: lightweight Docker on a local Windows machine
-Docker Desktop is the heavy part. Docker Engine inside WSL2 is much lighter, but it needs CPU virtualization enabled in BIOS (Task Manager, Performance, CPU shows "Virtualization: Enabled"). If that reads Disabled, local Docker cannot work and the Codespaces route above applies. Otherwise:
 ```powershell
-wsl --install -d Ubuntu
+docker compose --profile api up --build api
 ```
-Inside Ubuntu: `curl -fsSL https://get.docker.com | sh`, then `sudo usermod -aG docker $USER`. Cap WSL's memory in `%UserProfile%\.wslconfig`:
-```
-[wsl2]
-memory=4GB
-processors=2
-```
-Then run `wsl --shutdown` and reopen.
 
-## Limitations
-Kaggle and Colab notebooks do not provide a Docker daemon, so use them for the evidence run ([CLOUD.md](CLOUD.md)), not for containers.
+The UI uses port 8501 and the API port 8000. Missing credentials disable access. Compose intentionally gives the services separate data volumes; do not point concurrent processes at the same corpus. Review state and uploaded documents therefore do not transfer between the two services automatically. Put remote access behind TLS and a suitable network boundary. No public hosting provider is required for a local run.
+
+## Build verification
+
+The `docker` GitHub Actions workflow builds the image, loads all three neural models offline, performs demo ingestion/query and checks UI liveness. A manual run on a working branch builds and smoke-tests without publishing. Main-branch runs additionally publish the existing container package. The `ci` workflow separately tests Python 3.11, 3.12 and 3.13, critical lint checks and frozen report integrity without live inference credentials.
+
+Model downloads make the image substantially larger than a basic web service. This build is not proof that all models fit in four gigabytes alongside other applications. HNSW is optional and full index refresh remains memory-bound. Liveness means the process is running; authenticated `/ready` performs basic configuration/database checks and is not a full neural inference probe.
 
 ## Troubleshooting
-| Symptom | Likely cause |
-|---|---|
-| Actions fails at "Build" with a download error | A transient network or package-index error. Re-run the failed jobs. |
-| Smoke 1 fails | A model was not baked in because the download failed during build. Re-run; if it repeats, open an issue with the log. |
-| Smoke 3 fails | See the `docker logs dm` output printed in that step. |
-| Codespace UI reports a missing GROQ_API_KEY | The secret was added after the codespace was created. Rebuild the codespace. |
-| File upload returns 403 | Streamlit's XSRF check behind the proxy. The image disables it; confirm the compose file is used rather than a bare `streamlit run`. |
-| No login page | `DOCMIND_APP_PASSWORD` is empty. Set the secret and restart. |
+
+Inspect build logs for dependency/download failures. Inspect smoke logs for model-cache or permission failures. If uploads return 403 behind a proxy, configure trusted proxy origins and forwarding rather than disabling CORS/XSRF. If access is denied, verify the corresponding secret and restart. Persistent volumes may retain data after containers are removed; follow your retention policy before deleting them.
