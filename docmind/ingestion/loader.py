@@ -8,6 +8,9 @@ import hashlib
 import logging
 import os
 import zipfile
+import json
+import subprocess
+import sys
 from pathlib import Path
 from typing import List, Union
 
@@ -189,6 +192,20 @@ def load_document(path: Union[str, Path]) -> List[Document]:
     loader = LOADERS.get(path.suffix.lower())
     if not loader:
         raise ValueError(f"Unsupported extension: {path.suffix}. Supported: {sorted(LOADERS)}")
+    if path.suffix.lower() in (".pdf", ".docx") and os.getenv("DOCMIND_PARSER_WORKER") != "1":
+        environment = os.environ.copy()
+        for key in ("GROQ_API_KEY","DOCMIND_API_KEY","DOCMIND_APP_PASSWORD","DOCMIND_REVIEWER_PIN", "KAGGLE_API_TOKEN","HF_TOKEN"):
+            environment.pop(key,None)
+        try:
+            result=subprocess.run([sys.executable,"-m","docmind.ingestion.parse_worker",str(path.resolve())],
+                capture_output=True,text=True,encoding="utf-8",timeout=60,env=environment,
+                creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
+        except subprocess.TimeoutExpired as exc:
+            raise ValueError("Document parsing exceeded the 60-second limit") from exc
+        if result.returncode:
+            detail = result.stderr[-500:] if result.stderr else "Parser exceeded resource limits or rejected the file"
+            raise ValueError(detail)
+        return [Document(**item) for item in json.loads(result.stdout)]
     return loader(path)
 
 

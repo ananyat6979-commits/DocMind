@@ -114,7 +114,7 @@ class ReviewConfig:
     enabled: bool = True
     min_top_score: Optional[float] = field(default_factory=lambda: _env_float("DOCMIND_REVIEW_MIN_SCORE", None))
     audit_rate: float = field(default_factory=lambda: _env_float("DOCMIND_REVIEW_AUDIT_RATE", 0.10) or 0.0)
-    hold_until_approved: bool = False   # True: UI hides flagged answers until a reviewer decides
+    hold_until_approved: bool = True   # True: UI hides flagged answers until a reviewer decides
     reviewer_pin: str = field(default_factory=lambda: os.getenv("DOCMIND_REVIEWER_PIN", ""))
 
 

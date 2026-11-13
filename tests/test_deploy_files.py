@@ -24,10 +24,10 @@ def test_dockerfile_models_match_config():
     assert "cross-encoder/ms-marco-MiniLM-L-6-v2" in DOCKERFILE
 
 
-def test_compose_services_share_one_volume_and_never_bake_secrets():
+def test_compose_services_isolate_volumes_and_never_bake_secrets():
     c = yaml.safe_load((ROOT / "docker-compose.yml").read_text())
     for name, svc in c["services"].items():
-        assert "docmind-data:/data" in svc["volumes"], name
+        assert f"docmind-{name}-data:/data" in svc["volumes"], name
         for k, v in svc.get("environment", {}).items():
             assert str(v).startswith("${"), f"{name}.{k} must come from the environment, not be hardcoded"
 

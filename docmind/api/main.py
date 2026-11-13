@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from contextlib import asynccontextmanager
+from functools import lru_cache
 from fastapi import Request, Query, Depends, FastAPI, File, Header, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
@@ -64,12 +65,29 @@ _agent: Optional[ReActAgent] = None
 _lock = threading.Lock()
 
 
+@lru_cache(maxsize=8)
+def _persistent_stores(db_path):
+    return CorpusStore(db_path), ReviewStore(db_path), EventLog(db_path)
+
+
+def get_store():
+    return _persistent_stores(str(CONFIG.db_path))[0]
+
+
+def get_reviews():
+    return _persistent_stores(str(CONFIG.db_path))[1]
+
+
+def get_events():
+    return _persistent_stores(str(CONFIG.db_path))[2]
+
+
 def get_agent() -> ReActAgent:
     global _agent
     if _agent is None:
         with _lock:
             if _agent is None:
-                _agent = ReActAgent(retriever=HybridRetriever())
+                _agent = ReActAgent(retriever=HybridRetriever(get_store()))
     return _agent
 
 
@@ -152,14 +170,12 @@ class ReviewDecision(BaseModel):
 
 @app.get("/health")
 def health():
-    docs = CorpusStore().list_documents()
-    return {"status": "ok", "documents": len(docs), "chunks": sum(d["n_chunks"] for d in docs),
-            "llm_provider": CONFIG.llm.provider, "timestamp": time.time()}
+    return {"status":"ok", "timestamp":time.time()}
 
 
 @app.get("/documents", dependencies=[Depends(require_api_key)])
 def documents():
-    return CorpusStore().list_documents()
+    return get_store().list_documents()
 
 
 def _ingest_response(report, label: str) -> IngestResponse:
@@ -224,7 +240,7 @@ def upload(file: UploadFile = File(...)):
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
-def query(req: QueryRequest):
+def query(req: QueryRequest, request: Request):
     agent = get_agent()
     if agent.retriever.is_empty():
         raise HTTPException(status_code=409, detail="No documents ingested yet. POST /upload first.")
@@ -234,14 +250,17 @@ def query(req: QueryRequest):
         logger.exception("Agent query failed")
         raise HTTPException(status_code=500, detail="Query failed; consult server logs")
 
-    status = ReviewStore().record(resp, user="api-user")
-    EventLog().log("query", user="api-user", response_id=resp.response_id, latency_ms=round(resp.latency_ms),
+    status = get_reviews().record(resp, user="api-user")
+    get_events().log("query", user="api-user", response_id=resp.response_id, latency_ms=round(resp.latency_ms),
                    llm_calls=resp.llm_calls, abstained=resp.abstained, needs_review=resp.needs_review,
                    n_sources=len(resp.sources), finish=resp.finish_reason,
+                   request_id=getattr(request.state,"request_id",None), timings=resp.timings,
                    citation_validity=resp.citation_report.get("validity"))
     cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
     return QueryResponse(
-        response_id=resp.response_id, question=req.question, answer=resp.answer, abstained=resp.abstained,
+        response_id=resp.response_id, question=req.question,
+        answer="This answer is awaiting human review." if status=="pending" and CONFIG.review.hold_until_approved else resp.answer,
+        abstained=resp.abstained,
         review_status=status, review_reasons=resp.review_reasons,
         citation_validity=resp.citation_report.get("validity"),
         attribution=resp.citation_report.get("attribution"),
@@ -256,15 +275,15 @@ def query(req: QueryRequest):
 
 @app.post("/feedback", dependencies=[Depends(require_api_key)])
 def feedback(req: FeedbackRequest):
-    if ReviewStore().get(req.response_id) is None:
+    if get_reviews().get(req.response_id) is None:
         raise HTTPException(status_code=404, detail="Unknown response_id")
-    EventLog().log("feedback", user="api-user", response_id=req.response_id, helpful=req.helpful, comment=req.comment)
+    get_events().log("feedback", user="api-user", response_id=req.response_id, helpful=req.helpful, comment=req.comment)
     return {"ok": True}
 
 
 @app.get("/review/pending", dependencies=[Depends(require_api_key)])
 def review_pending(_: str = Depends(require_reviewer), limit: int = Query(default=50, ge=1, le=200)):
-    return ReviewStore().pending(limit=limit)
+    return get_reviews().pending(limit=limit)
 
 
 @app.post("/review/{response_id}", dependencies=[Depends(require_api_key)])
@@ -272,12 +291,12 @@ def review_decide(response_id: str, body: ReviewDecision, _: str = Depends(requi
     if body.decision not in DECISIONS:
         raise HTTPException(status_code=400, detail=f"decision must be one of {sorted(DECISIONS)}")
     try:
-        ok = ReviewStore().decide(response_id, body.decision, "reviewer", body.edited_answer, body.note)
+        ok = get_reviews().decide(response_id, body.decision, "reviewer", body.edited_answer, body.note)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     if not ok:
         raise HTTPException(status_code=404, detail="Not found or already decided")
-    EventLog().log("review_decision", user="reviewer", response_id=response_id, decision=body.decision)
+    get_events().log("review_decision", user="reviewer", response_id=response_id, decision=body.decision)
     return {"ok": True}
 
 
@@ -322,7 +341,7 @@ def cancel_ingestion(job_id: str, request: Request):
 def readiness():
     if not CONFIG.llm.groq_api_key and CONFIG.llm.provider != "demo":
         raise HTTPException(status_code=503, detail="Generation provider is not configured")
-    return {"status": "ready", "corpus_version": CorpusStore().version()}
+    return {"status": "ready", "corpus_version": get_store().version()}
 
 
 @app.post("/uploads/jobs", status_code=202, dependencies=[Depends(require_api_key)])

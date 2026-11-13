@@ -27,4 +27,9 @@ def erase_document(file_id, store=None):
     source = Path(doc["source"]).resolve()
     if root in source.parents:
         source.unlink(missing_ok=True)
+        owned = (root / doc["sha256"]).resolve()
+        if owned.parent == root and owned.is_dir():
+            for copy in owned.iterdir():
+                if copy.is_file() and copy.resolve().parent == owned:
+                    copy.unlink(missing_ok=True)
     return True

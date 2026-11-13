@@ -193,8 +193,19 @@ with tab_ask:
             v = resp.citation_report.get("validity")
             st.caption(f"{resp.latency_ms / 1000:.1f}s | {resp.llm_calls} LLM calls | {len(resp.sources)} passages | "
                        f"{STATUS_BADGE.get(status, status)}"
-                       + (f" | citation validity {v:.0%}" if v is not None else ""))
+                       + (f" | citation labels matched {v:.0%}" if v is not None else ""))
 
+            attribution = resp.citation_report.get("attribution")
+            if attribution and not hold:
+                with st.expander("Claim evidence checks"):
+                    if attribution.get("error"):
+                        st.info("Evidence checking is unavailable. Human review is required.")
+                    for claim in attribution.get("claims", []):
+                        st.markdown(claim["claim"])
+                        st.caption("Supported by the evidence check" if claim["supported"] else "Support was not established")
+                        if claim.get("quote"):
+                            st.text(claim["quote"])
+                            st.caption(f"Evidence characters {claim['start']} to {claim['end']}")
             if resp.sources:
                 with st.expander(f"Evidence ({len(resp.cited_sources)} cited of {len(resp.sources)} retrieved)"):
                     cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}

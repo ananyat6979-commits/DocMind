@@ -33,6 +33,8 @@ def load_testset(path: str, verified_only: bool = False) -> List[Dict]:
         it.setdefault("answerable", True)
         it.setdefault("gold_substrings", [])
         it.setdefault("verified", False)
+    if len({it["id"] for it in items}) != len(items):
+        raise ValueError("Testset IDs must be unique")
     if verified_only:
         kept = [it for it in items if it["verified"]]
         if not kept:

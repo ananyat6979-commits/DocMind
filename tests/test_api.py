@@ -25,7 +25,7 @@ def _upload(client, name, text):
 def test_upload_two_files_and_query_each(client):
     assert _upload(client, "alpha.txt", ALPHA).status_code == 200
     assert _upload(client, "beta.txt", BETA).status_code == 200
-    assert client.get("/health").json()["documents"] == 2
+    assert len(client.get("/documents").json()) == 2
     r = client.post("/query", json={"question": "vegetarian lentil curry"})
     assert r.status_code == 200 and "lentil" in r.json()["answer"].lower()
 

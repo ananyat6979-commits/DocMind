@@ -37,5 +37,7 @@ def test_app_answers_for_both_files_and_queues_review(make_file):
     [b for b in at.button if b.label == "Ask"][0].click().run()
     assert not at.exception
     md = " ".join(m.value for m in at.markdown)
-    assert "lentil" in md.lower()
-    assert any("Awaiting human review" in w.value for w in at.warning)
+    from docmind.review.store import ReviewStore
+    assert "lentil" in ReviewStore().pending()[0]["answer"].lower()
+    assert any("hidden until a reviewer decides" in info.value for info in at.info)
+    assert ReviewStore().pending()[0]["answer"] not in md

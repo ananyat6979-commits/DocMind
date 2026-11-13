@@ -21,13 +21,14 @@ class ClaimEvidence:
 
 
 class NLIJudge:
-    def __init__(self, model="typeform/distilbert-base-uncased-mnli", revision=None, local_files_only=True):
+    def __init__(self, model="typeform/distilbert-base-uncased-mnli", revision=None, local_files_only=True, device="cpu", batch_size=2):
         import torch
         from transformers import AutoTokenizer, AutoModelForSequenceClassification
         self.torch = torch
+        self.device, self.batch_size = device, batch_size
         self.tokenizer = AutoTokenizer.from_pretrained(model, revision=revision, local_files_only=local_files_only)
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            model, revision=revision, local_files_only=local_files_only).eval()
+            model, revision=revision, local_files_only=local_files_only).to(device).eval()
         labels = {str(v).lower(): int(k) for k, v in self.model.config.id2label.items()}
         if "entailment" not in labels:
             raise ValueError("NLI model must expose an entailment label")
@@ -36,10 +37,12 @@ class NLIJudge:
 
     def __call__(self, pairs):
         scores = []
-        for offset in range(0, len(pairs), 2):
-            batch = pairs[offset:offset+2]
+        for offset in range(0, len(pairs), self.batch_size):
+            batch = pairs[offset:offset+self.batch_size]
+            if any(len(self.tokenizer.encode(h,add_special_tokens=False))>128 for _,h in batch):
+                raise ValueError("Claim exceeds the NLI hypothesis budget")
             encoded = self.tokenizer([p for p, _ in batch], [h for _, h in batch],
-                padding=True, truncation=True, max_length=256, return_tensors="pt")
+                padding=True, truncation="only_first", max_length=256, return_tensors="pt").to(self.device)
             with self.torch.inference_mode():
                 scores.extend(self.model(**encoded).logits.softmax(-1)[:, self.entailment_id].tolist())
         return scores

@@ -143,7 +143,9 @@ def main():
     ap.add_argument("--draft-only", action="store_true", help="no prompts: write unverified drafts for scripts/verify_testset.py")
     args = ap.parse_args()
 
-    store, file_ids = CorpusStore(), []
+    import tempfile
+    workspace = tempfile.TemporaryDirectory(prefix="docmind_testset_")
+    store, file_ids = CorpusStore(db_path=Path(workspace.name) / "draft.db"), []
     for d in args.docs:
         file_ids += ingest(d, store=store).file_ids
     all_chunks, _ = store.load_corpus(file_ids)

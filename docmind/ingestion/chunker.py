@@ -134,7 +134,7 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document) -
 
 def _is_noise(text: str) -> bool:
     """Short fragments with no real word in them: page numbers, rules, stray bullets."""
-    return len(text) < 20 and not re.search(r"[A-Za-z]{3,}", text)
+    return len(text) < 20 and not any(c.isalpha() for c in text)
 
 
 def _emit(chunks: List[Chunk], content: str, doc: Document) -> None:

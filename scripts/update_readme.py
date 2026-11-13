@@ -23,6 +23,9 @@ def ragas_block():
     if not p.exists():
         return "Not yet run. Execute `python scripts/evaluate.py --testset data/testset.json`."
     s = json.loads(p.read_text())
+    provenance = s.get("provenance", {})
+    if not provenance.get("verified_only") or provenance.get("n_verified", 0) != provenance.get("n_questions"):
+        raise ValueError("Refusing to publish a report without verified testset provenance")
     a = s["answer_level"]
     rows = [f"Generator `{s['generator_model']}`, judge `{s['judge_model']}`, run {s['generated_at']}, "
             f"{a['n_total']} questions ({a['n_answerable']} answerable, {a['n_unanswerable']} unanswerable).", "",

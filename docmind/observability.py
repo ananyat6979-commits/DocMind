@@ -22,6 +22,7 @@ class RequestMonitor:
 
     async def __call__(self, request, call_next):
         request_id = uuid.uuid4().hex
+        request.state.request_id = request_id
         started = time.perf_counter()
         token = request.headers.get("x-api-key", "anonymous")
         identity = hashlib.sha256(token.encode()).hexdigest()

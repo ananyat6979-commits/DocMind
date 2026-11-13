@@ -184,3 +184,11 @@ def test_hnsw_search_respects_file_filter(make_file,monkeypatch):
     store=CorpusStore();fid=ingest(make_file("one.txt",ALPHA),store=store).file_ids[0]
     results=HybridRetriever(store).search("coolant",mode="dense",file_ids=[fid])
     assert results and all(r.chunk.file_id==fid for r in results)
+
+
+def test_docx_parser_worker_returns_bounded_results(tmp_path):
+    from docmind.ingestion.loader import load_document
+    document=Docx();document.add_paragraph("Bounded parser test text.")
+    path=tmp_path/"worker.docx";document.save(path)
+    units=load_document(path)
+    assert len(units)==1 and units[0].content=="Bounded parser test text."

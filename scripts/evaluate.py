@@ -33,6 +33,9 @@ def main():
 
     if not Path(args.testset).exists():
         sys.exit(f"Testset not found: {args.testset}")
+    from docmind.config import CONFIG
+    # Evaluation has its own persistent corpus so checkpointed runs can resume safely.
+    CONFIG.db_path = CONFIG.reports_dir / "evaluation_workspace" / "corpus.db"
     file_ids = None
     for d in args.docs:
         rep = ingest(d)

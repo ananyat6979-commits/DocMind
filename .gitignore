@@ -43,3 +43,8 @@ reports/**/cache/
 reports/**/reranker_cache.jsonl
 
 .venv-*/
+
+reports/reader_workspace/
+.kaggle-run/
+
+reports/history_redaction.json
