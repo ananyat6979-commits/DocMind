@@ -1,0 +1,46 @@
+{
+  "model": "qwen/qwen3.8-27b",
+  "provider": "Groq",
+  "reasoning_effort": "none",
+  "temperature": 0,
+  "max_output_tokens": 512,
+  "maximum_llm_calls": 4,
+  "n_requested_per_protocol": 20,
+  "token_cap": 80000,
+  "source": {
+    "dataset": "hotpotqa/hotpot_qa",
+    "revision": "1908d6afbbead072334abe2965f91bd2709910ab",
+    "path": "distractor/validation-00000-of-00001.parquet",
+    "license": "CC-BY-SA-4.0",
+    "source": "https://github.com/hotpotqa/hotpot",
+    "sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6"
+  },
+  "source_snapshot": {
+    "git_commit": "10a4016698a3d6cc47164661330b9bdeaf218e69",
+    "dirty": true
+  },
+  "question_ids": [
+    "5ab82e195542992aa3b8c8a8",
+    "5a858dc85542997b5ce40002",
+    "5adfc97255429906c02daa41",
+    "5a82accd55429966c78a6a78",
+    "5a8e8f6f5542995085b37451",
+    "5a8d6d4e554299441c6b9fdb",
+    "5ac0b1835542992a796ded65",
+    "5adefdd75542995ec70e8f4e",
+    "5ae64ba755429929b0807b25",
+    "5add1eed5542992ae4cec485",
+    "5a77769e5542997042120a65",
+    "5aba7cfe554299232ef4a2fd",
+    "5a73a7c755429978a71e9068",
+    "5ab1d6545542997061209588",
+    "5ae7940c55429952e35ea984",
+    "5add7a335542992200553b37",
+    "5ade1eda55429975fa854e71",
+    "5a8d75f35542994ba4e3dc8b",
+    "5ae1b01b5542997283cd2237",
+    "5a7f677455429969796c1a37"
+  ],
+  "retrieval": "Frozen dense top-five replay; each paragraph capped at 600 characters; same evidence for both protocols",
+  "scope": "Protocol and prompt comparison; NLI and review routing disabled; hosted model revision is opaque"
+}

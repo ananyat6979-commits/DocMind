@@ -1,0 +1,36 @@
+{
+  "critic": {
+    "0.1": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    },
+    "0.2": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    },
+    "0.3": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    }
+  },
+  "token": {
+    "0.1": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    },
+    "0.2": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    },
+    "0.3": {
+      "threshold": null,
+      "n_selected": 0,
+      "reason": "No candidate passes the multiplicity-corrected calibration bound"
+    }
+  }
+}

@@ -5,3 +5,11 @@ Dockerfile text eol=lf
 *.ipynb text eol=lf
 *.png binary
 *.pdf binary
+
+# Published artifact hashes must survive checkout without newline conversion.
+reports/benchmarks/** -text
+reports/protocols/** -text
+reports/local_ops.json -text
+reports/service_load.json -text
+data/testset.json -text
+data/public/corpus.json -text

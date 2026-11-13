@@ -1,22 +1,5489 @@
 [
   {
-    "question": "What is the main thesis of The Refrigeration Problem?",
-    "ground_truth": "The Refrigeration Problem is a thermodynamic audit of civilization's hidden telos, presenting five experiments with real empirical data to test its claims."
+    "id": "5705e4fe75f01819005e7705",
+    "question": "What is the name of the desert on the border of Arizona?",
+    "ground_truth": "Colorado Desert",
+    "references": [
+      "Colorado Desert",
+      "the Colorado Desert",
+      "Colorado Desert"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Colorado Desert",
+      "the Colorado Desert",
+      "Colorado Desert"
+    ],
+    "evidence_file_id": "dbdab84ab2698351",
+    "gold_spans": [
+      {
+        "start": 19,
+        "end": 34,
+        "text": "Colorado Desert"
+      },
+      {
+        "start": 15,
+        "end": 34,
+        "text": "the Colorado Desert"
+      },
+      {
+        "start": 19,
+        "end": 34,
+        "text": "Colorado Desert"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "dbdab84ab2698351a7891a905e5c427429c23ef61bbd63fa6959258a98080440"
   },
   {
-    "question": "How many experiments are presented in the document?",
-    "ground_truth": "Five experiments are presented."
+    "id": "5705eccb52bb8914006896ba",
+    "question": "Which region of California is Palm Springs located in?",
+    "ground_truth": "southern",
+    "references": [
+      "southern",
+      "the desert",
+      "southern"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "southern",
+      "the desert",
+      "southern"
+    ],
+    "evidence_file_id": "d1bd9316675d5ac9",
+    "gold_spans": [
+      {
+        "start": 38,
+        "end": 46,
+        "text": "southern"
+      },
+      {
+        "start": 93,
+        "end": 103,
+        "text": "the desert"
+      },
+      {
+        "start": 38,
+        "end": 46,
+        "text": "southern"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "d1bd9316675d5ac9fa7e69f137619aecc59a46e6cd8398569396ed53c86f02f1"
   },
   {
-    "question": "What kind of data does the document use?",
-    "ground_truth": "The document uses real empirical data produced by Python scripts, with all findings falsifiable."
+    "id": "5705edcd52bb8914006896ca",
+    "question": "Geographically speaking, where is California's north - south midway point in terms of latitude?",
+    "ground_truth": "37\u00b0 9' 58.23\"",
+    "references": [
+      "37\u00b0 9' 58.23\"",
+      "37\u00b0 9' 58.23\"",
+      "37\u00b0 9' 58.23\""
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "37\u00b0 9' 58.23\"",
+      "37\u00b0 9' 58.23\"",
+      "37\u00b0 9' 58.23\""
+    ],
+    "evidence_file_id": "5621a695e0f4cee7",
+    "gold_spans": [
+      {
+        "start": 194,
+        "end": 207,
+        "text": "37\u00b0 9' 58.23\""
+      },
+      {
+        "start": 194,
+        "end": 207,
+        "text": "37\u00b0 9' 58.23\""
+      },
+      {
+        "start": 194,
+        "end": 207,
+        "text": "37\u00b0 9' 58.23\""
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "5621a695e0f4cee7162cef3437520925a230303661d56d42374bb5adaf0aaaf9"
   },
   {
-    "question": "What does CAPEX vs federal infrastructure refer to in the document?",
-    "ground_truth": "It refers to a comparison between hyperscaler capital expenditure and US federal infrastructure spending, cited as 1.31x in 2024."
+    "id": "57060df252bb891400689822",
+    "question": "Other than Downtown San Bernardino, and University Town, what is the name of another business district in the San Bernardino-Riverside area?",
+    "ground_truth": "Hospitality Business/Financial Centre",
+    "references": [
+      "Hospitality Business/Financial Centre",
+      "Downtown Riverside",
+      "Hospitality Business/Financial Centre"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Hospitality Business/Financial Centre",
+      "Downtown Riverside",
+      "Hospitality Business/Financial Centre"
+    ],
+    "evidence_file_id": "be2792db1ce39051",
+    "gold_spans": [
+      {
+        "start": 95,
+        "end": 132,
+        "text": "Hospitality Business/Financial Centre"
+      },
+      {
+        "start": 182,
+        "end": 200,
+        "text": "Downtown Riverside"
+      },
+      {
+        "start": 95,
+        "end": 132,
+        "text": "Hospitality Business/Financial Centre"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "be2792db1ce39051057f50003730431c5d1e0c20852368f563eda2c372771da2"
   },
   {
-    "question": "What is meant by neutral nations mobilizing in the document?",
-    "ground_truth": "It refers to 7 nations with low or no geopolitical rivalry motive being the strongest attractor in the dataset."
+    "id": "57060eaf75f01819005e7911",
+    "question": "Where are international corporations headquartered?",
+    "ground_truth": "University of California, Irvine",
+    "references": [
+      "University of California, Irvine",
+      "the University of California, Irvine",
+      "University of California"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "University of California, Irvine",
+      "the University of California, Irvine",
+      "University of California"
+    ],
+    "evidence_file_id": "3990a188c951ac2a",
+    "gold_spans": [
+      {
+        "start": 268,
+        "end": 300,
+        "text": "University of California, Irvine"
+      },
+      {
+        "start": 264,
+        "end": 300,
+        "text": "the University of California, Irvine"
+      },
+      {
+        "start": 268,
+        "end": 292,
+        "text": "University of California"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "3990a188c951ac2ac5a549ad29f598b583da6695cf862bd17be6cdd20e3d149c"
+  },
+  {
+    "id": "5706149552bb891400689881",
+    "question": "How many teams did Los Angeles used to have?",
+    "ground_truth": "two",
+    "references": [
+      "two",
+      "two",
+      "two"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "two",
+      "two",
+      "two"
+    ],
+    "evidence_file_id": "bfc15b62d8c29f0d",
+    "gold_spans": [
+      {
+        "start": 30,
+        "end": 33,
+        "text": "two"
+      },
+      {
+        "start": 30,
+        "end": 33,
+        "text": "two"
+      },
+      {
+        "start": 30,
+        "end": 33,
+        "text": "two"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "bfc15b62d8c29f0dc1c0d417aa10a1f77a5bc1848cbd1df2d1f0872ba8f904b2"
+  },
+  {
+    "id": "570614ff52bb89140068988e",
+    "question": "The two listed teams play for which NCAA group?",
+    "ground_truth": "Division I",
+    "references": [
+      "Division I",
+      "Division I",
+      "Division I"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Division I",
+      "Division I",
+      "Division I"
+    ],
+    "evidence_file_id": "5f10859c15b5f6c6",
+    "gold_spans": [
+      {
+        "start": 117,
+        "end": 127,
+        "text": "Division I"
+      },
+      {
+        "start": 117,
+        "end": 127,
+        "text": "Division I"
+      },
+      {
+        "start": 117,
+        "end": 127,
+        "text": "Division I"
+      }
+    ],
+    "source_title": "Southern_California",
+    "context_sha256": "5f10859c15b5f6c66012ca3e4f33a4fc38b8221d1aefeaef9c774ef8e6e5949a"
+  },
+  {
+    "id": "57094b4f9928a814004714fa",
+    "question": "What was Sky Travel later rebranded as?",
+    "ground_truth": "Pick TV",
+    "references": [
+      "Pick TV",
+      "Pick TV",
+      "Pick TV"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Pick TV",
+      "Pick TV",
+      "Pick TV"
+    ],
+    "evidence_file_id": "8cd9a361825ad9f2",
+    "gold_spans": [
+      {
+        "start": 553,
+        "end": 560,
+        "text": "Pick TV"
+      },
+      {
+        "start": 553,
+        "end": 560,
+        "text": "Pick TV"
+      },
+      {
+        "start": 553,
+        "end": 560,
+        "text": "Pick TV"
+      }
+    ],
+    "source_title": "Sky_(United_Kingdom)",
+    "context_sha256": "8cd9a361825ad9f2d3cc6576b2de8c81bb02ec9fdbfdaa1559941ae6a93e7500"
+  },
+  {
+    "id": "570966e0200fba1400367f4f",
+    "question": "What are BSkyB's standard definition broadcasts compliant with?",
+    "ground_truth": "DVB-compliant MPEG-2",
+    "references": [
+      "DVB-compliant MPEG-2",
+      "DVB-compliant MPEG-2",
+      "MPEG-2"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "DVB-compliant MPEG-2",
+      "DVB-compliant MPEG-2",
+      "MPEG-2"
+    ],
+    "evidence_file_id": "3a2ba0c4865678a8",
+    "gold_spans": [
+      {
+        "start": 46,
+        "end": 66,
+        "text": "DVB-compliant MPEG-2"
+      },
+      {
+        "start": 46,
+        "end": 66,
+        "text": "DVB-compliant MPEG-2"
+      },
+      {
+        "start": 60,
+        "end": 66,
+        "text": "MPEG-2"
+      }
+    ],
+    "source_title": "Sky_(United_Kingdom)",
+    "context_sha256": "3a2ba0c4865678a89dbdb5a6f7c74e3eb86122b429459f4c72c70515c24b55c7"
+  },
+  {
+    "id": "570d29c2b3d812140066d4c0",
+    "question": "How many Victorians are Buddhist?",
+    "ground_truth": "168,637",
+    "references": [
+      "168,637",
+      "168,637",
+      "168,637"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "168,637",
+      "168,637",
+      "168,637"
+    ],
+    "evidence_file_id": "b8f79857343da03d",
+    "gold_spans": [
+      {
+        "start": 287,
+        "end": 294,
+        "text": "168,637"
+      },
+      {
+        "start": 287,
+        "end": 294,
+        "text": "168,637"
+      },
+      {
+        "start": 287,
+        "end": 294,
+        "text": "168,637"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "b8f79857343da03dc1c7c2a5e15e3350bb97060531e8db3a546fadb1276486cb"
+  },
+  {
+    "id": "570d2f5bfed7b91900d45ccf",
+    "question": "When did Victoria enact its constitution?",
+    "ground_truth": "1975",
+    "references": [
+      "1975",
+      "1975",
+      "1975"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1975",
+      "1975",
+      "1975"
+    ],
+    "evidence_file_id": "1dd13bf146601477",
+    "gold_spans": [
+      {
+        "start": 47,
+        "end": 51,
+        "text": "1975"
+      },
+      {
+        "start": 47,
+        "end": 51,
+        "text": "1975"
+      },
+      {
+        "start": 47,
+        "end": 51,
+        "text": "1975"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "1dd13bf14660147737c3329dcbc515e988f9c216e86af57e2f8c27638569229b"
+  },
+  {
+    "id": "570d4329fed7b91900d45dd7",
+    "question": "On what date was Victoria declared independent from New South Wales?",
+    "ground_truth": "1 July 1851",
+    "references": [
+      "1 July 1851",
+      "1 July 1851",
+      "1 July 1851"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1 July 1851",
+      "1 July 1851",
+      "1 July 1851"
+    ],
+    "evidence_file_id": "04f203956d3cfbce",
+    "gold_spans": [
+      {
+        "start": 3,
+        "end": 14,
+        "text": "1 July 1851"
+      },
+      {
+        "start": 3,
+        "end": 14,
+        "text": "1 July 1851"
+      },
+      {
+        "start": 3,
+        "end": 14,
+        "text": "1 July 1851"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "04f203956d3cfbce055adc4cf145999fbeca50dd2e3199c11308d0130f84b6ae"
+  },
+  {
+    "id": "570d47b8b3d812140066d631",
+    "question": "How many narrow gauge rail lines were previously government owned?",
+    "ground_truth": "five",
+    "references": [
+      "five",
+      "five",
+      "five"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "five",
+      "five",
+      "five"
+    ],
+    "evidence_file_id": "697a7cf1275ff152",
+    "gold_spans": [
+      {
+        "start": 474,
+        "end": 478,
+        "text": "five"
+      },
+      {
+        "start": 474,
+        "end": 478,
+        "text": "five"
+      },
+      {
+        "start": 474,
+        "end": 478,
+        "text": "five"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "697a7cf1275ff1524ff00842e78c97cc68f1da2ec72cc226223265bdf1d91a77"
+  },
+  {
+    "id": "570d4a6bfed7b91900d45e14",
+    "question": "What was the name of the eastern half of the colony of 1788?",
+    "ground_truth": "New South Wales",
+    "references": [
+      "New South Wales",
+      "New South Wales",
+      "New South Wales"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "New South Wales",
+      "New South Wales",
+      "New South Wales"
+    ],
+    "evidence_file_id": "73c9e930c6dd2929",
+    "gold_spans": [
+      {
+        "start": 110,
+        "end": 125,
+        "text": "New South Wales"
+      },
+      {
+        "start": 110,
+        "end": 125,
+        "text": "New South Wales"
+      },
+      {
+        "start": 110,
+        "end": 125,
+        "text": "New South Wales"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "73c9e930c6dd292910f185bef250a8ac347a83947ea0900879f5f37b1fd43415"
+  },
+  {
+    "id": "570d50a5fed7b91900d45e7e",
+    "question": "What percentage was the increase of agricultural products in 2003-04?",
+    "ground_truth": "17%",
+    "references": [
+      "17%",
+      "17%",
+      "17%"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "17%",
+      "17%",
+      "17%"
+    ],
+    "evidence_file_id": "caa4bb3befe82e04",
+    "gold_spans": [
+      {
+        "start": 82,
+        "end": 85,
+        "text": "17%"
+      },
+      {
+        "start": 82,
+        "end": 85,
+        "text": "17%"
+      },
+      {
+        "start": 82,
+        "end": 85,
+        "text": "17%"
+      }
+    ],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "caa4bb3befe82e04c1363d130349629bda110b4f974526ed193a670fd4dc5fed"
+  },
+  {
+    "id": "57106644b654c5140001f8e7",
+    "question": "Who translated this version of the scriptures?",
+    "ground_truth": "Guyard de Moulin",
+    "references": [
+      "Guyard de Moulin",
+      "Guyard de Moulin",
+      "Guyard de Moulin"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Guyard de Moulin",
+      "Guyard de Moulin",
+      "Guyard de Moulin"
+    ],
+    "evidence_file_id": "1b05d25302149995",
+    "gold_spans": [
+      {
+        "start": 366,
+        "end": 382,
+        "text": "Guyard de Moulin"
+      },
+      {
+        "start": 366,
+        "end": 382,
+        "text": "Guyard de Moulin"
+      },
+      {
+        "start": 366,
+        "end": 382,
+        "text": "Guyard de Moulin"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "1b05d25302149995ccf924cfe9d3dd6cbf03a0cc7e58f7a1dc97784ba0be55dc"
+  },
+  {
+    "id": "57107a3ea58dae1900cd69df",
+    "question": "Where in South Carolina did Huguenot nobility settle?",
+    "ground_truth": "the Charleston Orange district",
+    "references": [
+      "the Charleston Orange district",
+      "Charleston Orange district",
+      "Charleston Orange district"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Charleston Orange district",
+      "Charleston Orange district",
+      "Charleston Orange district"
+    ],
+    "evidence_file_id": "7f50192eb7a56861",
+    "gold_spans": [
+      {
+        "start": 661,
+        "end": 691,
+        "text": "the Charleston Orange district"
+      },
+      {
+        "start": 665,
+        "end": 691,
+        "text": "Charleston Orange district"
+      },
+      {
+        "start": 665,
+        "end": 691,
+        "text": "Charleston Orange district"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "7f50192eb7a5686105d400314c808341ce6c56c9f1ca7c4671b3ac6ae7badacb"
+  },
+  {
+    "id": "57107c24a58dae1900cd69ec",
+    "question": "When did France and the Dutch fight in the 17th century?",
+    "ground_truth": "1672",
+    "references": [
+      "1672",
+      "1672",
+      "1672"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1672",
+      "1672",
+      "1672"
+    ],
+    "evidence_file_id": "edb8d00a6415b164",
+    "gold_spans": [
+      {
+        "start": 169,
+        "end": 173,
+        "text": "1672"
+      },
+      {
+        "start": 169,
+        "end": 173,
+        "text": "1672"
+      },
+      {
+        "start": 169,
+        "end": 173,
+        "text": "1672"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "edb8d00a6415b164c394c0f93d41382a7c573f75814fabfa6e603926be0af604"
+  },
+  {
+    "id": "57107e6ca58dae1900cd69f6",
+    "question": "What was a non-religious reason for the massacre?",
+    "ground_truth": "some of the Huguenots were nobles trying to establish separate centers of power in southern France",
+    "references": [
+      "some of the Huguenots were nobles trying to establish separate centers of power in southern France",
+      "political reasons",
+      "some of the Huguenots were nobles trying to establish separate centers of power in southern France"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "some of the Huguenots were nobles trying to establish separate centers of power in southern France",
+      "political reasons",
+      "some of the Huguenots were nobles trying to establish separate centers of power in southern France"
+    ],
+    "evidence_file_id": "9736b7ea7cd39c4b",
+    "gold_spans": [
+      {
+        "start": 349,
+        "end": 447,
+        "text": "some of the Huguenots were nobles trying to establish separate centers of power in southern France"
+      },
+      {
+        "start": 310,
+        "end": 327,
+        "text": "political reasons"
+      },
+      {
+        "start": 349,
+        "end": 447,
+        "text": "some of the Huguenots were nobles trying to establish separate centers of power in southern France"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "9736b7ea7cd39c4bc1162efd0078ab91cd174f8fc5b3866084cab54568d1a565"
+  },
+  {
+    "id": "57108073b654c5140001f929",
+    "question": "Which successor to Henry resumed persecution of the Huguenots?",
+    "ground_truth": "Louis XIII",
+    "references": [
+      "Louis XIII",
+      "Louis XIII",
+      "Louis XIII"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Louis XIII",
+      "Louis XIII",
+      "Louis XIII"
+    ],
+    "evidence_file_id": "d0340f7215724f23",
+    "gold_spans": [
+      {
+        "start": 444,
+        "end": 454,
+        "text": "Louis XIII"
+      },
+      {
+        "start": 444,
+        "end": 454,
+        "text": "Louis XIII"
+      },
+      {
+        "start": 444,
+        "end": 454,
+        "text": "Louis XIII"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "d0340f7215724f2365361615e8a563799243a08b9728bfbb9a3f113a32d96975"
+  },
+  {
+    "id": "571095a8a58dae1900cd6a7a",
+    "question": "By what document did the Huguenots confess their faith to the Portuguese in Brazil?",
+    "ground_truth": "the Guanabara Confession of Faith",
+    "references": [
+      "the Guanabara Confession of Faith",
+      "Guanabara Confession of Faith",
+      "the Guanabara Confession of Faith"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Guanabara Confession of Faith",
+      "Guanabara Confession of Faith",
+      "the Guanabara Confession of Faith"
+    ],
+    "evidence_file_id": "0b80ec4b4d01cc5e",
+    "gold_spans": [
+      {
+        "start": 905,
+        "end": 938,
+        "text": "the Guanabara Confession of Faith"
+      },
+      {
+        "start": 909,
+        "end": 938,
+        "text": "Guanabara Confession of Faith"
+      },
+      {
+        "start": 905,
+        "end": 938,
+        "text": "the Guanabara Confession of Faith"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "0b80ec4b4d01cc5efd889368e776efe6eb305942873d06582992445d85649487"
+  },
+  {
+    "id": "5710e8c8a58dae1900cd6b2a",
+    "question": "French troops put down the Camisard uprisings between what years?",
+    "ground_truth": "1702 and 1709",
+    "references": [
+      "1702 and 1709",
+      "1702 and 1709",
+      "1702 and 1709"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1702 and 1709",
+      "1702 and 1709",
+      "1702 and 1709"
+    ],
+    "evidence_file_id": "b4e5bc367ebb9b2d",
+    "gold_spans": [
+      {
+        "start": 699,
+        "end": 712,
+        "text": "1702 and 1709"
+      },
+      {
+        "start": 699,
+        "end": 712,
+        "text": "1702 and 1709"
+      },
+      {
+        "start": 699,
+        "end": 712,
+        "text": "1702 and 1709"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "b4e5bc367ebb9b2d4ccef67770a2f67d1a323f808c17f89bede0f2af3b3a5f3f"
+  },
+  {
+    "id": "5710e9f8a58dae1900cd6b34",
+    "question": "When was the colony destroyed?",
+    "ground_truth": "1565",
+    "references": [
+      "1565",
+      "1565",
+      "1565"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1565",
+      "1565",
+      "1565"
+    ],
+    "evidence_file_id": "14b88b3e09e2c5d0",
+    "gold_spans": [
+      {
+        "start": 347,
+        "end": 351,
+        "text": "1565"
+      },
+      {
+        "start": 347,
+        "end": 351,
+        "text": "1565"
+      },
+      {
+        "start": 347,
+        "end": 351,
+        "text": "1565"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "14b88b3e09e2c5d0c0298a21eff363c5aba4a6de26c442f96b4b5da66e67d0f8"
+  },
+  {
+    "id": "57111380a58dae1900cd6bda",
+    "question": "What other European Protestant leader was educated at the University of Paris?",
+    "ground_truth": "Jean Cauvin (John Calvin)",
+    "references": [
+      "Jean Cauvin (John Calvin)",
+      "Jean Cauvin",
+      "Jean Cauvin"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Jean Cauvin (John Calvin)",
+      "Jean Cauvin",
+      "Jean Cauvin"
+    ],
+    "evidence_file_id": "b33181c0262419e5",
+    "gold_spans": [
+      {
+        "start": 663,
+        "end": 688,
+        "text": "Jean Cauvin (John Calvin)"
+      },
+      {
+        "start": 663,
+        "end": 674,
+        "text": "Jean Cauvin"
+      },
+      {
+        "start": 663,
+        "end": 674,
+        "text": "Jean Cauvin"
+      }
+    ],
+    "source_title": "Huguenot",
+    "context_sha256": "b33181c0262419e5c9cfbbf1c8b343becabd6004d529d66cdc65465c54aa31a6"
+  },
+  {
+    "id": "571135b8a58dae1900cd6d0f",
+    "question": "What types of pumps are typically used in industrial boilers?",
+    "ground_truth": "multi-stage centrifugal",
+    "references": [
+      "multi-stage centrifugal",
+      "multi-stage centrifugal",
+      "multi-stage centrifugal pumps"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "multi-stage centrifugal",
+      "multi-stage centrifugal",
+      "multi-stage centrifugal pumps"
+    ],
+    "evidence_file_id": "777ba60932fa02fb",
+    "gold_spans": [
+      {
+        "start": 190,
+        "end": 213,
+        "text": "multi-stage centrifugal"
+      },
+      {
+        "start": 190,
+        "end": 213,
+        "text": "multi-stage centrifugal"
+      },
+      {
+        "start": 190,
+        "end": 219,
+        "text": "multi-stage centrifugal pumps"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "777ba60932fa02fb3b72daca6f29f9c6c928a3a46a102597af53de301901e99b"
+  },
+  {
+    "id": "571153422419e3140095557f",
+    "question": "What type of locomotive was Salamanca?",
+    "ground_truth": "twin-cylinder",
+    "references": [
+      "twin-cylinder",
+      "twin-cylinder",
+      "twin-cylinder"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "twin-cylinder",
+      "twin-cylinder",
+      "twin-cylinder"
+    ],
+    "evidence_file_id": "e7204a7add4ae437",
+    "gold_spans": [
+      {
+        "start": 154,
+        "end": 167,
+        "text": "twin-cylinder"
+      },
+      {
+        "start": 154,
+        "end": 167,
+        "text": "twin-cylinder"
+      },
+      {
+        "start": 154,
+        "end": 167,
+        "text": "twin-cylinder"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "e7204a7add4ae4377c10d01ff9587526b8ab126f9d8a405900578a091232eb9d"
+  },
+  {
+    "id": "5711541350c2381900b54a71",
+    "question": "What is decreased by staging expansion across multiple cylinders?",
+    "ground_truth": "torque variability",
+    "references": [
+      "torque variability",
+      "torque variability",
+      "torque variability"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "torque variability",
+      "torque variability",
+      "torque variability"
+    ],
+    "evidence_file_id": "84f49c43c1af75d4",
+    "gold_spans": [
+      {
+        "start": 661,
+        "end": 679,
+        "text": "torque variability"
+      },
+      {
+        "start": 661,
+        "end": 679,
+        "text": "torque variability"
+      },
+      {
+        "start": 661,
+        "end": 679,
+        "text": "torque variability"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "84f49c43c1af75d4275d5136ba4713a8bdaef62dd919a64b1b24764e92c42856"
+  },
+  {
+    "id": "57115dbe2419e314009555a9",
+    "question": "What was the centrifugal governor incapable of doing?",
+    "ground_truth": "hold a set speed",
+    "references": [
+      "hold a set speed",
+      "hold a set speed",
+      "hold a set speed"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "hold a set speed",
+      "hold a set speed",
+      "hold a set speed"
+    ],
+    "evidence_file_id": "faf55bac047f0f94",
+    "gold_spans": [
+      {
+        "start": 200,
+        "end": 216,
+        "text": "hold a set speed"
+      },
+      {
+        "start": 200,
+        "end": 216,
+        "text": "hold a set speed"
+      },
+      {
+        "start": 200,
+        "end": 216,
+        "text": "hold a set speed"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "faf55bac047f0f94f70e9ed7842dc07f9af20019e44018a9b9eedfc802745806"
+  },
+  {
+    "id": "5711619950c2381900b54ab3",
+    "question": "In an atmospheric engine, what does air pressure push against?",
+    "ground_truth": "piston",
+    "references": [
+      "piston",
+      "a piston",
+      "piston",
+      "a piston"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "piston",
+      "a piston",
+      "piston",
+      "a piston"
+    ],
+    "evidence_file_id": "584f3e0b53ad471e",
+    "gold_spans": [
+      {
+        "start": 342,
+        "end": 348,
+        "text": "piston"
+      },
+      {
+        "start": 340,
+        "end": 348,
+        "text": "a piston"
+      },
+      {
+        "start": 342,
+        "end": 348,
+        "text": "piston"
+      },
+      {
+        "start": 340,
+        "end": 348,
+        "text": "a piston"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "584f3e0b53ad471ed774b85bafb1bcb103872014ef751859a9d2170ef0b13f3b"
+  },
+  {
+    "id": "5711648850c2381900b54ac5",
+    "question": "How much turbine power is consumed by the pump while the work fluid is condensed?",
+    "ground_truth": "1% to 3%",
+    "references": [
+      "1% to 3%",
+      "1% to 3%",
+      "1% to 3%"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1% to 3%",
+      "1% to 3%",
+      "1% to 3%"
+    ],
+    "evidence_file_id": "c9d8fd86f5032d24",
+    "gold_spans": [
+      {
+        "start": 287,
+        "end": 295,
+        "text": "1% to 3%"
+      },
+      {
+        "start": 287,
+        "end": 295,
+        "text": "1% to 3%"
+      },
+      {
+        "start": 287,
+        "end": 295,
+        "text": "1% to 3%"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "c9d8fd86f5032d24129329b73bf27e421ad722b5613a8be3e291130697ec25cd"
+  },
+  {
+    "id": "5711658e50c2381900b54ad9",
+    "question": "In what year was HMS Dreadnought launched?",
+    "ground_truth": "1905",
+    "references": [
+      "1905",
+      "1905",
+      "1905"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1905",
+      "1905",
+      "1905"
+    ],
+    "evidence_file_id": "240c8b1f49cd836b",
+    "gold_spans": [
+      {
+        "start": 423,
+        "end": 427,
+        "text": "1905"
+      },
+      {
+        "start": 423,
+        "end": 427,
+        "text": "1905"
+      },
+      {
+        "start": 423,
+        "end": 427,
+        "text": "1905"
+      }
+    ],
+    "source_title": "Steam_engine",
+    "context_sha256": "240c8b1f49cd836bd7a59eadd8b71f086502b482c10f8600748cf4a7146abbca"
+  },
+  {
+    "id": "571a52cb4faf5e1900b8a96b",
+    "question": "To reduce the chances of combustion ___ is required for safely handeling pure O.",
+    "ground_truth": "special training",
+    "references": [
+      "special training",
+      "special training",
+      "special training to ensure that ignition sources are minimized",
+      "special training",
+      "special training"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "special training",
+      "special training",
+      "special training to ensure that ignition sources are minimized",
+      "special training",
+      "special training"
+    ],
+    "evidence_file_id": "d58b1a4d6bf601f6",
+    "gold_spans": [
+      {
+        "start": 252,
+        "end": 268,
+        "text": "special training"
+      },
+      {
+        "start": 252,
+        "end": 268,
+        "text": "special training"
+      },
+      {
+        "start": 252,
+        "end": 314,
+        "text": "special training to ensure that ignition sources are minimized"
+      },
+      {
+        "start": 252,
+        "end": 268,
+        "text": "special training"
+      },
+      {
+        "start": 252,
+        "end": 268,
+        "text": "special training"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "d58b1a4d6bf601f6d89c2d7d1e8973e368c0b2c976fc6c565cb1649d3183c7f8"
+  },
+  {
+    "id": "571c3c47dd7acb1400e4c0a0",
+    "question": "What form of oxygen is composed of three oxygen atoms?",
+    "ground_truth": "ozone",
+    "references": [
+      "ozone",
+      "ozone",
+      "ozone",
+      "ozone"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "ozone",
+      "ozone",
+      "ozone",
+      "ozone"
+    ],
+    "evidence_file_id": "6b5baac861c36b5f",
+    "gold_spans": [
+      {
+        "start": 738,
+        "end": 743,
+        "text": "ozone"
+      },
+      {
+        "start": 659,
+        "end": 664,
+        "text": "ozone"
+      },
+      {
+        "start": 659,
+        "end": 664,
+        "text": "ozone"
+      },
+      {
+        "start": 659,
+        "end": 664,
+        "text": "ozone"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "6b5baac861c36b5fd13e7a181e848be90fe9291892c24fcaa534999aeb639149"
+  },
+  {
+    "id": "571c3e8cdd7acb1400e4c0aa",
+    "question": "What chemist showed that fire needed only a part of air?",
+    "ground_truth": "John Mayow",
+    "references": [
+      "John Mayow",
+      "John Mayow",
+      "Mayow",
+      "John Mayow"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "John Mayow",
+      "John Mayow",
+      "Mayow",
+      "John Mayow"
+    ],
+    "evidence_file_id": "d8abf737112efa93",
+    "gold_spans": [
+      {
+        "start": 100,
+        "end": 110,
+        "text": "John Mayow"
+      },
+      {
+        "start": 100,
+        "end": 110,
+        "text": "John Mayow"
+      },
+      {
+        "start": 105,
+        "end": 110,
+        "text": "Mayow"
+      },
+      {
+        "start": 100,
+        "end": 110,
+        "text": "John Mayow"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "d8abf737112efa9397c511991f2e930e293c8a4b7a2251790cb6dc58cc065917"
+  },
+  {
+    "id": "571c4132dd7acb1400e4c0b2",
+    "question": "In what year did Priestley publish the findings of his experiments?",
+    "ground_truth": "1775",
+    "references": [
+      "1775",
+      "1775",
+      "1775",
+      "1775",
+      "1775"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1775",
+      "1775",
+      "1775",
+      "1775",
+      "1775"
+    ],
+    "evidence_file_id": "2eca63750a362ff2",
+    "gold_spans": [
+      {
+        "start": 587,
+        "end": 591,
+        "text": "1775"
+      },
+      {
+        "start": 587,
+        "end": 591,
+        "text": "1775"
+      },
+      {
+        "start": 587,
+        "end": 591,
+        "text": "1775"
+      },
+      {
+        "start": 587,
+        "end": 591,
+        "text": "1775"
+      },
+      {
+        "start": 587,
+        "end": 591,
+        "text": "1775"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "2eca63750a362ff269957ac209e2ce98797d8646a987f037ecd7aad0aa135bb8"
+  },
+  {
+    "id": "571c7d55dd7acb1400e4c0c7",
+    "question": "What element did Gay-Lussac and von Humboldt discover was present in twice the amount of oxygen in water?",
+    "ground_truth": "hydrogen",
+    "references": [
+      "hydrogen",
+      "hydrogen",
+      "hydrogen",
+      "hydrogen",
+      "hydrogen"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "hydrogen",
+      "hydrogen",
+      "hydrogen",
+      "hydrogen",
+      "hydrogen"
+    ],
+    "evidence_file_id": "e0e9c1b00942a791",
+    "gold_spans": [
+      {
+        "start": 456,
+        "end": 464,
+        "text": "hydrogen"
+      },
+      {
+        "start": 456,
+        "end": 464,
+        "text": "hydrogen"
+      },
+      {
+        "start": 456,
+        "end": 464,
+        "text": "hydrogen"
+      },
+      {
+        "start": 456,
+        "end": 464,
+        "text": "hydrogen"
+      },
+      {
+        "start": 456,
+        "end": 464,
+        "text": "hydrogen"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "e0e9c1b00942a791f21d4d84c2985047c45f3e69d4a43439329f0a03c36f3f75"
+  },
+  {
+    "id": "571c83f3dd7acb1400e4c0dc",
+    "question": "Of what does the covalent double bond result from ?",
+    "ground_truth": "molecular orbitals",
+    "references": [
+      "molecular orbitals",
+      "filling of molecular orbitals",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "molecular orbitals",
+      "filling of molecular orbitals",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms",
+      "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+    ],
+    "evidence_file_id": "f831f1f184fd3a97",
+    "gold_spans": [
+      {
+        "start": 236,
+        "end": 254,
+        "text": "molecular orbitals"
+      },
+      {
+        "start": 225,
+        "end": 254,
+        "text": "filling of molecular orbitals"
+      },
+      {
+        "start": 221,
+        "end": 317,
+        "text": "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+      },
+      {
+        "start": 221,
+        "end": 317,
+        "text": "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+      },
+      {
+        "start": 221,
+        "end": 317,
+        "text": "the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "f831f1f184fd3a9793b6dde3bdbf892925d66cff3ec221ca3f9d0387b41ad687"
+  },
+  {
+    "id": "571c9074dd7acb1400e4c102",
+    "question": "What  does ozone's characteristic to cause damage effect?",
+    "ground_truth": "lung tissue",
+    "references": [
+      "lung tissue",
+      "lung tissue",
+      "lung tissue",
+      "lung",
+      "lung tissue"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "lung tissue",
+      "lung tissue",
+      "lung tissue",
+      "lung",
+      "lung tissue"
+    ],
+    "evidence_file_id": "069f593a47b1c7d5",
+    "gold_spans": [
+      {
+        "start": 105,
+        "end": 116,
+        "text": "lung tissue"
+      },
+      {
+        "start": 105,
+        "end": 116,
+        "text": "lung tissue"
+      },
+      {
+        "start": 105,
+        "end": 116,
+        "text": "lung tissue"
+      },
+      {
+        "start": 105,
+        "end": 109,
+        "text": "lung"
+      },
+      {
+        "start": 105,
+        "end": 116,
+        "text": "lung tissue"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "069f593a47b1c7d532212a62aba1e27bdd08d0259cb3e0a96bc73f362f4036e4"
+  },
+  {
+    "id": "571c91c8dd7acb1400e4c10d",
+    "question": "What characteristic of oxygen makes it necessary to life?",
+    "ground_truth": "energy content",
+    "references": [
+      "energy content",
+      "its energy content",
+      "energy content",
+      "energy content",
+      "its energy content"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "energy content",
+      "its energy content",
+      "energy content",
+      "energy content",
+      "its energy content"
+    ],
+    "evidence_file_id": "fd80faaf43d6d563",
+    "gold_spans": [
+      {
+        "start": 406,
+        "end": 420,
+        "text": "energy content"
+      },
+      {
+        "start": 402,
+        "end": 420,
+        "text": "its energy content"
+      },
+      {
+        "start": 406,
+        "end": 420,
+        "text": "energy content"
+      },
+      {
+        "start": 406,
+        "end": 420,
+        "text": "energy content"
+      },
+      {
+        "start": 402,
+        "end": 420,
+        "text": "its energy content"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "fd80faaf43d6d56307f1567cba40b08ce93dcfb538d6704d48b9c014969757ef"
+  },
+  {
+    "id": "571caac55efbb31900334dc8",
+    "question": "What scientist told the French Academy of Sciences that he had found how to liquefy oxygen?",
+    "ground_truth": "Raoul Pierre Pictet",
+    "references": [
+      "Raoul Pierre Pictet",
+      "Raoul Pierre Pictet",
+      "Pierre Pictet",
+      "Pictet",
+      "Raoul Pierre Pictet"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Raoul Pierre Pictet",
+      "Raoul Pierre Pictet",
+      "Pierre Pictet",
+      "Pictet",
+      "Raoul Pierre Pictet"
+    ],
+    "evidence_file_id": "36476aaf2aea4f79",
+    "gold_spans": [
+      {
+        "start": 186,
+        "end": 205,
+        "text": "Raoul Pierre Pictet"
+      },
+      {
+        "start": 186,
+        "end": 205,
+        "text": "Raoul Pierre Pictet"
+      },
+      {
+        "start": 192,
+        "end": 205,
+        "text": "Pierre Pictet"
+      },
+      {
+        "start": 199,
+        "end": 205,
+        "text": "Pictet"
+      },
+      {
+        "start": 186,
+        "end": 205,
+        "text": "Raoul Pierre Pictet"
+      }
+    ],
+    "source_title": "Oxygen",
+    "context_sha256": "36476aaf2aea4f7927c065f38bbc7e2f8ec013b37ee0a2f1c7f545368f0dc62e"
+  },
+  {
+    "id": "5725c0f289a1e219009abdf4",
+    "question": "What does ctenophora use for digestion and respiration?",
+    "ground_truth": "water flow through the body cavity",
+    "references": [
+      "water flow through the body cavity",
+      "water flow",
+      "water flow through the body cavity"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "water flow through the body cavity",
+      "water flow",
+      "water flow through the body cavity"
+    ],
+    "evidence_file_id": "f1fd21822238bc91",
+    "gold_spans": [
+      {
+        "start": 801,
+        "end": 835,
+        "text": "water flow through the body cavity"
+      },
+      {
+        "start": 801,
+        "end": 811,
+        "text": "water flow"
+      },
+      {
+        "start": 801,
+        "end": 835,
+        "text": "water flow through the body cavity"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "f1fd21822238bc914acc770ffbb65f55d8c7f833cb4d0a1c420d323ecdd137dd"
+  },
+  {
+    "id": "5725c69738643c19005accb9",
+    "question": "What does the Beroe eat? ",
+    "ground_truth": "other ctenophores",
+    "references": [
+      "other ctenophores",
+      "ctenophores",
+      "other ctenophores"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "other ctenophores",
+      "ctenophores",
+      "other ctenophores"
+    ],
+    "evidence_file_id": "7f75accf663d59c9",
+    "gold_spans": [
+      {
+        "start": 877,
+        "end": 894,
+        "text": "other ctenophores"
+      },
+      {
+        "start": 883,
+        "end": 894,
+        "text": "ctenophores"
+      },
+      {
+        "start": 877,
+        "end": 894,
+        "text": "other ctenophores"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "7f75accf663d59c998893e7d8881c9407df5f03def38be598706225dc5ae7b6e"
+  },
+  {
+    "id": "5725ce4d38643c19005acd4f",
+    "question": "What does the name Fresno mean in Spanish?",
+    "ground_truth": "ash tree",
+    "references": [
+      "ash tree",
+      "ash tree",
+      "ash tree"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "ash tree",
+      "ash tree",
+      "ash tree"
+    ],
+    "evidence_file_id": "d619b23bf7b93c12",
+    "gold_spans": [
+      {
+        "start": 605,
+        "end": 613,
+        "text": "ash tree"
+      },
+      {
+        "start": 605,
+        "end": 613,
+        "text": "ash tree"
+      },
+      {
+        "start": 605,
+        "end": 613,
+        "text": "ash tree"
+      }
+    ],
+    "source_title": "Fresno,_California",
+    "context_sha256": "d619b23bf7b93c1267c56dec97767d7a43f0b1d60b5a2d4b27068ccf50232fbf"
+  },
+  {
+    "id": "5725d16aec44d21400f3d61c",
+    "question": "What portion of bird species make up the world's total live in the rainforest?",
+    "ground_truth": "One in five",
+    "references": [
+      "One in five",
+      "One in five",
+      "One in five"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "One in five",
+      "One in five",
+      "One in five"
+    ],
+    "evidence_file_id": "e9030e5e203b110c",
+    "gold_spans": [
+      {
+        "start": 283,
+        "end": 294,
+        "text": "One in five"
+      },
+      {
+        "start": 283,
+        "end": 294,
+        "text": "One in five"
+      },
+      {
+        "start": 283,
+        "end": 294,
+        "text": "One in five"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "e9030e5e203b110c1161f7cb8b77776f171a3a793ec1fafe8d14e2b9bc0dff07"
+  },
+  {
+    "id": "5725d183271a42140099d23d",
+    "question": "In 1940, what percentage of the population in Fresno was Asian?",
+    "ground_truth": "2.7%",
+    "references": [
+      "2.7%",
+      "2.7%",
+      "2.7%"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "2.7%",
+      "2.7%",
+      "2.7%"
+    ],
+    "evidence_file_id": "b55f93537b0ed64f",
+    "gold_spans": [
+      {
+        "start": 214,
+        "end": 218,
+        "text": "2.7%"
+      },
+      {
+        "start": 214,
+        "end": 218,
+        "text": "2.7%"
+      },
+      {
+        "start": 214,
+        "end": 218,
+        "text": "2.7%"
+      }
+    ],
+    "source_title": "Fresno,_California",
+    "context_sha256": "b55f93537b0ed64fd665fb8381827e663f16411f4848025713a9aaa3ac0af0d5"
+  },
+  {
+    "id": "5725d34aec44d21400f3d63d",
+    "question": "What present-day company did BankAmericard turn into?",
+    "ground_truth": "Visa Inc.",
+    "references": [
+      "Visa Inc.",
+      "Visa Inc.",
+      "Visa Inc."
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Visa Inc.",
+      "Visa Inc.",
+      "Visa Inc."
+    ],
+    "evidence_file_id": "5aee5e7fbe75fde0",
+    "gold_spans": [
+      {
+        "start": 507,
+        "end": 516,
+        "text": "Visa Inc."
+      },
+      {
+        "start": 507,
+        "end": 516,
+        "text": "Visa Inc."
+      },
+      {
+        "start": 507,
+        "end": 516,
+        "text": "Visa Inc."
+      }
+    ],
+    "source_title": "Fresno,_California",
+    "context_sha256": "5aee5e7fbe75fde0fa4b31457b94e333a03d00b752032439d31a60d62d68616a"
+  },
+  {
+    "id": "572647d0708984140094c14c",
+    "question": "Ctenophores and cnidarians are classified as what?",
+    "ground_truth": "diploblastic",
+    "references": [
+      "diploblastic",
+      "ctenophores",
+      "diploblastic"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "diploblastic",
+      "ctenophores",
+      "diploblastic"
+    ],
+    "evidence_file_id": "0b5c5e9ff90b17df",
+    "gold_spans": [
+      {
+        "start": 337,
+        "end": 349,
+        "text": "diploblastic"
+      },
+      {
+        "start": 29,
+        "end": 40,
+        "text": "ctenophores"
+      },
+      {
+        "start": 337,
+        "end": 349,
+        "text": "diploblastic"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "0b5c5e9ff90b17dfedd7b2a52c9f273ef4aa7af6406c551772fe8ff04cdf1858"
+  },
+  {
+    "id": "57264a0ef1498d1400e8db41",
+    "question": "Which group of ctenophore are are hardest to study?",
+    "ground_truth": "oceanic species",
+    "references": [
+      "oceanic species",
+      "oceanic species",
+      "oceanic species"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "oceanic species",
+      "oceanic species",
+      "oceanic species"
+    ],
+    "evidence_file_id": "07c74ed461874b9d",
+    "gold_spans": [
+      {
+        "start": 190,
+        "end": 205,
+        "text": "oceanic species"
+      },
+      {
+        "start": 293,
+        "end": 308,
+        "text": "oceanic species"
+      },
+      {
+        "start": 190,
+        "end": 205,
+        "text": "oceanic species"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "07c74ed461874b9d65a20073628bf44782dd35b57d89d4d5a16b494c99bf9f34"
+  },
+  {
+    "id": "57264b1ddd62a815002e80a1",
+    "question": "What do photocytes produce?",
+    "ground_truth": "bioluminescence",
+    "references": [
+      "bioluminescence",
+      "bioluminescence",
+      "bioluminescence"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "bioluminescence",
+      "bioluminescence",
+      "bioluminescence"
+    ],
+    "evidence_file_id": "37f3d85a43188d70",
+    "gold_spans": [
+      {
+        "start": 945,
+        "end": 960,
+        "text": "bioluminescence"
+      },
+      {
+        "start": 945,
+        "end": 960,
+        "text": "bioluminescence"
+      },
+      {
+        "start": 945,
+        "end": 960,
+        "text": "bioluminescence"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "37f3d85a43188d708ec87e4ef98f552191843499c9f8f063fbab2fde1677810a"
+  },
+  {
+    "id": "57264c42dd62a815002e80ca",
+    "question": "What was the bubonic plague mechanism reliant on?",
+    "ground_truth": "two populations of rodents",
+    "references": [
+      "two populations of rodents",
+      "two populations of rodents",
+      "two populations of rodents"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "two populations of rodents",
+      "two populations of rodents",
+      "two populations of rodents"
+    ],
+    "evidence_file_id": "9d3029bec84c7f11",
+    "gold_spans": [
+      {
+        "start": 1024,
+        "end": 1050,
+        "text": "two populations of rodents"
+      },
+      {
+        "start": 1024,
+        "end": 1050,
+        "text": "two populations of rodents"
+      },
+      {
+        "start": 1024,
+        "end": 1050,
+        "text": "two populations of rodents"
+      }
+    ],
+    "source_title": "Black_Death",
+    "context_sha256": "9d3029bec84c7f113735fae2aee0eaa8c897d305858ac03459a04545e068759b"
+  },
+  {
+    "id": "5726516a708984140094c225",
+    "question": "How much do estimations of the population during the plague vary?",
+    "ground_truth": "by over 100%",
+    "references": [
+      "by over 100%",
+      "by over 100%",
+      "over 100%"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "by over 100%",
+      "by over 100%",
+      "over 100%"
+    ],
+    "evidence_file_id": "b5aed2dd9b558399",
+    "gold_spans": [
+      {
+        "start": 318,
+        "end": 330,
+        "text": "by over 100%"
+      },
+      {
+        "start": 318,
+        "end": 330,
+        "text": "by over 100%"
+      },
+      {
+        "start": 321,
+        "end": 330,
+        "text": "over 100%"
+      }
+    ],
+    "source_title": "Black_Death",
+    "context_sha256": "b5aed2dd9b558399cacafe86ab644b1de7e671e6c9a21e13cd89fb7a0e04e7db"
+  },
+  {
+    "id": "5726542ff1498d1400e8dc28",
+    "question": "How much of the population in the Middle East died of the plague?",
+    "ground_truth": "about a third.",
+    "references": [
+      "about a third.",
+      "about a third",
+      "about a third"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "about a third.",
+      "about a third",
+      "about a third"
+    ],
+    "evidence_file_id": "1ff281c692c83a32",
+    "gold_spans": [
+      {
+        "start": 128,
+        "end": 142,
+        "text": "about a third."
+      },
+      {
+        "start": 128,
+        "end": 141,
+        "text": "about a third"
+      },
+      {
+        "start": 128,
+        "end": 141,
+        "text": "about a third"
+      }
+    ],
+    "source_title": "Black_Death",
+    "context_sha256": "1ff281c692c83a32d73d6857c03271c9f747409739b4017f6984d587571d84c0"
+  },
+  {
+    "id": "5726577f708984140094c304",
+    "question": "How many people, at most, have died of plague in Baghdad? ",
+    "ground_truth": "two-thirds of its population",
+    "references": [
+      "two-thirds of its population",
+      "two-thirds of its population",
+      "two-thirds of its population"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "two-thirds of its population",
+      "two-thirds of its population",
+      "two-thirds of its population"
+    ],
+    "evidence_file_id": "482cc8356a93089a",
+    "gold_spans": [
+      {
+        "start": 642,
+        "end": 670,
+        "text": "two-thirds of its population"
+      },
+      {
+        "start": 642,
+        "end": 670,
+        "text": "two-thirds of its population"
+      },
+      {
+        "start": 642,
+        "end": 670,
+        "text": "two-thirds of its population"
+      }
+    ],
+    "source_title": "Black_Death",
+    "context_sha256": "482cc8356a93089acbdd93a4535c71be03a9b3d51facfa839ee7d6646a0a3bfd"
+  },
+  {
+    "id": "57265d86f1498d1400e8dd54",
+    "question": "What does the beroida have instead of feeding appendages?",
+    "ground_truth": "large pharynx",
+    "references": [
+      "large pharynx",
+      "large cilia",
+      "\"macrocilia\""
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "large pharynx",
+      "large cilia",
+      "\"macrocilia\""
+    ],
+    "evidence_file_id": "6a86cf0117278e97",
+    "gold_spans": [
+      {
+        "start": 71,
+        "end": 84,
+        "text": "large pharynx"
+      },
+      {
+        "start": 228,
+        "end": 239,
+        "text": "large cilia"
+      },
+      {
+        "start": 158,
+        "end": 170,
+        "text": "\"macrocilia\""
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "6a86cf0117278e97e947d4b42f0516d6f55fdec2dc5b293e4b77e48cf4269fde"
+  },
+  {
+    "id": "57268c01dd62a815002e8914",
+    "question": "When was ctenophore mnemiopsis leidyi introduced into The Black Sea and the Sea of Azov?",
+    "ground_truth": "in the late 1980s",
+    "references": [
+      "in the late 1980s",
+      "the late 1980s",
+      "late 1980s"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "in the late 1980s",
+      "the late 1980s",
+      "late 1980s"
+    ],
+    "evidence_file_id": "e72f4d9a7040228d",
+    "gold_spans": [
+      {
+        "start": 19,
+        "end": 36,
+        "text": "in the late 1980s"
+      },
+      {
+        "start": 22,
+        "end": 36,
+        "text": "the late 1980s"
+      },
+      {
+        "start": 26,
+        "end": 36,
+        "text": "late 1980s"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "e72f4d9a7040228d30bf4ff23cb64178c78f45cc775b615c629ed3bea1763b91"
+  },
+  {
+    "id": "57268da7f1498d1400e8e39c",
+    "question": "Why are ctenophores extremely rare as fossils?",
+    "ground_truth": "Because of their soft, gelatinous bodies",
+    "references": [
+      "Because of their soft, gelatinous bodies",
+      "their soft, gelatinous bodies",
+      "their soft, gelatinous bodies"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Because of their soft, gelatinous bodies",
+      "their soft, gelatinous bodies",
+      "their soft, gelatinous bodies"
+    ],
+    "evidence_file_id": "2cd5effea6825a6e",
+    "gold_spans": [
+      {
+        "start": 0,
+        "end": 40,
+        "text": "Because of their soft, gelatinous bodies"
+      },
+      {
+        "start": 11,
+        "end": 40,
+        "text": "their soft, gelatinous bodies"
+      },
+      {
+        "start": 11,
+        "end": 40,
+        "text": "their soft, gelatinous bodies"
+      }
+    ],
+    "source_title": "Ctenophora",
+    "context_sha256": "2cd5effea6825a6ef7ea9db3e15455260ec2dbdcce4dad86a9607b8c1be1318f"
+  },
+  {
+    "id": "5726da89dd62a815002e92b5",
+    "question": "What type of professional is a Pharmacy Technician considered to be?",
+    "ground_truth": "health care professional",
+    "references": [
+      "health care professional",
+      "pharmacy health care",
+      "health care professional"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "health care professional",
+      "pharmacy health care",
+      "health care professional"
+    ],
+    "evidence_file_id": "d65ecd072e715fe2",
+    "gold_spans": [
+      {
+        "start": 48,
+        "end": 72,
+        "text": "health care professional"
+      },
+      {
+        "start": 727,
+        "end": 747,
+        "text": "pharmacy health care"
+      },
+      {
+        "start": 48,
+        "end": 72,
+        "text": "health care professional"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "d65ecd072e715fe2dcda8065e423c90c09a474e3fa4d3330cda31a91cfd6d99f"
+  },
+  {
+    "id": "5726ddf6f1498d1400e8ee04",
+    "question": "Developments in which scientists influenced the creation of pharmacology in medieval Islam?",
+    "ground_truth": "botany and chemistry",
+    "references": [
+      "botany and chemistry",
+      "botany and chemistry",
+      "advances made in the Middle East in botany and chemistry"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "botany and chemistry",
+      "botany and chemistry",
+      "advances made in the Middle East in botany and chemistry"
+    ],
+    "evidence_file_id": "d0c3193100a2c9ce",
+    "gold_spans": [
+      {
+        "start": 40,
+        "end": 60,
+        "text": "botany and chemistry"
+      },
+      {
+        "start": 40,
+        "end": 60,
+        "text": "botany and chemistry"
+      },
+      {
+        "start": 4,
+        "end": 60,
+        "text": "advances made in the Middle East in botany and chemistry"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "d0c3193100a2c9cefa5efa046ca711a3a7943ddbb731e1aa29b247fe5eb27c7c"
+  },
+  {
+    "id": "5726e3c4dd62a815002e9408",
+    "question": "Where do clinical pharmacists work with patients?",
+    "ground_truth": "all health care settings",
+    "references": [
+      "all health care settings",
+      "drug product selection",
+      "all health care settings"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "all health care settings",
+      "drug product selection",
+      "all health care settings"
+    ],
+    "evidence_file_id": "1d470bf791028e4f",
+    "gold_spans": [
+      {
+        "start": 183,
+        "end": 207,
+        "text": "all health care settings"
+      },
+      {
+        "start": 555,
+        "end": 577,
+        "text": "drug product selection"
+      },
+      {
+        "start": 183,
+        "end": 207,
+        "text": "all health care settings"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "1d470bf791028e4f456c100c44c5b3410fac821035b36b868d821eb23e1f2a74"
+  },
+  {
+    "id": "5726e985dd62a815002e94dd",
+    "question": "What will a pharmacist who passes the ambulatory pharmacist exam be called?",
+    "ground_truth": "Board Certified Ambulatory Care Pharmacist",
+    "references": [
+      "Board Certified Ambulatory Care Pharmacist",
+      "Board Certified Ambulatory Care Pharmacist",
+      "Board Certified Ambulatory Care Pharmacist"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Board Certified Ambulatory Care Pharmacist",
+      "Board Certified Ambulatory Care Pharmacist",
+      "Board Certified Ambulatory Care Pharmacist"
+    ],
+    "evidence_file_id": "795ccd56a08606b9",
+    "gold_spans": [
+      {
+        "start": 555,
+        "end": 597,
+        "text": "Board Certified Ambulatory Care Pharmacist"
+      },
+      {
+        "start": 555,
+        "end": 597,
+        "text": "Board Certified Ambulatory Care Pharmacist"
+      },
+      {
+        "start": 555,
+        "end": 597,
+        "text": "Board Certified Ambulatory Care Pharmacist"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "795ccd56a08606b9fbd7643b1676dc4b2e42a3949da49b759987c4ffe07771e9"
+  },
+  {
+    "id": "5726eb4b5951b619008f826c",
+    "question": "Who often operates internet pharmacies?",
+    "ground_truth": "brick-and-mortar community pharmacies that serve consumers online and those that walk in their door",
+    "references": [
+      "brick-and-mortar community pharmacies that serve consumers online and those that walk in their door",
+      "brick-and-mortar community pharmacies",
+      "brick-and-mortar community pharmacies"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "brick-and-mortar community pharmacies that serve consumers online and those that walk in their door",
+      "brick-and-mortar community pharmacies",
+      "brick-and-mortar community pharmacies"
+    ],
+    "evidence_file_id": "c6305dffc303d36c",
+    "gold_spans": [
+      {
+        "start": 213,
+        "end": 312,
+        "text": "brick-and-mortar community pharmacies that serve consumers online and those that walk in their door"
+      },
+      {
+        "start": 213,
+        "end": 250,
+        "text": "brick-and-mortar community pharmacies"
+      },
+      {
+        "start": 213,
+        "end": 250,
+        "text": "brick-and-mortar community pharmacies"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "c6305dffc303d36cae10d75429cc053dc20ae8d1309eaab950d2703ef073570e"
+  },
+  {
+    "id": "5726f48df1498d1400e8f0de",
+    "question": "What are pharmacists forbidden to do?",
+    "ground_truth": "form business partnerships with physicians or give them \"kickback\" payments",
+    "references": [
+      "form business partnerships with physicians or give them \"kickback\" payments",
+      "form business partnerships with physicians",
+      "pharmacists cannot form business partnerships with physicians or give them \"kickback\" payments"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "form business partnerships with physicians or give them \"kickback\" payments",
+      "form business partnerships with physicians",
+      "pharmacists cannot form business partnerships with physicians or give them \"kickback\" payments"
+    ],
+    "evidence_file_id": "ba71a4259a62247d",
+    "gold_spans": [
+      {
+        "start": 248,
+        "end": 323,
+        "text": "form business partnerships with physicians or give them \"kickback\" payments"
+      },
+      {
+        "start": 248,
+        "end": 290,
+        "text": "form business partnerships with physicians"
+      },
+      {
+        "start": 229,
+        "end": 323,
+        "text": "pharmacists cannot form business partnerships with physicians or give them \"kickback\" payments"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "ba71a4259a62247db3f4e9130708c3bd7ff3d84f900927a591bddb688e7ad277"
+  },
+  {
+    "id": "5726f96ddd62a815002e9699",
+    "question": "Who pays Australian pharmacists for doing Home Medicines Reviews?",
+    "ground_truth": "the Australian Government",
+    "references": [
+      "the Australian Government",
+      "Australian Government",
+      "the Australian Government"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Australian Government",
+      "Australian Government",
+      "the Australian Government"
+    ],
+    "evidence_file_id": "a5c5b21972333d3f",
+    "gold_spans": [
+      {
+        "start": 117,
+        "end": 142,
+        "text": "the Australian Government"
+      },
+      {
+        "start": 121,
+        "end": 142,
+        "text": "Australian Government"
+      },
+      {
+        "start": 117,
+        "end": 142,
+        "text": "the Australian Government"
+      }
+    ],
+    "source_title": "Pharmacy",
+    "context_sha256": "a5c5b21972333d3f3f3912faed992876fca81100726aa101c35ba8f3dc2ca6a4"
+  },
+  {
+    "id": "57273d8bf1498d1400e8f4ff",
+    "question": "Building construction is usually further divided into what categories?",
+    "ground_truth": "residential and non-residential",
+    "references": [
+      "residential and non-residential",
+      "residential and non-residential (commercial/institutional)",
+      "residential and non-residential (commercial/institutional)"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "residential and non-residential",
+      "residential and non-residential (commercial/institutional)",
+      "residential and non-residential (commercial/institutional)"
+    ],
+    "evidence_file_id": "0303b992326c30ab",
+    "gold_spans": [
+      {
+        "start": 149,
+        "end": 180,
+        "text": "residential and non-residential"
+      },
+      {
+        "start": 149,
+        "end": 207,
+        "text": "residential and non-residential (commercial/institutional)"
+      },
+      {
+        "start": 149,
+        "end": 207,
+        "text": "residential and non-residential (commercial/institutional)"
+      }
+    ],
+    "source_title": "Construction",
+    "context_sha256": "0303b992326c30ab7517bcf7737bdc345dbbbc7eae232baca3af64f05f6565a4"
+  },
+  {
+    "id": "57274046dd62a815002e9a12",
+    "question": "What is the process of adding structure to real property or construction of buildings?",
+    "ground_truth": "Building construction",
+    "references": [
+      "Building construction",
+      "Building construction",
+      "Building construction"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Building construction",
+      "Building construction",
+      "Building construction"
+    ],
+    "evidence_file_id": "5caf1cc1422f1d46",
+    "gold_spans": [
+      {
+        "start": 0,
+        "end": 21,
+        "text": "Building construction"
+      },
+      {
+        "start": 0,
+        "end": 21,
+        "text": "Building construction"
+      },
+      {
+        "start": 0,
+        "end": 21,
+        "text": "Building construction"
+      }
+    ],
+    "source_title": "Construction",
+    "context_sha256": "5caf1cc1422f1d465946defdf660730d9cf842f54b1ae5136e9744b6079a7e92"
+  },
+  {
+    "id": "572756fe708984140094dc71",
+    "question": "What is one of the most dangerous occupations in the world?",
+    "ground_truth": "Construction",
+    "references": [
+      "Construction",
+      "Construction",
+      "Construction"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Construction",
+      "Construction",
+      "Construction"
+    ],
+    "evidence_file_id": "1cb7e5de5a224c8d",
+    "gold_spans": [
+      {
+        "start": 0,
+        "end": 12,
+        "text": "Construction"
+      },
+      {
+        "start": 0,
+        "end": 12,
+        "text": "Construction"
+      },
+      {
+        "start": 0,
+        "end": 12,
+        "text": "Construction"
+      }
+    ],
+    "source_title": "Construction",
+    "context_sha256": "1cb7e5de5a224c8dea488ef682fd45db2d8d645f12c7947aa866d443afa6e1b0"
+  },
+  {
+    "id": "5727afa82ca10214002d93c3",
+    "question": "What organization arranged to founding of school?",
+    "ground_truth": "Massachusetts Bay Colony",
+    "references": [
+      "Massachusetts Bay Colony",
+      "Great and General Court of the Massachusetts Bay Colony",
+      "Great and General Court of the Massachusetts Bay Colony"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Massachusetts Bay Colony",
+      "Great and General Court of the Massachusetts Bay Colony",
+      "Great and General Court of the Massachusetts Bay Colony"
+    ],
+    "evidence_file_id": "8636e94058ce0f55",
+    "gold_spans": [
+      {
+        "start": 73,
+        "end": 97,
+        "text": "Massachusetts Bay Colony"
+      },
+      {
+        "start": 42,
+        "end": 97,
+        "text": "Great and General Court of the Massachusetts Bay Colony"
+      },
+      {
+        "start": 42,
+        "end": 97,
+        "text": "Great and General Court of the Massachusetts Bay Colony"
+      }
+    ],
+    "source_title": "Harvard_University",
+    "context_sha256": "8636e94058ce0f55e10d0eaeb35617ebb9fd6ad1e019585a005e41e4592bcac8"
+  },
+  {
+    "id": "5727dc473acd2414000dee43",
+    "question": "What is the name of Harvard's basketball facility?",
+    "ground_truth": "Lavietes Pavilion",
+    "references": [
+      "Lavietes Pavilion",
+      "Lavietes Pavilion",
+      "Lavietes Pavilion"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Lavietes Pavilion",
+      "Lavietes Pavilion",
+      "Lavietes Pavilion"
+    ],
+    "evidence_file_id": "fe9c5d14f6acc063",
+    "gold_spans": [
+      {
+        "start": 53,
+        "end": 70,
+        "text": "Lavietes Pavilion"
+      },
+      {
+        "start": 53,
+        "end": 70,
+        "text": "Lavietes Pavilion"
+      },
+      {
+        "start": 53,
+        "end": 70,
+        "text": "Lavietes Pavilion"
+      }
+    ],
+    "source_title": "Harvard_University",
+    "context_sha256": "fe9c5d14f6acc06385618b84fac8d90555fe0e82822b20bcc630fd569cb457b2"
+  },
+  {
+    "id": "57281edd3acd2414000df4ed",
+    "question": "What was Jacksonville referred to as after the consolidation?",
+    "ground_truth": "\"Bold New City of the South\"",
+    "references": [
+      "\"Bold New City of the South\"",
+      "Bold New City of the South",
+      "Consolidated City of Jacksonville"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "\"Bold New City of the South\"",
+      "Bold New City of the South",
+      "Consolidated City of Jacksonville"
+    ],
+    "evidence_file_id": "2271df8c8c1b2d71",
+    "gold_spans": [
+      {
+        "start": 428,
+        "end": 456,
+        "text": "\"Bold New City of the South\""
+      },
+      {
+        "start": 429,
+        "end": 455,
+        "text": "Bold New City of the South"
+      },
+      {
+        "start": 133,
+        "end": 166,
+        "text": "Consolidated City of Jacksonville"
+      }
+    ],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "2271df8c8c1b2d712c122939c9c53f699509a751bc040f6c45e9660ceb9c2177"
+  },
+  {
+    "id": "5728223cff5b5019007d9dc5",
+    "question": "When does rain typically fall in Jacksonville?",
+    "ground_truth": "May through September",
+    "references": [
+      "May through September",
+      "May through September",
+      "the warmest months from May through September"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "May through September",
+      "May through September",
+      "the warmest months from May through September"
+    ],
+    "evidence_file_id": "e1d77a1f9e7bd0b4",
+    "gold_spans": [
+      {
+        "start": 256,
+        "end": 277,
+        "text": "May through September"
+      },
+      {
+        "start": 256,
+        "end": 277,
+        "text": "May through September"
+      },
+      {
+        "start": 232,
+        "end": 277,
+        "text": "the warmest months from May through September"
+      }
+    ],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "e1d77a1f9e7bd0b456cab2dbd3c49e298456069561cff9836fe9efbb7e0de51b"
+  },
+  {
+    "id": "572824f13acd2414000df58f",
+    "question": "What storm had the most significant impact on Jacksonville?",
+    "ground_truth": "Hurricane Dora",
+    "references": [
+      "Hurricane Dora",
+      "Hurricane Dora",
+      "Hurricane Dora"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Hurricane Dora",
+      "Hurricane Dora",
+      "Hurricane Dora"
+    ],
+    "evidence_file_id": "7164ec3ee8b4a82b",
+    "gold_spans": [
+      {
+        "start": 534,
+        "end": 548,
+        "text": "Hurricane Dora"
+      },
+      {
+        "start": 534,
+        "end": 548,
+        "text": "Hurricane Dora"
+      },
+      {
+        "start": 534,
+        "end": 548,
+        "text": "Hurricane Dora"
+      }
+    ],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "7164ec3ee8b4a82bbf8610d05c97b443293538f3c698d1afbb72c29b0088afd8"
+  },
+  {
+    "id": "572827fc3acd2414000df5bb",
+    "question": "What portion of households in Jacksonville have only one person?",
+    "ground_truth": "29.7%",
+    "references": [
+      "29.7%",
+      "29.7%",
+      "29.7%"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "29.7%",
+      "29.7%",
+      "29.7%"
+    ],
+    "evidence_file_id": "1d2a85c2f037a152",
+    "gold_spans": [
+      {
+        "start": 266,
+        "end": 271,
+        "text": "29.7%"
+      },
+      {
+        "start": 266,
+        "end": 271,
+        "text": "29.7%"
+      },
+      {
+        "start": 266,
+        "end": 271,
+        "text": "29.7%"
+      }
+    ],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "1d2a85c2f037a152cb0baebc5a70de8d798a0348c89163667f68afa981d9afd1"
+  },
+  {
+    "id": "57283d173acd2414000df793",
+    "question": "What basin was formed when the Andes Mountains rose?",
+    "ground_truth": "the Solim\u00f5es Basin",
+    "references": [
+      "the Solim\u00f5es Basin",
+      "Solim\u00f5es Basin",
+      "Solim\u00f5es Basin"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Solim\u00f5es Basin",
+      "Solim\u00f5es Basin",
+      "Solim\u00f5es Basin"
+    ],
+    "evidence_file_id": "bb8a76f08ce73953",
+    "gold_spans": [
+      {
+        "start": 369,
+        "end": 387,
+        "text": "the Solim\u00f5es Basin"
+      },
+      {
+        "start": 373,
+        "end": 387,
+        "text": "Solim\u00f5es Basin"
+      },
+      {
+        "start": 373,
+        "end": 387,
+        "text": "Solim\u00f5es Basin"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "bb8a76f08ce73953c6a06eda3ddc44cab30380cc4b6a0f4d40f518df582eefb4"
+  },
+  {
+    "id": "57284d484b864d1900164904",
+    "question": "When was the Gerald Ratner Athletics Center constructed?",
+    "ground_truth": "2003",
+    "references": [
+      "2003",
+      "2003"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "2003",
+      "2003"
+    ],
+    "evidence_file_id": "cf83b4012ada6714",
+    "gold_spans": [
+      {
+        "start": 813,
+        "end": 817,
+        "text": "2003"
+      },
+      {
+        "start": 813,
+        "end": 817,
+        "text": "2003"
+      }
+    ],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "cf83b4012ada6714b8fe507b4b152b6668fd47cd4eac346e991ac37512e34ebf"
+  },
+  {
+    "id": "5728667eff5b5019007da1ff",
+    "question": "Roughly how much is the Student Government's budget?",
+    "ground_truth": "greater than $2 million",
+    "references": [
+      "greater than $2 million",
+      "$2 million",
+      "greater than $2 million"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "greater than $2 million",
+      "$2 million",
+      "greater than $2 million"
+    ],
+    "evidence_file_id": "362c7d77e45876b8",
+    "gold_spans": [
+      {
+        "start": 599,
+        "end": 622,
+        "text": "greater than $2 million"
+      },
+      {
+        "start": 612,
+        "end": 622,
+        "text": "$2 million"
+      },
+      {
+        "start": 599,
+        "end": 622,
+        "text": "greater than $2 million"
+      }
+    ],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "362c7d77e45876b8ec90ccd0e364202c6b45142dabbe49bdfe6a843c0886069c"
+  },
+  {
+    "id": "57286d7d4b864d19001649e3",
+    "question": "What American actor is also a university graduate?",
+    "ground_truth": "Ed Asner",
+    "references": [
+      "Ed Asner",
+      "Ed Asner",
+      "Ed Asner"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Ed Asner",
+      "Ed Asner",
+      "Ed Asner"
+    ],
+    "evidence_file_id": "ba4b5380e10df31b",
+    "gold_spans": [
+      {
+        "start": 257,
+        "end": 265,
+        "text": "Ed Asner"
+      },
+      {
+        "start": 257,
+        "end": 265,
+        "text": "Ed Asner"
+      },
+      {
+        "start": 257,
+        "end": 265,
+        "text": "Ed Asner"
+      }
+    ],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "ba4b5380e10df31bf28d52a0694e9f4d2d11dda0dc4a8b72368a73abf8c1e23a"
+  },
+  {
+    "id": "57296f293f37b319004783a3",
+    "question": "What is the name of the property that designates a number as being prime or not?",
+    "ground_truth": "primality",
+    "references": [
+      "primality",
+      "primality",
+      "primality",
+      "primality",
+      "primality"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "primality",
+      "primality",
+      "primality",
+      "primality",
+      "primality"
+    ],
+    "evidence_file_id": "1a3bfa6d8c28e3d9",
+    "gold_spans": [
+      {
+        "start": 47,
+        "end": 56,
+        "text": "primality"
+      },
+      {
+        "start": 47,
+        "end": 56,
+        "text": "primality"
+      },
+      {
+        "start": 47,
+        "end": 56,
+        "text": "primality"
+      },
+      {
+        "start": 47,
+        "end": 56,
+        "text": "primality"
+      },
+      {
+        "start": 47,
+        "end": 56,
+        "text": "primality"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "1a3bfa6d8c28e3d95f98010e81aae93407594356ed4a4ca189d76d6b8d7c83f6"
+  },
+  {
+    "id": "572970c11d04691400779464",
+    "question": "Who established the amount of prime numbers in existence?",
+    "ground_truth": "Euclid",
+    "references": [
+      "Euclid",
+      "Euclid",
+      "Euclid",
+      "Euclid",
+      "Euclid"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Euclid",
+      "Euclid",
+      "Euclid",
+      "Euclid",
+      "Euclid"
+    ],
+    "evidence_file_id": "03ea982f284d9489",
+    "gold_spans": [
+      {
+        "start": 53,
+        "end": 59,
+        "text": "Euclid"
+      },
+      {
+        "start": 53,
+        "end": 59,
+        "text": "Euclid"
+      },
+      {
+        "start": 53,
+        "end": 59,
+        "text": "Euclid"
+      },
+      {
+        "start": 53,
+        "end": 59,
+        "text": "Euclid"
+      },
+      {
+        "start": 53,
+        "end": 59,
+        "text": "Euclid"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "03ea982f284d948986e37c976fdae843ae60b16e9bc2b2f30c5d51a7c1a4117f"
+  },
+  {
+    "id": "57297547af94a219006aa45b",
+    "question": "What number did early Greeks not regard as a true number?",
+    "ground_truth": "1",
+    "references": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "evidence_file_id": "24e9b742bafa6feb",
+    "gold_spans": [
+      {
+        "start": 40,
+        "end": 41,
+        "text": "1"
+      },
+      {
+        "start": 40,
+        "end": 41,
+        "text": "1"
+      },
+      {
+        "start": 40,
+        "end": 41,
+        "text": "1"
+      },
+      {
+        "start": 40,
+        "end": 41,
+        "text": "1"
+      },
+      {
+        "start": 40,
+        "end": 41,
+        "text": "1"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "24e9b742bafa6febc93490d25e9da46c531c66e39939020987e86a838117e341"
+  },
+  {
+    "id": "57297a276aef051400154f88",
+    "question": "In what year did Pierre de Fermat declare Fermat's little theorem?",
+    "ground_truth": "In 1640",
+    "references": [
+      "In 1640",
+      "1640",
+      "1640",
+      "1640",
+      "1640"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "In 1640",
+      "1640",
+      "1640",
+      "1640",
+      "1640"
+    ],
+    "evidence_file_id": "d09f7c87003b5bdc",
+    "gold_spans": [
+      {
+        "start": 90,
+        "end": 97,
+        "text": "In 1640"
+      },
+      {
+        "start": 93,
+        "end": 97,
+        "text": "1640"
+      },
+      {
+        "start": 93,
+        "end": 97,
+        "text": "1640"
+      },
+      {
+        "start": 93,
+        "end": 97,
+        "text": "1640"
+      },
+      {
+        "start": 93,
+        "end": 97,
+        "text": "1640"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "d09f7c87003b5bdc2d9edcdcff1a2c86df26c7603d224be41276d3fae28c4ac7"
+  },
+  {
+    "id": "57297ed93f37b31900478463",
+    "question": "What is the name of another compelling continuation of the Fermat primality test?",
+    "ground_truth": "Solovay-Strassen tests",
+    "references": [
+      "Solovay-Strassen tests",
+      "Miller-Rabin",
+      "Miller-Rabin",
+      "Miller-Rabin",
+      "Miller-Rabin"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Solovay-Strassen tests",
+      "Miller-Rabin",
+      "Miller-Rabin",
+      "Miller-Rabin",
+      "Miller-Rabin"
+    ],
+    "evidence_file_id": "4db57d18c895cf08",
+    "gold_spans": [
+      {
+        "start": 770,
+        "end": 792,
+        "text": "Solovay-Strassen tests"
+      },
+      {
+        "start": 752,
+        "end": 764,
+        "text": "Miller-Rabin"
+      },
+      {
+        "start": 752,
+        "end": 764,
+        "text": "Miller-Rabin"
+      },
+      {
+        "start": 752,
+        "end": 764,
+        "text": "Miller-Rabin"
+      },
+      {
+        "start": 752,
+        "end": 764,
+        "text": "Miller-Rabin"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "4db57d18c895cf08141264311300950074a7484693bfac13f09fd3abb15774bf"
+  },
+  {
+    "id": "572980f9af94a219006aa4d5",
+    "question": "What is the name of another type of prime here p+1 or p-1 takes a certain shape?",
+    "ground_truth": "Fermat primes",
+    "references": [
+      "Fermat primes",
+      "Mersenne",
+      "primorial primes",
+      "primorial primes",
+      "primorial primes"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Fermat primes",
+      "Mersenne",
+      "primorial primes",
+      "primorial primes",
+      "primorial primes"
+    ],
+    "evidence_file_id": "32a0dfbb09ed32ae",
+    "gold_spans": [
+      {
+        "start": 229,
+        "end": 242,
+        "text": "Fermat primes"
+      },
+      {
+        "start": 247,
+        "end": 255,
+        "text": "Mersenne"
+      },
+      {
+        "start": 211,
+        "end": 227,
+        "text": "primorial primes"
+      },
+      {
+        "start": 211,
+        "end": 227,
+        "text": "primorial primes"
+      },
+      {
+        "start": 211,
+        "end": 227,
+        "text": "primorial primes"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "32a0dfbb09ed32aec7e5781017443faf0d181dc3baf25713e1ccabb73b1ee77d"
+  },
+  {
+    "id": "572987e46aef051400154fa4",
+    "question": "What is the density of all primes compatible with a modulo 9?",
+    "ground_truth": "1/6",
+    "references": [
+      "1/6",
+      "1/6",
+      "1/6",
+      "1/6"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1/6",
+      "1/6",
+      "1/6",
+      "1/6"
+    ],
+    "evidence_file_id": "90bb1bb50f3f2a7e",
+    "gold_spans": [
+      {
+        "start": 713,
+        "end": 716,
+        "text": "1/6"
+      },
+      {
+        "start": 713,
+        "end": 716,
+        "text": "1/6"
+      },
+      {
+        "start": 713,
+        "end": 716,
+        "text": "1/6"
+      },
+      {
+        "start": 713,
+        "end": 716,
+        "text": "1/6"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "90bb1bb50f3f2a7e176f955e343879b294c0bc1743e3521a3db51a9a5f834fab"
+  },
+  {
+    "id": "57299326af94a219006aa518",
+    "question": "Besides public key cryptography, what is another application for prime numbers?",
+    "ground_truth": "hash tables",
+    "references": [
+      "hash tables",
+      "hash tables",
+      "hash tables and pseudorandom number generators",
+      "hash tables and pseudorandom number generators"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "hash tables",
+      "hash tables",
+      "hash tables and pseudorandom number generators",
+      "hash tables and pseudorandom number generators"
+    ],
+    "evidence_file_id": "f54da4edb1474159",
+    "gold_spans": [
+      {
+        "start": 664,
+        "end": 675,
+        "text": "hash tables"
+      },
+      {
+        "start": 664,
+        "end": 675,
+        "text": "hash tables"
+      },
+      {
+        "start": 664,
+        "end": 710,
+        "text": "hash tables and pseudorandom number generators"
+      },
+      {
+        "start": 664,
+        "end": 710,
+        "text": "hash tables and pseudorandom number generators"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "f54da4edb14741599b317e246ffe56becbfd450806ace7773701841b9f5b06c4"
+  },
+  {
+    "id": "57299ec43f37b3190047850d",
+    "question": "In what theory is the idea of a number exchanged with that of an ideal?",
+    "ground_truth": "In ring theory",
+    "references": [
+      "In ring theory",
+      "ring",
+      "ring theory",
+      "ring theory"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "In ring theory",
+      "ring",
+      "ring theory",
+      "ring theory"
+    ],
+    "evidence_file_id": "3d17d88bb8ed6f3e",
+    "gold_spans": [
+      {
+        "start": 0,
+        "end": 14,
+        "text": "In ring theory"
+      },
+      {
+        "start": 3,
+        "end": 7,
+        "text": "ring"
+      },
+      {
+        "start": 3,
+        "end": 14,
+        "text": "ring theory"
+      },
+      {
+        "start": 3,
+        "end": 14,
+        "text": "ring theory"
+      }
+    ],
+    "source_title": "Prime_number",
+    "context_sha256": "3d17d88bb8ed6f3e733ef5679710ee5b811949199d088a32462a07f19c6f8ef3"
+  },
+  {
+    "id": "5729ea263f37b319004785bf",
+    "question": "How much windblown dust leaves the Sahara each year?",
+    "ground_truth": "182 million tons",
+    "references": [
+      "182 million tons",
+      "182 million tons",
+      "182 million tons"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "182 million tons",
+      "182 million tons",
+      "182 million tons"
+    ],
+    "evidence_file_id": "6490f518fe350da9",
+    "gold_spans": [
+      {
+        "start": 119,
+        "end": 135,
+        "text": "182 million tons"
+      },
+      {
+        "start": 119,
+        "end": 135,
+        "text": "182 million tons"
+      },
+      {
+        "start": 119,
+        "end": 135,
+        "text": "182 million tons"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "6490f518fe350da9641471f3a1a36ab4a64fb7a97f05b88e0eee6eef8ff7e18f"
+  },
+  {
+    "id": "5729eb34af94a219006aa6c9",
+    "question": "Which archaeologist proposed the idea that the Amazon rainforest couldn't sustain large populations? ",
+    "ground_truth": "Betty Meggers",
+    "references": [
+      "Betty Meggers",
+      "Betty Meggers",
+      "Betty Meggers"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Betty Meggers",
+      "Betty Meggers",
+      "Betty Meggers"
+    ],
+    "evidence_file_id": "32aa68d3a51961f2",
+    "gold_spans": [
+      {
+        "start": 198,
+        "end": 211,
+        "text": "Betty Meggers"
+      },
+      {
+        "start": 198,
+        "end": 211,
+        "text": "Betty Meggers"
+      },
+      {
+        "start": 198,
+        "end": 211,
+        "text": "Betty Meggers"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "32aa68d3a51961f2fc85d1117b79448f87b2591002c8300196d5ce966afb629c"
+  },
+  {
+    "id": "5729edd56aef051400155113",
+    "question": "In what year did the first European travel the entire length of the Amazon River?",
+    "ground_truth": "1542",
+    "references": [
+      "1542",
+      "1542",
+      "1542"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "1542",
+      "1542",
+      "1542"
+    ],
+    "evidence_file_id": "040a5627ef7bb5d9",
+    "gold_spans": [
+      {
+        "start": 89,
+        "end": 93,
+        "text": "1542"
+      },
+      {
+        "start": 89,
+        "end": 93,
+        "text": "1542"
+      },
+      {
+        "start": 89,
+        "end": 93,
+        "text": "1542"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "040a5627ef7bb5d949592bbcd7381d5c49b141f464054a8ba8c03c8253480ddb"
+  },
+  {
+    "id": "572a03a06aef0514001551ab",
+    "question": "A complete loss of rainforest cover may be caused by what type of emissions?",
+    "ground_truth": "greenhouse gas emissions",
+    "references": [
+      "greenhouse gas emissions",
+      "greenhouse gas",
+      "greenhouse gas"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "greenhouse gas emissions",
+      "greenhouse gas",
+      "greenhouse gas"
+    ],
+    "evidence_file_id": "c3fae4238688c459",
+    "gold_spans": [
+      {
+        "start": 54,
+        "end": 78,
+        "text": "greenhouse gas emissions"
+      },
+      {
+        "start": 54,
+        "end": 68,
+        "text": "greenhouse gas"
+      },
+      {
+        "start": 54,
+        "end": 68,
+        "text": "greenhouse gas"
+      }
+    ],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "c3fae4238688c4590bb4910c491613f34cd2b5871fb6c949bbd22c1c82bf5247"
+  },
+  {
+    "id": "572fae4b04bcaa1900d76be0",
+    "question": "Whose control of the UK's government helped fuel a desire for a Scottish Parliament?",
+    "ground_truth": "the Conservative Party",
+    "references": [
+      "the Conservative Party",
+      "Conservative Party",
+      "the Conservative Party"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Conservative Party",
+      "Conservative Party",
+      "the Conservative Party"
+    ],
+    "evidence_file_id": "0823871567c92612",
+    "gold_spans": [
+      {
+        "start": 142,
+        "end": 164,
+        "text": "the Conservative Party"
+      },
+      {
+        "start": 146,
+        "end": 164,
+        "text": "Conservative Party"
+      },
+      {
+        "start": 142,
+        "end": 164,
+        "text": "the Conservative Party"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "0823871567c926124407b4674df9aa4e8bf9d7846b67df2c44d1b37fc733a0dd"
+  },
+  {
+    "id": "572fc41f947a6a140053cc83",
+    "question": "What members typically open debates?",
+    "ground_truth": "ministers or party leaders",
+    "references": [
+      "ministers or party leaders",
+      "ministers or party leaders",
+      "ministers or party leaders"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "ministers or party leaders",
+      "ministers or party leaders",
+      "ministers or party leaders"
+    ],
+    "evidence_file_id": "d2f59dee20615657",
+    "gold_spans": [
+      {
+        "start": 304,
+        "end": 330,
+        "text": "ministers or party leaders"
+      },
+      {
+        "start": 304,
+        "end": 330,
+        "text": "ministers or party leaders"
+      },
+      {
+        "start": 304,
+        "end": 330,
+        "text": "ministers or party leaders"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "d2f59dee20615657cea445b06ca585557b245920adc37cb50a3a3c910ca17965"
+  },
+  {
+    "id": "572fca7eb2c2fd1400568477",
+    "question": "Who has the role of holding the Scottish Government to account?",
+    "ground_truth": "Scottish Parliament",
+    "references": [
+      "Scottish Parliament",
+      "Parliament",
+      "the Parliament"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Scottish Parliament",
+      "Parliament",
+      "the Parliament"
+    ],
+    "evidence_file_id": "b4c77dc6b651a68d",
+    "gold_spans": [
+      {
+        "start": 901,
+        "end": 920,
+        "text": "Scottish Parliament"
+      },
+      {
+        "start": 1016,
+        "end": 1026,
+        "text": "Parliament"
+      },
+      {
+        "start": 1012,
+        "end": 1026,
+        "text": "the Parliament"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "b4c77dc6b651a68d38c1887f3949da424d9f10940509139effbe1f3c76c00c4b"
+  },
+  {
+    "id": "572fd6aa04bcaa1900d76da1",
+    "question": "Who may change the date by up to a month, on the proposal of the PO?",
+    "ground_truth": "the Monarch",
+    "references": [
+      "the Monarch",
+      "Monarch",
+      "the Monarch"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "the Monarch",
+      "Monarch",
+      "the Monarch"
+    ],
+    "evidence_file_id": "8796b2318cf8e605",
+    "gold_spans": [
+      {
+        "start": 237,
+        "end": 248,
+        "text": "the Monarch"
+      },
+      {
+        "start": 241,
+        "end": 248,
+        "text": "Monarch"
+      },
+      {
+        "start": 237,
+        "end": 248,
+        "text": "the Monarch"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "8796b2318cf8e6050ff8ba905f88d551f8360a13cfbf8739e1234d4ed4ac2c25"
+  },
+  {
+    "id": "572fd7b8947a6a140053cd3d",
+    "question": "What may members question the First Minister about directly during First Minister's Question Time?",
+    "ground_truth": "issues under their jurisdiction",
+    "references": [
+      "issues under their jurisdiction",
+      "issues under their jurisdiction",
+      "the First Minister"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "issues under their jurisdiction",
+      "issues under their jurisdiction",
+      "the First Minister"
+    ],
+    "evidence_file_id": "9a51dc8913bed328",
+    "gold_spans": [
+      {
+        "start": 668,
+        "end": 699,
+        "text": "issues under their jurisdiction"
+      },
+      {
+        "start": 668,
+        "end": 699,
+        "text": "issues under their jurisdiction"
+      },
+      {
+        "start": 637,
+        "end": 655,
+        "text": "the First Minister"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "9a51dc8913bed32890777c8d8e326667913afeaefcb20485f6c2fcf8e94a57d2"
+  },
+  {
+    "id": "572fdd03a23a5019007fca9d",
+    "question": "What consequence of establishing the Scottish Parliament applies to Scottish MPs sitting in the UK House of Commons?",
+    "ground_truth": "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland",
+    "references": [
+      "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland",
+      "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland",
+      "procedural consequence"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland",
+      "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland",
+      "procedural consequence"
+    ],
+    "evidence_file_id": "0b0c060c48f85197",
+    "gold_spans": [
+      {
+        "start": 133,
+        "end": 226,
+        "text": "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland"
+      },
+      {
+        "start": 133,
+        "end": 226,
+        "text": "able to vote on domestic legislation that applies only to England, Wales and Northern Ireland"
+      },
+      {
+        "start": 2,
+        "end": 24,
+        "text": "procedural consequence"
+      }
+    ],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "0b0c060c48f85197bf26e8fe7a9135f1de267f3c76fb0f2a8b61b88bdb83897d"
+  },
+  {
+    "id": "573093598ab72b1400f9c5b0",
+    "question": "Which American show changed the views of Romanians during the cold war?",
+    "ground_truth": "Dallas",
+    "references": [
+      "Dallas",
+      "Dallas",
+      "Dallas",
+      "Dallas",
+      "Dallas"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "Dallas",
+      "Dallas",
+      "Dallas",
+      "Dallas",
+      "Dallas"
+    ],
+    "evidence_file_id": "ccfb450b288c1553",
+    "gold_spans": [
+      {
+        "start": 510,
+        "end": 516,
+        "text": "Dallas"
+      },
+      {
+        "start": 510,
+        "end": 516,
+        "text": "Dallas"
+      },
+      {
+        "start": 510,
+        "end": 516,
+        "text": "Dallas"
+      },
+      {
+        "start": 510,
+        "end": 516,
+        "text": "Dallas"
+      },
+      {
+        "start": 510,
+        "end": 516,
+        "text": "Dallas"
+      }
+    ],
+    "source_title": "Imperialism",
+    "context_sha256": "ccfb450b288c15536e52e7e1c54aa458c0e2c2936babc78f6cab1b418fa9e1db"
+  },
+  {
+    "id": "573098f38ab72b1400f9c5d3",
+    "question": "What did European empires rely on to supply them with resources?",
+    "ground_truth": "colonies",
+    "references": [
+      "colonies",
+      "collecting resources from colonies",
+      "colonies",
+      "colonies",
+      "colonies"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "colonies",
+      "collecting resources from colonies",
+      "colonies",
+      "colonies",
+      "colonies"
+    ],
+    "evidence_file_id": "6e771f0502b0ffe4",
+    "gold_spans": [
+      {
+        "start": 116,
+        "end": 124,
+        "text": "colonies"
+      },
+      {
+        "start": 90,
+        "end": 124,
+        "text": "collecting resources from colonies"
+      },
+      {
+        "start": 116,
+        "end": 124,
+        "text": "colonies"
+      },
+      {
+        "start": 116,
+        "end": 124,
+        "text": "colonies"
+      },
+      {
+        "start": 116,
+        "end": 124,
+        "text": "colonies"
+      }
+    ],
+    "source_title": "Imperialism",
+    "context_sha256": "6e771f0502b0ffe4b6f4d609fc4c890fa8ed0de3b50ba8cf080f14d1b0e4278f"
+  },
+  {
+    "id": "5730a0778ab72b1400f9c60c",
+    "question": "Humans in tropical environments were considered what?",
+    "ground_truth": "less civilized",
+    "references": [
+      "less civilized",
+      "less civilized",
+      "less civilized",
+      "less civilized",
+      "less civilized"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "less civilized",
+      "less civilized",
+      "less civilized",
+      "less civilized",
+      "less civilized"
+    ],
+    "evidence_file_id": "8cecce59146202bd",
+    "gold_spans": [
+      {
+        "start": 330,
+        "end": 344,
+        "text": "less civilized"
+      },
+      {
+        "start": 330,
+        "end": 344,
+        "text": "less civilized"
+      },
+      {
+        "start": 330,
+        "end": 344,
+        "text": "less civilized"
+      },
+      {
+        "start": 330,
+        "end": 344,
+        "text": "less civilized"
+      },
+      {
+        "start": 330,
+        "end": 344,
+        "text": "less civilized"
+      }
+    ],
+    "source_title": "Imperialism",
+    "context_sha256": "8cecce59146202bdf29d0640494e08c970c9712b7abd814f26d4bbba906ea28e"
+  },
+  {
+    "id": "5730aef38ab72b1400f9c684",
+    "question": "What was the name of the first German settlement?",
+    "ground_truth": "New Guinea",
+    "references": [
+      "New Guinea",
+      "German New Guinea",
+      "German New Guinea",
+      "German New Guinea",
+      "German New Guinea"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "New Guinea",
+      "German New Guinea",
+      "German New Guinea",
+      "German New Guinea",
+      "German New Guinea"
+    ],
+    "evidence_file_id": "bedd9f5d0a5db4c8",
+    "gold_spans": [
+      {
+        "start": 512,
+        "end": 522,
+        "text": "New Guinea"
+      },
+      {
+        "start": 505,
+        "end": 522,
+        "text": "German New Guinea"
+      },
+      {
+        "start": 505,
+        "end": 522,
+        "text": "German New Guinea"
+      },
+      {
+        "start": 505,
+        "end": 522,
+        "text": "German New Guinea"
+      },
+      {
+        "start": 505,
+        "end": 522,
+        "text": "German New Guinea"
+      }
+    ],
+    "source_title": "Imperialism",
+    "context_sha256": "bedd9f5d0a5db4c8fc9999b0ed320ab5e6d56704b9e02e5331f2c1973ba98941"
+  },
+  {
+    "id": "5730bc308ab72b1400f9c740",
+    "question": "When was the Ottoman empire at its height?",
+    "ground_truth": "During the 16th and 17th centuries",
+    "references": [
+      "During the 16th and 17th centuries",
+      "17th century",
+      "the 16th and 17th centuries",
+      "16th and 17th centuries",
+      "16th and 17th centuries"
+    ],
+    "answerable": true,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [
+      "During the 16th and 17th centuries",
+      "17th century",
+      "the 16th and 17th centuries",
+      "16th and 17th centuries",
+      "16th and 17th centuries"
+    ],
+    "evidence_file_id": "d28ae44a1bd65936",
+    "gold_spans": [
+      {
+        "start": 72,
+        "end": 106,
+        "text": "During the 16th and 17th centuries"
+      },
+      {
+        "start": 391,
+        "end": 403,
+        "text": "17th century"
+      },
+      {
+        "start": 79,
+        "end": 106,
+        "text": "the 16th and 17th centuries"
+      },
+      {
+        "start": 83,
+        "end": 106,
+        "text": "16th and 17th centuries"
+      },
+      {
+        "start": 83,
+        "end": 106,
+        "text": "16th and 17th centuries"
+      }
+    ],
+    "source_title": "Imperialism",
+    "context_sha256": "d28ae44a1bd659369983c5d7b048773512040e9150f20bcb6fbae1f618e3266a"
+  },
+  {
+    "id": "5a0c8ba8f5590b0018dab462",
+    "question": "The deforestation decreased by 18% during what years?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "22a8092c42faa51f",
+    "gold_spans": [],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "22a8092c42faa51f3d6dbe3ed281515ca4a9627a0e1ba161e0cb10299afcec3e"
+  },
+  {
+    "id": "5a0c9275f5590b0018dab46b",
+    "question": "Release of carbon contained in vegetation will slow down what?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "a5fca4c3e39db7dc",
+    "gold_spans": [],
+    "source_title": "Amazon_rainforest",
+    "context_sha256": "a5fca4c3e39db7dc72170cfcb6b3abd6a58b735cbb9cce2d5f5f6e553669722a"
+  },
+  {
+    "id": "5a1c60f0b4fb5d0018714611",
+    "question": "Which port is United States's third-largest seaport?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "125135dd9d38f51a",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "125135dd9d38f51af002ba49b99121835c8d0843192c33251f5a9c21d5b1e374"
+  },
+  {
+    "id": "5a1c836ab4fb5d0018714636",
+    "question": "Who did Jacksonville support with supplies during the Revolutionary war?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "928990f37f000a25",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "928990f37f000a25d64f03019258af004a5c8124a88add2049f7910fea98667f"
+  },
+  {
+    "id": "5a1c861fb4fb5d0018714658",
+    "question": "What architect was prominent in Jacksonville prior to the fire?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3a95085253039f4b",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "3a95085253039f4bf191f1037c44a2641c44c877382c059105507c459d53eaba"
+  },
+  {
+    "id": "5a1c8753b4fb5d001871466a",
+    "question": "What was Hollywood known as?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "a35e1c42b814138b",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "a35e1c42b814138bccc4c2e3471cae108b831e3a97eabed131e090b2af71e6fb"
+  },
+  {
+    "id": "5a1c8971b4fb5d0018714683",
+    "question": "How many former city officials were investigated by the grand jury?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "7df04cb220df5f11",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "7df04cb220df5f112c46d2212eeee0bfd81f69d591643d49d0674e8cf59ab2fd"
+  },
+  {
+    "id": "5a1c8aedb4fb5d00187146a0",
+    "question": "Was sitting is 874.3 km\u00b2?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "75cb5a3ffcb3fc0f",
+    "gold_spans": [],
+    "source_title": "Jacksonville,_Florida",
+    "context_sha256": "75cb5a3ffcb3fc0fc634b23eb3e6ae0e8c3365b15ad5892f4ea7a382f0495c6a"
+  },
+  {
+    "id": "5a25a709ef59cd001a623c0e",
+    "question": "Where does manufacturing take place?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "ea82c9d7a805e960",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "ea82c9d7a805e960cc889a9692f69c9069b014904492e22cdfb4515383ed6d3f"
+  },
+  {
+    "id": "5a25a8e9ef59cd001a623c22",
+    "question": "Who normally supervises inconvenience to the public?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "712be0c0b0e3181f",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "712be0c0b0e3181f3d317747b1a87774a0db59c4052b4f405e2bcd641dc30c59"
+  },
+  {
+    "id": "5a25ade0ef59cd001a623c44",
+    "question": "What is a magazine for design companies?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c2d62502892e54f5",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "c2d62502892e54f510c36e86c2adf3cadf9c533c59c96e28d86c64a63f08853c"
+  },
+  {
+    "id": "5a25d529ef59cd001a623ced",
+    "question": "What issue is common in the financial planning field?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "ba3f4fa76f917844",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "ba3f4fa76f91784474b933b15c21d21e9d89f38989ba7c6375c28cd5befd60ff"
+  },
+  {
+    "id": "5a25eae4c93d92001a40033f",
+    "question": "What are three things the role of the main contractor is?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "956d35ad3934882f",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "956d35ad3934882f2e9d3120ee8738b6a8ef0bff6d9e54723e71f3457b5592c3"
+  },
+  {
+    "id": "5a25eed2c93d92001a40034a",
+    "question": "Who is usually hired for a design-bid-build contract?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "4bfde5c5f53f6992",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "4bfde5c5f53f69927f5f235510fbbe2969feac3237b78782ea69a8ebe395cbde"
+  },
+  {
+    "id": "5a25f38dc93d92001a40035e",
+    "question": "How many firms were there in 2011?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "7f004f5ed5931562",
+    "gold_spans": [],
+    "source_title": "Construction",
+    "context_sha256": "7f004f5ed59315626739ba9c35512c96ceeb6f3af1db7426178150a313595b76"
+  },
+  {
+    "id": "5a2c0c2fbfd06b001a5ae99d",
+    "question": "Sky lost how many packages?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "99b52199ae0d66bb",
+    "gold_spans": [],
+    "source_title": "Sky_(United_Kingdom)",
+    "context_sha256": "99b52199ae0d66bb5e7cf03964f9cd3473dd6a91b95100f6ae8b634cbc3a7b60"
+  },
+  {
+    "id": "5a2c36c4bfd06b001a5aea69",
+    "question": "What is the localized band that digital receivers will receive to air channels on?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "f39b9ccf2eadbdb3",
+    "gold_spans": [],
+    "source_title": "Sky_(United_Kingdom)",
+    "context_sha256": "f39b9ccf2eadbdb36e5c86e76a1a4054502a28cc4ecc37bdf94e9c39a471c535"
+  },
+  {
+    "id": "5a2c3efbbfd06b001a5aea95",
+    "question": "What additional service did BSkyB offer besides HD channels that they claimed offered no value?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "30b0e064c3aca4d3",
+    "gold_spans": [],
+    "source_title": "Sky_(United_Kingdom)",
+    "context_sha256": "30b0e064c3aca4d389caa6801b1bbf9dd1b6f813a453a0ce92bc1de3ed202a95"
+  },
+  {
+    "id": "5a2ebaada83784001a7d243d",
+    "question": "In what month and year did the Black Death spread into France?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2e5e9baaa2d5e643",
+    "gold_spans": [],
+    "source_title": "Black_Death",
+    "context_sha256": "2e5e9baaa2d5e643d9202328c0a2e0ee49969312ee9e4915c98092ea7d9b1cee"
+  },
+  {
+    "id": "5a2ec431a83784001a7d2454",
+    "question": "Scandinavia started calling the plague the Black Death in what year?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "61b66074094351a2",
+    "gold_spans": [],
+    "source_title": "Black_Death",
+    "context_sha256": "61b66074094351a2b9074e367a8e7de0c9ea38b495749119773fbae59a339d91"
+  },
+  {
+    "id": "5a2ed246a83784001a7d24e7",
+    "question": "What percentage of the population died in the 1625 outbreak of the Black Death?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "0b363ccd79edf5a3",
+    "gold_spans": [],
+    "source_title": "Black_Death",
+    "context_sha256": "0b363ccd79edf5a3fae3de2a9ab5967af3dba12ea67dec7a1e57170a0dd0ba11"
+  },
+  {
+    "id": "5a2ed354a83784001a7d24f1",
+    "question": "How many people lived in Norway in 1348?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "8b14af3080fc770b",
+    "gold_spans": [],
+    "source_title": "Black_Death",
+    "context_sha256": "8b14af3080fc770b0bf19c5b30cb00acc2ede39893860404f2c8434840a522be"
+  },
+  {
+    "id": "5a636c5a68151a001a9222c9",
+    "question": "How does Melbourne rank as to population?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2f4205298894876b",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "2f4205298894876b510bd47b3ec642ab534c15428a4b1df1010ece22c9c17979"
+  },
+  {
+    "id": "5a637a8868151a001a922306",
+    "question": "Where was the 1857 gold rush?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "114b4c83f0905851",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "114b4c83f090585170508b423750087f82e2cd6538f45a9294aa4265f92637bf"
+  },
+  {
+    "id": "5a637f8768151a001a922319",
+    "question": "How many representatives does each state have?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2ef6bc8b598c3ae9",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "2ef6bc8b598c3ae95dea517f30b72d286a3c1ea1c56e1f73f6bd8f2ab9cb63ef"
+  },
+  {
+    "id": "5a6381d868151a001a922325",
+    "question": "Who is the first Premier of Victoria?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "a4f39f1d9df3c7a1",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "a4f39f1d9df3c7a1c8e906ab4740679e3cd0926c0f0ceb7e939b92beda68425d"
+  },
+  {
+    "id": "5a638a2468151a001a92234d",
+    "question": "What church runs public schools in Victoria?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3655da224fa6e564",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "3655da224fa6e564876c355abd0b1207caca32ca4b67b3fa6aa41fa709a2c652"
+  },
+  {
+    "id": "5a638ffe68151a001a922386",
+    "question": "What brand of tractor is manufactured in Broadmeadows?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "1d4b2491c909da1e",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "1d4b2491c909da1e52c580fbfb723ed08bffedb1cbf55d0d87cac70e85a3f3ef"
+  },
+  {
+    "id": "5a63981168151a001a9223b7",
+    "question": "What operator transports cargo in Melbourne?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "38ef368895718c22",
+    "gold_spans": [],
+    "source_title": "Victoria_(Australia)",
+    "context_sha256": "38ef368895718c227f9e1c396bd2c622788a2307ea4553ac38ea7a2b7896fb5b"
+  },
+  {
+    "id": "5a6cee244eec6b001a80a6eb",
+    "question": "Where might the doctor's self-interest be equivalent with the patient's self-interest?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "312a70e3db7cba7a",
+    "gold_spans": [],
+    "source_title": "Pharmacy",
+    "context_sha256": "312a70e3db7cba7ab2f059baf65d323e5e949b04b9c08a807456e9366dcd38b4"
+  },
+  {
+    "id": "5a7b05cd21c2de001afe9cd9",
+    "question": "When did Millerton residents move out of Fresno?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "6740991a42bdf84c",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "6740991a42bdf84c8cdf4e82a485806a299304b992b7b57dfa26d34e0d97ab8f"
+  },
+  {
+    "id": "5a7b0ec521c2de001afe9d20",
+    "question": "What avenue is to the west of the golf course?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "9a83164fe22168da",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "9a83164fe22168da561ee3f57125658d4ef64b378429778d40c67af0fbc052d7"
+  },
+  {
+    "id": "5a7b0fae21c2de001afe9d29",
+    "question": "Fresno City College is located at what two avenues?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "7e9ee265449fa226",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "7e9ee265449fa22688d3f8cc460a08187bf8f5ac34d69544390c50c250eb0448"
+  },
+  {
+    "id": "5a7b32e621c2de001afe9db5",
+    "question": "Who named Thorne Ave?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "5ee9e17954c8db6e",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "5ee9e17954c8db6e08d7e774796ee372c5de505e121d05365dda2f195f5b33f5"
+  },
+  {
+    "id": "5a7b3b3121c2de001afe9df2",
+    "question": "How much did it rain in 1962?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "b754709d2be6673e",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "b754709d2be6673ec34c0291a03498bd3136fa91501c6f3047b79318627014c0"
+  },
+  {
+    "id": "5a7b409721c2de001afe9e17",
+    "question": "What was the first Sacramento station called?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2487c8649dc181a8",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "2487c8649dc181a88017e0a080ae60a697f0e6c568e034fc10a65134683cc088"
+  },
+  {
+    "id": "5a7b485921c2de001afe9e53",
+    "question": "What does the San Joaquin Valley Railroad cross with?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2313f2d61a682bc6",
+    "gold_spans": [],
+    "source_title": "Fresno,_California",
+    "context_sha256": "2313f2d61a682bc65173ff0058fcaf0f307a9e3925747c90df3c178cdcf53308"
+  },
+  {
+    "id": "5a82025a31013a001a3350b5",
+    "question": "In what year did Henry Ware die?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "286230116fa743f7",
+    "gold_spans": [],
+    "source_title": "Harvard_University",
+    "context_sha256": "286230116fa743f77871c0721b3874ae2889664d4113752586c5f53755626f21"
+  },
+  {
+    "id": "5a8203d431013a001a3350c1",
+    "question": "What did Plato's perspective on science combine?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c2efd8db4a6e03e9",
+    "gold_spans": [],
+    "source_title": "Harvard_University",
+    "context_sha256": "c2efd8db4a6e03e9a632ded17176ef7b4de416039b6d74b8fc93e8d2420af469"
+  },
+  {
+    "id": "5a82370631013a001a3352e5",
+    "question": "What glass flowers exhibit is included in the Busch-Reisinger Museum?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "4aaa6faf86477d3b",
+    "gold_spans": [],
+    "source_title": "Harvard_University",
+    "context_sha256": "4aaa6faf86477d3be34fa2e2263e88b5c583216a96351af8fd82b9f4924bd81e"
+  },
+  {
+    "id": "5a8257efe60761001a2eb1cf",
+    "question": "What scientist published \"The Better Angels of Our Nature\" in 2011?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "874533677a269c5d",
+    "gold_spans": [],
+    "source_title": "Harvard_University",
+    "context_sha256": "874533677a269c5d5fb8bd3a3213307ea1632c2236ea48b8da8182d07905fcc8"
+  },
+  {
+    "id": "5a834af5e60761001a2eb51f",
+    "question": "What do some species of rotifers do instead of being predators?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "ee73f593c26ad38e",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "ee73f593c26ad38e58d299361ba118fcf077591f71e9d4ed9515efb8b2fc75f2"
+  },
+  {
+    "id": "5a834caae60761001a2eb53b",
+    "question": "What happens to plankton when they mature?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "70150ba659ef2c4b",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "70150ba659ef2c4bad22a2a83dde1ff6810a8679153106769c21c3b383bdb336"
+  },
+  {
+    "id": "5a83878de60761001a2eb77a",
+    "question": "How do cilia and aboral escape from danger?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "07329d2931c0ce6c",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "07329d2931c0ce6c3dad2ef45fb8898b17becf72c1aea534e734c98af62ad377"
+  },
+  {
+    "id": "5a838a2ee60761001a2eb796",
+    "question": "What shape does the Aboral usually have?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "936d1474d94981a1",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "936d1474d94981a1e1610f5e29a490816e40c53f6d62829fb5d7ed61491d28b6"
+  },
+  {
+    "id": "5a838b42e60761001a2eb7ab",
+    "question": "Where do Aboral usually live?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "9a1d3f81d55fe6e9",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "9a1d3f81d55fe6e9af70adf663cb163faf4656522893b668bd17f7a470d9cad8"
+  },
+  {
+    "id": "5a8397d0e60761001a2eb7fe",
+    "question": "What kind of diet can salmon provide to other predators?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "827c9ff031e0d998",
+    "gold_spans": [],
+    "source_title": "Ctenophora",
+    "context_sha256": "827c9ff031e0d998f3901455949a7349bbd03c9ee89635495a219c5ce6dc0e71"
+  },
+  {
+    "id": "5a892d303b2508001a72a4f2",
+    "question": "When using a probalistic primality, how is the probability that the number is composite expressed mathematically?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "576db96228f229eb",
+    "gold_spans": [],
+    "source_title": "Prime_number",
+    "context_sha256": "576db96228f229ebd5188bfb187b0285ce8e7a6eae31bd74cad56712e9e871a5"
+  },
+  {
+    "id": "5a893a003b2508001a72a542",
+    "question": "Which theorem states that every large odd integer can be written as a prime summed with a semiprime?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "4eef5ee2e8e5a99f",
+    "gold_spans": [],
+    "source_title": "Prime_number",
+    "context_sha256": "4eef5ee2e8e5a99f7d072734f1ac52b08194c79b66eefd1f527eb2304547b585"
+  },
+  {
+    "id": "5a894a483b2508001a72a5af",
+    "question": "What principle highlights the significance of real numbers?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "02473abeaeaf0a7a",
+    "gold_spans": [],
+    "source_title": "Prime_number",
+    "context_sha256": "02473abeaeaf0a7ac1221ede2323c119c62182f573df438534fcb86c2c6943d4"
+  },
+  {
+    "id": "5acf7dcf77cf76001a684f7c",
+    "question": "In what year did Robert Harper become the first president of the University?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "9323aa77e16442a4",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "9323aa77e16442a4ebc3e47425b81a77c963c9796da7b75cebd9de1a6eb1ed55"
+  },
+  {
+    "id": "5acf82c277cf76001a685064",
+    "question": "During which decade was there an increase in student applications?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "5c1f57c736e7567a",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "5c1f57c736e7567a63ad3b0fe8dd60fb3b7aaa53a754a732221188180c8fcf30"
+  },
+  {
+    "id": "5acf974277cf76001a6853a9",
+    "question": "During what time frame were the core classes limited to only 15 students?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "eb9321cdd1b9c157",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "eb9321cdd1b9c157ced5a544ecb2c130392fae1ffc7aca72e06d7fba133c3f52"
+  },
+  {
+    "id": "5acf98ad77cf76001a6853ca",
+    "question": "Which is the largest university press in the South Side?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "7b34e1e2f91ddbd5",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "7b34e1e2f91ddbd599fb3d4d15ae6acd8e8d1cac5db50bbd4e9817681d7881c5"
+  },
+  {
+    "id": "5acf9b1177cf76001a685443",
+    "question": "What was the experiment that tested early life on Mars called?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2fd2db7f9ebb0764",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "2fd2db7f9ebb0764f0702a549c4f477adbd55ed996cfd70886abb1c7a8ed9560"
+  },
+  {
+    "id": "5acf9bcf77cf76001a68547e",
+    "question": "In what year did the Williams and Logan Center open?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3f83987ebc0c4b6d",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "3f83987ebc0c4b6d662d8cc6134fe19bdcd18d63555f50b4c6841486edd3606d"
+  },
+  {
+    "id": "5acf9d3477cf76001a685512",
+    "question": "How many students enrolled at the College during the spring of 2014?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "8082f6ac9145af8d",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "8082f6ac9145af8d3dd02d6d8f221e3f2ea140fd3ea974adc4ce26b460334eff"
+  },
+  {
+    "id": "5acfa09277cf76001a6855cd",
+    "question": "What do four of the fraternities form?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "b11a179d53281b2c",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "b11a179d53281b2c32154de7d72bc5f8e3c0c35320a1c9d0f9b20fb0e505678d"
+  },
+  {
+    "id": "5acfa18177cf76001a6855f9",
+    "question": "What has been held since 1987, taking over the campus for 7-10 days with exhibitions?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "25c0e585d1869967",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "25c0e585d18699679401cf5f18912437c8e682ace293ae92bc47426596ca51ce"
+  },
+  {
+    "id": "5acfa8a277cf76001a68576e",
+    "question": "Who is known for working on portfolio capture theory?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "75ac617b40cb38bf",
+    "gold_spans": [],
+    "source_title": "University_of_Chicago",
+    "context_sha256": "75ac617b40cb38bf492969cedae24066684167be82eea9788bf5bc732da485ac"
+  },
+  {
+    "id": "5ad0178577cf76001a68698b",
+    "question": "What additional two counties make ten counties into the traditional definition of SoCal include?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "443784f71b85ab6f",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "443784f71b85ab6f58648fe4eb266a7020505d78a8661774accc6a72ddeac883"
+  },
+  {
+    "id": "5ad0206677cf76001a686afc",
+    "question": "Where is Los Angeles a district of?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "30b7a829adbfdb90",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "30b7a829adbfdb906de66d9485f19fc60e679fb1f8bd9c9f1d2ce62b19587dd1"
+  },
+  {
+    "id": "5ad0220a77cf76001a686b2c",
+    "question": "Where does professional surfer Tony Hawk live?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "101cbad929a29d84",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "101cbad929a29d849498c9f76cb12e8cd254bed0e11856ba0d2a3ad7e2da7af1"
+  },
+  {
+    "id": "5ad02ab477cf76001a686c69",
+    "question": " What law did not justify British imperialism?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3d22b3f5d1e3403f",
+    "gold_spans": [],
+    "source_title": "Imperialism",
+    "context_sha256": "3d22b3f5d1e3403f040c29691b6316b46a56bd72bea2f0052dc88bad8bc76893"
+  },
+  {
+    "id": "5ad02be477cf76001a686c9c",
+    "question": " What did Basset analyze after coming to his conclusions?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "6638daf3357f97af",
+    "gold_spans": [],
+    "source_title": "Imperialism",
+    "context_sha256": "6638daf3357f97afba40505b33af08c76b24c6d5399a55772351804230526ef8"
+  },
+  {
+    "id": "5ad02cf577cf76001a686cdb",
+    "question": " How many non-Muslim empires have used imperialism?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "6cfe10acbb60c6d8",
+    "gold_spans": [],
+    "source_title": "Imperialism",
+    "context_sha256": "6cfe10acbb60c6d8a0089776a1f286752d23ddda6886a1bea5e5b3516e94b48b"
+  },
+  {
+    "id": "5ad02e6777cf76001a686d47",
+    "question": "What meetings are closed to the public?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "58de06c671d2cd29",
+    "gold_spans": [],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "58de06c671d2cd29f3b8bde136326194d51c92607fc4a624d1d5a6e90dd5cf33"
+  },
+  {
+    "id": "5ad0313b77cf76001a686dd3",
+    "question": "Who has the task of ensuring that party members don't vote according to party line?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "60527ca1cce54d34",
+    "gold_spans": [],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "60527ca1cce54d340513d3ebe3086d4f283d0953ce0dd1d62f7c93de4d1730e4"
+  },
+  {
+    "id": "5ad0381a77cf76001a686e31",
+    "question": "Where are summer temperature ranges 70-50s?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c573b153ffd8943e",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "c573b153ffd8943e12d1903fa463c60e3bbbe8df9681c3b4057a0344790d1b5c"
+  },
+  {
+    "id": "5ad03a1a77cf76001a686e6e",
+    "question": " When did the Spanish and Portuguese colonies lose their independance.",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "2a788c023034a52a",
+    "gold_spans": [],
+    "source_title": "Imperialism",
+    "context_sha256": "2a788c023034a52ad733026fb02cca9fa43db6440104bba1c9c1b811876035e7"
+  },
+  {
+    "id": "5ad03a8a77cf76001a686e83",
+    "question": " When was Isiah Bowman not appointed to President Wilson's Inquiry?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "abd40abdc254c141",
+    "gold_spans": [],
+    "source_title": "Imperialism",
+    "context_sha256": "abd40abdc254c141a4abb9aedba61b7f018954ae13ee8133e1733febf4091cd0"
+  },
+  {
+    "id": "5ad03cd377cf76001a686ec5",
+    "question": "Who is able to legislate on issues that are reserved to Westminster?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "a04348495e1d5c9d",
+    "gold_spans": [],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "a04348495e1d5c9dbb1605250473569a44febecb13da4593d68c64afff3699c1"
+  },
+  {
+    "id": "5ad0403c77cf76001a686eed",
+    "question": "The bill is submitted to whom before it is passed?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "a39e17016b193219",
+    "gold_spans": [],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "a39e17016b193219ad2d263fa5839b7f520034dd1f60ce7c364d0478c49964ca"
+  },
+  {
+    "id": "5ad043a977cf76001a686f38",
+    "question": "What method is used in tallying votes in the first vote of the ballot?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "5b1d7779ff634f8b",
+    "gold_spans": [],
+    "source_title": "Scottish_Parliament",
+    "context_sha256": "5b1d7779ff634f8b4049e70e99b5eaadf538e5a3d3a2aa5069b096c68cb79e5d"
+  },
+  {
+    "id": "5ad0440877cf76001a686f42",
+    "question": "What city has a population of 1.7 million people?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "6ee5d1fa17d81ced",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "6ee5d1fa17d81ceddc66e821d2760925c2f8f375ae09c69d361c0fc75ba38ba0"
+  },
+  {
+    "id": "5ad044f077cf76001a686f5b",
+    "question": "Where is southern Hollywood located?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "b75e5803fbb4f060",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "b75e5803fbb4f060c696351025c35bd5542acc3855a593521033151e4d0d2c14"
+  },
+  {
+    "id": "5ad0461477cf76001a686f7c",
+    "question": "What does DCB stand for?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "071a5970e18127aa",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "071a5970e18127aa4ea55223be8ce6067227160e20689d0175c1386528e5d93d"
+  },
+  {
+    "id": "5ad04b2377cf76001a686f94",
+    "question": "What business districts are located in Northern downtown San Diego?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "5edf6aded128ebbb",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "5edf6aded128ebbbf800aac0b81c39c677b7387bf981608b76f5b3f572854f2e"
+  },
+  {
+    "id": "5ad04f7977cf76001a686fbb",
+    "question": "What NLH teams are from Southern California?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c13e97d5b9e107a9",
+    "gold_spans": [],
+    "source_title": "Southern_California",
+    "context_sha256": "c13e97d5b9e107a95bfa1a5c4501e6f2324d1835f95f811f69b00da962998aa8"
+  },
+  {
+    "id": "5ad2381dd7d075001a42882c",
+    "question": "When was the book, Sur, published?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "99ba13b83b00cb79",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "99ba13b83b00cb792f32172352e751adb373fb038760c686b2cbb9543de8c934"
+  },
+  {
+    "id": "5ad23f8fd7d075001a4288ee",
+    "question": "What was developed by Carl von Hampson and William Linde?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3b43cbab19f7f313",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "3b43cbab19f7f3133d1da9d6519cc013ff3e5e23c2c70f574acda48ff54ebc31"
+  },
+  {
+    "id": "5ad24de6d7d075001a428c33",
+    "question": "What does air in equilibrium with water contain?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "3ee61e6d7605bacd",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "3ee61e6d7605bacdeb4f37ab798daa449f57668fd923e6b04e1a516237821782"
+  },
+  {
+    "id": "5ad24e85d7d075001a428c4f",
+    "question": "Besides England who else were particularly welcoming to those fleeing France?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "30002152686f8427",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "30002152686f84273913d0dff1b10414c6fe11653db90ebb13ab33320cb98c9c"
+  },
+  {
+    "id": "5ad258b4d7d075001a428dde",
+    "question": "What event occurred 5.2 billion years ago?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "7570c6179b8da3c0",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "7570c6179b8da3c0ea28959bb249cf7b34072b311b684304210406b0986f7d7a"
+  },
+  {
+    "id": "5ad25bf3d7d075001a428e96",
+    "question": "What involves delivering a gas stream that is 9% to 93% O2?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "9e5f19ae8c4bcea4",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "9e5f19ae8c4bcea47d2097bb803a6f512f53874779686d5848e1aec6bdadef81"
+  },
+  {
+    "id": "5ad25e70d7d075001a428f1d",
+    "question": "What field is respiration used in?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "1a29c4d900a58619",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "1a29c4d900a5861923886c7581703bf0d565d9d2f379ba04c2860be4aa68f14e"
+  },
+  {
+    "id": "5ad2615ed7d075001a429019",
+    "question": "How much land did the Lord of Pelham Manor, John Pell. own in total in North America?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "8936635bf73401c4",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "8936635bf73401c433870cb063f6320a4ef8777db9a366c03e4dbb42de622dd0"
+  },
+  {
+    "id": "5ad26235d7d075001a429083",
+    "question": "What is Fe2O?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "1bb8a054229137a9",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "1bb8a054229137a9005ea877e0aa27b556891e3521788927c58348127564b154"
+  },
+  {
+    "id": "5ad26530d7d075001a4291a0",
+    "question": "When can partial oxygen be toxic?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "6e5410ef5b1cf7aa",
+    "gold_spans": [],
+    "source_title": "Oxygen",
+    "context_sha256": "6e5410ef5b1cf7aa294d0905e9bb3458c6bbdd873d39aefcd61606cb2be59f78"
+  },
+  {
+    "id": "5ad26acad7d075001a42932d",
+    "question": "How many volumes is Historical and Critical Dictionary?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "52e533d595a50176",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "52e533d595a501764514b440ac2ec0f7cebfaac473204708efa685c5a348d032"
+  },
+  {
+    "id": "5ad26dbcd7d075001a4293d5",
+    "question": "In what year did the Black Eagle Brewery change its name to Old Truman Brewery?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "5b38927a00cca8f7",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "5b38927a00cca8f78729fc0a7e1783aa49382db22072a7337823fda2888c3a8c"
+  },
+  {
+    "id": "5ad271c2d7d075001a429476",
+    "question": "How many men were in the AltpreusBische Infantry No. 15?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c4f7a9257e453b0a",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "c4f7a9257e453b0a752577b87b26fac2f158793df00e5ae7513ed4aafac440a2"
+  },
+  {
+    "id": "5ad27294d7d075001a42949b",
+    "question": "What neighborhood did Huguenots establish in Stockholm?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "465f3a788653969d",
+    "gold_spans": [],
+    "source_title": "Huguenot",
+    "context_sha256": "465f3a788653969dc5843bdf05150f974f547770065e89d57e06c202b8273776"
+  },
+  {
+    "id": "5ad3c061604f3c001a3fef70",
+    "question": "What type of electric engines produced most power up to the early 20th century?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "49dc68fb419c7d95",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "49dc68fb419c7d95e59f7efa07c36ce3082421f1e2da4c5b2eaee57b57b31b14"
+  },
+  {
+    "id": "5ad3c1ad604f3c001a3fef8e",
+    "question": "Along with road vehicles, locomotives and ships, on what vehicles were steam engines used during cultivation?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "9294fafaa3256dfe",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "9294fafaa3256dfeae51d7bef0a6f25791c067fb43c9150099381f45dc7e8f78"
+  },
+  {
+    "id": "5ad3c57a604f3c001a3feff1",
+    "question": "Who developed the first commercial engine powered device?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "68cc7e443dab62ac",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "68cc7e443dab62acd50ead8d7c118537cf11388e2cd488044cf040b21f06c60c"
+  },
+  {
+    "id": "5ad3f689604f3c001a3ff9e5",
+    "question": "What is another way of referring to power systems?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "45d09dcbde15ec52",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "45d09dcbde15ec52d7b4cb77166fe10c2c1288f7fd636d21e5bfcf6258d2a1ae"
+  },
+  {
+    "id": "5ad3fabc604f3c001a3ffb1c",
+    "question": "What does the steam generated by a auxiliary power drive?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "18421b977c0934cb",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "18421b977c0934cbdee78ce3b3e1e3d999af77d0e67ef9aa7bbed857be3070ec"
+  },
+  {
+    "id": "5ad3fc1f604f3c001a3ffb7f",
+    "question": "What is a variant of the simple expansion pivot mounting?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "c18330dd0d345a1e",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "c18330dd0d345a1e5eedb14b423dc1fbbdd345ce4298bcde654d618cf5d24707"
+  },
+  {
+    "id": "5ad415fd604f3c001a400329",
+    "question": "What working fluid is used in a mercury cycle?",
+    "ground_truth": "",
+    "references": [],
+    "answerable": false,
+    "verified": true,
+    "verification_source": "Original SQuAD2 human annotations",
+    "gold_substrings": [],
+    "evidence_file_id": "4b2a2a7e8bce520e",
+    "gold_spans": [],
+    "source_title": "Steam_engine",
+    "context_sha256": "4b2a2a7e8bce520e5e42162e14db64c90808895b36ef2edfc527bbc3df66971c"
   }
 ]

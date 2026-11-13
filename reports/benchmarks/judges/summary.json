@@ -1,0 +1,230 @@
+{
+  "provenance": {
+    "source": {
+      "dataset": "tdiggelm/climate_fever",
+      "revision": "ae61ccb9320a78109a246414139ff3a2bd677b8b",
+      "path": "data/test-00000-of-00001.parquet",
+      "sha256": "35a53b07a01714a097ee65acfd19b51cf0d5d03554add81970fa8116554951b0",
+      "license": "Unspecified; no source sentences are redistributed"
+    },
+    "source_snapshot": {
+      "source_commit": "10a4016698a3d6cc47164661330b9bdeaf218e69",
+      "branch": "improvements/evidence-hardening",
+      "dirty": true,
+      "files": {
+        ".dockerignore": "860b7b0f2c3df3baff10ab3a1cb94686a5154fcd1c582e9928fe9935d7fcd936",
+        ".env.example": "77ae36a45cbc45b7a898848412ef2a7699c88098c5f4620e584a2f8aaac3275d",
+        ".gitattributes": "3f0df355b5ea57281a82764ddf27e74b1d2505766a4c6130b002adc4ba798a91",
+        ".github/workflows/ci.yml": "6e8d9ce8c6c4ff51797aacc363d47fb0454762ab286255bf46a7ec9b1b8c77d6",
+        ".github/workflows/docker.yml": "f6e40dbe1255c565d5e3a977cdab21718e1c03cf971027e7f3933ab23f41c6b5",
+        ".gitignore": "28bce2ad38db9bc04da2038e4994a4776cc647e8571d8e205a28629bf88e7f18",
+        ".streamlit/config.toml": "8341e14c097a4b30cae6618518b7762096839d95715894cec9f776e922ddb69c",
+        "app.py": "bb2fa2a6ffb2aeb89aa49a7010f0753e4563bef736f3023866b5fc8b77bd51dd",
+        "docker-compose.yml": "14d6317212620b47cd30aaddf75266ea441a3f0ac6a0e793cdb530eb1fd5aa51",
+        "Dockerfile": "dd1d84ef8163e3acfef71523bcc20c808703039d7117a265ec05059a8fa5bfd1",
+        "docmind/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/agent/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/agent/citations.py": "9e5218126acf6a9b035aef52b40f81665883178751a1165f0b70a7db09e9411b",
+        "docmind/agent/prompts.py": "32724a5dedc000df6ea12ee194bbeed6e821a2eb42c5a15ccf9ea446a8949577",
+        "docmind/agent/react.py": "fbf9f3d32f8d99bc7bf4695f52b6c6a7594aeca8f62494405f75ac7855fcc526",
+        "docmind/agent/tools.py": "6cf53137060c5a6ff3dcc6c49cffa7524efb328780d41aba8b06ecaebb79bc85",
+        "docmind/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/api/main.py": "4d0894308ec140c4184c826963af7585df1eb1b805438d3b83688658c8e7a6ce",
+        "docmind/attribution.py": "661e6dcbf3b6700bcca01d56be111fc8b982b5e16cb199b00802477d8479055f",
+        "docmind/config.py": "95899f7efe1d8f085e614f38e85500a1b0776bee6a18f95cfa8056be7b428f7c",
+        "docmind/db.py": "4dc36d3afb9e10089cd3938e80e76d4f7a412caf7a66faaddf90857af4fa87b9",
+        "docmind/embeddings.py": "640a011286f48650ef1614d89b1b6e84e1ec6feb55769014b241ca4f5c01aaa6",
+        "docmind/evaluation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/evaluation/harness.py": "a98194eb81db43bac4c8dba5bc0aefff3cce1291cd36bb773a7d2adc90583cb1",
+        "docmind/evaluation/metrics.py": "132787b3a5ecfd64597f8d831b183fd5c0efb82e96c92dab4efc102c8dbf417d",
+        "docmind/evaluation/provenance.py": "56e3125b7749f9ec5036d2ed6c9f77714f365d59b483422b2053db5adcee0035",
+        "docmind/evaluation/retrieval_eval.py": "6f663e467f0b62e0bd2ccc8ddfe4cae4d648bb7a1f7042b22a313c732e4e3642",
+        "docmind/evaluation/selective.py": "e92eb4e1d712abeec23e71a8d661921850fd2b9620abfe7b7ba9b27a0a7cf323",
+        "docmind/ingestion/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/ingestion/chunker.py": "f33d5ef42f402b1b7b5f744959d556abcf293bc492ec1ec09364a43f9e4fbe04",
+        "docmind/ingestion/loader.py": "c2834093c6bd7bd1b2bc80a0d8e57f65ac2fe4dd5ae7049a8b6c3c1d5dc0f0d4",
+        "docmind/ingestion/parse_worker.py": "49409105632b58f6e1ad6fed4c7b1ed919bf7990fcd1c05d1d92804471d2d88d",
+        "docmind/ingestion/pipeline.py": "0db20ee15d45435d9ff41fdeef3797c4623573fc260f8b4e2bf28fc3c4fea7c1",
+        "docmind/jobs.py": "8a26f064c35579550a5f3e92797ffa736c1e96fecc76f145922d98b46b51fcb1",
+        "docmind/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/llm/base.py": "d11c206824a4ae370ef2719836e0af1642e5ac573102e33176220a19679575ae",
+        "docmind/llm/demo.py": "0f38b515a8800d4b6ce9a03c80bfc0af5ab6dbad17c142a1072c69fd8d2ac5b4",
+        "docmind/llm/groq_client.py": "dc67c577e9af90bdcb1bfaa2b9a17c9470bca23c411432fc3dc325492c477d56",
+        "docmind/models.py": "c552531400155acd94716a2011c85d9e58236bac8d7087e993157f7df985c589",
+        "docmind/observability.py": "f1779c1ed8e422ba5d7210bb9ccfbf00cede8ffc77d7d3dcd60afd5ab3242d3a",
+        "docmind/retrieval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/retrieval/dense.py": "aa6ed96b63a544f5bf5c604fdb8d7f664b0eb38a2a78ac78b553b7503d57da0b",
+        "docmind/retrieval/hybrid.py": "4d67cbc260fb19bde05fb20570e0288dba534491b0f98b353b5809db635aca76",
+        "docmind/retrieval/reranker.py": "bcafbe118e6841f77f2030815470ea2624312656b835f121f8618b9f9531a9ce",
+        "docmind/retrieval/sparse.py": "0645c494b8d4fdad167f72f484a258ada5fecc129216b897aeac1399177f2770",
+        "docmind/review/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/review/policy.py": "785c7706a7e6ee45f39ab4ccd2cfa7b2ac2c3df5ac49e96e9080aa2c40438b17",
+        "docmind/review/store.py": "4d3f59ddd7f9adb3d9a3c754598eab6dd7de9b81a549c8df5c48c1dbaff1c324",
+        "docmind/services.py": "e6d7f16cfe6906e7a00a0c262329522f710fe4b90b5a38fadac147ccfe7d004c",
+        "docmind/store.py": "a03f6e723e7f6b527d409f78a6a0e898ae26eb120c974525c44df4654f125fcf",
+        "docmind/telemetry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/telemetry/events.py": "656b7249d434ab01c8c69b5bd70dcd8dec9ab913e467b13367d28fa485a67962",
+        "docmind/tracking/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/tracking/tracker.py": "fb41617379916bc22d9d5a66789f8924e7e9c4f711bc295bbf2d287b65fd375c",
+        "docs/ADR-001-SQLITE-PILOT.md": "74f2dc9292f6249f436757d90cf012897c347e14bad58ccd5c9b9d0f343eb871",
+        "docs/API_MIGRATION.md": "5cef5d373d4e8daf5c2dc92c80eced76b1cf967e2d40f1359b067937aa0252eb",
+        "docs/AUDIT.md": "89ffcd583bb30185f4b7eab8f8e24cf317a94dbda67b7b353426879b1d1591d3",
+        "docs/CLOUD.md": "c5da6ad2250395e4bdf7e8b58ad2b606890b6fb581fa700e3e26300bcb2eea5b",
+        "docs/DOCKER_CLOUD.md": "09357150a858ed2a6a4d0908d83c029f618092e316e51e72b41d8475dea6151b",
+        "docs/METRICS.md": "55bad3938ebe86994ea8d13a588fb27b50e474275b420b3528ca82ce90ad7b8e",
+        "docs/PILOT.md": "07853768de94784ccb8d7f523cddc67b03ae8dd1928ec10f55d151e6b09cb4f1",
+        "docs/REQUIREMENTS.md": "51eef7bdbdf0cbb1faba08e7b4797c0b71a74e25daae7d28a500bb2817970560",
+        "docs/ROADMAP.md": "641c6e1bc59ae37d119f90f0ddfd3deff1dabce564b500152dbce57d779835c3",
+        "LICENSE": "9234003d05a90ea747e8f09931505305a893e20337c6a4ff1fdac28fb12fde94",
+        "pyproject.toml": "fca0b56c223d846c769f0a6e7c7c5c04ba5bad9ceb6c58db3a2947a7920cae3b",
+        "README.md": "22dfab801634dbc460daf964fdf7663fbc4a8497d57c49d849db6cf20f47abe5",
+        "requirements-dev.txt": "c045a537853ea3ca8fd34cdbfeb65c9725058d647185bd78efea6ed50a61a25e",
+        "requirements-eval.txt": "a41fb310785943ff9696454fc1e1cd628de17a4936d2d34e6b1f485e8da6e6ab",
+        "requirements.txt": "b0a49888aea1386801805f8ce76f3c8a2bdbb4788ccadccfd5c839ab45375cb2",
+        "scripts/ablation.py": "bd649e4bc1909063c7b95317e8e7776cacab1365376bd5806c1c30987ceb782c",
+        "scripts/attribution_benchmark.py": "c4dc185b7e4804b86c0b03e777960687bd3288e214bbff0ce6402c24e1024b5c",
+        "scripts/check_pdf_text.py": "bdf3a34d1b5f235f8d3b9990f427960ece2bc2d68609e18140a7265b0e145d2f",
+        "scripts/cloud_run.py": "9dcee19b97e1b5e28399251d2e2b242c5f52bbec0f80b2937dd27779db2e5565",
+        "scripts/demo.py": "d10da8990392d064b263ac53e9cd32f21cc65c640f0a3420fc04a6db3a0bc2df",
+        "scripts/evaluate.py": "ff852ac47e3118c335716af30b3c6123c134ec4bf56bbf333d4b8e53c1c0af4b",
+        "scripts/judge_comparison.py": "2bc63292c5ab863ee03a98d7448119f55a5278aa38993251cc90300d9e0a81e6",
+        "scripts/list_models.py": "000ff8b17119cb3427eda3cffbdeb1ea33cdc4050b370eb0415d1858854a47a5",
+        "scripts/make_testset.py": "aca2b73d4f915caeb93379ae1575e2478496b70307fa1113c70e187920266e42",
+        "scripts/materialize_public_corpus.py": "70ddb4900982202593049cd61ed04019c62e0184cba11045de6cedc49daac12f",
+        "scripts/measure_local.py": "1c410fd4e847f46be376eba60a8db7378d0a410231c95ab3dd6dd01d3fd7d686",
+        "scripts/pilot_report.py": "7339cf1ec43d5132845cc462bb7feab4be705f911079c5cf3e9cb1235624356e",
+        "scripts/public_benchmark.py": "82098e347c1ae2a9128967869ed67752854db11f18bec1d52b2e5a73d21bfe1a",
+        "scripts/qa_and_robustness.py": "935cef68d24bc73aa1a8f7a18a667cd7a5b1e82e93aff8e58028668d23960827",
+        "scripts/record_metrics.py": "31e81036b7d3f275728e1091a6e9f396041e6a8fd242cbfddeeb81761d65ff8b",
+        "scripts/selective_benchmark.py": "241dc45b335a316f3b0ea972637b63de9933c8df10c6dd80ade86797fb5b3b1e",
+        "scripts/stack_check.py": "61304eddac579d5a74d84accc5a8cdef09eccbf5a43a6bca7fa67fd64b59ee5d",
+        "scripts/update_readme.py": "c8e205456ae3d4f92c2738ce30954be55408f1fa4a13c1a8c750b0507317d68c",
+        "scripts/verify_testset.py": "2bf0b87d27e45cdf93bba30b229d9f2890be3a4fcbe7a84207c0fa9201d81b84",
+        "SECURITY.md": "31c37bc272ab714120523119023353209aabe3d098edee2ea9779176cb5bfd3d",
+        "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tests/conftest.py": "c39bef804329dfcf8edd5c59862cb1a8ac234670057fee391756f0a5fb4d9bcc",
+        "tests/test_api.py": "8280b91988be324adce2bb2f17b210356a90809c69f7369f685fcc386abddc0e",
+        "tests/test_app.py": "98da35a31df489bceb90d35266f1b9263de9906a072abe696d031c441d53a3ef",
+        "tests/test_citations.py": "2bd8e1b2a07d33e722597fbbd2e69867ab0b6abf8e971c6bb7c03c6918e69de2",
+        "tests/test_cloud_workflow.py": "a2ac7a3da3b100df81e7542df665e201ebd9eff62b3d43d1fe6004f402292fb3",
+        "tests/test_confirmed_regressions.py": "19cc59da6298aea9a8aae1387c3a9e6fa4f73ead841c4c8f7bfc2d2271242458",
+        "tests/test_deploy_files.py": "5dd57ec3e45f1ebbcbe0eeaa5a91c55a744fef57c5281a9957a55dd5bea39787",
+        "tests/test_env_isolation.py": "24b8c3e592857e375383c07d629df001e13c8fa35f5abd5f8e25abd4e5148447",
+        "tests/test_eval_and_sparse.py": "45e98004e7214262f8cdf3133ac7ed99758a73ca3491a1a1468e69ff4f215bfd",
+        "tests/test_groq_client.py": "53bd59c31efee2b8893e46be5506f55663a74fac648dc3fdadad4f1370eefd52",
+        "tests/test_ingest_multifile.py": "9d997c679eceff2178498b1fb2db85e47eab46ef8469b1ac145a345e2cd68a8f",
+        "tests/test_ingestion.py": "801a79980d29ef9bbb175f6f3308b2d78dcd9ddba1b1bdd04956bcc18e66de8a",
+        "tests/test_lowram_switches.py": "0643092769ae62330dbf4ae6aa452047f4dc8a64f2759b238ef30acf9c957c3d",
+        "tests/test_make_testset_flow.py": "dd23d634b600b051c0e8ea46b7c6bd447790dd0719a80c6a751a501cfb7fa738",
+        "tests/test_models.py": "009ea01518cd79721c2e09faebe497eb55540128380709087b772b23d9750852",
+        "tests/test_native.py": "ff67f28f2c7ac90220902f58baf9a80d69dc568e35498cf8ee6bd728e388ca64",
+        "tests/test_pdf_and_testset_filter.py": "e8170f98a12690ab0c4a923209502ae9983d44360c8cab2f87570bc0d9d064c4",
+        "tests/test_ragas_plumbing.py": "4815a1681fe0b2acca05be93a1d7dcf08bcead8f81824ad2a5b3f6d3c8b765db",
+        "tests/test_react.py": "26de236320e56c62c5ecd55b43a6d92a4f52fa166c7a7896bc77d20c70f7d99d",
+        "tests/test_retrieval.py": "d464e5b0e430f3f95d243f8f072da74dd7f073cb9dbf1d1911d974a387cf1040",
+        "tests/test_review.py": "0d5da7cf8d102734e5b6ef3b2c6e2336c2aa4727ba2aa668088115f81f4241e7",
+        "tests/test_stack_and_metrics.py": "c7d91d9492f6205e8cdb8ec869e71ac457d6eed165db8fd5a6ba9fbb6b832b5f"
+      }
+    },
+    "models": {
+      "typeform/distilbert-base-uncased-mnli": {
+        "model": "typeform/distilbert-base-uncased-mnli",
+        "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+      },
+      "facebook/bart-large-mnli": {
+        "model": "facebook/bart-large-mnli",
+        "revision": "d7645e127eaf1aefc7862fd59a17a5aa8558b8ce"
+      }
+    },
+    "claim_split": "100 calibration claims at hash positions 0:100; fresh 200 held-out claims at positions 300:500",
+    "threshold": 0.8,
+    "scope": "Human-defined claims, actual cited-span selection and NLI; no automatic claim-segmentation validation",
+    "model_selection": "Calibration F1; fixed threshold; held-out labels excluded from selection",
+    "bootstrap_unit": "Claim, preserving five evidence pairs",
+    "n_heldout_pairs": 1000
+  },
+  "results": {
+    "typeform/distilbert-base-uncased-mnli": {
+      "calibration": {
+        "precision": 0.5714285714285714,
+        "recall": 0.11940298507462686,
+        "tp": 16,
+        "fp": 12,
+        "fn": 118,
+        "n": 500,
+        "ci95_claim_bootstrap": {
+          "precision": [
+            0.2569642857142857,
+            0.8751249999999993
+          ],
+          "recall": [
+            0.041641260162601626,
+            0.20770833333333324
+          ]
+        },
+        "quote_roundtrip_rate": 1.0
+      },
+      "heldout": {
+        "precision": 0.5185185185185185,
+        "recall": 0.059322033898305086,
+        "tp": 14,
+        "fp": 13,
+        "fn": 222,
+        "n": 1000,
+        "ci95_claim_bootstrap": {
+          "precision": [
+            0.2916666666666667,
+            0.7576018808777428
+          ],
+          "recall": [
+            0.028153765110347125,
+            0.10126873942717142
+          ]
+        },
+        "quote_roundtrip_rate": 1.0
+      }
+    },
+    "facebook/bart-large-mnli": {
+      "calibration": {
+        "precision": 0.9375,
+        "recall": 0.11194029850746269,
+        "tp": 15,
+        "fp": 1,
+        "fn": 119,
+        "n": 500,
+        "ci95_claim_bootstrap": {
+          "precision": [
+            0.6666666666666666,
+            1.0
+          ],
+          "recall": [
+            0.026490066225165563,
+            0.20866417976729712
+          ]
+        },
+        "quote_roundtrip_rate": 1.0
+      },
+      "heldout": {
+        "precision": 0.7272727272727273,
+        "recall": 0.03389830508474576,
+        "tp": 8,
+        "fp": 3,
+        "fn": 228,
+        "n": 1000,
+        "ci95_claim_bootstrap": {
+          "precision": [
+            0.4666666666666667,
+            1.0
+          ],
+          "recall": [
+            0.01276460512080779,
+            0.05855943834459459
+          ]
+        },
+        "quote_roundtrip_rate": 1.0
+      }
+    }
+  },
+  "selected_on_calibration": "facebook/bart-large-mnli",
+  "limitation": "Evidence labels are human sentence-level support, not human minimal-span annotations"
+}

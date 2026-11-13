@@ -1,0 +1,7 @@
+{
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "Tesla T4",
+  "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+  "source_archive_sha256": "413307cb38ea6a828f1cba812882d0a6d7ce5e32e81e919a88cddb39df5043c5"
+}

@@ -1,0 +1,210 @@
+{
+  "provenance": {
+    "reader": {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "device": "cuda",
+      "max_new_tokens": 96,
+      "do_sample": false,
+      "max_document_tokens": 384,
+      "batch_size": 4
+    },
+    "source": {
+      "dataset": "hotpotqa/hotpot_qa",
+      "revision": "1908d6afbbead072334abe2965f91bd2709910ab",
+      "path": "distractor/validation-00000-of-00001.parquet",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/hotpotqa/hotpot",
+      "sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6"
+    },
+    "heldout_ids_sha256": "b2a1d88b0808d46b058f062521b0af37e4ed4be2df8793ed0e5a406386db2524",
+    "source_snapshot": {
+      "source_commit": "1ec1ca4b6bf45a870e3adbfcb6413f5040648fc4",
+      "branch": "improvements/evidence-hardening",
+      "dirty": true,
+      "files": {
+        ".dockerignore": "860b7b0f2c3df3baff10ab3a1cb94686a5154fcd1c582e9928fe9935d7fcd936",
+        ".env.example": "77ae36a45cbc45b7a898848412ef2a7699c88098c5f4620e584a2f8aaac3275d",
+        ".gitattributes": "3f0df355b5ea57281a82764ddf27e74b1d2505766a4c6130b002adc4ba798a91",
+        ".github/workflows/ci.yml": "6e8d9ce8c6c4ff51797aacc363d47fb0454762ab286255bf46a7ec9b1b8c77d6",
+        ".github/workflows/docker.yml": "f6e40dbe1255c565d5e3a977cdab21718e1c03cf971027e7f3933ab23f41c6b5",
+        ".gitignore": "c63c6636393ae25c4bc182ba04680ba72ce5ef61289dc3dd03b30c08945153bb",
+        ".streamlit/config.toml": "8341e14c097a4b30cae6618518b7762096839d95715894cec9f776e922ddb69c",
+        "app.py": "08e7664e54bdcd9fb5044b1e7defe0cf54fa02fbe24116ec42f15b0cc2d2df0d",
+        "docker-compose.yml": "14d6317212620b47cd30aaddf75266ea441a3f0ac6a0e793cdb530eb1fd5aa51",
+        "Dockerfile": "dd1d84ef8163e3acfef71523bcc20c808703039d7117a265ec05059a8fa5bfd1",
+        "docmind/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/agent/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/agent/citations.py": "9e5218126acf6a9b035aef52b40f81665883178751a1165f0b70a7db09e9411b",
+        "docmind/agent/prompts.py": "32724a5dedc000df6ea12ee194bbeed6e821a2eb42c5a15ccf9ea446a8949577",
+        "docmind/agent/react.py": "fbf9f3d32f8d99bc7bf4695f52b6c6a7594aeca8f62494405f75ac7855fcc526",
+        "docmind/agent/tools.py": "6cf53137060c5a6ff3dcc6c49cffa7524efb328780d41aba8b06ecaebb79bc85",
+        "docmind/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/api/main.py": "4d0894308ec140c4184c826963af7585df1eb1b805438d3b83688658c8e7a6ce",
+        "docmind/attribution.py": "dc48881e55b6ae151f423ee898b9ea60b19e4c5458a041e2fc5a8f4acf92128a",
+        "docmind/config.py": "6b5cfbfd7edb75000ac05ba6d54809e4105ed31d1accf7c8f2dbd4c35f22ba51",
+        "docmind/db.py": "4dc36d3afb9e10089cd3938e80e76d4f7a412caf7a66faaddf90857af4fa87b9",
+        "docmind/embeddings.py": "640a011286f48650ef1614d89b1b6e84e1ec6feb55769014b241ca4f5c01aaa6",
+        "docmind/evaluation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/evaluation/harness.py": "a98194eb81db43bac4c8dba5bc0aefff3cce1291cd36bb773a7d2adc90583cb1",
+        "docmind/evaluation/metrics.py": "132787b3a5ecfd64597f8d831b183fd5c0efb82e96c92dab4efc102c8dbf417d",
+        "docmind/evaluation/provenance.py": "56e3125b7749f9ec5036d2ed6c9f77714f365d59b483422b2053db5adcee0035",
+        "docmind/evaluation/retrieval_eval.py": "09b3ac1b329babe3fad469526c5b7ea49e4843e98dfd1aaa078ac1f0749eef07",
+        "docmind/evaluation/selective.py": "e92eb4e1d712abeec23e71a8d661921850fd2b9620abfe7b7ba9b27a0a7cf323",
+        "docmind/ingestion/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/ingestion/chunker.py": "ac4117e329b2952904ac05f2523ad58d50fdc2acae4c1deba799edb44d584266",
+        "docmind/ingestion/loader.py": "c2834093c6bd7bd1b2bc80a0d8e57f65ac2fe4dd5ae7049a8b6c3c1d5dc0f0d4",
+        "docmind/ingestion/parse_worker.py": "49409105632b58f6e1ad6fed4c7b1ed919bf7990fcd1c05d1d92804471d2d88d",
+        "docmind/ingestion/pipeline.py": "16deb92535ffa3ee0a020a18d358b9bc63316f95e0250bcc5beb4ba254c2e5aa",
+        "docmind/jobs.py": "8a26f064c35579550a5f3e92797ffa736c1e96fecc76f145922d98b46b51fcb1",
+        "docmind/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/llm/base.py": "d11c206824a4ae370ef2719836e0af1642e5ac573102e33176220a19679575ae",
+        "docmind/llm/demo.py": "0f38b515a8800d4b6ce9a03c80bfc0af5ab6dbad17c142a1072c69fd8d2ac5b4",
+        "docmind/llm/groq_client.py": "dc67c577e9af90bdcb1bfaa2b9a17c9470bca23c411432fc3dc325492c477d56",
+        "docmind/models.py": "c552531400155acd94716a2011c85d9e58236bac8d7087e993157f7df985c589",
+        "docmind/observability.py": "f1779c1ed8e422ba5d7210bb9ccfbf00cede8ffc77d7d3dcd60afd5ab3242d3a",
+        "docmind/retrieval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/retrieval/dense.py": "aa6ed96b63a544f5bf5c604fdb8d7f664b0eb38a2a78ac78b553b7503d57da0b",
+        "docmind/retrieval/hybrid.py": "4d67cbc260fb19bde05fb20570e0288dba534491b0f98b353b5809db635aca76",
+        "docmind/retrieval/reranker.py": "bcafbe118e6841f77f2030815470ea2624312656b835f121f8618b9f9531a9ce",
+        "docmind/retrieval/sparse.py": "0645c494b8d4fdad167f72f484a258ada5fecc129216b897aeac1399177f2770",
+        "docmind/review/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/review/policy.py": "785c7706a7e6ee45f39ab4ccd2cfa7b2ac2c3df5ac49e96e9080aa2c40438b17",
+        "docmind/review/store.py": "4d3f59ddd7f9adb3d9a3c754598eab6dd7de9b81a549c8df5c48c1dbaff1c324",
+        "docmind/services.py": "e6d7f16cfe6906e7a00a0c262329522f710fe4b90b5a38fadac147ccfe7d004c",
+        "docmind/store.py": "a03f6e723e7f6b527d409f78a6a0e898ae26eb120c974525c44df4654f125fcf",
+        "docmind/telemetry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/telemetry/events.py": "656b7249d434ab01c8c69b5bd70dcd8dec9ab913e467b13367d28fa485a67962",
+        "docmind/tracking/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "docmind/tracking/tracker.py": "fb41617379916bc22d9d5a66789f8924e7e9c4f711bc295bbf2d287b65fd375c",
+        "docs/ADR-001-SQLITE-PILOT.md": "74f2dc9292f6249f436757d90cf012897c347e14bad58ccd5c9b9d0f343eb871",
+        "docs/API_MIGRATION.md": "5cef5d373d4e8daf5c2dc92c80eced76b1cf967e2d40f1359b067937aa0252eb",
+        "docs/AUDIT.md": "89ffcd583bb30185f4b7eab8f8e24cf317a94dbda67b7b353426879b1d1591d3",
+        "docs/CLOUD.md": "c5da6ad2250395e4bdf7e8b58ad2b606890b6fb581fa700e3e26300bcb2eea5b",
+        "docs/DOCKER_CLOUD.md": "09357150a858ed2a6a4d0908d83c029f618092e316e51e72b41d8475dea6151b",
+        "docs/METRICS.md": "55bad3938ebe86994ea8d13a588fb27b50e474275b420b3528ca82ce90ad7b8e",
+        "docs/PILOT.md": "07853768de94784ccb8d7f523cddc67b03ae8dd1928ec10f55d151e6b09cb4f1",
+        "docs/REQUIREMENTS.md": "51eef7bdbdf0cbb1faba08e7b4797c0b71a74e25daae7d28a500bb2817970560",
+        "docs/ROADMAP.md": "641c6e1bc59ae37d119f90f0ddfd3deff1dabce564b500152dbce57d779835c3",
+        "LICENSE": "9234003d05a90ea747e8f09931505305a893e20337c6a4ff1fdac28fb12fde94",
+        "pyproject.toml": "fca0b56c223d846c769f0a6e7c7c5c04ba5bad9ceb6c58db3a2947a7920cae3b",
+        "README.md": "22dfab801634dbc460daf964fdf7663fbc4a8497d57c49d849db6cf20f47abe5",
+        "requirements-dev.txt": "c045a537853ea3ca8fd34cdbfeb65c9725058d647185bd78efea6ed50a61a25e",
+        "requirements-eval.txt": "a41fb310785943ff9696454fc1e1cd628de17a4936d2d34e6b1f485e8da6e6ab",
+        "requirements.txt": "b0a49888aea1386801805f8ce76f3c8a2bdbb4788ccadccfd5c839ab45375cb2",
+        "scripts/ablation.py": "bd649e4bc1909063c7b95317e8e7776cacab1365376bd5806c1c30987ceb782c",
+        "scripts/attribution_benchmark.py": "c4dc185b7e4804b86c0b03e777960687bd3288e214bbff0ce6402c24e1024b5c",
+        "scripts/check_pdf_text.py": "bdf3a34d1b5f235f8d3b9990f427960ece2bc2d68609e18140a7265b0e145d2f",
+        "scripts/cloud_run.py": "9dcee19b97e1b5e28399251d2e2b242c5f52bbec0f80b2937dd27779db2e5565",
+        "scripts/demo.py": "d10da8990392d064b263ac53e9cd32f21cc65c640f0a3420fc04a6db3a0bc2df",
+        "scripts/evaluate.py": "ff852ac47e3118c335716af30b3c6123c134ec4bf56bbf333d4b8e53c1c0af4b",
+        "scripts/list_models.py": "000ff8b17119cb3427eda3cffbdeb1ea33cdc4050b370eb0415d1858854a47a5",
+        "scripts/make_testset.py": "aca2b73d4f915caeb93379ae1575e2478496b70307fa1113c70e187920266e42",
+        "scripts/measure_local.py": "8d71e2a8bcdce38880ef85b4bd2b3b4ac869eb32b45b2756384e8cf198342a12",
+        "scripts/pilot_report.py": "7339cf1ec43d5132845cc462bb7feab4be705f911079c5cf3e9cb1235624356e",
+        "scripts/public_benchmark.py": "82098e347c1ae2a9128967869ed67752854db11f18bec1d52b2e5a73d21bfe1a",
+        "scripts/qa_and_robustness.py": "935cef68d24bc73aa1a8f7a18a667cd7a5b1e82e93aff8e58028668d23960827",
+        "scripts/record_metrics.py": "31e81036b7d3f275728e1091a6e9f396041e6a8fd242cbfddeeb81761d65ff8b",
+        "scripts/stack_check.py": "61304eddac579d5a74d84accc5a8cdef09eccbf5a43a6bca7fa67fd64b59ee5d",
+        "scripts/update_readme.py": "c8e205456ae3d4f92c2738ce30954be55408f1fa4a13c1a8c750b0507317d68c",
+        "scripts/verify_testset.py": "2bf0b87d27e45cdf93bba30b229d9f2890be3a4fcbe7a84207c0fa9201d81b84",
+        "SECURITY.md": "31c37bc272ab714120523119023353209aabe3d098edee2ea9779176cb5bfd3d",
+        "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tests/conftest.py": "c39bef804329dfcf8edd5c59862cb1a8ac234670057fee391756f0a5fb4d9bcc",
+        "tests/test_api.py": "8280b91988be324adce2bb2f17b210356a90809c69f7369f685fcc386abddc0e",
+        "tests/test_app.py": "4bd807dd0ed324f15c1fba340ae900f2ee35c907abcd2b1e14af5dfdb5643429",
+        "tests/test_citations.py": "2bd8e1b2a07d33e722597fbbd2e69867ab0b6abf8e971c6bb7c03c6918e69de2",
+        "tests/test_cloud_workflow.py": "a2ac7a3da3b100df81e7542df665e201ebd9eff62b3d43d1fe6004f402292fb3",
+        "tests/test_confirmed_regressions.py": "19cc59da6298aea9a8aae1387c3a9e6fa4f73ead841c4c8f7bfc2d2271242458",
+        "tests/test_deploy_files.py": "5dd57ec3e45f1ebbcbe0eeaa5a91c55a744fef57c5281a9957a55dd5bea39787",
+        "tests/test_env_isolation.py": "24b8c3e592857e375383c07d629df001e13c8fa35f5abd5f8e25abd4e5148447",
+        "tests/test_eval_and_sparse.py": "0830660687262ca0768778384734181f8e1fcc5185cafd549da93422653a8701",
+        "tests/test_groq_client.py": "53bd59c31efee2b8893e46be5506f55663a74fac648dc3fdadad4f1370eefd52",
+        "tests/test_ingest_multifile.py": "9d997c679eceff2178498b1fb2db85e47eab46ef8469b1ac145a345e2cd68a8f",
+        "tests/test_ingestion.py": "801a79980d29ef9bbb175f6f3308b2d78dcd9ddba1b1bdd04956bcc18e66de8a",
+        "tests/test_lowram_switches.py": "0643092769ae62330dbf4ae6aa452047f4dc8a64f2759b238ef30acf9c957c3d",
+        "tests/test_make_testset_flow.py": "dd23d634b600b051c0e8ea46b7c6bd447790dd0719a80c6a751a501cfb7fa738",
+        "tests/test_models.py": "009ea01518cd79721c2e09faebe497eb55540128380709087b772b23d9750852",
+        "tests/test_native.py": "ff67f28f2c7ac90220902f58baf9a80d69dc568e35498cf8ee6bd728e388ca64",
+        "tests/test_pdf_and_testset_filter.py": "e8170f98a12690ab0c4a923209502ae9983d44360c8cab2f87570bc0d9d064c4",
+        "tests/test_ragas_plumbing.py": "4815a1681fe0b2acca05be93a1d7dcf08bcead8f81824ad2a5b3f6d3c8b765db",
+        "tests/test_react.py": "26de236320e56c62c5ecd55b43a6d92a4f52fa166c7a7896bc77d20c70f7d99d",
+        "tests/test_retrieval.py": "d464e5b0e430f3f95d243f8f072da74dd7f073cb9dbf1d1911d974a387cf1040",
+        "tests/test_review.py": "0d5da7cf8d102734e5b6ef3b2c6e2336c2aa4727ba2aa668088115f81f4241e7",
+        "tests/test_stack_and_metrics.py": "c7d91d9492f6205e8cdb8ec869e71ac457d6eed165db8fd5a6ba9fbb6b832b5f"
+      }
+    },
+    "scope": "HotpotQA validation distractor QA on 200 held-out IDs; deterministic generation",
+    "metric": "HotpotQA-style answer normalization, EM and token F1; bootstrap over questions"
+  },
+  "qa": {
+    "hybrid_rerank_top5": {
+      "exact_match": {
+        "mean": 0.19,
+        "lo": 0.135,
+        "hi": 0.245
+      },
+      "token_f1": {
+        "mean": 0.2566452661826981,
+        "lo": 0.20122800427793625,
+        "hi": 0.3149551929392446
+      },
+      "n": 200
+    },
+    "long_context_all10": {
+      "exact_match": {
+        "mean": 0.12,
+        "lo": 0.08,
+        "hi": 0.165
+      },
+      "token_f1": {
+        "mean": 0.14506060606060606,
+        "lo": 0.10032651515151515,
+        "hi": 0.1926681818181818
+      },
+      "n": 200
+    },
+    "naive_dense_top5": {
+      "exact_match": {
+        "mean": 0.2,
+        "lo": 0.145,
+        "hi": 0.2551249999999993
+      },
+      "token_f1": {
+        "mean": 0.24708150183150182,
+        "lo": 0.19168125,
+        "hi": 0.30320109890109886
+      },
+      "n": 200
+    }
+  },
+  "robustness": {
+    "attack_success": {
+      "False": {
+        "mean": 0.12,
+        "lo": 0.0,
+        "hi": 0.32
+      },
+      "True": {
+        "mean": 0.3,
+        "lo": 0.0,
+        "hi": 0.6
+      }
+    },
+    "n_per_condition": 50,
+    "bootstrap_unit": "ten attack templates, preserving five variants per template",
+    "benign_control_answers": [
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND",
+      "NOT_FOUND"
+    ],
+    "scope": "Direct context reader; does not measure hosted service or tool-loop attack success"
+  }
+}

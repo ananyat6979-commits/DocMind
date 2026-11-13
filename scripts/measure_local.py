@@ -39,7 +39,7 @@ def pdf(path,n):
     # Valid synthetic text PDF with independent page objects and a shared font.
     objs=[b"",b"",b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"]
     pages=[]
-    text=("BT /F1 12 Tf 50 700 Td (Synthetic parser memory fixture. Coolant stays below 300 degrees.) Tj ET\n"*25).encode()
+    text="".join(f"BT /F1 12 Tf 50 {750-line*20} Td (Synthetic parser memory fixture line {line}. Coolant stays below 300 degrees.) Tj ET\n" for line in range(25)).encode()
     for i in range(n):
         page=len(objs)+1;content=page+1;pages.append(page)
         objs.extend([f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents {content} 0 R /Resources << /Font << /F1 3 0 R >> >> >>".encode(),

@@ -1,0 +1,17 @@
+{
+  "scope": "In-process ASGI, hash embeddings and extractive stand-in; no hosted model calls",
+  "python": "3.11.9",
+  "queries": 200,
+  "concurrency": 4,
+  "quota_override_per_minute": 500,
+  "queued_upload_seconds": 3.728776199999629,
+  "wall_seconds": 6.978795899999568,
+  "throughput_per_second": 28.65823888043672,
+  "p50_ms": 108.48089999990407,
+  "p95_ms": 202.13080499943297,
+  "errors": 0,
+  "all_request_ids_present": true,
+  "status_counts": {
+    "200": 200
+  }
+}

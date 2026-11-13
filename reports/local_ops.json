@@ -1,0 +1,45 @@
+{
+  "python": "3.11.9",
+  "cpu_count": 8,
+  "scope": "synthetic parser and BM25 microbenchmarks, not model/API load",
+  "parser": [
+    {
+      "pages": 100,
+      "bytes": 284727,
+      "seconds": 0.9685952999998335,
+      "nonempty_pages": 100,
+      "before": {
+        "rss_mib": 28.62109375,
+        "peak_mib": 29.79296875
+      },
+      "after": {
+        "rss_mib": 33.82421875,
+        "peak_mib": 35.515625
+      }
+    },
+    {
+      "pages": 300,
+      "bytes": 853927,
+      "seconds": 0.7853066999996372,
+      "nonempty_pages": 300,
+      "before": {
+        "rss_mib": 34.109375,
+        "peak_mib": 37.9921875
+      },
+      "after": {
+        "rss_mib": 34.734375,
+        "peak_mib": 37.9921875
+      }
+    }
+  ],
+  "bm25_build_seconds": 0.45331350000014936,
+  "bm25_load": {
+    "queries": 400,
+    "workers": 4,
+    "chunks": 50000,
+    "wall_seconds": 0.38715230000070733,
+    "p50_ms": 3.2770500001788605,
+    "p95_ms": 5.2108799997313255,
+    "errors": 0
+  }
+}
