@@ -40,6 +40,7 @@
     "reports/protocols/manifest.json": "7ba5f88820ee59846f3374493becf880ede3a64c5460ba64ed6988a8161d1022",
     "reports/protocols/records.jsonl": "42a1f32a13619758e36a6ce702a0287bb9f679f47214ed9301de945643a45a5c",
     "reports/protocols/summary.json": "61b566880d4cccfa88e5b370c9d9843040cee8ea609f559fc52d0ffc1b4925f0",
-    "reports/service_load.json": "75702f3847b1f7b333e6d6c4010417861f31cc3b4838e17a68f82a930255218f"
+    "reports/service_load.json": "75702f3847b1f7b333e6d6c4010417861f31cc3b4838e17a68f82a930255218f",
+    "reports/ann_scale.json": "531ce10f424ac31c91bc1a061337aec412f55d398509a10192d342be996d80f7"
   }
 }

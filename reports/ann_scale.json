@@ -1,0 +1,42 @@
+{
+  "scope": "Synthetic normalized Gaussian vectors, not semantic retrieval or API load",
+  "python": "3.11.9",
+  "faiss": "1.16.0",
+  "vectors": 50000,
+  "dimensions": 384,
+  "queries": 100,
+  "seed": 71,
+  "threads": 4,
+  "top_k": 10,
+  "vector_sha256": "22c9cd02edf7c01e6fe80702d3cb42461d18c540224b338a9525d4a5d3929938",
+  "indexes": {
+    "flat": {
+      "build_seconds": 0.041652600000816165,
+      "serialized_bytes": 76800045,
+      "p50_ms": 13.58059999984107,
+      "p95_ms": 19.644404999235118,
+      "recall10_against_exact": 1.0,
+      "process_memory": {
+        "rss_mib": 111.5703125,
+        "peak_mib": 247.99609375
+      }
+    },
+    "hnsw": {
+      "build_seconds": 116.53847590000078,
+      "serialized_bytes": 90412578,
+      "p50_ms": 4.250200000569748,
+      "p95_ms": 5.951870000990311,
+      "recall10_against_exact": 0.26899999999999996,
+      "process_memory": {
+        "rss_mib": 151.5859375,
+        "peak_mib": 322.85546875
+      }
+    }
+  },
+  "limitations": [
+    "Uniform vectors do not represent a real document distribution",
+    "HNSW parallel construction may vary by hardware",
+    "Memory is process cumulative peak, not isolated index RSS",
+    "No confidence interval for single build or timing run"
+  ]
+}

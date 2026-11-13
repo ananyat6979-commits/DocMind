@@ -13,3 +13,4 @@ reports/local_ops.json -text
 reports/service_load.json -text
 data/testset.json -text
 data/public/corpus.json -text
+reports/ann_scale.json -text

@@ -34,13 +34,14 @@ Copy-Item .env.example .env
 Set the keys and passwords in `.env` privately. The UI requires `DOCMIND_APP_PASSWORD`; the API requires `DOCMIND_API_KEY`; review operations require `DOCMIND_REVIEWER_PIN`; document deletion and rebuild in the UI require `DOCMIND_ADMIN_PIN`. Missing credentials disable the corresponding access. Select a currently available hosted model with `python scripts/list_models.py`, then set `DOCMIND_LLM_MODEL`. `DOCMIND_SECRETS_FILE` can point to a private dotenv file outside the checkout. Never put secrets in a notebook or archive.
 
 ```powershell
+python scripts/cache_models.py
 streamlit run app.py
 uvicorn docmind.api.main:app --host 127.0.0.1 --port 8000
 python -m pytest -q
 python scripts/verify_benchmark_reports.py
 ```
 
-The test suite uses hash embeddings and a demo reader without downloading models. `DOCMIND_TEST_MODE=1` uses explicit development backends and must stay off in a deployed service. Real startup downloads the pinned retrieval and attribution models unless they are cached. Docker bakes those weights into the image; see [deployment](docs/DOCKER_CLOUD.md).
+The test suite uses hash embeddings and a demo reader without downloading models. `DOCMIND_TEST_MODE=1` uses explicit development backends and must stay off in a deployed service. Run `cache_models.py` once with network access to cache the pinned retrieval and attribution models. The runtime attribution judge reads cached weights and routes to review if unavailable. Docker bakes those weights into the image; see [deployment](docs/DOCKER_CLOUD.md).
 
 ## How it works
 
@@ -69,7 +70,7 @@ For your own documents, draft labels with `scripts/make_testset.py`, verify them
 
 ## Limits and security
 
-English-oriented retrieval and NLI; scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. The default small attribution model has particularly poor measured recall. Prompt injection remains possible. ANN is optional, but corpus refresh still rebuilds in-memory caches, so storage and ingestion are not proven at service scale. Run one application process per corpus; the two Compose services use separate corpora. Synthetic local throughput does not predict hosted inference latency.
+English-oriented retrieval and NLI; scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. The default small attribution model has particularly poor measured recall. Prompt injection remains possible. ANN is optional and recovered only 26.9% of exact top-ten neighbors in a 50,000-vector synthetic test. Flat search remains the default. Corpus refresh still rebuilds in-memory caches, so storage and ingestion are not proven at service scale. Run one application process per corpus; the two Compose services use separate corpora. Synthetic local throughput does not predict hosted inference latency.
 
 Read [security and retention](SECURITY.md), [evaluation and failure analysis](docs/EVALUATION.md), and [public data attribution](data/public/README.md).
 
