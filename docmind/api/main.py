@@ -41,12 +41,26 @@ from docmind.review.store import ReviewStore, DECISIONS
 from docmind.store import CorpusStore, EmbeddingModelMismatch
 from docmind.telemetry.events import EventLog
 
+from docmind.tenancy import database_scope,data_root
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 @asynccontextmanager
 async def lifespan(app):
     from docmind.jobs import IngestionQueue
+    if os.getenv('DOCMIND_DATABASE_URL'):
+        import json
+        from docmind.postgres import DatabaseScope
+        records=json.loads(Path(os.environ['DOCMIND_CREDENTIALS_FILE']).read_text(encoding='utf-8-sig'))
+        tenants={r['tenant_id'] for r in records}
+        if not 1<=len(tenants)<=16:raise RuntimeError('Production profile supports one to sixteen provisioned tenants')
+        app.state.tenant_queues={tenant:IngestionQueue(DatabaseScope(os.environ['DOCMIND_DATABASE_URL'],tenant)) for tenant in tenants}
+        for queue in app.state.tenant_queues.values():queue.start()
+        try:yield
+        finally:
+            for queue in app.state.tenant_queues.values():queue.close()
+        return
     queue = IngestionQueue()
     app.state.ingestion_queue = queue
     from docmind.uploads import sweep
@@ -73,18 +87,33 @@ def _persistent_stores(db_path):
 
 
 def get_store():
-    return _persistent_stores(str(CONFIG.db_path))[0]
+    return _persistent_stores(database_scope())[0]
 
 
 def get_reviews():
-    return _persistent_stores(str(CONFIG.db_path))[1]
+    return _persistent_stores(database_scope())[1]
 
 
 def get_events():
-    return _persistent_stores(str(CONFIG.db_path))[2]
+    return _persistent_stores(database_scope())[2]
+
+
+_tenant_agents: dict = {}
+
+
+def get_queue(request):
+    if os.getenv('DOCMIND_DATABASE_URL'):
+        return request.app.state.tenant_queues[request.state.principal.tenant_id]
+    return request.app.state.ingestion_queue
 
 
 def get_agent() -> ReActAgent:
+    if os.getenv('DOCMIND_DATABASE_URL'):
+        scope=database_scope()
+        with _lock:
+            if scope not in _tenant_agents:
+                _tenant_agents[scope]=ReActAgent(retriever=HybridRetriever(get_store()))
+            return _tenant_agents[scope]
     global _agent
     if _agent is None:
         with _lock:
@@ -210,7 +239,7 @@ def _ingest_response(report, label: str) -> IngestResponse:
 
 @app.post("/ingest", response_model=IngestResponse, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
 def ingest_documents(req: IngestRequest):
-    root = CONFIG.data_dir.resolve()
+    root = data_root().resolve()
     path = Path(req.path)
     path = (root / path).resolve() if not path.is_absolute() else path.resolve()
     if root != path and root not in path.parents:
@@ -230,7 +259,7 @@ def _persist_upload(file):
     name = Path(file.filename or "upload").name
     if Path(name).suffix.lower() not in LOADERS:
         raise HTTPException(status_code=415, detail=f"Unsupported type. Supported: {sorted(LOADERS)}")
-    dest_dir = CONFIG.data_dir / "uploads"
+    dest_dir = data_root() / "uploads"
     dest_dir.mkdir(parents=True, exist_ok=True)
     limit = CONFIG.max_upload_mb * 1024 * 1024
     written = 0
@@ -346,21 +375,21 @@ def delete_document(file_id: str):
 
 @app.post("/ingest/jobs", status_code=202, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
 def enqueue_ingestion(req: IngestRequest, request: Request):
-    root = CONFIG.data_dir.resolve()
+    root = data_root().resolve()
     path = (root / req.path).resolve()
     if root not in path.parents or not path.is_file():
         raise HTTPException(status_code=400, detail="Choose a file within the data directory")
     if req.rebuild:
         raise HTTPException(status_code=400, detail="Queued rebuild is not supported")
     try:
-        return {"job_id": request.app.state.ingestion_queue.enqueue(path, owner=request.state.principal.actor_id,expected_language=req.expected_language,encoding=req.encoding), "status": "queued"}
+        return {"job_id": get_queue(request).enqueue(path, owner=request.state.principal.actor_id,expected_language=req.expected_language,encoding=req.encoding), "status": "queued"}
     except ValueError as exc:
         raise HTTPException(status_code=429, detail=str(exc))
 
 
 @app.get("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
 def ingestion_status(job_id: str, request: Request):
-    row = request.app.state.ingestion_queue.get(job_id)
+    row = get_queue(request).get(job_id)
     if not row or row["owner"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404, detail="Unknown ingestion job")
     return row
@@ -368,10 +397,10 @@ def ingestion_status(job_id: str, request: Request):
 
 @app.delete("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
 def cancel_ingestion(job_id: str, request: Request):
-    row=request.app.state.ingestion_queue.get(job_id)
+    row=get_queue(request).get(job_id)
     if not row or row["owner"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404,detail="Unknown ingestion job")
-    if not request.app.state.ingestion_queue.cancel(job_id):
+    if not get_queue(request).cancel(job_id):
         raise HTTPException(status_code=409, detail="Only queued jobs can be cancelled")
     return {"ok": True}
 
@@ -392,7 +421,7 @@ def readiness():
 def enqueue_upload(request: Request, file: UploadFile = File(...), expected_language: Optional[Literal["en","hi","fr","de","fi"]] = None, encoding: Optional[Literal["cp1252"]] = None):
     dest, name = _persist_upload(file)
     try:
-        return {"job_id": request.app.state.ingestion_queue.enqueue(dest, owner=request.state.principal.actor_id,expected_language=expected_language,encoding=encoding), "status":"queued", "filename":name}
+        return {"job_id": get_queue(request).enqueue(dest, owner=request.state.principal.actor_id,expected_language=expected_language,encoding=encoding), "status":"queued", "filename":name}
     except ValueError as exc:
         raise HTTPException(status_code=429, detail=str(exc))
     finally:

@@ -46,6 +46,8 @@ class IngestionQueue:
             return bool(conn.execute("UPDATE ingestion_jobs SET status='cancelled',updated_at=? WHERE job_id=? AND status='queued'", (time.time(),job)).rowcount)
 
     def run_one(self):
+        from docmind.postgres import DatabaseScope
+        if isinstance(self.db_path,DatabaseScope):return self._run_leased()
         from docmind.store import CorpusStore
         with connect(self.db_path) as conn:
             conn.execute("BEGIN IMMEDIATE")
@@ -66,9 +68,47 @@ class IngestionQueue:
         cleanup(row["path"], self.db_path)
         return True
 
-    def start(self):
+    def _claim(self,lease_seconds=60):
+        token=uuid.uuid4().hex
         with connect(self.db_path) as conn:
-            conn.execute("UPDATE ingestion_jobs SET status='failed',error='Interrupted during service restart' WHERE status='running'")
+            conn.execute("BEGIN IMMEDIATE")
+            conn.execute("UPDATE ingestion_jobs SET status=CASE WHEN attempts>=3 THEN 'failed' ELSE 'queued' END,error='Worker lease expired',lease_token=NULL WHERE status='running' AND lease_until<=EXTRACT(EPOCH FROM clock_timestamp())")
+            row=conn.execute("SELECT job_id,path,options FROM ingestion_jobs WHERE status='queued' ORDER BY created_at LIMIT 1 FOR UPDATE SKIP LOCKED").fetchone()
+            if row is None:return None
+            conn.execute("UPDATE ingestion_jobs SET status='running',lease_token=?,lease_until=EXTRACT(EPOCH FROM clock_timestamp())+?,attempts=attempts+1,updated_at=EXTRACT(EPOCH FROM clock_timestamp()) WHERE job_id=?",(token,lease_seconds,row['job_id']))
+        return dict(row),token
+
+    def _run_leased(self):
+        from docmind.store import CorpusStore
+        claimed=self._claim()
+        if claimed is None:return False
+        row,token=claimed;done=threading.Event()
+        def heartbeat():
+            while not done.wait(10):
+                try:
+                    with connect(self.db_path) as conn:
+                        changed=conn.execute("UPDATE ingestion_jobs SET lease_until=EXTRACT(EPOCH FROM clock_timestamp())+60 WHERE job_id=? AND lease_token=? AND status='running' AND lease_until>EXTRACT(EPOCH FROM clock_timestamp())",(row['job_id'],token)).rowcount
+                    if not changed:return
+                except Exception:return
+        pulse=threading.Thread(target=heartbeat,daemon=True);pulse.start()
+        try:
+            report=ingest(row['path'],store=CorpusStore(self.db_path.fenced(row['job_id'],token)),**json.loads(row['options']))
+            status,result,error='completed',json.dumps({'file_ids':report.file_ids,'chunks_added':report.chunks_added}),None
+        except Exception as exc:
+            status,result,error='failed',None,type(exc).__name__
+        finally:done.set();pulse.join(timeout=1)
+        with connect(self.db_path) as conn:
+            changed=conn.execute("UPDATE ingestion_jobs SET status=?,result=?,error=?,updated_at=EXTRACT(EPOCH FROM clock_timestamp()),lease_token=NULL WHERE job_id=? AND lease_token=? AND status='running' AND lease_until>EXTRACT(EPOCH FROM clock_timestamp())",(status,result,error,row['job_id'],token)).rowcount
+        if changed:
+            from docmind.uploads import cleanup
+            cleanup(row['path'],self.db_path)
+        return True
+
+    def start(self):
+        from docmind.postgres import DatabaseScope
+        if not isinstance(self.db_path,DatabaseScope):
+            with connect(self.db_path) as conn:
+                conn.execute("UPDATE ingestion_jobs SET status='failed',error='Interrupted during service restart' WHERE status='running'")
         def loop():
             next_sweep=0.0
             while not self.stop_event.is_set():

@@ -1,5 +1,7 @@
 """Authenticate before quota allocation; trace every response, including rejections."""
 import json
+import os
+import hashlib
 import logging
 import threading
 import time
@@ -33,6 +35,12 @@ class RequestMonitor:
         return True
 
     async def __call__(self, request, call_next):
+        from docmind.tenancy import PRINCIPAL
+        token=PRINCIPAL.set(None)
+        try:return await self._dispatch(request,call_next)
+        finally:PRINCIPAL.reset(token)
+
+    async def _dispatch(self, request, call_next):
         request_id = uuid.uuid4().hex
         request.state.request_id = request_id
         started = time.perf_counter()
@@ -43,13 +51,29 @@ class RequestMonitor:
                 response = JSONResponse({"detail": "API authentication is not configured" if status == 503 else "Invalid or missing X-API-Key"}, status_code=status)
             else:
                 request.state.principal = principal
+                from docmind.tenancy import PRINCIPAL
+                PRINCIPAL.set(principal)
                 if request.url.path != "/metrics":
                     # Only the actual peer address is used. No untrusted forwarding headers.
                     peer = request.client.host if request.client else "local"
-                    with self.lock:
-                        now = time.monotonic()
-                        allowed = self._quota(self.buckets, principal.key_id, self.limit, now)
-                        allowed = self._quota(self.ip_buckets, peer, self.ip_limit, now) and allowed
+                    if os.getenv('DOCMIND_DATABASE_URL'):
+                        from starlette.concurrency import run_in_threadpool
+                        from docmind.tenancy import database_scope
+                        from docmind.db import connect
+                        scope=database_scope()
+                        def shared_quota():
+                            with connect(scope) as conn:
+                                return conn.execute("SELECT take_quota(?,?,?,?) AS allowed",(principal.key_id,hashlib.sha256(peer.encode()).hexdigest(),self.limit,self.ip_limit)).fetchone()['allowed']
+                        try:allowed=await run_in_threadpool(shared_quota)
+                        except Exception:
+                            logging.getLogger(__name__).error('Shared quota backend unavailable; request_id=%s',request_id)
+                            response=JSONResponse({'detail':'Quota backend unavailable'},status_code=503)
+                            allowed=True
+                    else:
+                        with self.lock:
+                            now = time.monotonic()
+                            allowed = self._quota(self.buckets, principal.key_id, self.limit, now)
+                            allowed = self._quota(self.ip_buckets, peer, self.ip_limit, now) and allowed
                     if not allowed: response = JSONResponse({"detail":"Authenticated request quota exceeded"},status_code=429)
         if response is None:
             try:

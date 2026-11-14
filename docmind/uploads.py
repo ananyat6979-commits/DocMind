@@ -20,7 +20,8 @@ def acquire(path):
 
 def cleanup(path, db_path=None, release=False, owned_document=False):
     path = Path(path).resolve()
-    root = (CONFIG.data_dir / "uploads").resolve()
+    from docmind.tenancy import data_root
+    root = (data_root(db_path) / "uploads").resolve()
     if root not in path.parents: return False
     key = str(path)
     with _LOCK:
@@ -42,7 +43,8 @@ def cleanup(path, db_path=None, release=False, owned_document=False):
 
 
 def sweep(db_path=None, min_age_seconds=3600, limit=500):
-    root=CONFIG.data_dir/"uploads"
+    from docmind.tenancy import data_root
+    root=data_root(db_path)/"uploads"
     if not root.exists():return 0
     removed=0
     with _LOCK:

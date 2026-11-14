@@ -1,0 +1,38 @@
+name: postgres
+on:
+  push:
+    branches: [main, improvements/hindi-evidence]
+    paths: ["docmind/**", "scripts/migrate_postgres.py", "tests/test_postgres_backend.py", "locks/postgres.txt", ".github/workflows/postgres.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.7-pg17-trixie
+        env:
+          POSTGRES_PASSWORD: integration-admin-only
+          POSTGRES_DB: docmind
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d docmind"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DOCMIND_TEST_MODE: "1"
+      DOCMIND_MIGRATION_DSN: postgresql://postgres:integration-admin-only@localhost:5432/docmind
+      DOCMIND_DB_PASSWORD: integration-runtime-only-credentials
+      DOCMIND_TEST_POSTGRES_URL: postgresql://docmind_runtime:integration-runtime-only-credentials@localhost:5432/docmind
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install offline test dependencies and locked database driver
+        run: |
+          pip install numpy faiss-cpu pypdfium2 python-docx fastapi httpx python-multipart python-dotenv tqdm pytest regex lingua-language-detector==2.1.1
+          pip install --require-hashes -r locks/postgres.txt
+      - name: Provision separate runtime role and forced tenant policies
+        run: python scripts/migrate_postgres.py --tenant alpha --tenant beta
+      - name: Exercise live isolation, persistent search, shared quotas and lease recovery
+        run: python -m pytest tests/test_postgres_backend.py -v

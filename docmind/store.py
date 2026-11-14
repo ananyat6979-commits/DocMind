@@ -86,6 +86,10 @@ class CorpusStore:
         conn.execute("INSERT OR REPLACE INTO meta(key, value) VALUES (?, ?)", (key, value))
 
     def _bump(self, conn) -> None:
+        from docmind.postgres import Connection
+        if isinstance(conn,Connection):
+            conn.execute("INSERT INTO meta(key,value) VALUES ('corpus_version','1') ON CONFLICT(tenant_id,key) DO UPDATE SET value=(meta.value::bigint+1)::text")
+            return
         v = int(self._get_meta(conn, "corpus_version", "0")) + 1
         self._set_meta(conn, "corpus_version", str(v))
 
@@ -137,6 +141,11 @@ class CorpusStore:
             raise ValueError("chunks and embeddings length mismatch")
         sig = self._embedding_signature()
         with connect(self.db_path) as conn:
+            from docmind.postgres import Connection
+            if isinstance(conn,Connection):
+                conn.corpus_lock()
+                if embeddings.ndim!=2 or embeddings.shape[1]!=384:raise ValueError("Production vector schema requires 384-dimensional embeddings")
+                if not np.isfinite(embeddings).all():raise ValueError("Nonfinite embeddings")
             existing_sig = self._get_meta(conn, "embedding_signature", "")
             n_existing = conn.execute("SELECT COUNT(*) AS n FROM chunks").fetchone()["n"]
             if existing_sig and existing_sig != sig and n_existing > 0:
@@ -170,6 +179,8 @@ class CorpusStore:
 
     def delete_document(self, file_id: str) -> bool:
         with connect(self.db_path) as conn:
+            from docmind.postgres import Connection
+            if isinstance(conn,Connection):conn.corpus_lock()
             cur = conn.execute("DELETE FROM documents WHERE file_id=?", (file_id,))
             if cur.rowcount:
                 self._bump(conn)

@@ -8,6 +8,10 @@ from docmind.config import CONFIG
 
 @contextmanager
 def connect(db_path=None):
+    from docmind.postgres import DatabaseScope, connect as pg_connect
+    if isinstance(db_path,DatabaseScope):
+        with pg_connect(db_path) as conn:yield conn
+        return
     path = Path(db_path or CONFIG.db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(path), timeout=15)

@@ -17,6 +17,7 @@ from typing import Dict, Iterable, List, Optional
 from docmind.config import CONFIG
 from docmind.models import Chunk, SearchResult
 from docmind.retrieval.dense import DenseRetriever
+from docmind.retrieval.postgres import PostgresDenseRetriever
 from docmind.retrieval.reranker import CrossEncoderReranker
 from docmind.retrieval.sparse import SparseRetriever
 from docmind.store import CorpusStore
@@ -43,7 +44,7 @@ def reciprocal_rank_fusion(result_lists: List[List[SearchResult]], k: int = 60) 
 class HybridRetriever:
     def __init__(self, store: Optional[CorpusStore] = None):
         self.store = store or CorpusStore()
-        self.dense = DenseRetriever()
+        self.dense: DenseRetriever | PostgresDenseRetriever = DenseRetriever()
         self.sparse = SparseRetriever()
         self.reranker = CrossEncoderReranker() if CONFIG.retriever.use_reranker else None
         self._version = -1
@@ -63,6 +64,16 @@ class HybridRetriever:
             return
         with self._lock:
             if not force and v == self._version and identity == self._embedding_identity and mode == self._fit_mode:
+                return
+            from docmind.postgres import DatabaseScope
+            if isinstance(self.store.db_path,DatabaseScope):
+                if mode!='dense':raise ValueError("Persistent PostgreSQL profile currently requires dense retrieval")
+                from docmind.retrieval.postgres import PostgresDenseRetriever
+                from docmind.db import connect
+                self.store.ensure_embedding_compatible()
+                self.dense=PostgresDenseRetriever(self.store)
+                with connect(self.store.db_path) as conn:self._n_chunks=conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+                self._version=v;self._embedding_identity=identity;self._fit_mode=mode
                 return
             self.store.ensure_embedding_compatible()
             chunks, matrix = self.store.load_corpus()
