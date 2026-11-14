@@ -32,6 +32,9 @@ jobs:
             --tmpfs /tmp:rw,noexec,nosuid,size=128m,uid=10001,gid=10001,mode=700 \
             -v /tmp/dm-parser-socket:/run/docmind-parser docmind-parser:test
           for i in $(seq 1 20); do test -S /tmp/dm-parser-socket/parser.sock && break; sleep 1; done
+          # The host test user differs from the production API UID 10001.
+          # Grant only the CI host permission to connect to this temporary socket.
+          sudo chmod o+rw /tmp/dm-parser-socket/parser.sock
           PYTHONPATH=. python scripts/parser_transport_check.py --socket /tmp/dm-parser-socket/parser.sock
       - name: Parser logs
         if: always()
