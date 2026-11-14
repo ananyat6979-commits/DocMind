@@ -57,6 +57,8 @@ class IngestionQueue:
         with connect(self.db_path) as conn:
             conn.execute("UPDATE ingestion_jobs SET status=?,result=?,error=?,updated_at=? WHERE job_id=?",
                          (status,result,error,time.time(),row["job_id"]))
+        from docmind.uploads import cleanup
+        cleanup(row["path"], self.db_path)
         return True
 
     def start(self):
@@ -64,8 +66,12 @@ class IngestionQueue:
             conn.execute("UPDATE ingestion_jobs SET status='failed',error='Interrupted during service restart' WHERE status='running'")
         def loop():
             while not self.stop_event.is_set():
-                if not self.run_one():
-                    self.stop_event.wait(0.25)
+                try:
+                    if not self.run_one(): self.stop_event.wait(0.25)
+                except Exception:
+                    import logging
+                    logging.getLogger(__name__).exception("Ingestion worker failed; retrying after backoff")
+                    self.stop_event.wait(1)
         self.thread = threading.Thread(target=loop, name="ingestion-worker", daemon=True)
         self.thread.start()
 

@@ -50,6 +50,7 @@ class DenseRetriever:
         qv = embed_query(query)
 
         if file_ids:
+            assert self._file_ids is not None
             allowed = np.nonzero(np.isin(self._file_ids, list(file_ids)))[0].astype("int64")
             if allowed.size == 0:
                 return []

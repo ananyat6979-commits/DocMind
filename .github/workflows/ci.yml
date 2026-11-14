@@ -12,11 +12,12 @@ jobs:
         with: { python-version: "${{ matrix.python }}" }
       - name: Install (offline test deps only, no model downloads)
         run: |
-          pip install numpy faiss-cpu nltk pdfplumber pypdfium2 python-docx fastapi httpx python-multipart \
-                      streamlit python-dotenv tqdm pytest pyyaml ruff
-          python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
+          pip install numpy faiss-cpu pypdfium2 python-docx fastapi httpx python-multipart \
+                      streamlit python-dotenv tqdm pytest pyyaml ruff mypy regex lingua-language-detector==2.1.1
       - name: Syntax and undefined-name checks
         run: ruff check docmind scripts tests
+      - name: Type checks
+        run: python -m mypy docmind app.py --ignore-missing-imports --check-untyped-defs
       - name: Tests (hash embedder, lexical reranker, demo LLM)
         run: python -m pytest -q
       - name: Verify published benchmark records

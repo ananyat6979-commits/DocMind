@@ -59,15 +59,20 @@ class ReviewStore:
         self.db_path = db_path
         with connect(self.db_path) as conn:
             conn.executescript(SCHEMA)
+            columns = {r["name"] for r in conn.execute("PRAGMA table_info(reviews)")}
+            if "response_info" not in columns:
+                conn.execute("ALTER TABLE reviews ADD COLUMN response_info TEXT NOT NULL DEFAULT '{}'")
 
     def record(self, resp: AgentResponse, user: str = "anonymous") -> str:
         status = "pending" if resp.needs_review else "auto_approved"
         with connect(self.db_path) as conn:
             conn.execute(
                 "INSERT OR REPLACE INTO reviews(response_id, created_at, user, question, answer, sources_json,"
-                " reasons_json, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                " reasons_json, status, response_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (resp.response_id, time.time(), user, resp.query, resp.answer,
-                 json.dumps(_source_payload(resp)), json.dumps(resp.review_reasons), status),
+                 json.dumps(_source_payload(resp)), json.dumps(resp.review_reasons), status,
+                 json.dumps({"abstained":resp.abstained,"latency_ms":resp.latency_ms,"llm_calls":resp.llm_calls,
+                     "citation_report":resp.citation_report,"finish_reason":resp.finish_reason})),
             )
         return status
 
@@ -119,7 +124,10 @@ class ReviewStore:
                 "id": d["response_id"],
                 "question": d["question"],
                 "ground_truth": d["edited_answer"] or d["answer"],
-                "answerable": not any(x == "abstained" for x in d["reasons"]),
+                "answerable": bool(d["edited_answer"]) or "abstained" not in d["reasons"],
+                "verified": True,
+                "verification_source": "Human review decision",
+                "references": [d["edited_answer"] or d["answer"]],
                 "contexts": [s["content"] for s in d["sources"] if s.get("cited")] or [s["content"] for s in d["sources"]],
                 "origin": "human_reviewed",
             })
@@ -132,4 +140,5 @@ class ReviewStore:
         d = dict(row)
         d["sources"] = json.loads(d.pop("sources_json"))
         d["reasons"] = json.loads(d.pop("reasons_json"))
+        d["response_info"] = json.loads(d.get("response_info") or "{}")
         return d

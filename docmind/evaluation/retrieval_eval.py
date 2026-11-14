@@ -69,7 +69,7 @@ def evaluate_modes(testset: List[Dict], retriever: HybridRetriever, k: int = 5,
     calib_scores: List[float] = []
     calib_labels: List[bool] = []
     for mode in modes:
-        cols = {"precision": [], "hit": [], "mrr": [], "ndcg": [], "recall": []}
+        cols: Dict[str, List[float]] = {"precision": [], "hit": [], "mrr": [], "ndcg": [], "recall": []}
         for item in labeled:
             results = retriever.search(item["question"], top_k=k, file_ids=file_ids, mode=mode,min_score=None)
             rel = [_relevant(r.chunk,item) for r in results]

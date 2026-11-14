@@ -6,7 +6,7 @@ in embedding space. When we see a sharp drop in similarity between adjacent
 sentences, that's a semantic boundary, a good place to start a new chunk.
 
 Algorithm:
-  1. Tokenize text into sentences (NLTK).
+  1. Find offset-preserving sentence boundaries.
   2. Embed every sentence.
   3. Compute cosine similarity between sentence[i] and sentence[i+1].
   4. Convert to distances (1 - similarity). High distance = topic shift.
@@ -29,28 +29,13 @@ from docmind.embeddings import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
-_REGEX_SPLIT = re.compile(r"(?<=[.!?。！？])\s+(?=[A-Z0-9\"'(\[])|\n{2,}")
-
-
 def _regex_sentences(text: str) -> List[str]:
-    return [s.strip() for s in _REGEX_SPLIT.split(text) if s and s.strip()]
+    from docmind.text import sentence_spans
+    return [span.text for span in sentence_spans(text)]
 
 
 def _tokenize(text: str) -> List[str]:
-    """NLTK sentence tokenizer. Downloads punkt once; if that is impossible
-    (offline machine), falls back to a regex splitter instead of crashing."""
-    try:
-        import nltk
-        from nltk.tokenize import sent_tokenize
-        try:
-            sentences = sent_tokenize(text)
-        except LookupError:
-            sentences = _regex_sentences(text)
-    except Exception as exc:
-        logger.warning(f"NLTK unavailable ({exc}); using regex sentence splitter")
-        sentences = _regex_sentences(text)
-    sentences = [part for sent in sentences for part in re.split(r"(?<=[。！？])", sent)]
-    return [s.strip() for s in sentences if s.strip()]
+    return _regex_sentences(text)
 
 
 def _find_breakpoints(sentences: List[str], config=None, embedding_model=None) -> List[int]:
@@ -138,7 +123,7 @@ def _build_chunks(sentences: List[str], breakpoints: List[int], doc: Document, c
 
 def _is_noise(text: str) -> bool:
     """Short fragments with no real word in them: page numbers, rules, stray bullets."""
-    return len(text) < 20 and not any(c.isalpha() for c in text)
+    return not text.strip()
 
 
 def _source_spans(content,doc):
@@ -153,7 +138,10 @@ def _source_spans(content,doc):
     if start<0:return [],False
     if compact.find(needle,start+1)>=0:return [],True
     origin=int(doc.metadata.get("source_offset",0))
-    return [{"start":origin+positions[start],"end":origin+positions[start+len(needle)-1]+1}],False
+    from docmind.ingestion.quality import source_offset
+    edits = doc.metadata.get("normalization_edits", [])
+    return [{"start":source_offset(origin+positions[start], edits),
+             "end":source_offset(origin+positions[start+len(needle)-1]+1, edits, end=True)}],False
 
 
 def _emit(chunks: List[Chunk], content: str, doc: Document) -> None:
@@ -267,12 +255,13 @@ def _recursive_chunk(doc, config=None):
             return [text[i:i+cfg.max_chunk_size] for i in range(0,len(text),cfg.max_chunk_size)]
         if separator not in text:return split(text,level+1)
         pieces=text.split(separator)
-        result=[]
+        result: list[str] = []
         for i,piece in enumerate(pieces):
             piece+=separator if i<len(pieces)-1 else ""
             result.extend(split(piece,level+1) if len(piece)>cfg.max_chunk_size else [piece])
         return result
-    chunks=[];current="";overlap=min(100,cfg.max_chunk_size//4)
+    chunks: List[Chunk] = []
+    current="";overlap=min(100,cfg.max_chunk_size//4)
     for part in split(doc.content):
         if current and len(current)+len(part)>cfg.max_chunk_size:
             _emit(chunks,current,doc)

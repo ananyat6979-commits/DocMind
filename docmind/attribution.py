@@ -51,26 +51,20 @@ class NLIJudge:
 
 
 def evidence_spans(text):
-    matches = list(re.finditer(r"[^\n.!?]+(?:[.!?]+|$)", text))
-    for i, match in enumerate(matches):
-        yield match.start(), match.end(), text[match.start():match.end()]
-        if i + 1 < len(matches):
-            end = matches[i+1].end()
-            yield match.start(), end, text[match.start():end]
+    from docmind.text import sentence_spans
+    matches = sentence_spans(text)
+    for index, span in enumerate(matches):
+        yield span.start, span.end, span.text
+        if index + 1 < len(matches):
+            end = matches[index+1].end
+            yield span.start, end, text[span.start:end]
 
 
 def attribute(answer, sources, judge, threshold=0.8, claim_units=None):
     allowed = allowed_citations(sources)
     claims = []
-    # Citations bind to the immediately preceding sentence. Uncited sentences remain unsupported.
-    citations_by_token = {}
-    def protect(match):
-        token = "CITEREF" + str(len(citations_by_token)) + "TOKEN"
-        citations_by_token[token] = match.group(0)
-        return token
-    masked = CITATION_RE.sub(protect, answer)
-    parts = re.split(r"(?<=[.!?])\s+|\n+", masked)
-    parts = [re.sub(r"CITEREF\d+TOKEN", lambda m: citations_by_token[m.group(0)], part) for part in parts]
+    from docmind.text import sentence_spans
+    parts = [span.text for span in sentence_spans(answer)]
     if claim_units is not None:
         parts=list(claim_units)
     for part in parts:

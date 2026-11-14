@@ -89,7 +89,7 @@ with st.sidebar:
 
     uploads = st.file_uploader("Add documents", type=[e.lstrip(".") for e in LOADERS], accept_multiple_files=True)
     for up in uploads or []:
-        key = (up.name, up.size)
+        key = (up.name, hashlib.sha256(bytes(up.getbuffer())).hexdigest())
         if key in st.session_state.processed:
             continue
         if up.size > CONFIG.max_upload_mb * 1024 * 1024:
@@ -108,12 +108,15 @@ with st.sidebar:
                 st.success(f"{up.name}: {f.status} ({f.n_chunks} chunks)")
                 events.log("upload", user(), st.session_state.session_id, filename=up.name, status=f.status, n_chunks=f.n_chunks)
             except Exception as exc:
+                from docmind.uploads import cleanup
+                cleanup(dest)
                 st.error(f"{up.name}: {exc}")
+                continue
         st.session_state.processed.add(key)
 
     st.subheader("Library")
     admin_pin = st.text_input("Library administrator PIN", type="password", key="library_pin")
-    can_admin = bool(CONFIG.review.reviewer_pin) and hmac.compare_digest(admin_pin.encode(), CONFIG.review.reviewer_pin.encode())
+    can_admin = bool(os.getenv("DOCMIND_ADMIN_PIN")) and hmac.compare_digest(admin_pin.encode(), os.environ["DOCMIND_ADMIN_PIN"].encode())
     docs = store.list_documents()
     selected = []
     if not docs:
@@ -177,11 +180,11 @@ with tab_ask:
                     st.error(f"Agent error: {exc}")
 
         for resp in reversed(st.session_state.history):
-            status = reviews.status_of(resp.response_id) or "auto_approved"
+            status = reviews.status_of(resp.response_id) or "unavailable"
             st.markdown(f"**Q: {resp.query}**")
-            hold = CONFIG.review.hold_until_approved and status == "pending"
+            hold = status not in ("approved", "edited", "auto_approved")
             if hold:
-                st.info("This answer is waiting for human review and is hidden until a reviewer decides.")
+                st.info("This answer is hidden until a reviewer decides." if status == "pending" else "This response is rejected or no longer available.")
             else:
                 item = reviews.get(resp.response_id) or {}
                 text = item.get("edited_answer") or resp.answer
@@ -196,7 +199,7 @@ with tab_ask:
                        + (f" | citation labels matched {v:.0%}" if v is not None else ""))
 
             attribution = resp.citation_report.get("attribution")
-            if attribution and not hold:
+            if attribution and not hold and status != "edited":
                 with st.expander("Claim evidence checks"):
                     if attribution.get("error"):
                         st.info("Evidence checking is unavailable. Human review is required.")
@@ -206,7 +209,7 @@ with tab_ask:
                         if claim.get("quote"):
                             st.text(claim["quote"])
                             st.caption(f"Evidence characters {claim['start']} to {claim['end']}")
-            if resp.sources:
+            if resp.sources and not hold:
                 with st.expander(f"Evidence ({len(resp.cited_sources)} cited of {len(resp.sources)} retrieved)"):
                     cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
                     for s in resp.sources:
@@ -249,7 +252,7 @@ with tab_review:
                 edited = st.text_area("Corrected answer (only for 'Correct and approve')", key=f"ed_{rid}")
                 note = st.text_input("Note", key=f"nt_{rid}")
                 b1, b2, b3 = st.columns(3)
-                decision = None
+                decision: tuple[str, str | None] | None = None
                 if b1.button("Approve", key=f"ap_{rid}"):
                     decision = ("approved", None)
                 if b2.button("Correct and approve", key=f"ce_{rid}") and edited.strip():

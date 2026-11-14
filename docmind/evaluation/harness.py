@@ -64,11 +64,14 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
     out = Path(out_path or CONFIG.reports_dir / "generations.jsonl")
     out.parent.mkdir(parents=True, exist_ok=True)
     testset = load_testset(testset_path, verified_only=verified_only)[: limit or None]
+    corpus_store = getattr(getattr(agent, "retriever", None), "store", None)
     manifest = fingerprint(testset_path, verified_only, file_ids,
         runtime={"runner": type(agent).__module__ + "." + type(agent).__qualname__,
                  "max_iterations": getattr(agent, "max_iterations", None),
-                 "corpus_version": getattr(getattr(agent, "retriever", None), "store", None).version()
-                    if getattr(getattr(agent, "retriever", None), "store", None) else None})
+                 "selected_ids": [item["id"] for item in testset],
+                 "actual_model": getattr(getattr(agent,"llm",None),"_model",None),
+                 "actual_reasoning_effort": getattr(getattr(agent,"llm",None),"_reasoning_effort",None),
+                 "corpus_version": corpus_store.version() if corpus_store is not None else None})
     manifest.update(n_questions=len(testset), n_verified=sum(bool(x.get("verified")) for x in testset))
     manifest_path = out.with_suffix(".manifest.json")
     if out.exists() and out.stat().st_size:
@@ -109,7 +112,8 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
         }])
         logger.info(f"generated {item['id']} ({len(done) + 1}/{len(testset)})")
         done.add(item["id"])
-    return _read_jsonl(out)
+    selected = {item["id"] for item in testset}
+    return [r for r in _read_jsonl(out) if r["id"] in selected]
 
 
 # --------------------------------------------------------------------- phase 2
@@ -202,7 +206,7 @@ def summarize(records: List[Dict], scores: List[Dict]) -> Dict:
     out: Dict = {"judge_model": CONFIG.eval.judge_model, "generator_model": CONFIG.llm.groq_model,
                  "answer_level": answer_level_stats(records), "ragas": {}}
     for short in METRIC_COLUMNS:
-        vals = [s.get(short) for s in scores if s.get(short) is not None]
+        vals = [float(s[short]) for s in scores if s.get(short) is not None]
         mean, lo, hi = bootstrap_ci(vals, CONFIG.eval.bootstrap_resamples)
         out["ragas"][short] = {"mean": mean, "ci95": [lo, hi], "n": len(vals),
                                "n_failed": sum(1 for r in records if r.get("answerable") and not r.get("abstained") and
@@ -219,6 +223,14 @@ def run_evaluation(testset_path: str, agent=None, output_path: Optional[str] = N
     """Both phases, then summary JSON and an MLflow run."""
     reports = CONFIG.reports_dir
     gen_path = reports / "generations.jsonl"
+    if skip_generate:
+        manifest_path = gen_path.with_suffix(".manifest.json")
+        if not manifest_path.exists(): raise ValueError("Missing generation provenance")
+        saved = json.loads(manifest_path.read_text(encoding="utf-8"))
+        expected = fingerprint(testset_path,verified_only,file_ids,runtime=saved.get("runtime"))
+        selected = load_testset(testset_path,verified_only=verified_only)[:limit or None]
+        if expected["run_id"] != saved.get("run_id") or [r["id"] for r in selected] != saved.get("runtime",{}).get("selected_ids"):
+            raise ValueError("Cached generations do not match the requested evaluation")
     records = _read_jsonl(gen_path) if skip_generate else generate(testset_path, agent, str(gen_path), file_ids, limit, verified_only)
     if score_backend not in {"local","ragas"}:raise ValueError("Unknown scoring backend")
     scores=[] if score_backend=="local" else (_read_jsonl(reports/"ragas_scores.jsonl") if skip_score else score(records,metrics=metrics))

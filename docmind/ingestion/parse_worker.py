@@ -7,7 +7,8 @@ from dataclasses import asdict
 
 def bound_resources():
     if os.name != "nt":
-        import resource
+        import importlib
+        resource = importlib.import_module("resource")
         resource.setrlimit(resource.RLIMIT_AS,(512*1024**2,512*1024**2))
         resource.setrlimit(resource.RLIMIT_CPU,(45,45))
         return
@@ -46,7 +47,7 @@ def main():
     bound_resources()
     os.environ["DOCMIND_PARSER_WORKER"]="1"
     from docmind.ingestion.loader import load_document
-    documents=load_document(sys.argv[1])
+    documents=load_document(sys.argv[1], expected_language=sys.argv[2] if len(sys.argv)>2 and sys.argv[2] else None)
     sys.stdout.write(json.dumps([asdict(d) for d in documents],ensure_ascii=True))
 
 if __name__=="__main__":

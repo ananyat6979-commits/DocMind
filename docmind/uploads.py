@@ -1,0 +1,51 @@
+"""Owned upload leases and reference-aware cleanup for a single corpus process."""
+from collections import Counter
+from itertools import chain, islice
+from pathlib import Path
+import re
+import threading
+import time
+from docmind.config import CONFIG
+from docmind.db import connect
+
+_LOCK = threading.RLock()
+_ACTIVE: Counter[str] = Counter()
+
+
+def acquire(path):
+    with _LOCK: _ACTIVE[str(Path(path).resolve())] += 1
+
+
+def cleanup(path, db_path=None, release=False):
+    path = Path(path).resolve()
+    root = (CONFIG.data_dir / "uploads").resolve()
+    if root not in path.parents: return False
+    key = str(path)
+    with _LOCK:
+        if release and _ACTIVE[key]:
+            _ACTIVE[key] -= 1
+            if not _ACTIVE[key]: del _ACTIVE[key]
+        if _ACTIVE[key]: return False
+        with connect(db_path) as conn:
+            tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if "documents" in tables and conn.execute("SELECT 1 FROM documents WHERE source=? OR sha256=? LIMIT 1", (key,path.parent.name)).fetchone(): return False
+            if "ingestion_jobs" in tables and conn.execute("SELECT 1 FROM ingestion_jobs WHERE path=? AND status IN ('queued','running') LIMIT 1",(key,)).fetchone(): return False
+        if path.parent != root and not re.fullmatch(r"[a-f0-9]{64}",path.parent.name): return False
+        if not path.is_file(): return False
+        path.unlink()
+        if path.parent != root:
+            try: path.parent.rmdir()
+            except OSError: pass
+        return True
+
+
+def sweep(db_path=None, min_age_seconds=3600, limit=500):
+    root = CONFIG.data_dir / "uploads"
+    if not root.exists(): return 0
+    removed = 0
+    for path in islice(chain(root.glob(".*.upload"),root.glob("*/*")),limit):
+        try:
+            if path.is_file() and time.time()-path.stat().st_mtime >= min_age_seconds:
+                removed += int(cleanup(path,db_path))
+        except FileNotFoundError: continue
+    return removed

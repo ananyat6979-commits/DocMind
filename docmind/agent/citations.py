@@ -42,7 +42,9 @@ def source_citations(chunk):
 
 def allowed_citations(sources: Sequence[SearchResult]) -> Dict[str, str]:
     """Accept unique labels and explicit file identities; reject ambiguous legacy labels."""
-    out={};identities={};ambiguous=set()
+    out: Dict[str, str] = {}
+    identities: Dict[str, str] = {}
+    ambiguous: Set[str] = set()
     for source in sources:
         identity=source.chunk.file_id or source.chunk.source
         for citation in source_citations(source.chunk):

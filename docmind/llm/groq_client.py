@@ -197,7 +197,8 @@ class GroqLLM(BaseLLM):
                     ) from exc
                 logger.warning(f"Groq {name}; retry {attempt + 1} in {wait:.1f}s")
                 time.sleep(wait)
-        raise last_exc  # pragma: no cover
+        if last_exc is not None: raise last_exc
+        raise RuntimeError("No completion attempts configured")  # pragma: no cover
 
 
     def complete_tools(self, messages, tools):

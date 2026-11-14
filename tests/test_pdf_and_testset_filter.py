@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-pytest.importorskip("pdfplumber")
+pytest.importorskip("pypdfium2")
 ROOT = Path(__file__).resolve().parents[1]
 SENTENCE = "We evaluate the final selected repository on the full benchmark and report the results"
 
@@ -56,35 +56,20 @@ def test_pdfium_extracts_normal_text_and_records_parser(tmp_path):
     assert loaded[0].metadata["parser"] == "pypdfium2"
 
 
-def test_invalid_tolerance_falls_back_to_default(tmp_path, monkeypatch):
-    from docmind.ingestion.loader import _pdf_x_tolerance
-    monkeypatch.setenv("DOCMIND_PDF_X_TOLERANCE", "not-a-number")
-    assert _pdf_x_tolerance() == 3.0
-    monkeypatch.delenv("DOCMIND_PDF_X_TOLERANCE")
-    assert _pdf_x_tolerance() == 3.0
-
-
-def test_diagnostic_recommends_a_smaller_tolerance_for_glued_text(tmp_path):
+def test_diagnostic_uses_production_parser(tmp_path):
     mod = _load_script("check_pdf_text")
-    res = mod.evaluate(str(build_tight_pdf(tmp_path / "tight.pdf")))
-    by = {r["tolerance"]: r for r in res["rows"]}
-    assert res["best"] is not None and res["best"] < 3.0
-    assert by[3.0]["long_ratio"] > 0.1 and by[res["best"]]["long_ratio"] == 0.0
-    assert "We evaluate the" in res["previews"][res["best"]]
-
-
-def test_diagnostic_keeps_default_for_normally_spaced_text(tmp_path):
-    mod = _load_script("check_pdf_text")
-    res = mod.evaluate(str(build_tight_pdf(tmp_path / "normal.pdf", gap=6.0)))     # a real space width
-    assert res["best"] == 3.0
+    res = mod.evaluate(str(build_tight_pdf(tmp_path / "normal.pdf", gap=6.0)))
+    assert res["parser"] == "pypdfium2" and res["pages"] == 1
+    assert "We evaluate the" in res["samples"][0]["preview"]
+    assert res["samples"][0]["quality"]["status"] == "usable_unicode"
 
 
 def test_diagnostic_cli(tmp_path):
-    pdf = build_tight_pdf(tmp_path / "tight.pdf")
-    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_pdf_text.py"), str(pdf)], capture_output=True, text=True,
-                       env=dict(os.environ, PYTHONPATH=str(ROOT)))
-    assert r.returncode == 0 and "export DOCMIND_PDF_X_TOLERANCE=" in r.stdout and "<-- best" in r.stdout
-    missing = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_pdf_text.py"), str(tmp_path / "nope.pdf")], capture_output=True, text=True)
+    pdf = build_tight_pdf(tmp_path / "normal.pdf",gap=6.0)
+    r = subprocess.run([sys.executable,str(ROOT/"scripts/check_pdf_text.py"),str(pdf)],capture_output=True,text=True,
+                       env=dict(os.environ,PYTHONPATH=str(ROOT)))
+    assert r.returncode == 0 and "pypdfium2" in r.stdout
+    missing = subprocess.run([sys.executable,str(ROOT/"scripts/check_pdf_text.py"),str(tmp_path/"nope.pdf")],capture_output=True,text=True)
     assert missing.returncode == 1 and "not found" in missing.stdout
 
 

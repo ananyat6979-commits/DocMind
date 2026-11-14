@@ -104,7 +104,7 @@ def _total_tokens(records):
 
 
 def _count_by(records, fn):
-    out = {}
+    out: dict[str, int] = {}
     for r in records:
         out[fn(r)] = out.get(fn(r), 0) + 1
     return out

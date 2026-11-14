@@ -49,6 +49,8 @@ async def lifespan(app):
     from docmind.jobs import IngestionQueue
     queue = IngestionQueue()
     app.state.ingestion_queue = queue
+    from docmind.uploads import sweep
+    sweep()
     queue.start()
     yield
     queue.close()
@@ -112,6 +114,12 @@ def require_reviewer(x_reviewer_pin: Optional[str] = Header(default=None)) -> st
     return "reviewer"
 
 
+def require_admin(x_admin_pin: Optional[str] = Header(default=None)) -> None:
+    expected = os.getenv("DOCMIND_ADMIN_PIN", "")
+    if not expected: raise HTTPException(status_code=503,detail="Configure DOCMIND_ADMIN_PIN before library mutations")
+    if not x_admin_pin or not _eq(x_admin_pin,expected): raise HTTPException(status_code=401,detail="Invalid administrator credential")
+
+
 class IngestRequest(BaseModel):
     path: str = Field(min_length=1,max_length=1024)
     rebuild: bool = False
@@ -150,6 +158,7 @@ class QueryResponse(BaseModel):
     review_reasons: List[str]
     citation_validity: Optional[float]
     attribution: Optional[dict] = None
+    attribution_status: str = "not_checked"
     sources: List[SourceInfo]
     latency_ms: float
     llm_calls: int
@@ -228,6 +237,8 @@ def _persist_upload(file):
         temp.unlink()
     else:
         temp.replace(dest)
+    from docmind.uploads import acquire
+    acquire(dest)
     return dest, name
 
 
@@ -237,7 +248,11 @@ def upload(file: UploadFile = File(...)):
     try:
         return _ingest_response(ingest(dest), name)
     except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
+        from docmind.ingestion.parser_client import ParserUnavailable
+        raise HTTPException(status_code=503 if isinstance(exc, ParserUnavailable) else 422, detail=str(exc))
+    finally:
+        from docmind.uploads import cleanup
+        cleanup(dest, release=True)
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
@@ -251,25 +266,27 @@ def query(req: QueryRequest, request: Request):
         logger.exception("Agent query failed")
         raise HTTPException(status_code=500, detail="Query failed; consult server logs")
 
-    status = get_reviews().record(resp, user="api-user")
-    get_events().log("query", user="api-user", response_id=resp.response_id, latency_ms=round(resp.latency_ms),
+    status = get_reviews().record(resp, user=request.state.principal.actor_id)
+    get_events().log("query", user=request.state.principal.actor_id, response_id=resp.response_id, latency_ms=round(resp.latency_ms),
                    llm_calls=resp.llm_calls, abstained=resp.abstained, needs_review=resp.needs_review,
                    n_sources=len(resp.sources), finish=resp.finish_reason,
                    request_id=getattr(request.state,"request_id",None), timings=resp.timings,
                    citation_validity=resp.citation_report.get("validity"))
+    held = status == "pending" and CONFIG.review.hold_until_approved
     cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
     return QueryResponse(
         response_id=resp.response_id, question=req.question,
         answer="This answer is awaiting human review." if status=="pending" and CONFIG.review.hold_until_approved else resp.answer,
         abstained=resp.abstained,
         review_status=status, review_reasons=resp.review_reasons,
-        citation_validity=resp.citation_report.get("validity"),
-        attribution=resp.citation_report.get("attribution"),
+        citation_validity=None if held else resp.citation_report.get("validity"),
+        attribution=None if held else resp.citation_report.get("attribution"),
+        attribution_status="withheld" if held else "model_judgment",
         sources=[SourceInfo(
             chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),file_id=s.chunk.file_id,
             page=s.chunk.metadata.get("page"), section=s.chunk.metadata.get("section"),
             content_preview=(s.chunk.content[:200] + "...") if len(s.chunk.content) > 200 else s.chunk.content,
-            score=round(s.score, 4), cited=s.chunk.chunk_id in cited_ids) for s in resp.sources],
+            score=round(s.score, 4), cited=s.chunk.chunk_id in cited_ids) for s in ([] if held else resp.sources)],
         latency_ms=round(resp.latency_ms, 1), llm_calls=resp.llm_calls,
     )
 
@@ -301,7 +318,7 @@ def review_decide(response_id: str, body: ReviewDecision, _: str = Depends(requi
     return {"ok": True}
 
 
-@app.delete("/documents/{file_id}", dependencies=[Depends(require_api_key), Depends(require_reviewer)])
+@app.delete("/documents/{file_id}", dependencies=[Depends(require_api_key), Depends(require_admin)])
 def delete_document(file_id: str):
     from docmind.services import erase_document
     if not erase_document(file_id):
@@ -340,7 +357,7 @@ def cancel_ingestion(job_id: str, request: Request):
 
 @app.get("/ready", dependencies=[Depends(require_api_key)])
 def readiness():
-    if not CONFIG.llm.groq_api_key and CONFIG.llm.provider != "demo":
+    if CONFIG.llm.provider != "demo" and (not CONFIG.llm.groq_api_key or not CONFIG.llm.groq_model):
         raise HTTPException(status_code=503, detail="Generation provider is not configured")
     return {"status": "ready", "corpus_version": get_store().version()}
 
@@ -352,9 +369,35 @@ def enqueue_upload(request: Request, file: UploadFile = File(...)):
         return {"job_id": request.app.state.ingestion_queue.enqueue(dest), "status":"queued", "filename":name}
     except ValueError as exc:
         raise HTTPException(status_code=429, detail=str(exc))
+    finally:
+        from docmind.uploads import cleanup
+        cleanup(dest, release=True)
 
 
 @app.get("/metrics", dependencies=[Depends(require_api_key)])
 def metrics():
     with _monitor.lock:
         return {"requests_by_status":dict(_monitor.counts), "quota_per_minute":_monitor.limit}
+
+
+@app.get("/responses/{response_id}", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
+def response_result(response_id: str, request: Request):
+    item = get_reviews().get(response_id)
+    if item is None: raise HTTPException(status_code=404, detail="Response no longer available")
+    if item["user"] not in (request.state.principal.actor_id, "api-user"):
+        raise HTTPException(status_code=404, detail="Response not available to this principal")
+    status = item["status"]
+    visible = status in ("auto_approved", "approved", "edited")
+    info = item.get("response_info", {})
+    edited = status == "edited"
+    report = info.get("citation_report", {})
+    return QueryResponse(response_id=response_id,question=item["question"],
+        answer=(item["edited_answer"] or item["answer"]) if visible else "This response is not released.",
+        abstained=False if edited else info.get("abstained",False),review_status=status,review_reasons=item["reasons"],
+        citation_validity=report.get("validity") if visible and not edited else None,
+        attribution=report.get("attribution") if visible and not edited else None,
+        attribution_status="human_edited_not_rechecked" if edited else ("model_judgment" if visible else "withheld"),
+        sources=[SourceInfo(chunk_id=s["chunk_id"],filename=s["filename"],file_id=s.get("file_id",""),
+            page=s.get("page"),section=s.get("section"),content_preview=s["content"][:200],
+            score=s["score"],cited=bool(s.get("cited")) and not edited) for s in item["sources"]] if visible else [],
+        latency_ms=info.get("latency_ms",0),llm_calls=info.get("llm_calls",0))

@@ -30,6 +30,14 @@ def review_reasons(resp: AgentResponse) -> List[str]:
     if resp.abstained:
         reasons.append("abstained")
     else:
+        if any(s.chunk.metadata.get("partial_document") or
+               s.chunk.metadata.get("extraction_quality",{}).get("flags") for s in resp.sources):
+            reasons.append("extraction_quality_requires_review")
+        import os
+        if os.getenv("DOCMIND_TEST_MODE") != "1":
+            languages = [s.chunk.metadata.get("language_info",{}) for s in resp.sources]
+            if any(x.get("language") != "en" for x in languages):
+                reasons.append("language_policy_unvalidated")
         report = resp.citation_report or {}
         attribution = report.get("attribution")
         if attribution is not None:

@@ -31,16 +31,6 @@ def file_sha256(path: Union[str, Path], block: int = 1 << 20) -> str:
     return h.hexdigest()
 
 
-def _pdf_x_tolerance() -> float:
-    """Horizontal gap (in points) above which pdfplumber inserts a space. The default of 3 glues words
-    together in tightly kerned PDFs ('WeevaluateAgentS4'), which breaks word-based search. Choose a value
-    with scripts/check_pdf_text.py and set DOCMIND_PDF_X_TOLERANCE. Re-ingest after changing it."""
-    try:
-        return float(os.getenv("DOCMIND_PDF_X_TOLERANCE", "3"))
-    except ValueError:
-        return 3.0
-
-
 def load_pdf(path: Path) -> List[Document]:
     """Extract bounded text with PDFium, closing each page immediately."""
     import pypdfium2 as pdfium
@@ -62,10 +52,23 @@ def load_pdf(path: Path) -> List[Document]:
                 total_chars += len(text)
                 if total_chars > 8000000:
                     raise ValueError("PDF exceeds extracted text safety limit")
-                if text:
-                    docs.append(Document(content=text, source=str(path.resolve()), metadata={
-                        "file_type": "pdf", "page": page_num + 1, "total_pages": total,
-                        "filename": path.name, "parser": "pypdfium2"}))
+                from docmind.ingestion.quality import extraction_quality
+                fonts = []
+                try:
+                    import ctypes
+                    for index in range(0, min(textpage.count_chars(), 128), 16):
+                        flags = ctypes.c_int()
+                        length = pdfium.raw.FPDFText_GetFontInfo(textpage, index, None, 0, ctypes.byref(flags))
+                        if 0 < length < 4096:
+                            buffer = ctypes.create_string_buffer(length)
+                            pdfium.raw.FPDFText_GetFontInfo(textpage, index, buffer, length, ctypes.byref(flags))
+                            fonts.append(buffer.value.decode("utf-8", errors="replace"))
+                except (AttributeError, TypeError, ValueError):
+                    logger.debug("Font metadata unavailable")
+                docs.append(Document(content=text, source=str(path.resolve()), metadata={
+                    "file_type": "pdf", "page": page_num + 1, "total_pages": total,
+                    "filename": path.name, "parser": "pypdfium2",
+                    "extraction_quality": extraction_quality(text, font_names=fonts)}))
             finally:
                 if textpage is not None:
                     textpage.close()
@@ -144,10 +147,12 @@ def load_docx(path: Path) -> List[Document]:
     return docs
 
 
-def load_text(path: Path) -> List[Document]:
+def load_text(path: Path, encoding: str | None = None) -> List[Document]:
     """Load plain text or markdown as a single Document."""
     raw = path.read_bytes()
-    if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
+    if encoding == "cp1252":
+        content = raw.decode("cp1252")
+    elif raw.startswith((b"\xff\xfe", b"\xfe\xff")):
         content = raw.decode("utf-16")
         encoding="utf-16"
     else:
@@ -157,6 +162,8 @@ def load_text(path: Path) -> List[Document]:
         except UnicodeDecodeError as exc:
             raise ValueError("Text must be UTF-8 or BOM-marked UTF-16; convert its encoding first") from exc
     if len(content)>8000000:raise ValueError("Text exceeds the extracted character safety limit")
+    from docmind.ingestion.quality import normalize_text_input
+    content, edits = normalize_text_input(content)
     source_offset=len(content)-len(content.lstrip())
     content=content.strip()
     if "\x00" in content or any(ord(c) < 32 and c not in "\t\n\r" for c in content):
@@ -167,7 +174,7 @@ def load_text(path: Path) -> List[Document]:
     return [Document(
         content=content,
         source=str(path.resolve()),
-        metadata={"file_type": file_type, "filename": path.name,"encoding":encoding,"source_offset":source_offset},
+        metadata={"file_type": file_type, "filename": path.name,"encoding":encoding,"source_offset":source_offset,"normalization_edits":edits},
     )]
 
 
@@ -182,7 +189,7 @@ LOADERS = {
 }
 
 
-def load_document(path: Union[str, Path]) -> List[Document]:
+def load_document(path: Union[str, Path], expected_language: str | None = None, encoding: str | None = None) -> List[Document]:
     path = Path(path)
     if not path.exists():
         raise FileNotFoundError(f"Not found: {path}")
@@ -198,11 +205,15 @@ def load_document(path: Union[str, Path]) -> List[Document]:
     if not loader:
         raise ValueError(f"Unsupported extension: {path.suffix}. Supported: {sorted(LOADERS)}")
     if path.suffix.lower() in (".pdf", ".docx") and os.getenv("DOCMIND_PARSER_WORKER") != "1":
-        environment = os.environ.copy()
-        for key in ("GROQ_API_KEY","DOCMIND_API_KEY","DOCMIND_APP_PASSWORD","DOCMIND_REVIEWER_PIN", "KAGGLE_API_TOKEN","HF_TOKEN"):
-            environment.pop(key,None)
+        mode = os.getenv("DOCMIND_PARSER_MODE", "local" if os.getenv("DOCMIND_TEST_MODE") == "1" else "service")
+        if mode == "service":
+            from docmind.ingestion.parser_client import parse_remote
+            return parse_remote(path, expected_language)
+        if mode != "local" or not (os.getenv("DOCMIND_ALLOW_UNSANDBOXED_PARSING") == "1" or os.getenv("DOCMIND_TEST_MODE") == "1"):
+            raise ValueError("Native parsing requires local mode and explicit trusted-input opt-in")
+        environment = parser_environment()
         try:
-            result=subprocess.run([sys.executable,"-m","docmind.ingestion.parse_worker",str(path.resolve())],
+            result=subprocess.run([sys.executable,"-m","docmind.ingestion.parse_worker",str(path.resolve()), expected_language or ""],
                 capture_output=True,text=True,encoding="utf-8",timeout=60,env=environment,
                 creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
         except subprocess.TimeoutExpired as exc:
@@ -211,7 +222,12 @@ def load_document(path: Union[str, Path]) -> List[Document]:
             detail = result.stderr[-500:] if result.stderr else "Parser exceeded resource limits or rejected the file"
             raise ValueError(detail)
         return [Document(**item) for item in json.loads(result.stdout)]
-    return loader(path)
+    units = load_text(path, encoding) if loader is load_text else loader(path)
+    from docmind.ingestion.quality import extraction_quality
+    for unit in units:
+        old = unit.metadata.get("extraction_quality", {})
+        unit.metadata["extraction_quality"] = extraction_quality(unit.content, expected_language, old.get("font_names", []))
+    return units
 
 
 def iter_supported_files(directory: Union[str, Path]):
@@ -229,3 +245,14 @@ def load_directory(directory: Union[str, Path]) -> List[Document]:
             logger.warning(f"Skipping {file_path.name}: {exc}")
     logger.info(f"Directory '{directory}': loaded {len(docs)} total documents")
     return docs
+
+
+def parser_environment() -> dict[str, str]:
+    """Start from no inherited application settings or credentials."""
+    environment = {"PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1", "DOCMIND_PARSER_WORKER": "1",
+                   "PYTHONPATH": str(Path(__file__).resolve().parents[2]), "LANG": "C.UTF-8"}
+    for name in ("SystemRoot", "WINDIR", "TEMP", "TMP", "SYSTEMDRIVE"):
+        if name in os.environ: environment[name] = os.environ[name]
+    environment["PATH"] = str(Path(sys.executable).parent)
+    if os.getenv("DOCMIND_TEST_MODE") == "1": environment["DOCMIND_TEST_MODE"] = "1"
+    return environment

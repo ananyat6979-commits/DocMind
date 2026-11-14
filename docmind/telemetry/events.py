@@ -43,7 +43,8 @@ class EventLog:
             logging.getLogger(__name__).exception("Event persistence failed")
 
     def rows(self, type: Optional[str] = None) -> List[Dict]:
-        sql, params = "SELECT * FROM events", ()
+        sql = "SELECT * FROM events"
+        params: tuple[str, ...] = ()
         if type:
             sql, params = sql + " WHERE type=?", (type,)
         with connect(self.db_path) as conn:

@@ -68,13 +68,14 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
     if existed and not rebuild:
         store.ensure_embedding_compatible()
         doc = store.get_document(file_id)
+        if doc is None: raise ValueError("Cached document disappeared; retry ingestion")
         if doc.get("lineage",{}).get("chunker")!=asdict(chunker_config or CONFIG.chunker):
             raise ValueError("Cached document uses a different chunker configuration; rebuild it explicitly")
         logger.info(f"'{path.name}' already ingested (file_id={file_id}); skipping")
         return FileReport(file_id, path.name, "cached", doc["n_chunks"] if doc else 0)
 
     units = load_document(path)
-    if not units:
+    if not units or not any(unit.content.strip() for unit in units):
         hint=" Run OCR first if this is a scanned PDF." if path.suffix.lower()==".pdf" else ""
         raise EmptyDocumentError(f"No extractable text in '{path.name}'."+hint)
 
@@ -83,7 +84,13 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
         "query_instruction": CONFIG.embedding.query_instruction,"revision":CONFIG.embedding.model_revision},
         "parsers": {name: importlib.metadata.version(name) for name in ("python-docx", "pypdfium2")}}
     chunks: List[Chunk] = []
+    partial = any(u.metadata.get("extraction_quality", {}).get("quarantined") for u in units)
     for unit in tqdm(units, desc=f"Chunking {path.name}", unit="unit", leave=False):
+        if unit.metadata.get("extraction_quality", {}).get("quarantined"):
+            continue
+        from docmind.language import language_info
+        unit.metadata["language_info"] = language_info(unit.content)
+        unit.metadata["partial_document"] = partial
         for c in chunk_document(unit,config=chunker_config):
             c.file_id = file_id
             c.ord = len(chunks)           # global position within the file

@@ -25,7 +25,7 @@ Environment overrides (all optional):
 import os
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Literal, Optional
+from typing import Literal, Optional, cast
 from dotenv import load_dotenv
 
 # Offline test mode must never read a developer's real .env: tests would otherwise pick up a live
@@ -63,7 +63,7 @@ class EmbeddingConfig:
 class ChunkerConfig:
     # "fixed" skips per-sentence embedding: much faster on long documents (a novel can take many minutes
     # with "semantic"), at some cost in chunk coherence. Compare them with scripts/ablation.py --chunkers.
-    strategy: Literal["semantic", "fixed", "recursive"] = field(default_factory=lambda: os.getenv("DOCMIND_CHUNKER", "semantic"))
+    strategy: Literal["semantic", "fixed", "recursive"] = field(default_factory=lambda: cast(Literal["semantic", "fixed", "recursive"], os.getenv("DOCMIND_CHUNKER", "semantic")))
     min_chunk_size: int = 150
     max_chunk_size: int = 1200
     overlap_sentences: int = 1

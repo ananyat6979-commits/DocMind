@@ -46,7 +46,7 @@ class HybridRetriever:
         self.sparse = SparseRetriever()
         self.reranker = CrossEncoderReranker() if CONFIG.retriever.use_reranker else None
         self._version = -1
-        self._embedding_identity = None
+        self._embedding_identity: str | None = None
         self._lock = threading.RLock()
 
     def refresh(self, force: bool = False) -> None:
