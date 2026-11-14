@@ -16,7 +16,7 @@ def acquire(path):
     with _LOCK: _ACTIVE[str(Path(path).resolve())] += 1
 
 
-def cleanup(path, db_path=None, release=False):
+def cleanup(path, db_path=None, release=False, owned_document=False):
     path = Path(path).resolve()
     root = (CONFIG.data_dir / "uploads").resolve()
     if root not in path.parents: return False
@@ -30,7 +30,7 @@ def cleanup(path, db_path=None, release=False):
             tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             if "documents" in tables and conn.execute("SELECT 1 FROM documents WHERE source=? OR sha256=? LIMIT 1", (key,path.parent.name)).fetchone(): return False
             if "ingestion_jobs" in tables and conn.execute("SELECT 1 FROM ingestion_jobs WHERE path=? AND status IN ('queued','running') LIMIT 1",(key,)).fetchone(): return False
-        if path.parent != root and not re.fullmatch(r"[a-f0-9]{64}",path.parent.name): return False
+        if not owned_document and path.parent != root and not re.fullmatch(r"[a-f0-9]{64}",path.parent.name): return False
         if not path.is_file(): return False
         path.unlink()
         if path.parent != root:

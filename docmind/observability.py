@@ -79,5 +79,6 @@ class RequestMonitor:
         with self.lock: self.counts[str(response.status_code)] += 1
         logging.getLogger("docmind.requests").info(json.dumps({"request_id":request_id,"method":request.method,
             "route":getattr(request.scope.get("route"),"path",request.url.path),"status":response.status_code,
+            "actor_id":getattr(getattr(request.state,"principal",None),"actor_id",None),
             "latency_ms":round((time.perf_counter()-started)*1000,2)}))
         return response

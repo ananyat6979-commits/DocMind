@@ -1,29 +1,23 @@
-# Container deployment
+# Centralized deployment
 
-The Docker image uses Python 3.11, CPU PyTorch, pinned retrieval and attribution weights under `/opt/hf`, and a non-root user. Runtime state belongs under `/data`. Network access is disabled in the model-loading smoke check, proving that the configured default weights were included during the build.
+The UI calls one authenticated API. It has no generation key or library volume. The API owns the corpus, review state, quota and trusted identities. Readers share one library; tenant and per-document authorization are outside this release.
 
-## Local run
-
-Create `.env` from `.env.example` and privately fill the UI password, administrator PIN, reviewer PIN, provider key and a currently available model ID. Then run:
+Create private personal credentials before starting containers:
 
 ```powershell
-docker compose up --build ui
+python scripts/create_credential.py --actor owner --roles reader ingestor reviewer admin
+$env:DOCMIND_CREDENTIALS_PATH = "$env:USERPROFILE/.config/docmind/credentials.json"
+docker compose up --build
 ```
 
-For the API, set `DOCMIND_API_KEY` and run:
+Read the generated personal `.key` file privately and enter it in the UI. The service mounts only the hashed credential registry, read-only. Set the provider key and model in the shell or private environment configuration. Never put keys in Git. Remove a credential record to revoke it; changes apply on the next request. Protect private files with host access permissions and use TLS for remote access.
 
-```powershell
-docker compose --profile api up --build api
-```
+The API and UI bind localhost ports 8000 and 8501. The API's data volume is the only library. A separate parser receives bytes over a Unix socket. Its container has no network namespace access, accepts only Unix-family sockets, drops capabilities, runs as UID 10001, uses a read-only filesystem and a bounded temporary filesystem, and has CPU, memory and process limits. It receives no application credential file or database mount. A malformed or exhausted worker returns a bounded rejection and the service handles the next request.
 
-The UI uses port 8501 and the API port 8000. Missing credentials disable access. Compose intentionally gives the services separate data volumes; do not point concurrent processes at the same corpus. Review state and uploaded documents therefore do not transfer between the two services automatically. Put remote access behind TLS and a suitable network boundary. No public hosting provider is required for a local run.
+`deployment/compose.parser.yml` starts the isolated parser independently. The `parser isolation` workflow exercises denied network access, absent secrets, environment scrubbing, memory exhaustion and recovery. Passing these checks is a release gate. A working-branch push does not publish an image or establish that the container checks have passed.
 
-## Build verification
+Native parsing requires both `DOCMIND_PARSER_MODE=local` and `DOCMIND_ALLOW_UNSANDBOXED_PARSING=1` and is restricted to trusted development/benchmark inputs. The local UI additionally requires `DOCMIND_UI_MODE=local` and `DOCMIND_ALLOW_LOCAL_UI=1`. Resource-limited native parsing has no filesystem or network confinement.
 
-The `docker` GitHub Actions workflow builds the image, loads all three neural models offline, performs demo ingestion/query and checks UI liveness. A manual run on a working branch builds and smoke-tests without publishing. Main-branch runs additionally publish the existing container package. The `ci` workflow separately tests Python 3.11, 3.12 and 3.13, critical lint checks and frozen report integrity without live inference credentials.
+CPU and CUDA environments are recorded under `locks/`, including hashes. The CPU image installs the Linux Python 3.11 lock and pinned model revisions. The full image's offline neural smoke checks remain separate from the small parser-isolation checks. The local Docker daemon must be running to execute either suite locally.
 
-Model downloads make the image substantially larger than a basic web service. This build is not proof that all models fit in four gigabytes alongside other applications. HNSW is optional and full index refresh remains memory-bound. Liveness means the process is running; authenticated `/ready` performs basic configuration/database checks and is not a full neural inference probe.
-
-## Troubleshooting
-
-Inspect build logs for dependency/download failures. Inspect smoke logs for model-cache or permission failures. If uploads return 403 behind a proxy, configure trusted proxy origins and forwarding rather than disabling CORS/XSRF. If access is denied, verify the corresponding secret and restart. Persistent volumes may retain data after containers are removed; follow your retention policy before deleting them.
+Liveness only proves the HTTP process runs. Authenticated readiness checks generation configuration and database access, not all neural inference paths. SQLite state, in-process quotas and the ingestion queue support one service process. Distributed operation, tenant authorization, incremental persistent indexes and kernel isolation beyond the configured container boundary remain limitations.

@@ -27,6 +27,11 @@ from docmind.telemetry.events import EventLog
 
 st.set_page_config(page_title="DocMind", page_icon="🧠", layout="wide", initial_sidebar_state="expanded")
 
+if os.getenv("DOCMIND_TEST_MODE") != "1" and not (os.getenv("DOCMIND_UI_MODE") == "local" and os.getenv("DOCMIND_ALLOW_LOCAL_UI") == "1"):
+    from docmind.ui_remote import render
+    render()
+    st.stop()
+
 # Password gate. Set DOCMIND_APP_PASSWORD before exposing the app through any tunnel or host:
 # otherwise anyone with the URL can spend your Groq quota and read every uploaded document.
 _APP_PASSWORD = os.getenv("DOCMIND_APP_PASSWORD", "")

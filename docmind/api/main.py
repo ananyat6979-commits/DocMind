@@ -25,7 +25,7 @@ import threading
 import time
 import uuid
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 from contextlib import asynccontextmanager
 from functools import lru_cache
@@ -97,25 +97,36 @@ def _eq(a: str, b: str) -> bool:
     return hmac.compare_digest(a.encode(), b.encode())
 
 
-def require_api_key(x_api_key: Optional[str] = Header(default=None)) -> None:
-    expected = os.getenv("DOCMIND_API_KEY", "")
-    if not expected:
-        raise HTTPException(status_code=503, detail="Configure DOCMIND_API_KEY before serving requests")
-    if not (x_api_key and _eq(x_api_key, expected)):
-        raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
+def require_api_key(request: Request) -> None:
+    if not getattr(request.state,"principal",None):
+        raise HTTPException(status_code=401,detail="Authenticated principal required")
+    if "reader" not in request.state.principal.roles:
+        raise HTTPException(status_code=403,detail="Reader permission required")
 
 
-def require_reviewer(x_reviewer_pin: Optional[str] = Header(default=None)) -> str:
+def require_ingestor(request: Request) -> None:
+    if "ingestor" not in request.state.principal.roles:
+        raise HTTPException(status_code=403,detail="Ingestor permission required")
+
+
+def require_reviewer(request: Request, x_reviewer_pin: Optional[str] = Header(default=None)) -> str:
+    if os.getenv("DOCMIND_CREDENTIALS_FILE"):
+        if "reviewer" not in request.state.principal.roles:
+            raise HTTPException(status_code=403,detail="Reviewer permission required")
+        return request.state.principal.actor_id
     pin = CONFIG.review.reviewer_pin
-    if not pin:
-        raise HTTPException(status_code=503, detail="Configure DOCMIND_REVIEWER_PIN before reviewing")
-    if not (x_reviewer_pin and _eq(x_reviewer_pin, pin)):
-        raise HTTPException(status_code=401, detail="Invalid or missing X-Reviewer-Pin")
-    return "reviewer"
+    if not pin: raise HTTPException(status_code=503,detail="Configure DOCMIND_REVIEWER_PIN before reviewing")
+    if not x_reviewer_pin or not _eq(x_reviewer_pin,pin):
+        raise HTTPException(status_code=401,detail="Invalid reviewer credential")
+    return "shared-reviewer"
 
 
-def require_admin(x_admin_pin: Optional[str] = Header(default=None)) -> None:
-    expected = os.getenv("DOCMIND_ADMIN_PIN", "")
+def require_admin(request: Request, x_admin_pin: Optional[str] = Header(default=None)) -> None:
+    if os.getenv("DOCMIND_CREDENTIALS_FILE"):
+        if "admin" not in request.state.principal.roles:
+            raise HTTPException(status_code=403,detail="Administrator permission required")
+        return
+    expected=os.getenv("DOCMIND_ADMIN_PIN", "")
     if not expected: raise HTTPException(status_code=503,detail="Configure DOCMIND_ADMIN_PIN before library mutations")
     if not x_admin_pin or not _eq(x_admin_pin,expected): raise HTTPException(status_code=401,detail="Invalid administrator credential")
 
@@ -123,6 +134,8 @@ def require_admin(x_admin_pin: Optional[str] = Header(default=None)) -> None:
 class IngestRequest(BaseModel):
     path: str = Field(min_length=1,max_length=1024)
     rebuild: bool = False
+    expected_language: Optional[Literal["en","hi","fr","de","fi"]] = None
+    encoding: Optional[Literal["cp1252"]] = None
 
 
 class IngestResponse(BaseModel):
@@ -195,7 +208,7 @@ def _ingest_response(report, label: str) -> IngestResponse:
                           chunks_added=report.chunks_added, cached=report.n_cached)
 
 
-@app.post("/ingest", response_model=IngestResponse, dependencies=[Depends(require_api_key)])
+@app.post("/ingest", response_model=IngestResponse, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
 def ingest_documents(req: IngestRequest):
     root = CONFIG.data_dir.resolve()
     path = Path(req.path)
@@ -205,7 +218,7 @@ def ingest_documents(req: IngestRequest):
     if not path.exists():
         raise HTTPException(status_code=404, detail=f"Path not found: {req.path}")
     try:
-        return _ingest_response(ingest(path, rebuild_index=req.rebuild), req.path)
+        return _ingest_response(ingest(path, rebuild_index=req.rebuild,expected_language=req.expected_language,encoding=req.encoding), req.path)
     except HTTPException:
         raise
     except Exception as exc:
@@ -242,11 +255,11 @@ def _persist_upload(file):
     return dest, name
 
 
-@app.post("/upload", response_model=IngestResponse, dependencies=[Depends(require_api_key)])
-def upload(file: UploadFile = File(...)):
+@app.post("/upload", response_model=IngestResponse, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
+def upload(file: UploadFile = File(...), expected_language: Optional[Literal["en","hi","fr","de","fi"]] = None, encoding: Optional[Literal["cp1252"]] = None):
     dest, name = _persist_upload(file)
     try:
-        return _ingest_response(ingest(dest), name)
+        return _ingest_response(ingest(dest,expected_language=expected_language,encoding=encoding), name)
     except Exception as exc:
         from docmind.ingestion.parser_client import ParserUnavailable
         raise HTTPException(status_code=503 if isinstance(exc, ParserUnavailable) else 422, detail=str(exc))
@@ -292,10 +305,11 @@ def query(req: QueryRequest, request: Request):
 
 
 @app.post("/feedback", dependencies=[Depends(require_api_key)])
-def feedback(req: FeedbackRequest):
-    if get_reviews().get(req.response_id) is None:
+def feedback(req: FeedbackRequest, request: Request):
+    item = get_reviews().get(req.response_id)
+    if item is None or item["user"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404, detail="Unknown response_id")
-    get_events().log("feedback", user="api-user", response_id=req.response_id, helpful=req.helpful, comment=req.comment)
+    get_events().log("feedback", user=request.state.principal.actor_id, response_id=req.response_id, helpful=req.helpful, comment=req.comment)
     return {"ok": True}
 
 
@@ -305,16 +319,16 @@ def review_pending(_: str = Depends(require_reviewer), limit: int = Query(defaul
 
 
 @app.post("/review/{response_id}", dependencies=[Depends(require_api_key)])
-def review_decide(response_id: str, body: ReviewDecision, _: str = Depends(require_reviewer)):
+def review_decide(response_id: str, body: ReviewDecision, reviewer: str = Depends(require_reviewer)):
     if body.decision not in DECISIONS:
         raise HTTPException(status_code=400, detail=f"decision must be one of {sorted(DECISIONS)}")
     try:
-        ok = get_reviews().decide(response_id, body.decision, "reviewer", body.edited_answer, body.note)
+        ok = get_reviews().decide(response_id, body.decision, reviewer, body.edited_answer, body.note)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     if not ok:
         raise HTTPException(status_code=404, detail="Not found or already decided")
-    get_events().log("review_decision", user="reviewer", response_id=response_id, decision=body.decision)
+    get_events().log("review_decision", user=reviewer, response_id=response_id, decision=body.decision)
     return {"ok": True}
 
 
@@ -326,7 +340,7 @@ def delete_document(file_id: str):
     return {"ok": True}
 
 
-@app.post("/ingest/jobs", status_code=202, dependencies=[Depends(require_api_key)])
+@app.post("/ingest/jobs", status_code=202, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
 def enqueue_ingestion(req: IngestRequest, request: Request):
     root = CONFIG.data_dir.resolve()
     path = (root / req.path).resolve()
@@ -335,7 +349,7 @@ def enqueue_ingestion(req: IngestRequest, request: Request):
     if req.rebuild:
         raise HTTPException(status_code=400, detail="Queued rebuild is not supported")
     try:
-        return {"job_id": request.app.state.ingestion_queue.enqueue(path), "status": "queued"}
+        return {"job_id": request.app.state.ingestion_queue.enqueue(path, owner=request.state.principal.actor_id,expected_language=req.expected_language,encoding=req.encoding), "status": "queued"}
     except ValueError as exc:
         raise HTTPException(status_code=429, detail=str(exc))
 
@@ -343,13 +357,16 @@ def enqueue_ingestion(req: IngestRequest, request: Request):
 @app.get("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
 def ingestion_status(job_id: str, request: Request):
     row = request.app.state.ingestion_queue.get(job_id)
-    if not row:
+    if not row or row["owner"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404, detail="Unknown ingestion job")
     return row
 
 
 @app.delete("/ingest/jobs/{job_id}", dependencies=[Depends(require_api_key)])
 def cancel_ingestion(job_id: str, request: Request):
+    row=request.app.state.ingestion_queue.get(job_id)
+    if not row or row["owner"] != request.state.principal.actor_id:
+        raise HTTPException(status_code=404,detail="Unknown ingestion job")
     if not request.app.state.ingestion_queue.cancel(job_id):
         raise HTTPException(status_code=409, detail="Only queued jobs can be cancelled")
     return {"ok": True}
@@ -362,11 +379,11 @@ def readiness():
     return {"status": "ready", "corpus_version": get_store().version()}
 
 
-@app.post("/uploads/jobs", status_code=202, dependencies=[Depends(require_api_key)])
-def enqueue_upload(request: Request, file: UploadFile = File(...)):
+@app.post("/uploads/jobs", status_code=202, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
+def enqueue_upload(request: Request, file: UploadFile = File(...), expected_language: Optional[Literal["en","hi","fr","de","fi"]] = None, encoding: Optional[Literal["cp1252"]] = None):
     dest, name = _persist_upload(file)
     try:
-        return {"job_id": request.app.state.ingestion_queue.enqueue(dest), "status":"queued", "filename":name}
+        return {"job_id": request.app.state.ingestion_queue.enqueue(dest, owner=request.state.principal.actor_id,expected_language=expected_language,encoding=encoding), "status":"queued", "filename":name}
     except ValueError as exc:
         raise HTTPException(status_code=429, detail=str(exc))
     finally:
@@ -384,7 +401,7 @@ def metrics():
 def response_result(response_id: str, request: Request):
     item = get_reviews().get(response_id)
     if item is None: raise HTTPException(status_code=404, detail="Response no longer available")
-    if item["user"] not in (request.state.principal.actor_id, "api-user"):
+    if item["user"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404, detail="Response not available to this principal")
     status = item["status"]
     visible = status in ("auto_approved", "approved", "edited")
@@ -401,3 +418,10 @@ def response_result(response_id: str, request: Request):
             page=s.get("page"),section=s.get("section"),content_preview=s["content"][:200],
             score=s["score"],cited=bool(s.get("cited")) and not edited) for s in item["sources"]] if visible else [],
         latency_ms=info.get("latency_ms",0),llm_calls=info.get("llm_calls",0))
+
+
+@app.get("/whoami", dependencies=[Depends(require_api_key)])
+def whoami(request: Request):
+    principal=request.state.principal
+    return {"actor_id":principal.actor_id,"roles":sorted(principal.roles),
+            "identity_mode":"individual" if os.getenv("DOCMIND_CREDENTIALS_FILE") else "shared credential"}

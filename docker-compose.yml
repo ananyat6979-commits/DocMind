@@ -1,48 +1,58 @@
-# UI:   docker compose up --build ui          then open http://localhost:8501
-# API:  docker compose --profile api up --build api     then http://localhost:8000/docs
-# Secrets come from your shell or a local .env file (never baked into the image):
-#   GROQ_API_KEY, DOCMIND_APP_PASSWORD, DOCMIND_REVIEWER_PIN
+# The UI has no library volume or generation credentials. All operations go through the API.
 services:
   ui:
     build: .
     image: docmind:local
-    ports:
-      - "8501:8501"
+    ports: ["127.0.0.1:8501:8501"]
     environment:
-      GROQ_API_KEY: ${GROQ_API_KEY:-}
-      DOCMIND_LLM_MODEL: ${DOCMIND_LLM_MODEL:-}
-      DOCMIND_REASONING_EFFORT: ${DOCMIND_REASONING_EFFORT:-}
-      DOCMIND_MAX_TOKENS: ${DOCMIND_MAX_TOKENS:-2048}
-      DOCMIND_APP_PASSWORD: ${DOCMIND_APP_PASSWORD:-}
-      DOCMIND_ADMIN_PIN: ${DOCMIND_ADMIN_PIN:-}
-      DOCMIND_REVIEWER_PIN: ${DOCMIND_REVIEWER_PIN:-}
-    volumes:
-      - docmind-ui-data:/data
+      DOCMIND_API_URL: http://api:8000
+      DOCMIND_HOME: /tmp/docmind
+    depends_on: [api]
+    read_only: true
+    tmpfs: [/tmp]
     restart: unless-stopped
-
   api:
     build: .
     image: docmind:local
-    profiles: ["api"]
     command: ["uvicorn", "docmind.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
-    ports:
-      - "8000:8000"
+    ports: ["127.0.0.1:8000:8000"]
     environment:
       GROQ_API_KEY: ${GROQ_API_KEY:-}
       DOCMIND_LLM_MODEL: ${DOCMIND_LLM_MODEL:-}
-      DOCMIND_REASONING_EFFORT: ${DOCMIND_REASONING_EFFORT:-}
       DOCMIND_MAX_TOKENS: ${DOCMIND_MAX_TOKENS:-2048}
-      DOCMIND_API_KEY: ${DOCMIND_API_KEY:-}
-      DOCMIND_REVIEWER_PIN: ${DOCMIND_REVIEWER_PIN:-}
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 30s
-      timeout: 5s
-      start_period: 60s
-      retries: 3
+      DOCMIND_CREDENTIALS_FILE: /run/secrets/credentials.json
+      DOCMIND_PARSER_MODE: service
+      DOCMIND_PARSER_SOCKET: /run/docmind-parser/parser.sock
     volumes:
       - docmind-api-data:/data
-
+      - parser-socket:/run/docmind-parser:ro
+      - type: bind
+        source: ${DOCMIND_CREDENTIALS_PATH:?Set the private credentials.json path}
+        target: /run/secrets/credentials.json
+        read_only: true
+        bind:
+          create_host_path: false
+    depends_on: [parser]
+    restart: unless-stopped
+  parser:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.parser
+    network_mode: none
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:deployment/parser-seccomp.json
+    mem_limit: 768m
+    cpus: 1
+    pids_limit: 32
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m,uid=10001,gid=10001,mode=700
+    volumes:
+      - parser-socket:/run/docmind-parser
+    restart: on-failure:3
 volumes:
-  docmind-ui-data:
   docmind-api-data:
+  parser-socket:

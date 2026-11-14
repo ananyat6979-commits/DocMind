@@ -19,21 +19,26 @@ class IngestionQueue:
         self.thread = None
         with connect(db_path) as conn:
             conn.executescript(SCHEMA)
+            if "owner" not in {row["name"] for row in conn.execute("PRAGMA table_info(ingestion_jobs)")}:
+                conn.execute("ALTER TABLE ingestion_jobs ADD COLUMN owner TEXT NOT NULL DEFAULT 'shared-api'")
 
-    def enqueue(self, path):
+            if "options" not in {row["name"] for row in conn.execute("PRAGMA table_info(ingestion_jobs)")}:
+                conn.execute("ALTER TABLE ingestion_jobs ADD COLUMN options TEXT NOT NULL DEFAULT '{}'")
+
+    def enqueue(self, path, owner="shared-api", expected_language=None, encoding=None):
         with connect(self.db_path) as conn:
             conn.execute("BEGIN IMMEDIATE")
             count = conn.execute("SELECT COUNT(*) FROM ingestion_jobs WHERE status IN ('queued','running')").fetchone()[0]
             if count >= 20:
                 raise ValueError("Ingestion queue is full")
             job = uuid.uuid4().hex
-            conn.execute("INSERT INTO ingestion_jobs VALUES (?,?, 'queued', ?,?,NULL,NULL)",
-                         (job, str(path), time.time(), time.time()))
+            conn.execute("INSERT INTO ingestion_jobs(job_id,path,status,created_at,updated_at,result,error,owner,options) VALUES (?,?, 'queued', ?,?,NULL,NULL,?,?)",
+                         (job, str(path), time.time(), time.time(), owner,json.dumps({"expected_language":expected_language,"encoding":encoding})))
         return job
 
     def get(self, job):
         with connect(self.db_path) as conn:
-            row = conn.execute("SELECT job_id,status,created_at,updated_at,result,error FROM ingestion_jobs WHERE job_id=?", (job,)).fetchone()
+            row = conn.execute("SELECT job_id,status,created_at,updated_at,result,error,owner FROM ingestion_jobs WHERE job_id=?", (job,)).fetchone()
         return dict(row) if row else None
 
     def cancel(self, job):
@@ -44,12 +49,12 @@ class IngestionQueue:
         from docmind.store import CorpusStore
         with connect(self.db_path) as conn:
             conn.execute("BEGIN IMMEDIATE")
-            row = conn.execute("SELECT job_id,path FROM ingestion_jobs WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
+            row = conn.execute("SELECT job_id,path,options FROM ingestion_jobs WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
             if not row:
                 return False
             conn.execute("UPDATE ingestion_jobs SET status='running',updated_at=? WHERE job_id=?", (time.time(), row["job_id"]))
         try:
-            report = ingest(row["path"], store=CorpusStore(self.db_path))
+            report = ingest(row["path"], store=CorpusStore(self.db_path),**json.loads(row["options"]))
             result = json.dumps({"file_ids":report.file_ids,"chunks_added":report.chunks_added})
             status, error = "completed", None
         except Exception as exc:

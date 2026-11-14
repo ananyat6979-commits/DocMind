@@ -3,8 +3,8 @@ name: docker
 # publishes it to GitHub Container Registry (ghcr.io). Run manually from the Actions tab at any time.
 on:
   push:
-    branches: [main]
-    paths: ["Dockerfile", "requirements.txt", "docmind/**", "app.py", "scripts/**", ".streamlit/**", ".github/workflows/docker.yml"]
+    branches: [main, improvements/hindi-evidence]
+    paths: ["Dockerfile", "locks/**", "requirements.txt", "docmind/**", "app.py", "scripts/**", ".streamlit/**", ".github/workflows/docker.yml"]
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,38 @@
+name: parser isolation
+on:
+  push:
+    paths: ["deployment/**", "docmind/ingestion/**", "scripts/parser_isolation_check.py", "tests/test_isolation_identity.py", ".github/workflows/parser.yml"]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build small parser image
+        run: docker build -f deployment/Dockerfile.parser -t docmind-parser:test .
+      - name: Test confinement, exhausted worker and recovery
+        run: |
+          docker run --rm --network none --read-only --user 10001:10001 --cap-drop ALL \
+            --security-opt no-new-privileges --security-opt seccomp=deployment/parser-seccomp.json \
+            --memory 768m --cpus 1 --pids-limit 32 \
+            --tmpfs /tmp:rw,noexec,nosuid,size=128m,uid=10001,gid=10001,mode=700 \
+            docmind-parser:test python scripts/parser_isolation_check.py
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install transport-test dependencies
+        run: pip install pypdfium2==5.15.2 python-docx==1.2.0 python-dotenv==1.2.4 reportlab
+      - name: Compare real PDF and DOCX output through the socket
+        run: |
+          mkdir -p /tmp/dm-parser-socket
+          chmod 777 /tmp/dm-parser-socket
+          docker run -d --name dm-parser --network none --read-only --user 10001:10001 --cap-drop ALL \
+            --security-opt no-new-privileges --security-opt seccomp=deployment/parser-seccomp.json \
+            --memory 768m --cpus 1 --pids-limit 32 \
+            --tmpfs /tmp:rw,noexec,nosuid,size=128m,uid=10001,gid=10001,mode=700 \
+            -v /tmp/dm-parser-socket:/run/docmind-parser docmind-parser:test
+          for i in $(seq 1 20); do test -S /tmp/dm-parser-socket/parser.sock && break; sleep 1; done
+          PYTHONPATH=. python scripts/parser_transport_check.py --socket /tmp/dm-parser-socket/parser.sock
+      - name: Parser logs
+        if: always()
+        run: docker logs dm-parser || true

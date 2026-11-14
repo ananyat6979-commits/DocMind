@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+ENV PYTHONUNBUFFERED=1 PYTHONUTF8=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/app
+WORKDIR /app
+RUN pip install --no-cache-dir pypdfium2==5.15.2 python-docx==1.2.0 python-dotenv==1.2.4
+COPY docmind ./docmind
+COPY scripts/parser_isolation_check.py ./scripts/parser_isolation_check.py
+RUN useradd --uid 10001 --no-create-home parser && mkdir -p /run/docmind-parser && chown 10001:10001 /run/docmind-parser
+USER 10001:10001
+CMD ["python", "-m", "docmind.ingestion.parser_service"]

@@ -1,5 +1,7 @@
 # DocMind
 
+The revised release sequence is documented in [release gates](docs/RELEASES.md). Production UI access now goes through the authenticated API and separate parser service; follow [centralized deployment](docs/DOCKER_CLOUD.md). Native parsing and the direct local UI require explicit trusted-development overrides. English/Hindi component and PDF measurements are separate, and unmeasured languages remain gated.
+
 Question answering over PDF, DOCX and text files, with hybrid retrieval, quoted evidence, claim-level attribution checks and a human review queue. This is a single-corpus pilot with published measurements and known failures.
 
 ## Measured results

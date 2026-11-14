@@ -26,10 +26,16 @@ def test_dockerfile_models_match_config():
 
 def test_compose_services_isolate_volumes_and_never_bake_secrets():
     c = yaml.safe_load((ROOT / "docker-compose.yml").read_text())
-    for name, svc in c["services"].items():
-        assert f"docmind-{name}-data:/data" in svc["volumes"], name
-        for k, v in svc.get("environment", {}).items():
-            assert str(v).startswith("${"), f"{name}.{k} must come from the environment, not be hardcoded"
+    ui, api, parser = (c["services"][name] for name in ("ui","api","parser"))
+    assert "volumes" not in ui and "GROQ_API_KEY" not in ui["environment"]
+    assert ui["environment"]["DOCMIND_API_URL"] == "http://api:8000"
+    assert "docmind-api-data:/data" in api["volumes"]
+    credential = next(v for v in api["volumes"] if isinstance(v,dict))
+    assert credential["read_only"] and not credential["bind"]["create_host_path"]
+    assert parser["network_mode"] == "none" and parser["read_only"]
+    assert parser["cap_drop"] == ["ALL"] and parser["mem_limit"] == "768m"
+    assert not parser.get("environment")
+    assert parser["volumes"] == ["parser-socket:/run/docmind-parser"]
 
 
 def test_workflow_smoke_tests_and_publish_only_on_main():
