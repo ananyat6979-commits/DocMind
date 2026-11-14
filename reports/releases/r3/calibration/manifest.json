@@ -1,0 +1,40 @@
+{
+  "source_url": "https://huggingface.co/datasets/hotpotqa/hotpot_qa/resolve/1908d6afbbead072334abe2965f91bd2709910ab/distractor/validation-00000-of-00001.parquet",
+  "source_sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+  "source_license": "CC BY-SA 4.0; HotpotQA authors and underlying Wikipedia attribution apply",
+  "script_sha256": "a9fd1456f439f0afd79d751b3fe3069368627aa990336cc9a3f7bcab53076e78",
+  "split": "Globally disjoint casefolded context titles and paragraph hashes; ten timing-only questions excluded; seed seven",
+  "qa_prompt_sha256": "b83db01bbe4a98520a78a1bf5731260624f3dc1bfdaa9e0a3388938dcbb52804",
+  "verification_prompt_sha256": "3eef6fca9407480d0b7877193a5963e04f8137a98ff00f58d82f125fd41bd685",
+  "max_per_split": 200,
+  "grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "family_size": 126,
+  "targets": [
+    0.1,
+    0.2
+  ],
+  "cohort_selection_uses_outcomes": false,
+  "human_labels": "Original public answer labels, not independently reviewed"
+}

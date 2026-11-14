@@ -1,0 +1,32 @@
+{
+  "ranking": {
+    "token_confidence": {
+      "auroc": 0.7571785268414482,
+      "stratified_bootstrap95_nominal": [
+        0.65479088639201,
+        0.8508270911360798
+      ],
+      "n_available": 125
+    },
+    "verification_score": {
+      "auroc": 0.5621612466124661,
+      "stratified_bootstrap95_nominal": [
+        0.49457571138211387,
+        0.6226329607046069
+      ],
+      "n_available": 118
+    },
+    "combined_score": {
+      "auroc": 0.7564363143631436,
+      "stratified_bootstrap95_nominal": [
+        0.657859078590786,
+        0.849610433604336
+      ],
+      "n_available": 118
+    }
+  },
+  "intervals": "Stratified percentile bootstrap, 2000 draws, seed seven; nominal exploratory ranking intervals, not simultaneous policy certificates",
+  "heldout_em_correct": 36,
+  "heldout_requested": 128,
+  "human_review_cost": "Awaiting actual private review labels"
+}

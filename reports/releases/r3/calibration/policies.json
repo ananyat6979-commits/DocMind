@@ -1,0 +1,62 @@
+[
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "token_confidence",
+    "target_em_risk": 0.1,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  },
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "token_confidence",
+    "target_em_risk": 0.2,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  },
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "verification_score",
+    "target_em_risk": 0.1,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  },
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "verification_score",
+    "target_em_risk": 0.2,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  },
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "combined_score",
+    "target_em_risk": 0.1,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  },
+  {
+    "threshold": null,
+    "n_selected": 0,
+    "reason": "No fixed-grid threshold meets the corrected exact bound",
+    "signal": "combined_score",
+    "target_em_risk": 0.2,
+    "alpha": 0.05,
+    "family_size": 126,
+    "scope": "Selective exact-match error under independent matched-distribution examples; distribution shift is outside the bound"
+  }
+]

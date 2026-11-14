@@ -25,3 +25,6 @@ jobs:
 
       - name: Verify current-reader synthetic robustness records
         run: python scripts/verify_current_reader_robustness.py reports/releases/r2/current_reader_t4
+
+      - name: Verify frozen selective-risk records
+        run: python scripts/verify_calibration_closure.py reports/releases/r3/calibration
