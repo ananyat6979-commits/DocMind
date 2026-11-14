@@ -28,3 +28,18 @@ def test_http_load_keeps_failed_and_unserved_requests():
     assert summary["unserved"] == 2
     assert summary["completed_only_p50_ms"] == 20
     assert summary["completed_per_second"] == .5
+
+
+def test_http_200_does_not_certify_completed_nli(tmp_path):
+    import sqlite3
+    helper = module("load_http_service")
+    path = tmp_path/"reviews.db"
+    with sqlite3.connect(path) as conn:
+        conn.execute("CREATE TABLE reviews(response_info TEXT)")
+        for attribution in [{"n_claims": 2, "supported_fraction": 1.0, "judge": {"model": "pinned", "revision": "r"}},
+                            {"n_claims": 2, "supported_fraction": 1.0, "error": "ModelFailure"},
+                            {"n_claims": 0, "supported_fraction": None}]:
+            conn.execute("INSERT INTO reviews VALUES (?)", (json.dumps({"citation_report": {"attribution": attribution}}),))
+    result = helper.stored_attribution_summary(path)
+    assert result["responses"] == 3 and result["completed_nli"] == 1
+    assert result["judges"] == [{"model": "pinned", "revision": "r"}]

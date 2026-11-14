@@ -1,0 +1,12 @@
+{"index": 0, "status": 200, "request_id_present": true, "latency_ms": 716.863601, "review_status": "pending", "application_latency_ms": 349.9}
+{"index": 1, "status": 200, "request_id_present": true, "latency_ms": 368.15655099999844, "review_status": "pending", "application_latency_ms": 352.6}
+{"index": 2, "status": 200, "request_id_present": true, "latency_ms": 693.6762649999935, "review_status": "pending", "application_latency_ms": 341.4}
+{"index": 3, "status": 200, "request_id_present": true, "latency_ms": 694.0407339999979, "review_status": "pending", "application_latency_ms": 345.3}
+{"index": 4, "status": 200, "request_id_present": true, "latency_ms": 706.6628279999918, "review_status": "pending", "application_latency_ms": 359.6}
+{"index": 5, "status": 200, "request_id_present": true, "latency_ms": 753.6303420000081, "review_status": "pending", "application_latency_ms": 392.8}
+{"index": 6, "status": 200, "request_id_present": true, "latency_ms": 893.2680719999837, "review_status": "pending", "application_latency_ms": 350.0}
+{"index": 7, "status": 200, "request_id_present": true, "latency_ms": 698.0478939999841, "review_status": "pending", "application_latency_ms": 344.1}
+{"index": 8, "status": 200, "request_id_present": true, "latency_ms": 662.4066989999733, "review_status": "pending", "application_latency_ms": 337.6}
+{"index": 9, "status": 200, "request_id_present": true, "latency_ms": 724.5697050000217, "review_status": "pending", "application_latency_ms": 342.3}
+{"index": 10, "status": 200, "request_id_present": true, "latency_ms": 695.0814829999956, "review_status": "pending", "application_latency_ms": 344.3}
+{"index": 11, "status": 200, "request_id_present": true, "latency_ms": 633.3260499999938, "review_status": "pending", "application_latency_ms": 337.4}

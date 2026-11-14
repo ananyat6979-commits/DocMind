@@ -9,6 +9,8 @@ import concurrent.futures
 import hashlib
 import json
 import os
+import math
+import sqlite3
 from pathlib import Path
 import platform
 import secrets
@@ -35,6 +37,29 @@ def summarize(rows, requested, elapsed):
         "completed_only_p50_ms": float(np.percentile(durations, 50)) if durations else None,
         "completed_only_p95_ms": float(np.percentile(durations, 95)) if durations else None,
         "all_completed_have_request_id": bool(completed) and all(row["request_id_present"] for row in completed)}
+
+
+def stored_attribution_summary(path):
+    """Verify completed NLI from stored response metadata, without publishing text."""
+    if not path.exists():
+        return {"responses": 0, "completed_nli": 0, "judges": []}
+    try:
+        with sqlite3.connect("file:"+path.as_posix()+"?mode=ro", uri=True) as connection:
+            rows = connection.execute("SELECT response_info FROM reviews").fetchall()
+    except sqlite3.OperationalError:
+        return {"responses": 0, "completed_nli": 0, "judges": []}
+    completed = []
+    for row in rows:
+        attribution = json.loads(row[0]).get("citation_report", {}).get("attribution") or {}
+        fraction = attribution.get("supported_fraction")
+        if (not attribution.get("error") and attribution.get("n_claims", 0) > 0
+                and isinstance(fraction, (int, float)) and math.isfinite(fraction)
+                and isinstance(attribution.get("judge"), dict)):
+            completed.append(attribution)
+    identities = {json.dumps(a["judge"], sort_keys=True) for a in completed}
+    return {"responses": len(rows), "completed_nli": len(completed),
+        "judges": [json.loads(identity) for identity in sorted(identities)],
+        "scope": "Stored NLI execution metadata only, not human support or correctness"}
 
 
 def main():
@@ -151,6 +176,11 @@ def main():
                         server.wait(timeout=10)
                         report["forced_kill"] = True
                 report["server_exit_code"] = server.returncode if server is not None else None
+        if args.real_models:
+            report["stored_attribution"] = stored_attribution_summary(Path(tmp)/"indexes"/"docmind.db")
+            report["neural_path_verified"] = (
+                report["stored_attribution"]["responses"] == args.requests+1
+                and report["stored_attribution"]["completed_nli"] == args.requests+1)
     if (out/"runtime.json").exists():
         report["runtime"] = json.loads((out/"runtime.json").read_text(encoding="utf-8"))
     report["total_wall_seconds"] = time.monotonic()-started
@@ -158,7 +188,8 @@ def main():
     (out/"rows.jsonl").write_bytes("".join(json.dumps(row)+"\n" for row in rows).encode())
     (out/"summary.json").write_bytes(json.dumps(report, indent=2).encode())
     print(json.dumps(report, indent=2), flush=True)
-    return 0 if not report.get("setup_error") and report["warm_load"]["completed"] == args.requests else 1
+    return 0 if (not report.get("setup_error") and report["warm_load"]["completed"] == args.requests
+        and (not args.real_models or report.get("neural_path_verified"))) else 1
 
 
 if __name__ == "__main__":

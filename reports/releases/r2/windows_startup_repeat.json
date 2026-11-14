@@ -1,0 +1,76 @@
+{
+  "scope": "Identical second staged run with the same cap, retained alongside the failed run; not an isolated root-cause experiment",
+  "source_commit": "5708b8e",
+  "process": {
+    "scope": "Bounded local diagnostic, not an API latency benchmark",
+    "timeout_seconds": 240.0,
+    "launch_seconds": 0.0,
+    "wall_seconds": 82.0,
+    "exit_code": 0,
+    "timed_out": false,
+    "process_passed": true
+  },
+  "stages": [
+    {
+      "stage": "child_started",
+      "elapsed_seconds": 0.0
+    },
+    {
+      "stage": "torch_imported",
+      "elapsed_seconds": 10.609000000000378
+    },
+    {
+      "stage": "application_imported",
+      "elapsed_seconds": 10.969000000000051
+    },
+    {
+      "stage": "ingested",
+      "elapsed_seconds": 68.14100000000053
+    },
+    {
+      "stage": "query_object_created",
+      "elapsed_seconds": 68.15599999999995
+    },
+    {
+      "stage": "query_completed",
+      "elapsed_seconds": 71.8130000000001
+    },
+    {
+      "stage": "top_level_completed",
+      "elapsed_seconds": 71.84400000000005
+    },
+    {
+      "stage": "atexit",
+      "elapsed_seconds": 72.3130000000001,
+      "threads": [
+        "MainThread"
+      ]
+    }
+  ],
+  "model_checks": {
+    "scope": "Synthetic offline CPU compatibility observation; no human or provider validation",
+    "versions": {
+      "torch": "2.13.0+cpu",
+      "transformers": "5.23.0",
+      "sentence-transformers": "5.7.0"
+    },
+    "embedding": [
+      "intfloat/multilingual-e5-small",
+      "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+    ],
+    "retrieval_mode": "dense",
+    "fixture_sha256": "b596a5136c8658a45f71a2eeafdd5b68d929509c96983ff595f35e732ffd2e9d",
+    "citation_validity": 1.0,
+    "n_claims": 8,
+    "nli_finite": true,
+    "provider_calls": 0,
+    "model_downloads": false
+  },
+  "script_git_lf_sha256": "cfd668522580c8189290dbb799fdef6f0ef7205304e97e27f0e0cf7611a4fe00",
+  "limitations": [
+    "Prior staged run timed out at 240 seconds",
+    "Both runs count; success does not erase variability",
+    "Different initialization timings do not isolate storage, memory pressure, cache or other host effects",
+    "No provider calls or model downloads"
+  ]
+}

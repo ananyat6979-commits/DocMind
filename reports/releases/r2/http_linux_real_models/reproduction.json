@@ -1,0 +1,7 @@
+{
+  "source_commit": "5708b8e",
+  "workflow_run": 43618152645,
+  "artifact_sha256": "5bf904823c8b3aa13b12fada7a480b19903a14d5fb0bb4428b367949a68883f5",
+  "source_sha256": "fddbd3eda7c45bbfbe7d440df216e4fa5aa2bb21dfa98375e472b5916bf68873",
+  "verification": "Reconciled twelve numeric rows with request counts and exact executed source hash; not a quality benchmark"
+}
