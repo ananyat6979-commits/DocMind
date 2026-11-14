@@ -2,6 +2,7 @@
 FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PYTHONPATH=/app \
     DOCMIND_HOME=/data \
@@ -27,10 +28,11 @@ COPY app.py ./
 COPY scripts ./scripts
 COPY .streamlit ./.streamlit
 
-# Run as a non-root user. /data (database, uploads, reports) is the only writable state.
+# Run as a non-root user. Persistent application state lives under /data.
+# Application source and baked model files retain root ownership.
 RUN useradd --create-home --uid 10001 docmind \
  && mkdir -p /data \
- && chown -R docmind:docmind /data /app /opt/hf
+ && chown docmind:docmind /data
 USER docmind
 EXPOSE 8501 8000
 

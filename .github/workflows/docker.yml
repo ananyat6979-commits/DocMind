@@ -33,7 +33,10 @@ jobs:
 
       - name: Smoke 1, both models load with the network disabled (proves they are baked in)
         run: |
-          docker run --rm --network none ${{ env.IMAGE }}:ci python -c "
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,size=256m --tmpfs /data:rw,uid=10001,gid=10001,size=128m ${{ env.IMAGE }}:ci python -c "
+          import os
+          assert not os.access('/app/docmind', os.W_OK), 'application source must be read-only to runtime UID'
+          assert not os.access('/opt/hf', os.W_OK), 'baked model cache must be read-only to runtime UID'
           from docmind.embeddings import embed_query
           from docmind.retrieval.reranker import _get_model
           print('embedding shape', embed_query('hello').shape)

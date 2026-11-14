@@ -34,3 +34,6 @@ Compose forwards the explicit retrieval mode, embedding identity, optional reran
 Startup, queued ingestion, one cold query, and warm HTTP load are separate measurements. Requested, failed and unserved counts accompany completed-only percentiles. This is one process and a repeated tiny fixture with demo generation, not a hosted-reader SLA, representative corpus-scale load or multi-tenant validation. Server termination by the harness does not validate graceful shutdown.
 
 For native model startup investigation, `python scripts/profile_local_models.py --out reports/release_workspace/model-check` records stages and repeated thread stacks under a finite process deadline. A model-output file alone never makes a timed-out process pass. Diagnostic directories may contain local paths and remain private.
+
+
+The runtime UID does not own application source or the baked model cache. Persistent application data is assigned to that UID; temporary runtime files belong in `/tmp`. The offline model-loading check runs with a read-only root filesystem and separate temporary `/data` and `/tmp` mounts. Ownership hardening is validated separately from parser confinement and does not provide tenant isolation or protection against every kernel exploit.
