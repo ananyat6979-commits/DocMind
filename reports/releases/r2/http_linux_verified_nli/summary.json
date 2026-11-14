@@ -1,0 +1,61 @@
+{
+  "scope": "Single-process loopback HTTP, synthetic document and demo generation; not a production or generative-reader SLA",
+  "real_embedding_and_nli": true,
+  "provider_calls": 0,
+  "model_downloads": false,
+  "python": "3.11.18",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.41",
+  "concurrency": 2,
+  "requested": 12,
+  "deadline_seconds": 420.0,
+  "quota_override_per_minute": 1000,
+  "script_sha256": "a16d10369e8736fc58807859fd9af5fe2ba01b02387ca93234cba503b1e5dae3",
+  "fixture_sha256": "b596a5136c8658a45f71a2eeafdd5b68d929509c96983ff595f35e732ffd2e9d",
+  "server_ready_seconds": 0.5325554670000088,
+  "queued_ingestion_seconds": 7.2910901959999705,
+  "cold_query_seconds": 0.37895449000001236,
+  "warm_load": {
+    "requested": 12,
+    "recorded": 12,
+    "completed": 12,
+    "failed": 0,
+    "unserved": 0,
+    "status_counts": {
+      "200": 12
+    },
+    "elapsed_seconds": 3.157959731999995,
+    "completed_per_second": 3.799921790769693,
+    "completed_only_p50_ms": 521.9020140000339,
+    "completed_only_p95_ms": 572.5532894499935,
+    "all_completed_have_request_id": true
+  },
+  "forced_kill": false,
+  "server_exit_code": -15,
+  "stored_attribution": {
+    "responses": 13,
+    "completed_nli": 13,
+    "judges": [
+      {
+        "model": "typeform/distilbert-base-uncased-mnli",
+        "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+      }
+    ],
+    "scope": "Stored NLI execution metadata only, not human support or correctness"
+  },
+  "neural_path_verified": true,
+  "runtime": {
+    "embedding_backend": "sentence-transformers",
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "embedding_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "retrieval_mode": "dense",
+    "versions": {
+      "torch": "2.13.0+cpu",
+      "transformers": "5.23.0",
+      "sentence-transformers": "5.7.0",
+      "fastapi": "0.162.7",
+      "uvicorn": "0.54.0"
+    }
+  },
+  "total_wall_seconds": 11.699406427999975,
+  "shutdown_scope": "Harness termination, not a graceful-shutdown benchmark"
+}

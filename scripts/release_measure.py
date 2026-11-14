@@ -236,7 +236,7 @@ def english_pdf_pilot(inputs,output,n=3):
             new=attribute(response.answer,response.sources,judge,claim_units=claims)
             replays.append({"id":item["id"],"legacy":old,"repaired":new,"input_sha256":digest([response.answer,record["sources"]])})
         except Exception as exc:
-            record={"id":item["id"],"language":"en","condition":"baseline_capture","elapsed_seconds":time.perf_counter()-start,"error":type(exc).__name__}
+            record={"id":item["id"],"language":"en","condition":"baseline_capture","elapsed_seconds":time.perf_counter()-start,"error":type(exc).__name__,"calls":reader.call_records[prior:]}
         records.append(record);write(output/"private"/"english-pilot.json",records);write(output/"private"/"replay.json",replays)
     write(output/"reader-identity.json",reader.identity)
     result={"scope":"English local-reader T4 diagnostic pilot; synthetic drafts, no human correctness labels",

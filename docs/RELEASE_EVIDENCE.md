@@ -118,3 +118,8 @@ The [Windows loopback HTTP observation](../reports/releases/r2/http_windows_stan
 
 
 An [identical staged Windows repeat](../reports/releases/r2/windows_startup_repeat.json) completed model assertions and exited with status zero in 82.0 seconds under the same 240-second cap. Torch import took 10.6 seconds, ingestion completed at 68.1 seconds, query completion at 71.8 seconds and the exit handler at 72.3 seconds. The failed initialization run remains published. These observations show variable initialization and a successful process exit, not a proven shutdown fix or isolated host-performance cause.
+
+
+The [stored-NLI-verified HTTP follow-up](../reports/releases/r2/http_linux_verified_nli/summary.json) completed 12/12 warm requests, plus the separate cold query, and verified thirteen stored judgments with the pinned English NLI identity and finite support fractions. Warm p50/p95 were 521.9/572.6 ms at concurrency two. This is a separate CI run, not an established speedup over the earlier observation. It retains the same tiny-fixture, demo-generation and single-process limits. Successful NLI execution does not validate the judgments or answer correctness.
+
+Fresh local-reader profiles now record failed calls, including prefill-budget errors and numerical failures. Generated-token counts remain unknown when generation fails without returning tokens. Submitted input tokens and elapsed failure time are retained, preventing successful-call-only budget accounting. The reader identity records `attempts-v2`; historical results are unchanged. Updated CUDA inference remains unmeasured.

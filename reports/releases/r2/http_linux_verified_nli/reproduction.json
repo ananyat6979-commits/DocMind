@@ -1,0 +1,7 @@
+{
+  "source_commit": "d30f21d",
+  "workflow_run": 43620944793,
+  "artifact_sha256": "183515119e6e6330a05e600faba9c6a573f3a922469d21b2b5929d1d6c704f47",
+  "source_sha256": "a16d10369e8736fc58807859fd9af5fe2ba01b02387ca93234cba503b1e5dae3",
+  "verification": "Twelve HTTP rows plus cold query: thirteen stored NLI completions, finite scores, pinned judge identity and exact executed source hash; not human correctness evidence"
+}
