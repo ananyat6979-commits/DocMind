@@ -116,7 +116,7 @@ def test_api_tenant_headers_cannot_override_credentials(scopes,tmp_path,monkeypa
     from fastapi.testclient import TestClient
     from docmind.api.main import app
     tokens=['alpha-secret','beta-secret'];registry=tmp_path/'credentials.json'
-    registry.write_text(json.dumps([{'tenant_id':tenant,'actor_id':'reader','key_sha256':hashlib.sha256(token.encode()).hexdigest(),'roles':['reader']} for tenant,token in zip(('alpha','beta'),tokens)]))
+    registry.write_text(json.dumps([{'tenant_id':tenant,'actor_id':'reader','key_sha256':hashlib.sha256(token.encode()).hexdigest(),'roles':['reader','ingestor','admin']} for tenant,token in zip(('alpha','beta'),tokens)]))
     monkeypatch.setenv('DOCMIND_DATABASE_URL',scopes[0].dsn);monkeypatch.setenv('DOCMIND_CREDENTIALS_FILE',str(registry))
     add(CorpusStore(scopes[0]))
     with TestClient(app) as client:
@@ -125,6 +125,14 @@ def test_api_tenant_headers_cannot_override_credentials(scopes,tmp_path,monkeypa
         assert left.status_code==right.status_code==200
         assert 'same-file' in left.text and 'same-file' not in right.text
         assert client.get('/documents',headers={'X-API-Key':'invalid'}).status_code==401
+        # Synchronous upload and deletion must use the authenticated backend too.
+        response=client.post('/upload',headers={'X-API-Key':tokens[0]},files={'file':('tenant.txt',b'The reactor coolant remains below 300 degrees during startup. Operators inspect the pump each shift.','text/plain')})
+        assert response.status_code==200,response.text
+        file_id=response.json()['file_ids'][0]
+        assert CorpusStore(scopes[0]).has_file(file_id) and not CorpusStore(scopes[1]).has_file(file_id)
+        assert client.delete('/documents/'+file_id,headers={'X-API-Key':tokens[1]}).status_code==404
+        assert client.delete('/documents/'+file_id,headers={'X-API-Key':tokens[0]}).status_code==200
+        assert not CorpusStore(scopes[0]).has_file(file_id)
 
 
 def test_two_api_processes_share_quota_and_tenant_isolation(scopes,tmp_path,monkeypatch):

@@ -247,7 +247,7 @@ def ingest_documents(req: IngestRequest):
     if not path.exists():
         raise HTTPException(status_code=404, detail=f"Path not found: {req.path}")
     try:
-        return _ingest_response(ingest(path, rebuild_index=req.rebuild,expected_language=req.expected_language,encoding=req.encoding), req.path)
+        return _ingest_response(ingest(path, store=get_store(),rebuild_index=req.rebuild,expected_language=req.expected_language,encoding=req.encoding), req.path)
     except HTTPException:
         raise
     except Exception as exc:
@@ -288,13 +288,13 @@ def _persist_upload(file):
 def upload(file: UploadFile = File(...), expected_language: Optional[Literal["en","hi","fr","de","fi"]] = None, encoding: Optional[Literal["cp1252"]] = None):
     dest, name = _persist_upload(file)
     try:
-        return _ingest_response(ingest(dest,expected_language=expected_language,encoding=encoding), name)
+        return _ingest_response(ingest(dest,store=get_store(),expected_language=expected_language,encoding=encoding), name)
     except Exception as exc:
         from docmind.ingestion.parser_client import ParserUnavailable
         raise HTTPException(status_code=503 if isinstance(exc, ParserUnavailable) else 422, detail=str(exc))
     finally:
         from docmind.uploads import cleanup
-        cleanup(dest, release=True)
+        cleanup(dest,get_store().db_path, release=True)
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
@@ -368,7 +368,7 @@ def review_decide(response_id: str, body: ReviewDecision, reviewer: str = Depend
 @app.delete("/documents/{file_id}", dependencies=[Depends(require_api_key), Depends(require_admin)])
 def delete_document(file_id: str):
     from docmind.services import erase_document
-    if not erase_document(file_id):
+    if not erase_document(file_id,store=get_store()):
         raise HTTPException(status_code=404, detail="Unknown document")
     return {"ok": True}
 
@@ -426,7 +426,7 @@ def enqueue_upload(request: Request, file: UploadFile = File(...), expected_lang
         raise HTTPException(status_code=429, detail=str(exc))
     finally:
         from docmind.uploads import cleanup
-        cleanup(dest, release=True)
+        cleanup(dest,get_store().db_path, release=True)
 
 
 @app.get("/metrics", dependencies=[Depends(require_api_key)])

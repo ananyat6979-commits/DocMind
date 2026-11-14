@@ -1,5 +1,6 @@
 """SQLite helper. One database file holds corpus, reviews and usage events."""
 import sqlite3
+import os
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -12,6 +13,8 @@ def connect(db_path=None):
     if isinstance(db_path,DatabaseScope):
         with pg_connect(db_path) as conn:yield conn
         return
+    if db_path is None and os.getenv("DOCMIND_DATABASE_URL"):
+        raise RuntimeError("Production storage requires an explicit authenticated database scope")
     path = Path(db_path or CONFIG.db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(path), timeout=15)
