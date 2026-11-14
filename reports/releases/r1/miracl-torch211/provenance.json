@@ -1,0 +1,8 @@
+{
+  "source_commit": "01943d2",
+  "workflow_run": 43594762755,
+  "artifact_sha256": "4b764425383f5934782bf586a291a99869ae1b2bbef3d74e8722b0295c7ec0a1",
+  "scope": "MIRACL dev-derived pooled judged-candidate component, not full-corpus MIRACL",
+  "license": "MIRACL card declares Apache-2.0. Underlying Wikipedia attribution/share-alike terms remain separate. No source text or qrels are committed.",
+  "verification": "4200 numeric ranking rows and all reported intervals verified against pinned public qrels."
+}

@@ -60,3 +60,10 @@ def test_event_log_roundtrip():
     ev.log("query", user="u1", latency_ms=1200, abstained=False)
     rows = ev.rows("query")
     assert rows[0]["user"] == "u1" and rows[0]["payload"]["latency_ms"] == 1200
+
+
+def test_dense_scores_do_not_reuse_a_reranker_review_threshold():
+    CONFIG.review.min_top_score=0.1
+    response=_resp()
+    response.sources[0].retriever="dense"
+    assert "retrieval_score_policy_unavailable" in review_reasons(response)

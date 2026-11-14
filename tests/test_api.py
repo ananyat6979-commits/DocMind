@@ -83,3 +83,12 @@ def test_reviewer_pin_enforced(client):
     assert client.get("/review/pending").status_code == 401
     assert client.get("/review/pending", headers={"X-Reviewer-Pin": "1234"}).status_code == 200
     CONFIG.review.reviewer_pin = "test-pin"
+
+
+def test_embedding_migration_fails_ready_and_query_without_deleting_library(client,monkeypatch):
+    assert _upload(client,"alpha.txt",ALPHA).status_code==200
+    monkeypatch.setattr(CONFIG.embedding,"model_revision","different-representation")
+    assert client.get("/ready").status_code==503
+    result=client.post("/query",json={"question":"coolant temperature"})
+    assert result.status_code==503 and "isolated corpus" in result.json()["detail"]
+    assert len(client.get("/documents").json())==1

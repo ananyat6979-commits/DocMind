@@ -18,7 +18,7 @@ COPY requirements.txt .
 
 # Bake the retrieval and attribution models INTO the image. Nothing is downloaded at start-up,
 # it works offline, and the /data volume can never hide them (HF_HOME is outside /data).
-RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('BAAI/bge-small-en-v1.5', revision='5c38ec7c405ec4b44b94cc5a9bb96e735b38267a'); CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', revision='233902d25c440f23af6f7d6e94d2946bac0bee0a')"
+RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('intfloat/multilingual-e5-small', revision='614241f622f53c4eeff9890bdc4f31cfecc418b3'); SentenceTransformer('BAAI/bge-small-en-v1.5', revision='5c38ec7c405ec4b44b94cc5a9bb96e735b38267a'); CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', revision='233902d25c440f23af6f7d6e94d2946bac0bee0a')"
 RUN python -c "from transformers import AutoTokenizer, AutoModelForSequenceClassification; m='typeform/distilbert-base-uncased-mnli'; r='cfa538a0fddbbd978fefe8966c1aeff7ad409c90'; AutoTokenizer.from_pretrained(m, revision=r); AutoModelForSequenceClassification.from_pretrained(m, revision=r)"
 ENV HF_HUB_OFFLINE=1
 

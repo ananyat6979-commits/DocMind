@@ -14,6 +14,7 @@ sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/"scripts"))
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--inputs",type=Path,required=True);parser.add_argument("--out",type=Path,required=True);args=parser.parse_args()
+    if args.out.exists() and any(args.out.iterdir()):raise ValueError("Output already exists; choose a fresh directory to preserve prior measurements")
     os.environ.update(DOCMIND_TEST_MODE="0",DOCMIND_SECRETS_FILE=str(args.out/"no-provider.env"));os.environ.pop("GROQ_API_KEY",None)
     import numpy as np
     from miracl_component import prepare_pool,legacy_tokenize

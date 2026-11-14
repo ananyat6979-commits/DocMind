@@ -22,6 +22,8 @@ def verify_row(row, qrels):
         raise ValueError("Invalid or duplicate ranking")
     if row.get("error") and predicted:
         raise ValueError("Failed rows must not carry a successful ranking")
+    if "elapsed_ms" in row and (not math.isfinite(row["elapsed_ms"]) or row["elapsed_ms"]<0):
+        raise ValueError("Invalid latency")
     rel = [qrels.get(item, 0) > 0 for item in predicted]
     total = sum(v > 0 for v in qrels.values())
     expected = {"recall5": recall_at_k(rel, 5, total), "ndcg5": ndcg_at_k(rel, 5, total), "mrr5": mrr(rel, 5)}
@@ -29,9 +31,24 @@ def verify_row(row, qrels):
         raise ValueError("Per-query metric mismatch")
 
 
+def verify_selection(rows, selection, manifest):
+    for key, entry in selection["contrasts"].items():
+        language=key.split("_",1)[0]
+        a=[r for r in rows if r["language"]==language and r["mode"]==entry["baseline"]]
+        b={r["id"]:r for r in rows if r["language"]==language and r["mode"]==entry["treatment"]}
+        if len(a)!=entry["n"] or len(b)!=entry["n"] or entry["n"]!=manifest["n_per_language"][language] or {r["id"] for r in a}!=set(b):
+            raise ValueError("Selection comparison cohort mismatch")
+        if any(r.get("error") for r in [*a,*b.values()]):raise ValueError("Selection comparison contains failed rows")
+        for metric, actual in entry["metrics"].items():
+            expected=bootstrap_ci([b[r["id"]][metric]-r[metric] for r in a],2000)
+            if any(not math.isclose(x,y,abs_tol=1e-12) for x,y in zip(expected,(actual["difference"],*actual["ci95"]))):
+                raise ValueError("Default selection interval mismatch")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
+    parser.add_argument("--selection", type=Path)
     args = parser.parse_args()
     manifest = json.loads((args.directory / "manifest.json").read_text(encoding="utf-8"))
     run_id = manifest.pop("run_id")
@@ -88,6 +105,11 @@ def main():
                 expected = bootstrap_ci([b[qid][metric]-a[qid][metric] for qid in paired],2000)
                 if any(not math.isclose(x,y,abs_tol=1e-12) for x,y in zip(expected,(actual["difference"],*actual["ci95"]))):
                     raise ValueError("Paired interval mismatch")
+    if args.selection:
+        selection=json.loads(args.selection.read_text(encoding="utf-8"))
+        normalized=(args.directory/"records.jsonl").read_bytes().replace(b"\r\n",b"\n")
+        if hashlib.sha256(normalized).hexdigest()!=selection["source_records_sha256"]:raise ValueError("Selection input identity mismatch")
+        verify_selection(rows,selection,manifest)
     print(f"Verified {len(rows)} numeric rankings against pinned public judgments and requested denominators.")
 
 

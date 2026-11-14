@@ -6,7 +6,8 @@ Rank-based, so cosine and BM25 scales never need normalizing.
 
 The retriever is a view over CorpusStore. Each search checks the store's
 corpus_version and rebuilds the in-memory indexes if another process (or the
-upload button) changed the corpus, so it can never serve a stale index.
+upload button) changed the corpus. Searches capture coherent dense/sparse
+snapshots; supported deployment still uses one API service process.
 """
 import logging
 import threading
@@ -77,11 +78,17 @@ class HybridRetriever:
         query: str,
         top_k: Optional[int] = None,
         file_ids: Optional[Iterable[str]] = None,
-        mode: str = "hybrid_rerank",
+        mode: Optional[str] = None,
         min_score=_USE_CONFIG_THRESHOLD,
     ) -> List[SearchResult]:
+        mode = mode or CONFIG.retriever.mode
+        threshold = CONFIG.retriever.min_rerank_score if min_score is _USE_CONFIG_THRESHOLD else min_score
+        if mode != "hybrid_rerank" and threshold is not None:
+            raise ValueError("Reranker thresholds require hybrid_rerank mode; clear stale thresholds before changing retrieval")
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}")
+        if mode == "hybrid_rerank" and self.reranker is None:
+            raise ValueError("The requested reranker is disabled; enable it explicitly or select dense/hybrid mode")
         self.refresh()
         with self._lock:
             dense, sparse = self.dense, self.sparse

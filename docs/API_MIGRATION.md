@@ -34,3 +34,12 @@ Use `POST /uploads/jobs` for a multipart upload or `POST /ingest/jobs` for an al
 ## Corpus migration
 
 Embedding signatures now include model revision. Existing corpora without compatible lineage must be rebuilt into an isolated directory, then switched over deliberately. Changing chunker configuration does not silently reuse cached chunks. Back up authorized data before migration.
+
+
+## E5 dense default
+
+The measured English/Hindi component release defaults to pinned multilingual E5-small with dense retrieval. Existing BGE vectors, even with 384 dimensions, are a different representation. The identity also includes inference-library versions. `/ready` and `/query` return 503 when a nonempty corpus does not match the active identity; the original documents remain listed.
+
+Keep the old store and authorized uploads for rollback. Create an isolated `DOCMIND_HOME` for the new corpus and re-ingest retained source files through the authenticated ingestion path. For Compose, stop the old stack while retaining its volumes, then start a separately named project such as `docker compose -p docmind-e5 up --build`. Re-upload authorized source files to its new API library. Historical responses and review labels remain associated with their original inputs.
+
+`DOCMIND_RETRIEVAL_MODE=hybrid_rerank` explicitly enables the legacy-style search path. `DOCMIND_USE_RERANKER` controls whether that optional scorer is available; dense requests do not invoke it. Clear old `DOCMIND_MIN_RERANK_SCORE` values when switching modes. They cannot be applied to cosine scores. A configured reranker review threshold without reranker scores routes to review. Any new threshold requires a fresh calibration study; these component results do not validate a risk bound.

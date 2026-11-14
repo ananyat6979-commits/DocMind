@@ -38,7 +38,7 @@ from docmind.ingestion.loader import LOADERS
 from docmind.ingestion.pipeline import ingest
 from docmind.retrieval.hybrid import HybridRetriever
 from docmind.review.store import ReviewStore, DECISIONS
-from docmind.store import CorpusStore
+from docmind.store import CorpusStore, EmbeddingModelMismatch
 from docmind.telemetry.events import EventLog
 
 logger = logging.getLogger(__name__)
@@ -270,11 +270,15 @@ def upload(file: UploadFile = File(...), expected_language: Optional[Literal["en
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
 def query(req: QueryRequest, request: Request):
-    agent = get_agent()
-    if agent.retriever.is_empty():
-        raise HTTPException(status_code=409, detail="No documents ingested yet. POST /upload first.")
     try:
+        agent = get_agent()
+        if agent.retriever.is_empty():
+            raise HTTPException(status_code=409, detail="No documents ingested yet. POST /upload first.")
         resp = agent.run(req.question, file_ids=req.file_ids)
+    except EmbeddingModelMismatch:
+        raise HTTPException(status_code=503, detail="Corpus embeddings differ from the active configuration; rebuild an isolated corpus from retained uploads")
+    except HTTPException:
+        raise
     except Exception as exc:
         logger.exception("Agent query failed")
         raise HTTPException(status_code=500, detail="Query failed; consult server logs")
@@ -376,7 +380,12 @@ def cancel_ingestion(job_id: str, request: Request):
 def readiness():
     if CONFIG.llm.provider != "demo" and (not CONFIG.llm.groq_api_key or not CONFIG.llm.groq_model):
         raise HTTPException(status_code=503, detail="Generation provider is not configured")
-    return {"status": "ready", "corpus_version": get_store().version()}
+    store = get_store()
+    try:
+        store.ensure_embedding_compatible()
+    except EmbeddingModelMismatch:
+        raise HTTPException(status_code=503, detail="Corpus embeddings differ from the active configuration; rebuild an isolated corpus from retained uploads")
+    return {"status": "ready", "corpus_version": store.version()}
 
 
 @app.post("/uploads/jobs", status_code=202, dependencies=[Depends(require_api_key), Depends(require_ingestor)])

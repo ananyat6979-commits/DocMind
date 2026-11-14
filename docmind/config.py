@@ -5,7 +5,8 @@ All tunable parameters live here. Nothing is hardcoded in pipeline code.
 Environment overrides (all optional):
   GROQ_API_KEY              generator + judge key
   DOCMIND_CHUNKER=fixed     skip sentence-level embedding when chunking (fast on very long documents)
-  DOCMIND_USE_RERANKER=0    skip the cross-encoder (low-RAM laptops)
+  DOCMIND_RETRIEVAL_MODE    dense (default), sparse, hybrid or hybrid_rerank
+  DOCMIND_USE_RERANKER=0    disable optional cross-encoder availability
   DOCMIND_MAX_ITERATIONS    ReAct steps per question (default 5; 3 saves tokens)
   DOCMIND_DEVICE            cpu | cuda (embedding + reranker device)
   DOCMIND_APP_PASSWORD      password gate for the Streamlit UI (set this before exposing it)
@@ -47,11 +48,12 @@ TEST_MODE = os.getenv("DOCMIND_TEST_MODE", "") == "1"
 
 @dataclass
 class EmbeddingConfig:
-    # bge-small-en-v1.5: ~33M params, 384 dims. Retrieval queries should be
-    # prefixed with an instruction (see embeddings.embed_query).
-    model_name: str = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_MODEL","BAAI/bge-small-en-v1.5"))
-    model_revision: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_REVISION") or
-        ("5c38ec7c405ec4b44b94cc5a9bb96e735b38267a" if os.getenv("DOCMIND_EMBEDDING_MODEL","BAAI/bge-small-en-v1.5")=="BAAI/bge-small-en-v1.5" else None))
+    # E5-small covers the measured English/Hindi component; source prefixes are required.
+    model_name: str = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_MODEL","intfloat/multilingual-e5-small"))
+    model_revision: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_EMBEDDING_REVISION") or {
+        "intfloat/multilingual-e5-small":"614241f622f53c4eeff9890bdc4f31cfecc418b3",
+        "BAAI/bge-small-en-v1.5":"5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    }.get(os.getenv("DOCMIND_EMBEDDING_MODEL","intfloat/multilingual-e5-small")))
     backend: Literal["sentence-transformers", "hash"] = "hash" if TEST_MODE else "sentence-transformers"
     device: str = field(default_factory=lambda: os.getenv("DOCMIND_DEVICE", "cpu"))   # "cuda" on Kaggle/Colab GPU
     batch_size: int = 32
@@ -76,11 +78,12 @@ class RetrieverConfig:
     top_k_sparse: int = 10
     top_k_rerank: int = 5
     rrf_k: int = 60
+    mode: Literal["dense","sparse","hybrid","hybrid_rerank"] = field(default_factory=lambda: cast(Literal["dense","sparse","hybrid","hybrid_rerank"],os.getenv("DOCMIND_RETRIEVAL_MODE","dense")))
     reranker_model: str = field(default_factory=lambda: "lexical" if TEST_MODE else os.getenv("DOCMIND_RERANKER_MODEL","cross-encoder/ms-marco-MiniLM-L-6-v2"))
     reranker_revision: Optional[str] = field(default_factory=lambda: os.getenv("DOCMIND_RERANKER_REVISION") or
         ("233902d25c440f23af6f7d6e94d2946bac0bee0a" if os.getenv("DOCMIND_RERANKER_MODEL","cross-encoder/ms-marco-MiniLM-L-6-v2")=="cross-encoder/ms-marco-MiniLM-L-6-v2" else None))
     # Set DOCMIND_USE_RERANKER=0 on a low-RAM machine to skip the cross-encoder (saves ~0.5 GB).
-    # Retrieval is then hybrid-only and the abstention gate cannot apply. Never evaluate in this mode.
+    # Dense is the default. This switch controls availability of explicit reranking modes.
     use_reranker: bool = field(default_factory=lambda: os.getenv("DOCMIND_USE_RERANKER", "1") != "0")
     # Abstention gate. None = disabled. Calibrate with scripts/ablation.py,
     # which prints a recommended value from your labeled testset.

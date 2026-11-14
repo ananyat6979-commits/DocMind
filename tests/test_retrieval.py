@@ -53,3 +53,23 @@ def test_rrf_k_parameter():
     scores_high = [r.score for r in fused_high_k]
     # Low k = larger differences between ranks
     assert (scores_low[0] - scores_low[-1]) > (scores_high[0] - scores_high[-1])
+
+def test_default_dense_does_not_run_sparse_or_reranker(make_file,monkeypatch):
+    from docmind.config import CONFIG,DocMindConfig
+    from docmind.ingestion.pipeline import ingest
+    from docmind.retrieval.hybrid import HybridRetriever
+    from docmind.store import CorpusStore
+    from tests.conftest import ALPHA
+    cfg=DocMindConfig()
+    assert cfg.embedding.model_name=="intfloat/multilingual-e5-small" and cfg.embedding.model_revision
+    assert cfg.retriever.mode=="dense"
+    store=CorpusStore();ingest(make_file("a.txt",ALPHA),store=store)
+    retriever=HybridRetriever(store);retriever.refresh()
+    def unused(*args,**kwargs):raise AssertionError("Default dense path invoked an optional scorer")
+    monkeypatch.setattr(retriever.sparse,"search",unused)
+    monkeypatch.setattr(retriever.reranker,"rerank",unused)
+    hits=retriever.search("coolant temperature startup")
+    assert hits and all(r.retriever=="dense" for r in hits)
+    monkeypatch.setattr(CONFIG.retriever,"min_rerank_score",0.1)
+    with pytest.raises(ValueError,match="clear stale thresholds"):
+        retriever.search("coolant temperature startup")

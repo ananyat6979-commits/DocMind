@@ -2,7 +2,7 @@
 Shared embedding backend.
 
 Two backends:
-  - sentence-transformers (default): BAAI/bge-small-en-v1.5
+  - sentence-transformers (default): pinned multilingual E5-small
   - hash: deterministic bag-of-hashed-tokens vectors. Used for offline tests and
     CI so the test suite never downloads a model. Never use it for real retrieval.
 """
@@ -66,7 +66,7 @@ def reset_embedding_model() -> None:
 
 
 def embed_texts(texts: List[str], show_progress: bool = False) -> np.ndarray:
-    """Embed passages (no instruction prefix). Returns float32 (n, dim)."""
+    """Embed passages with the model-specific prefix policy, as float32 (n, dim)."""
     return _encode(texts, show_progress, query=False)
 
 

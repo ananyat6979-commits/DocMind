@@ -2,7 +2,9 @@
 
 The revised release sequence is documented in [release gates](docs/RELEASES.md). Production UI access now goes through the authenticated API and separate parser service; follow [centralized deployment](docs/DOCKER_CLOUD.md). Native parsing and the direct local UI require explicit trusted-development overrides. English/Hindi component and PDF measurements are separate, and unmeasured languages remain gated.
 
-Question answering over PDF, DOCX and text files, with hybrid retrieval, quoted evidence, claim-level attribution checks and a human review queue. This is a single-corpus pilot with published measurements and known failures.
+Question answering over PDF, DOCX and text files, with pinned multilingual E5 dense retrieval, optional hybrid/reranking profiles, quoted evidence, claim-level attribution checks and a human review queue. This is a single-corpus pilot with published measurements and known failures.
+
+The default now follows measured cost and language coverage: E5-small with dense retrieval. Hindi Recall@5 was 75.9% versus 0.8% for English BGE in the declared MIRACL candidate pool. English was 74.1% versus 75.4%, with an uncertain difference. This is component evidence; Hindi answers still require review. Existing corpora need an [isolated migration](docs/API_MIGRATION.md#e5-dense-default).
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced local-reader cohort remain unmeasured.
 

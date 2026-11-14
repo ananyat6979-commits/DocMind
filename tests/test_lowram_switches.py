@@ -25,6 +25,8 @@ def test_ablation_refuses_to_run_without_reranker(make_file):
     try:
         r = HybridRetriever(store)
         assert r.reranker is None
+        with pytest.raises(ValueError,match="reranker is disabled"):
+            r.search("coolant temperature",mode="hybrid_rerank")
         with pytest.raises(ValueError, match="reranker is disabled"):
             evaluate_modes([{"question": "q", "answerable": True, "gold_substrings": ["x"]}], r)
     finally:
@@ -41,6 +43,6 @@ def test_search_still_works_without_reranker(make_file):
     CONFIG.retriever.use_reranker = False
     try:
         hits = HybridRetriever(store).search("coolant temperature startup")
-        assert hits and hits[0].retriever == "hybrid"
+        assert hits and hits[0].retriever == "dense"
     finally:
         CONFIG.retriever.use_reranker = True

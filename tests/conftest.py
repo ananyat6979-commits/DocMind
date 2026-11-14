@@ -32,6 +32,7 @@ def isolated(tmp_path):
     CONFIG.data_dir = tmp_path / "data"
     CONFIG.reports_dir = tmp_path / "reports"
     CONFIG.ensure_dirs()
+    CONFIG.retriever.mode = "dense"
     CONFIG.retriever.min_rerank_score = None
     CONFIG.review.min_top_score = None
     CONFIG.review.audit_rate = 0.0

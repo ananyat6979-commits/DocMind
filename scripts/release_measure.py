@@ -202,7 +202,9 @@ def english_pdf_pilot(inputs,output,n=3):
     pool=json.loads((inputs/"pool-en.json").read_text(encoding="utf-8"))
     CONFIG.embedding.model_name,CONFIG.embedding.model_revision=MODELS["bge"]
     CONFIG.embedding.backend="sentence-transformers";CONFIG.embedding.device=device
+    CONFIG.retriever.mode="hybrid_rerank"
     CONFIG.retriever.reranker_model="cross-encoder/ms-marco-MiniLM-L-6-v2"
+    CONFIG.retriever.reranker_revision="233902d25c440f23af6f7d6e94d2946bac0bee0a"
     CONFIG.chunker.strategy="recursive";CONFIG.llm.temperature=0;CONFIG.llm.max_tokens=256
     chunks=[]
     for page in cache["pages"]:
@@ -238,6 +240,7 @@ def english_pdf_pilot(inputs,output,n=3):
         records.append(record);write(output/"private"/"english-pilot.json",records);write(output/"private"/"replay.json",replays)
     write(output/"reader-identity.json",reader.identity)
     result={"scope":"English local-reader T4 diagnostic pilot; synthetic drafts, no human correctness labels",
+        "retrieval_profile":{"embedding":MODELS["bge"],"mode":"hybrid_rerank","reranker":[CONFIG.retriever.reranker_model,CONFIG.retriever.reranker_revision],"chunker":"recursive"},
         **pilot_accounting(records,n),
         "partial_document_policy":"All answers require review because the source contains quarantined pages",
         "attribution_replays":[{"id":r["id"],"legacy_supported_fraction":r["legacy"]["supported_fraction"],"repaired_supported_fraction":r["repaired"]["supported_fraction"]} for r in replays],

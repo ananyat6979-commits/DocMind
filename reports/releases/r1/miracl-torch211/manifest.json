@@ -1,0 +1,59 @@
+{
+  "scope": "MIRACL dev-derived judged-candidate component subset, not full-corpus MIRACL",
+  "sources": {
+    "en": "f575dbbc1a2c9e471aa192721f1a40499a1b52b0a46de118c12b6ca77e080b6f",
+    "hi": "e3c954f836f844194fb822775034e5e5fdc777585901a81b19767b08c39b4bb6"
+  },
+  "device": "cpu",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "transformers": "5.23.0",
+    "sentence-transformers": "5.7.0",
+    "tokenizers": "0.23.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.16.0"
+  },
+  "python": "3.11.18",
+  "distractors": 2000,
+  "code_sha256": "518b51355fde04be0f4580f0d6821b8260321b46dbfcd9b5a2ae2923d3c51674",
+  "headers": false,
+  "fusion_depth_per_retriever": 10,
+  "reranker_candidate_caps": [
+    5,
+    20
+  ],
+  "models": {
+    "bge": [
+      "BAAI/bge-small-en-v1.5",
+      "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+    ],
+    "e5": [
+      "intfloat/multilingual-e5-small",
+      "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+    ],
+    "reranker": [
+      "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "1427fd652930e4ba29e8149678df786c240d8825"
+    ],
+    "english_nli": [
+      "typeform/distilbert-base-uncased-mnli",
+      "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+    ],
+    "multilingual_nli": [
+      "MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli",
+      "0a71e92a985b6e1ad1828cf67ce9c459639c1dca"
+    ]
+  },
+  "n_per_language": {
+    "en": 200,
+    "hi": 200
+  },
+  "documents_per_language": {
+    "en": 4024,
+    "hi": 3964
+  },
+  "public_labels": "not independently reviewed",
+  "run_id": "b208ead0b42bc0b704ed23a057372d001e1b85d6d09039ca51dea30ddf6a7bca"
+}

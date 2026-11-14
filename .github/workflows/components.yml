@@ -32,6 +32,8 @@ jobs:
             reports/release_workspace/cpu-components/ann-query-records.json
           if-no-files-found: warn
   retrieval:
+    # Full corpus preparation is a deliberate frozen release experiment.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 115
     env:

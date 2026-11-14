@@ -24,3 +24,5 @@ data/
 indexes/
 *.zip
 *.7z
+
+.kaggle*/

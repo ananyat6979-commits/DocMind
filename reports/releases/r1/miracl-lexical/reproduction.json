@@ -1,0 +1,7 @@
+{
+  "measurement_runner_commit": "730560a",
+  "runner_path": "scripts/miracl_lexical.py",
+  "git_lf_source_sha256": "e35a475c42d29714c660c8b9ab17b102836155eaa17cb0e861102e5b23c63c3f",
+  "measured_windows_crlf_source_sha256": "15c8b102f0cdc333bf73ee3275ea7adb35c04f504be2fd99bf6a4c9605d764ed",
+  "note": "Git stores LF. The original Windows run hashed CRLF source bytes. Converting the named Git version to CRLF reproduces the recorded runner hash. A later overwrite guard changes only output handling."
+}

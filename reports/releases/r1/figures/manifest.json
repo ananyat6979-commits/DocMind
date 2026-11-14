@@ -1,0 +1,9 @@
+{
+  "source_report_canonical_sha256": "8c71cb85ea9865316d00e69540dff1e376460a4c287053e0979e8783ca1bab55",
+  "matplotlib": "3.11.2",
+  "numpy": "2.4.6",
+  "files": {
+    "retrieval_components.png": "ed38e27a7a9fc2ea9edbeb72213c6d38b84853cdbbed0a1b92d470dec75fdcec",
+    "retrieval_components.svg": "214bf1b07de45b4eaf20b34be5dd7c3e13fd80635ca834053125840460de6c5d"
+  }
+}

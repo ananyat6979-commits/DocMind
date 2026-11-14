@@ -1,0 +1,79 @@
+{
+  "scope": "MIRACL dev-derived judged-candidate component subset, not full-corpus MIRACL",
+  "sources": {
+    "en": "46961a4118f7e4771812efa220eea4aabb4204f6c7f8156b3054278047926570",
+    "hi": "8985aed5f960f804bb89d02d5585725b131daeb04a426c4749e90687e66108ae"
+  },
+  "semantic_sources": {
+    "en": {
+      "query_revision": "5be20db9509754dadad47689368639fcec739c00",
+      "corpus_revision": "d921ec7e349ce0d28daf30b2da9da5ee698bef0d",
+      "topics_sha256": "25d9e6d17656674fd7aa3b67ee912c71545e664a842b147bfc17e9ff391db3da",
+      "qrels_sha256": "a0af836c300e85088c4d73449492e2378280f967cac032853c9e11f3bc8a8d81",
+      "selected_ids_sha256": "b2d0d2ba2aeba6205fcc8a6bfb728a324eed7d84ea500fed8474bd86f5eb35fb",
+      "cohort_sha256": "f219a17fcd93df7bff99521ba13d1fde63928d01c58dc29cedb79d3e6a537b03",
+      "corpus_sha256": "aa64b1bb9fe09ad7c1dc1525da75e7bc5cabaa74a5c0299e8f25b98d88247ffa"
+    },
+    "hi": {
+      "query_revision": "5be20db9509754dadad47689368639fcec739c00",
+      "corpus_revision": "d921ec7e349ce0d28daf30b2da9da5ee698bef0d",
+      "topics_sha256": "94bed8e649806246f59edfb6434ea0c59920a44f2f60a56e01d205c6bf58ef60",
+      "qrels_sha256": "4cec99e7012ffca7fd129eeea01f37984bb21702706a8398208e8fba1c14e963",
+      "selected_ids_sha256": "205c0d8f52c24ea760a7bff6fff87deb727bef06b43b1213f9d49b39cd56ef10",
+      "cohort_sha256": "21d8161254e7a400c57e7e764bd945a190e2e6f50e980951361568a7b7ff7579",
+      "corpus_sha256": "e2ec1ced24b7d14310fa07bc04f6c19384f0d8e19a8a39ce477b944eba2c2426"
+    }
+  },
+  "device": "cpu",
+  "platform": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "versions": {
+    "torch": "2.13.0+cpu",
+    "transformers": "5.23.0",
+    "sentence-transformers": "5.7.0",
+    "tokenizers": "0.23.3",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.16.0"
+  },
+  "python": "3.11.18",
+  "distractors": 2000,
+  "code_sha256": "aac8f8a92eb0580d38f90a719629c9679c73b764abe5beb461f0a3fe5ff9ca1b",
+  "headers": false,
+  "fusion_depth_per_retriever": 10,
+  "reranker_candidate_caps": [
+    5,
+    20
+  ],
+  "models": {
+    "bge": [
+      "BAAI/bge-small-en-v1.5",
+      "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+    ],
+    "e5": [
+      "intfloat/multilingual-e5-small",
+      "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+    ],
+    "reranker": [
+      "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "1427fd652930e4ba29e8149678df786c240d8825"
+    ],
+    "english_nli": [
+      "typeform/distilbert-base-uncased-mnli",
+      "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+    ],
+    "multilingual_nli": [
+      "MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli",
+      "0a71e92a985b6e1ad1828cf67ce9c459639c1dca"
+    ]
+  },
+  "n_per_language": {
+    "en": 200,
+    "hi": 200
+  },
+  "documents_per_language": {
+    "en": 4024,
+    "hi": 3964
+  },
+  "public_labels": "not independently reviewed",
+  "run_id": "eb37fb774fb14ced71f61797e52334d1b8a44761edf5fccedce887c57d4e8228"
+}

@@ -2,8 +2,8 @@
 Cross-encoder reranker.
 
 A bi-encoder embeds query and passage separately. A cross-encoder reads
-[CLS] query [SEP] passage [SEP] jointly, which is slower (so we only run it on
-the ~20 fused candidates) but a much stronger relevance signal.
+[CLS] query [SEP] passage [SEP] jointly. This costs more and requires a measured
+model/language match; reranking is an explicit alternative to the dense default.
 
 The model is a process-wide singleton: the old code reloaded the 90MB model for
 every HybridRetriever instance (e.g. on every upload in the UI).

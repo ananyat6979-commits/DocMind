@@ -1,0 +1,124 @@
+{
+  "scope": "Post-hoc engineering decision over predeclared component conditions; not a noninferiority trial or end-to-end QA validation",
+  "source_records_sha256": "a9632e8245f25c44082b01b1ae387ebcbfb01d8e6183bf9e60b6b314645afb5e",
+  "contrasts": {
+    "en_e5_dense_minus_bge_dense": {
+      "n": 200,
+      "baseline": "bge_dense",
+      "treatment": "e5_dense",
+      "metrics": {
+        "recall5": {
+          "difference": -0.013208333333333336,
+          "ci95": [
+            -0.046974553571428566,
+            0.018806249999999986
+          ]
+        },
+        "ndcg5": {
+          "difference": 0.007204771377520223,
+          "ci95": [
+            -0.025175265001004907,
+            0.040658312774673064
+          ]
+        },
+        "mrr5": {
+          "difference": 0.03583333333333334,
+          "ci95": [
+            -0.0036666666666666627,
+            0.07642499999999997
+          ]
+        }
+      }
+    },
+    "en_e5_hybrid_word_multilingual_rerank20_minus_e5_dense": {
+      "n": 200,
+      "baseline": "e5_dense",
+      "treatment": "e5_hybrid_word_multilingual_rerank20",
+      "metrics": {
+        "recall5": {
+          "difference": 0.011400793650793653,
+          "ci95": [
+            -0.02659027777777778,
+            0.04645595238095236
+          ]
+        },
+        "ndcg5": {
+          "difference": 0.006952935664838967,
+          "ci95": [
+            -0.02706627823988935,
+            0.03860708053337055
+          ]
+        },
+        "mrr5": {
+          "difference": -0.023,
+          "ci95": [
+            -0.06425,
+            0.017927083333333278
+          ]
+        }
+      }
+    },
+    "hi_e5_dense_minus_bge_dense": {
+      "n": 200,
+      "baseline": "bge_dense",
+      "treatment": "e5_dense",
+      "metrics": {
+        "recall5": {
+          "difference": 0.7512936507936507,
+          "ci95": [
+            0.7051512896825397,
+            0.797357242063492
+          ]
+        },
+        "ndcg5": {
+          "difference": 0.6466723646091572,
+          "ci95": [
+            0.6030113508171292,
+            0.6898456992674424
+          ]
+        },
+        "mrr5": {
+          "difference": 0.6651666666666667,
+          "ci95": [
+            0.6137458333333332,
+            0.7151020833333332
+          ]
+        }
+      }
+    },
+    "hi_e5_hybrid_word_multilingual_rerank20_minus_e5_dense": {
+      "n": 200,
+      "baseline": "e5_dense",
+      "treatment": "e5_hybrid_word_multilingual_rerank20",
+      "metrics": {
+        "recall5": {
+          "difference": 0.03363095238095238,
+          "ci95": [
+            -0.010798214285714284,
+            0.0755613095238095
+          ]
+        },
+        "ndcg5": {
+          "difference": 0.03674272718810324,
+          "ci95": [
+            -0.003735090164753842,
+            0.07680674219358126
+          ]
+        },
+        "mrr5": {
+          "difference": 0.030750000000000003,
+          "ci95": [
+            -0.015931249999999997,
+            0.07708541666666666
+          ]
+        }
+      }
+    }
+  },
+  "decision": "Pinned multilingual E5-small, dense retrieval; keep reranking explicit and Hindi answers gated",
+  "limits": [
+    "Nominal exploratory 95 percent intervals",
+    "Distinct question sets per language",
+    "No claim of English noninferiority or general PDF attribution validation"
+  ]
+}

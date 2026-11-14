@@ -31,7 +31,7 @@ The component and reader profile took 177.84 seconds; setup-inclusive measured s
 
 One pilot answer had citation-existence validity 1.0 and judged claim support 0.0. The other two had both scores 1.0. Thus a perfect citation score did not establish judged support. These [numeric diagnostics](../reports/releases/r1/t4_citation_diagnostics.json) have no human correctness labels.
 
-Frozen answer/evidence replay held claims and the judge fixed. Legacy versus repaired evidence segmentation produced supported fractions 0 to 0, 1 to 1 and 0 to 1. These are support judgments, not human correctness labels. All three answers required review because the source document contained quarantined pages. That 100% routing rate includes the partial-document policy and cannot be attributed to the judge alone. A clean-PDF default withholding rate remains unmeasured. The hosted default also remains unmeasured.
+Frozen answer/evidence replay held claims and the judge fixed. Legacy versus repaired evidence segmentation produced supported fractions 0 to 0, 1 to 1 and 0 to 1. These are support judgments, not human correctness labels. All three answers required review because the source document contained quarantined pages. That 100% routing rate includes the partial-document policy and cannot be attributed to the judge alone. A clean-PDF default withholding rate remains unmeasured. This pilot used BGE with hybrid English reranking and recursive chunks, not the subsequently chosen E5 dense default. The hosted default also remains unmeasured.
 
 No balanced English/Hindi PDF cohort was frozen: a usable Hindi task pool and separate fresh-condition timing were not established. The remaining compute ceiling is not a reason to invent a cohort or label drafts human gold.
 
@@ -45,7 +45,29 @@ One reviewer completed the blinded 15-pair Hindi public-label packet in 520 acti
 
 Real multilingual E5 embeddings replaced the historical Gaussian-vector stress input for a new application-path test. HNSW Recall@10 against exact search was 99.1% [98.5, 99.6] over 100 queries and 3,340 vectors. CPU unscoped median search time was 0.140 ms versus exact 0.273 ms, excluding embedding. Scoped requests deliberately use an exact filtered scan, with linear cost. This small sentence corpus establishes fidelity on this input, not production scale, semantic relevance or an incremental persistent index. The old 50,000-vector experiment remains unchanged and is not directly comparable.
 
-The MIRACL workflow freezes 200 original public dev queries per language, retains all positive passages, up to ten judged negatives per query and deterministic distractors. Its lexical, embedding, reranker and candidate-depth comparisons are a judged-candidate component experiment, not official full-corpus MIRACL. Restricted source text stays private. Every condition reports requested-cohort and completed-only statistics; unserved rows retain zero scores in the requested denominator. Paired differences use matched completed query IDs and must not be generalized from incomplete profiles. The lexical measurements below completed locally. Neural embedding and reranker comparisons remain unmeasured until their workflow finishes and artifacts validate.
+The MIRACL workflow freezes 200 original public dev queries per language, retains all positive passages, up to ten judged negatives per query and deterministic distractors. Its lexical, embedding, reranker and candidate-depth comparisons are a judged-candidate component experiment, not official full-corpus MIRACL. Restricted source text stays private. Every condition reports requested-cohort and completed-only statistics; unserved rows retain zero scores in the requested denominator. Paired differences use matched completed query IDs and must not be generalized from incomplete profiles. The lexical measurements below completed locally. Neural embedding and reranker comparisons completed and passed independent artifact validation.
+
+### Neural retrieval and the default decision
+
+Both CPU profiles completed all 21 conditions: 200 questions per condition and 4,200 ranking rows per run, with zero failed or unserved rows. [Torch 2.11 records](../reports/releases/r1/miracl-torch211) remain separate from the [Torch 2.13 baseline](../reports/releases/r1/miracl-torch213). Every per-query quality metric matched across the upgrade; two rankings changed order without changing their metrics. Runner hardware and floating-point ties prevent attributing every ordering change solely to the library version. The lexical and neural corpus/cohort semantic hashes match.
+
+| Configuration | English Recall@5, 95% interval | Hindi Recall@5, 95% interval | Warm median ms, English / Hindi |
+|---|---:|---:|---:|
+| English BGE dense | 75.42% [71.19, 79.42] | 0.80% [0.07, 2.00] | 14.02 / 18.22 |
+| Multilingual E5 dense | 74.10% [70.01, 78.15] | 75.93% [71.36, 80.38] | 12.05 / 15.73 |
+| E5 word hybrid | 70.70% [66.34, 74.96] | 73.20% [68.44, 77.56] | 12.15 / 16.02 |
+| E5 hybrid + English reranker, depth 20 | 76.38% [72.18, 80.41] | 49.63% [43.90, 55.18] | 283.88 / 742.91 |
+| E5 hybrid + multilingual reranker, depth 20 | 75.24% [71.39, 79.25] | 79.29% [74.83, 83.77] | 650.69 / 999.20 |
+
+![Verified retrieval quality and cost](../reports/releases/r1/figures/retrieval_components.png)
+
+The [default-selection analysis](../reports/releases/r1/default_selection.json) is an exploratory engineering decision over predeclared component conditions. E5 versus BGE changes English Recall@5 by -1.32 points [-4.70, 1.88], so English noninferiority is not established. Hindi gains 75.13 points [70.52, 79.74]. E5 dense is the balanced-language, lower-cost default; the result does not establish better general PDF answers. Hindi answer release remains gated.
+
+Fusion reduced English recall by 3.40 points [-6.64, -0.20] relative to E5 dense. Multilingual reranking improved recall against that fused baseline, but its gain against E5 dense was uncertain: English +1.14 [-2.66, 4.65] and Hindi +3.36 [-1.08, 7.56] points. Its median cost was roughly 54 to 64 times dense retrieval on this run. Candidate depth five only permutes five items and therefore cannot improve Recall@5; nDCG and MRR can still change. Depth twenty can recover lower-ranked evidence.
+
+The English reranker reduced Hindi Recall@5 to 49.63%, while the multilingual reranker at the same depth reached 79.29%. Model/language fit matters. Grapheme trigrams also failed to establish a hybrid recall gain: -0.12 points [-3.68, 3.40] versus ordinary word fusion. They stay optional. Full nDCG, MRR, paired differences and latency records are published rather than selecting one favorable metric.
+
+The service now defaults to pinned E5 dense retrieval and leaves reranking explicit. The English NLI judge remains in place because replacing it globally reduced English component recall. Old embeddings and reranker thresholds require the [documented isolated migration](API_MIGRATION.md#e5-dense-default). These component measurements do not validate the hosted generator or automatic Hindi PDF attribution. Full retrieval runs are deliberate `workflow_dispatch` experiments; automatic CI keeps unit, type, real-model compatibility and bounded NLI/ANN checks.
 
 ### Measured lexical ablation
 

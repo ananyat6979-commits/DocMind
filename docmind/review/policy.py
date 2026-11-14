@@ -55,8 +55,11 @@ def review_reasons(resp: AgentResponse) -> List[str]:
         if resp.finish_reason in ("synthesis", "fallback"):
             reasons.append("no_clean_final_answer")
         scores = [s.score for s in resp.sources if s.retriever == "reranker"]
-        if cfg.min_top_score is not None and scores and max(scores) < cfg.min_top_score:
-            reasons.append("low_retrieval_confidence")
+        if cfg.min_top_score is not None:
+            if not scores:
+                reasons.append("retrieval_score_policy_unavailable")
+            elif max(scores) < cfg.min_top_score:
+                reasons.append("low_retrieval_confidence")
     if not reasons and _audit_hit(resp.response_id, cfg.audit_rate):
         reasons.append("random_audit")
     return reasons
