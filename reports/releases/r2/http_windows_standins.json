@@ -1,0 +1,51 @@
+{
+  "scope": "Single-process loopback HTTP, synthetic document and demo generation; not a production or generative-reader SLA",
+  "real_embedding_and_nli": false,
+  "provider_calls": 0,
+  "model_downloads": false,
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "concurrency": 4,
+  "requested": 40,
+  "deadline_seconds": 120.0,
+  "quota_override_per_minute": 1000,
+  "script_sha256": "a2ae7056e649e7deff18adfae062a8cac392e0907bbc724e8e6c1aac4228a8b7",
+  "fixture_sha256": "b596a5136c8658a45f71a2eeafdd5b68d929509c96983ff595f35e732ffd2e9d",
+  "server_ready_seconds": 9.327999999999975,
+  "queued_ingestion_seconds": 1.594000000000051,
+  "cold_query_seconds": 0.9839999999999236,
+  "warm_load": {
+    "requested": 40,
+    "recorded": 40,
+    "completed": 40,
+    "failed": 0,
+    "unserved": 0,
+    "status_counts": {
+      "200": 40
+    },
+    "elapsed_seconds": 1.4380000000001019,
+    "completed_per_second": 27.816411682890937,
+    "completed_only_p50_ms": 141.0000000000764,
+    "completed_only_p95_ms": 187.04999999990832,
+    "all_completed_have_request_id": true
+  },
+  "forced_kill": false,
+  "server_exit_code": 1,
+  "runtime": {
+    "embedding_backend": "hash",
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "embedding_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "retrieval_mode": "dense",
+    "versions": {
+      "torch": "2.13.0+cpu",
+      "transformers": "5.23.0",
+      "sentence-transformers": "5.7.0",
+      "fastapi": "0.162.7",
+      "uvicorn": "0.54.0"
+    }
+  },
+  "total_wall_seconds": 13.577999999999975,
+  "shutdown_scope": "Harness termination, not a graceful-shutdown benchmark",
+  "script_git_lf_sha256": "fddbd3eda7c45bbfbe7d440df216e4fa5aa2bb21dfa98375e472b5916bf68873",
+  "source_hash_note": "Executed Windows source bytes and normalized Git LF source hash are both recorded; line-ending conversion does not change logic"
+}

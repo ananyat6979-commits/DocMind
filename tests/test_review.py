@@ -67,3 +67,18 @@ def test_dense_scores_do_not_reuse_a_reranker_review_threshold():
     response=_resp()
     response.sources[0].retriever="dense"
     assert "retrieval_score_policy_unavailable" in review_reasons(response)
+
+
+def test_old_extraction_policy_cannot_release_automatically(monkeypatch):
+    from docmind.ingestion.quality import VERSION
+    monkeypatch.setenv("DOCMIND_TEST_MODE", "0")
+    monkeypatch.setattr("docmind.language.language_info", lambda text: {"language": "en"})
+    response = _resp()
+    metadata = response.sources[0].chunk.metadata
+    metadata["language_info"] = {"language": "en"}
+    metadata["lineage"] = {"preprocessing": {"extraction_quality": "extraction-quality-v1"}}
+    assert "stale_extraction_policy" in review_reasons(response)
+    metadata["lineage"]["preprocessing"]["extraction_quality"] = VERSION
+    assert "stale_extraction_policy" not in review_reasons(response)
+    del metadata["lineage"]
+    assert "stale_extraction_policy" in review_reasons(response)

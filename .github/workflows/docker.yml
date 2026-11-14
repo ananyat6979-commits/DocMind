@@ -61,6 +61,24 @@ jobs:
           assert math.isfinite(attribution['supported_fraction'])
           print('real E5 default, citations and NLI completed with network disabled')"
 
+      - name: Measure bounded real-model loopback HTTP paths with offline demo generation
+        timeout-minutes: 10
+        run: |
+          mkdir -p reports/release_workspace/http-load
+          chmod 777 reports/release_workspace/http-load
+          docker run --rm --network none -v "$PWD/reports/release_workspace/http-load:/results" \
+            ${{ env.IMAGE }}:ci python scripts/load_http_service.py --out /results/real-model-http \
+            --real-models --requests 12 --concurrency 2 --deadline 420
+
+      - name: Keep numeric HTTP load records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-model-http-load
+          path: |
+            reports/release_workspace/http-load/real-model-http/summary.json
+            reports/release_workspace/http-load/real-model-http/rows.jsonl
+
       - name: Smoke 3, the UI starts and reports healthy
         run: |
           docker run -d --name dm -p 8501:8501 ${{ env.IMAGE }}:ci

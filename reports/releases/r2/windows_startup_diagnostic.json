@@ -1,0 +1,40 @@
+{
+  "scope": "Second bounded Windows observation, not the cause of the original timeout or a passing model check",
+  "source_script_sha256": "8a438a44715abb28107316cfee5960a73efa5455b4ddd3e294454e14ec9e45c7",
+  "source_file": "scripts/profile_local_models.py",
+  "process": {
+    "scope": "Bounded local diagnostic, not an API latency benchmark",
+    "timeout_seconds": 240.0,
+    "launch_seconds": 0.07799999999997453,
+    "wall_seconds": 240.04700000000003,
+    "exit_code": 1,
+    "timed_out": true,
+    "process_passed": false
+  },
+  "stages": [
+    {
+      "stage": "child_started",
+      "elapsed_seconds": 0.0
+    },
+    {
+      "stage": "torch_imported",
+      "elapsed_seconds": 67.26600000000008
+    },
+    {
+      "stage": "application_imported",
+      "elapsed_seconds": 68.90599999999995
+    }
+  ],
+  "model_checks_completed": false,
+  "last_trace_observation": "Captured dependency imports through transformers modeling utilities during ingestion initialization; no top-level completion or shutdown stage observed",
+  "stderr_sha256": "2ce4a1b515e6e31bc70a4883cb020a5c91c1112276ea8e764a905a471c8130ae",
+  "provider_calls": 0,
+  "model_downloads": false,
+  "limitations": [
+    "One run on the constrained Windows host",
+    "Does not establish deadlock, root cause, or shutdown failure",
+    "Different run from the earlier completed model assertions; do not pool timings"
+  ],
+  "script_git_lf_sha256": "cfd668522580c8189290dbb799fdef6f0ef7205304e97e27f0e0cf7611a4fe00",
+  "source_hash_note": "Executed Windows source bytes and normalized Git LF source hash are both recorded; line-ending conversion does not change logic"
+}

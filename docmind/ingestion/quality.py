@@ -1,9 +1,10 @@
 """Conservative extraction diagnostics, not an OCR or font-conversion system."""
 import re
+from collections import Counter
 import unicodedata
 from typing import Any, Iterable
 
-VERSION = "extraction-quality-v1"
+VERSION = "extraction-quality-v2"
 _LEGACY = ("krutidev", "kruti dev", "devlys", "chanakya", "shusha")
 _SGR = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -46,6 +47,13 @@ def extraction_quality(text: str, expected_language: str | None = None,
         if controls > .002: flags.append("unexpected_control_characters")
         if bad > .01: flags.append("replacement_or_private_use_characters")
         if malformed: flags.append("suspicious_combining_sequence")
+        # Repeated watermark-like digit strings can otherwise pass the script
+        # check because the page contains almost no letters. Keep isolated
+        # numeric fragments and ordinary value tables unchanged.
+        runs = Counter(re.findall(r"(?<![\d.])[0-9०-९]{12,}(?![\d.])", text))
+        compact_length = max(sum(not c.isspace() for c in text), 1)
+        if any(n >= 8 and len(token)*n/compact_length >= .6 for token, n in runs.items()):
+            flags.append("repeated_numeric_artifacts")
         if legacy_font or bad > .01 or controls > .002: status = "suspected_legacy_font"
         elif flags: status = "uncertain_or_mixed"
         else: status = "usable_unicode"

@@ -25,3 +25,12 @@ CPU and CUDA environments are recorded under `locks/`, including hashes. The CPU
 Liveness only proves the HTTP process runs. Authenticated readiness checks generation configuration, database access and corpus embedding identity, not all neural inference paths. SQLite state, in-process quotas and the ingestion queue support one service process. Distributed operation, tenant authorization, incremental persistent indexes and kernel isolation beyond the configured container boundary remain limitations.
 
 Compose forwards the explicit retrieval mode, embedding identity, optional reranker identity and score-policy settings. Known default model revisions are pinned in configuration. Alternate models require their exact revision and a custom image with those weights cached before offline startup. The standard image caches E5-small, legacy BGE, the English reranker and the English NLI judge.
+
+
+## Bounded HTTP diagnostics
+
+`python scripts/load_http_service.py --out reports/release_workspace/http-check` starts a temporary loopback API, uses synthetic data and offline stand-ins, and records real socket HTTP behavior. Add `--real-models --requests 12 --concurrency 2` only in a CPU environment containing the pinned, cached E5 and NLI models. Model downloads and provider generation are disabled in both modes. The Docker workflow exercises the real-model variant with external networking disabled.
+
+Startup, queued ingestion, one cold query, and warm HTTP load are separate measurements. Requested, failed and unserved counts accompany completed-only percentiles. This is one process and a repeated tiny fixture with demo generation, not a hosted-reader SLA, representative corpus-scale load or multi-tenant validation. Server termination by the harness does not validate graceful shutdown.
+
+For native model startup investigation, `python scripts/profile_local_models.py --out reports/release_workspace/model-check` records stages and repeated thread stacks under a finite process deadline. A model-output file alone never makes a timed-out process pass. Diagnostic directories may contain local paths and remain private.

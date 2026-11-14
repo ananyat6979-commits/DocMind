@@ -1,0 +1,17 @@
+{
+  "schema": "parser-output-equivalence-v1",
+  "sources": [
+    {
+      "filename": "english.pdf",
+      "url": "https://azimpremjiuniversity.edu.in/media/publications/downloads/magazine/i-wonder_Issue-8_June-2022.pdf",
+      "pdf_sha256": "ffb2340fa5e0892ffcf6e754912d44fc2af96083e8d2954dcb856c912e40f899",
+      "expected_semantic_sha256": "683049e73af57a331dc1182a0143e49d8c329a81e9fd709ecd8313b2cf9a3a46",
+      "expected_language": "en",
+      "license": "CC BY-NC 4.0 for articles, with separate image credits; private research cache only",
+      "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "attribution": "i wonder... Issue 8, June 2022, Azim Premji University; article authors as credited in the PDF"
+    }
+  ],
+  "note": "Fresh Windows native extraction identity for quality policy v2; does not update or validate historical neural results",
+  "quality_policy": "extraction-quality-v2"
+}

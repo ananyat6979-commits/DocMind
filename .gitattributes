@@ -19,3 +19,5 @@ reports/releases/r1/** -text
 
 # Preserve renderer path whitespace in generated SVG assets.
 reports/releases/r1/figures/*.svg linguist-generated=true -whitespace
+
+reports/releases/r2/** -text

@@ -1,0 +1,19 @@
+{
+  "scope": "Five deliberately selected PDF extraction-quality checks by one Hindi reader, not a probability sample or answer/claim labels",
+  "n_pages": 5,
+  "label_counts": {
+    "unusable": 2,
+    "damaged": 3
+  },
+  "finished": 5,
+  "visible_page_timer_seconds": 699.4979000000003,
+  "timer_limitations": "Browser-visible time can include idle time; not a verified focused-work duration",
+  "conservative_pdf_budget_remaining_seconds": 4700.5021,
+  "pilot_and_buffer_accounting": "Charge recorded time to the ten-minute pilot and then its five-minute buffer; keep the total PDF review cap at ninety minutes",
+  "raw_export_sha256": "b6f03edfd107e26574b45fbf88c241376773626dce1ea1b293900b5f1d0fcda7",
+  "human_answer_correctness_labels": 0,
+  "human_claim_support_labels": 0,
+  "population_extrapolation": false,
+  "independent_reviewers": 1,
+  "notes": "Damaged Unicode pages may contain usable spans. Whole-page readability does not certify exact evidence or justify automatic release. Raw notes and source pages remain private."
+}

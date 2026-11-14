@@ -43,3 +43,10 @@ The measured English/Hindi component release defaults to pinned multilingual E5-
 Keep the old store and authorized uploads for rollback. Create an isolated `DOCMIND_HOME` for the new corpus and re-ingest retained source files through the authenticated ingestion path. For Compose, stop the old stack while retaining its volumes, then start a separately named project such as `docker compose -p docmind-e5 up --build`. Re-upload authorized source files to its new API library. Historical responses and review labels remain associated with their original inputs.
 
 `DOCMIND_RETRIEVAL_MODE=hybrid_rerank` explicitly enables the legacy-style search path. `DOCMIND_USE_RERANKER` controls whether that optional scorer is available; dense requests do not invoke it. Clear old `DOCMIND_MIN_RERANK_SCORE` values when switching modes. They cannot be applied to cosine scores. A configured reranker review threshold without reranker scores routes to review. Any new threshold requires a fresh calibration study; these component results do not validate a risk bound.
+
+
+## Extraction quality policy v2
+
+The policy now flags repeated long digit artifacts, while retaining ordinary numeric fragments and distinct identifier tables. Re-ingest retained uploads into a fresh isolated store to apply the new quarantine decisions. Existing production responses retrieved from stale or missing extraction-policy lineage require review. Re-uploading the same bytes does not silently reuse an old preprocessing cache; an explicit rebuild or isolated ingestion is required.
+
+The new parser equivalence manifest is `reports/releases/r2/parser_equivalence_quality_v2.json`. Historical manifests and neural results remain unchanged. Quality metadata changed, so historical downstream artifacts are not automatically evidence for this policy.

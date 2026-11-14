@@ -230,3 +230,15 @@ def test_orphan_sweeps_progress_past_referenced_files():
         conn.execute("INSERT INTO documents(file_id,filename,source,sha256,n_units,n_chunks,ingested_at) VALUES (?,?,?,?,1,0,0)",("ref","one.txt",str(reference.resolve()),"a"*64))
     removed=sum(sweep(min_age_seconds=0,limit=1) for _ in range(6))
     assert removed==1 and not orphan.exists() and reference.exists()
+
+
+def test_numeric_watermark_page_is_quarantined_without_discarding_values():
+    from docmind.ingestion.quality import extraction_quality
+    watermark = ("12345678901234567\n" * 40) + "Reprint 2025-26"
+    report = extraction_quality(watermark, expected_language="hi")
+    assert report["status"] == "uncertain_or_mixed"
+    assert "repeated_numeric_artifacts" in report["flags"]
+    assert report["quarantined"]
+    for text in ("12345678901234567", "12.5 300 2025 2026", "१२.५ ३०० २०२५"):
+        assert not extraction_quality(text)["quarantined"]
+    assert not extraction_quality("\n".join(str(1000000000000000+i) for i in range(40)))["quarantined"]
