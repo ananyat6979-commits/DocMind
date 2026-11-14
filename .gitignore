@@ -68,3 +68,5 @@ reports/release_review/
 .kaggle-miracl-source/
 
 .kaggle-miracl-t4/
+
+.kaggle-reader-current/
