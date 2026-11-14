@@ -47,31 +47,41 @@ class HybridRetriever:
         self.sparse = SparseRetriever()
         self.reranker = CrossEncoderReranker() if CONFIG.retriever.use_reranker else None
         self._version = -1
+        self._fit_mode: str | None = None
+        self._n_chunks = 0
         self._embedding_identity: str | None = None
         self._lock = threading.RLock()
 
-    def refresh(self, force: bool = False) -> None:
-        """(Re)build in-memory indexes if the store changed."""
+    def refresh(self, force: bool = False, mode: Optional[str] = None) -> None:
+        """Build only views required by this mode, publishing one coherent snapshot."""
+        mode = mode or CONFIG.retriever.mode
+        if mode not in MODES:
+            raise ValueError(f"mode must be one of {MODES}")
         v = self.store.version()
         identity=self.store._embedding_signature()
-        if not force and v == self._version and identity == self._embedding_identity:
+        if not force and v == self._version and identity == self._embedding_identity and mode == self._fit_mode:
             return
         with self._lock:
-            if not force and v == self._version and identity == self._embedding_identity:
+            if not force and v == self._version and identity == self._embedding_identity and mode == self._fit_mode:
                 return
             self.store.ensure_embedding_compatible()
             chunks, matrix = self.store.load_corpus()
             dense, sparse = DenseRetriever(), SparseRetriever()
-            dense.fit(chunks, matrix)
-            sparse.fit(chunks)
+            if mode != "sparse":
+                dense.fit(chunks, matrix)
+            if mode != "dense":
+                sparse.fit(chunks)
             self.dense, self.sparse = dense, sparse
             self._version = v
             self._embedding_identity = identity
+            self._fit_mode = mode
+            self._n_chunks = len(chunks)
             logger.info(f"Indexes synced to corpus version {v} ({len(chunks)} chunks)")
 
     def is_empty(self) -> bool:
-        self.refresh()
-        return not self.dense._chunks
+        with self._lock:
+            self.refresh()
+            return not self._n_chunks
 
     def search(
         self,
@@ -89,8 +99,8 @@ class HybridRetriever:
             raise ValueError(f"mode must be one of {MODES}")
         if mode == "hybrid_rerank" and self.reranker is None:
             raise ValueError("The requested reranker is disabled; enable it explicitly or select dense/hybrid mode")
-        self.refresh()
         with self._lock:
+            self.refresh(mode=mode)
             dense, sparse = self.dense, self.sparse
         cfg = CONFIG.retriever
         top_k = top_k or cfg.top_k_rerank

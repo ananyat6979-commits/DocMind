@@ -73,3 +73,47 @@ def test_default_dense_does_not_run_sparse_or_reranker(make_file,monkeypatch):
     monkeypatch.setattr(CONFIG.retriever,"min_rerank_score",0.1)
     with pytest.raises(ValueError,match="clear stale thresholds"):
         retriever.search("coolant temperature startup")
+
+
+def test_dense_default_skips_sparse_index_construction(make_file,monkeypatch):
+    from docmind.ingestion.pipeline import ingest
+    from docmind.retrieval.hybrid import HybridRetriever
+    from docmind.retrieval.sparse import SparseRetriever
+    from docmind.store import CorpusStore
+    from tests.conftest import ALPHA
+    store=CorpusStore();ingest(make_file("source.txt",ALPHA),store=store)
+    def unused(*args,**kwargs):raise AssertionError("Unrequested sparse index was built")
+    monkeypatch.setattr(SparseRetriever,"fit",unused)
+    assert HybridRetriever(store).search("coolant",mode="dense")
+
+
+def test_sparse_mode_skips_dense_build_and_remains_nonempty(make_file,monkeypatch):
+    from docmind.config import CONFIG
+    from docmind.ingestion.pipeline import ingest
+    from docmind.retrieval.hybrid import HybridRetriever
+    from docmind.retrieval.dense import DenseRetriever
+    from docmind.store import CorpusStore
+    from tests.conftest import ALPHA
+    store=CorpusStore();ingest(make_file("source.txt",ALPHA),store=store)
+    def unused(*args,**kwargs):raise AssertionError("Unrequested dense index was built")
+    monkeypatch.setattr(DenseRetriever,"fit",unused)
+    monkeypatch.setattr(CONFIG.retriever,"mode","sparse")
+    retriever=HybridRetriever(store)
+    assert retriever.search("coolant") and not retriever.is_empty()
+
+
+def test_concurrent_explicit_modes_keep_their_required_snapshot(make_file):
+    from concurrent.futures import ThreadPoolExecutor
+    from docmind.ingestion.pipeline import ingest
+    from docmind.retrieval.hybrid import HybridRetriever
+    from docmind.store import CorpusStore
+    from tests.conftest import ALPHA
+    store=CorpusStore();ingest(make_file("source.txt",ALPHA),store=store)
+    retriever=HybridRetriever(store)
+    modes=["dense","sparse","hybrid"]*12
+    def ask(mode):
+        hits=retriever.search("coolant",mode=mode)
+        assert hits and all(hit.retriever==mode for hit in hits)
+        return len(hits)
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        assert all(pool.map(ask,modes))

@@ -22,3 +22,6 @@ jobs:
         run: python -m pytest -q
       - name: Verify published benchmark records
         run: python scripts/verify_benchmark_reports.py
+
+      - name: Verify current-reader synthetic robustness records
+        run: python scripts/verify_current_reader_robustness.py reports/releases/r2/current_reader_t4

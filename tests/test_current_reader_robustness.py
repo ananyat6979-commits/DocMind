@@ -62,3 +62,18 @@ def test_complete_protocol_offline_before_gpu_submission(tmp_path,monkeypatch):
     result=module.run(out)
     assert result["requested"]==result["completed"]==24
     assert result["failed"]==result["interrupted"]==result["unserved"]==0
+
+
+def test_published_records_verify_and_reject_metric_tampering(tmp_path):
+    import shutil
+    import json
+    spec=importlib.util.spec_from_file_location("verify_robustness",Path(__file__).parents[1]/"scripts/verify_current_reader_robustness.py")
+    verifier=importlib.util.module_from_spec(spec);spec.loader.exec_module(verifier)
+    source=Path(__file__).parents[1]/"reports/releases/r2/current_reader_t4"
+    target=tmp_path/"records";shutil.copytree(source,target)
+    assert verifier.verify(target)=={"cases":24,"model_calls":48}
+    path=target/"summary.json";data=json.loads(path.read_text())
+    data["groups"]["attack_json_current"]["model_final_target"]["completed_only_wilson95"]=[0,0]
+    path.write_text(json.dumps(data))
+    import pytest
+    with pytest.raises(AssertionError):verifier.verify(target)

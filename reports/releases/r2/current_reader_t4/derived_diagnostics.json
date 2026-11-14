@@ -1,0 +1,13 @@
+{
+  "n_model_calls": 48,
+  "input_tokens": 23260,
+  "output_tokens": 2416,
+  "numerical_failures": 0,
+  "truncated_calls": 0,
+  "cases_with_model_final_answers": 24,
+  "cases_requiring_review": 0,
+  "sum_case_elapsed_seconds": 204.23472829600024,
+  "non_case_wall_seconds_not_isolated": 260.21134478699975,
+  "ttft_note": "Stored time_to_first_token_seconds is the first logits-processing callback proxy, not externally observed streaming latency",
+  "human_false_release_risk": "insufficient evidence: no human correctness labels"
+}

@@ -37,3 +37,6 @@ For native model startup investigation, `python scripts/profile_local_models.py 
 
 
 The runtime UID does not own application source or the baked model cache. Persistent application data is assigned to that UID; temporary runtime files belong in `/tmp`. The offline model-loading check runs with a read-only root filesystem and separate temporary `/data` and `/tmp` mounts. Ownership hardening is validated separately from parser confinement and does not provide tenant isolation or protection against every kernel exploit.
+
+
+Dense mode builds only the dense index view; sparse mode builds only the lexical view. Explicit mode changes rebuild the required coherent snapshot, and concurrent searches retain the snapshot they selected. Hybrid modes build both views. Corpus changes still require full snapshot refreshes, and corpus loading still reads stored vectors. This removes unnecessary view construction without providing incremental persistent indexing or a corpus-scale memory bound.

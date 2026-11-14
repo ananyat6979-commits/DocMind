@@ -1,0 +1,29 @@
+{
+  "reader": {
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "dtype": "float16",
+    "seed": 7,
+    "temperature": 0,
+    "do_sample": false,
+    "attention": "sdpa",
+    "call_accounting": "attempts-v2",
+    "max_input_tokens": 8192,
+    "max_new_tokens": 256
+  },
+  "judge": {
+    "model": "typeform/distilbert-base-uncased-mnli",
+    "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+  },
+  "actual_reader_dtype": "torch.float16",
+  "cuda_runtime": "13.0",
+  "gpu": "Tesla T4",
+  "allocated_gpu_count": 2,
+  "versions": {
+    "torch": "2.13.0+cu130",
+    "transformers": "5.23.0",
+    "sentence-transformers": "5.7.0"
+  },
+  "system_prompt_sha256": "5176740c15ad59d4412d00bfb0f702ba0972e230f1ca3f248c8aa296eb51310d",
+  "device": "cuda:0"
+}
