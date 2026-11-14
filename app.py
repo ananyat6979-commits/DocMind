@@ -198,7 +198,7 @@ with tab_ask:
                 elif status == "rejected":
                     st.error(STATUS_BADGE[status])
                 st.markdown(text)               # markdown only, never unsafe HTML
-            v = resp.citation_report.get("validity")
+            v = None if hold or status == "edited" else resp.citation_report.get("validity")
             st.caption(f"{resp.latency_ms / 1000:.1f}s | {resp.llm_calls} LLM calls | {len(resp.sources)} passages | "
                        f"{STATUS_BADGE.get(status, status)}"
                        + (f" | citation labels matched {v:.0%}" if v is not None else ""))
@@ -216,7 +216,7 @@ with tab_ask:
                             st.caption(f"Evidence characters {claim['start']} to {claim['end']}")
             if resp.sources and not hold:
                 with st.expander(f"Evidence ({len(resp.cited_sources)} cited of {len(resp.sources)} retrieved)"):
-                    cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
+                    cited_ids = set() if status == "edited" else {s.chunk.chunk_id for s in resp.cited_sources}
                     for s in resp.sources:
                         mark = "CITED" if s.chunk.chunk_id in cited_ids else "retrieved"
                         st.markdown(f"**{s.chunk.filename()}** {s.chunk.citation()[1:-1]} | {mark} | score {s.score:.2f}")

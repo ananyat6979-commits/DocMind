@@ -71,3 +71,19 @@ def test_corpus_identity_detects_equal_version_different_content(make_file,tmp_p
     ingest(make_file("two.txt","The pressure limit is 40 bars."),store=second)
     assert first.version()==second.version()
     assert first.content_identity()!=second.content_identity()
+
+
+def test_checkpoint_rejects_rows_from_another_run(tmp_path):
+    import json
+    from types import SimpleNamespace
+    from docmind.models import AgentResponse
+    from docmind.evaluation.harness import generate
+    question=tmp_path/"questions.json"
+    question.write_text(json.dumps([{"id":"q","question":"limit?","verified":True,"ground_truth":"300"}]))
+    agent=SimpleNamespace(run=lambda *a,**kw:AgentResponse("300",[],[],"limit?",1))
+    output=tmp_path/"answers.jsonl"
+    records=generate(str(question),agent,str(output))
+    records[0]["run_id"]="another-run"
+    output.write_text(json.dumps(records[0])+"\n")
+    with pytest.raises(ValueError,match="Checkpoint records"):
+        generate(str(question),agent,str(output))

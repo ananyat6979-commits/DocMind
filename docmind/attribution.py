@@ -5,6 +5,7 @@ Every evidence offset indexes the original retrieved chunk, never normalized tex
 """
 import re
 import os
+import threading
 from dataclasses import dataclass, asdict
 from docmind.agent.citations import CITATION_RE, _items, allowed_citations, source_citations
 
@@ -22,10 +23,11 @@ class ClaimEvidence:
 
 class NLIJudge:
     def __init__(self, model="typeform/distilbert-base-uncased-mnli", revision=None, local_files_only=True, device="cpu", batch_size=2):
-        import torch
-        from transformers import AutoTokenizer, AutoModelForSequenceClassification
         if revision is None and model=="typeform/distilbert-base-uncased-mnli":
             revision="cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+        if not revision: raise ValueError("Pin DOCMIND_NLI_REVISION before selecting a different attribution model")
+        import torch
+        from transformers import AutoTokenizer, AutoModelForSequenceClassification
         self.torch = torch
         self.device, self.batch_size = device, batch_size
         self.tokenizer = AutoTokenizer.from_pretrained(model, revision=revision, local_files_only=local_files_only)
@@ -107,10 +109,18 @@ def attribution_metrics(predictions, labels):
 
 
 _JUDGE = None
+_JUDGE_KEY: tuple[str, str | None, str, int] | None = None
+_JUDGE_LOCK = threading.Lock()
+
 
 def default_judge():
-    global _JUDGE
-    if _JUDGE is None:
-        _JUDGE = NLIJudge(model=os.getenv("DOCMIND_NLI_MODEL", "typeform/distilbert-base-uncased-mnli"),
-                          revision=os.getenv("DOCMIND_NLI_REVISION") or None)
+    global _JUDGE, _JUDGE_KEY
+    key=(os.getenv("DOCMIND_NLI_MODEL","typeform/distilbert-base-uncased-mnli"),
+         os.getenv("DOCMIND_NLI_REVISION") or None,
+         os.getenv("DOCMIND_NLI_DEVICE","cpu"),int(os.getenv("DOCMIND_NLI_BATCH_SIZE","2")))
+    if _JUDGE is None or _JUDGE_KEY!=key:
+        with _JUDGE_LOCK:
+            if _JUDGE is None or _JUDGE_KEY!=key:
+                _JUDGE=NLIJudge(model=key[0],revision=key[1],device=key[2],batch_size=key[3])
+                _JUDGE_KEY=key
     return _JUDGE

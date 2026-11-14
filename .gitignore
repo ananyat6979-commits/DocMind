@@ -64,3 +64,5 @@ reports/release_workspace/
 reports/release_review/
 
 .kaggle-release/
+
+.kaggle-miracl-source/

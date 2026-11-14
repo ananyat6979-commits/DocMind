@@ -1,7 +1,8 @@
 """Owned upload leases and reference-aware cleanup for a single corpus process."""
 from collections import Counter
-from itertools import chain, islice
+from itertools import chain
 from pathlib import Path
+from typing import Iterator
 import re
 import threading
 import time
@@ -10,6 +11,7 @@ from docmind.db import connect
 
 _LOCK = threading.RLock()
 _ACTIVE: Counter[str] = Counter()
+_SWEEPS: dict[str, Iterator[Path]] = {}
 
 
 def acquire(path):
@@ -40,12 +42,22 @@ def cleanup(path, db_path=None, release=False, owned_document=False):
 
 
 def sweep(db_path=None, min_age_seconds=3600, limit=500):
-    root = CONFIG.data_dir / "uploads"
-    if not root.exists(): return 0
-    removed = 0
-    for path in islice(chain(root.glob(".*.upload"),root.glob("*/*")),limit):
-        try:
-            if path.is_file() and time.time()-path.stat().st_mtime >= min_age_seconds:
-                removed += int(cleanup(path,db_path))
-        except FileNotFoundError: continue
+    root=CONFIG.data_dir/"uploads"
+    if not root.exists():return 0
+    removed=0
+    with _LOCK:
+        key=str(root.resolve())
+        if key not in _SWEEPS:
+            if len(_SWEEPS)>=16:_SWEEPS.pop(next(iter(_SWEEPS)))
+            _SWEEPS[key]=iter(chain(root.glob("*"),root.glob("*/*")))
+        iterator=_SWEEPS[key]
+        for _ in range(limit):
+            try:path=next(iterator)
+            except StopIteration:
+                _SWEEPS.pop(key,None)
+                break
+            try:
+                if path.is_file() and time.time()-path.stat().st_mtime>=min_age_seconds:
+                    removed+=int(cleanup(path,db_path))
+            except FileNotFoundError:continue
     return removed

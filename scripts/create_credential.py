@@ -25,8 +25,11 @@ def main():
     with os.fdopen(descriptor,"w",encoding="utf-8") as stream:stream.write(token+"\n")
     temporary=args.out.with_suffix(".tmp")
     descriptor=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
-    with os.fdopen(descriptor,"w",encoding="utf-8") as stream:json.dump(records,stream,indent=2)
+    with os.fdopen(descriptor,"w",encoding="utf-8") as stream:
+        if os.name == "posix": os.fchmod(stream.fileno(),0o640)
+        json.dump(records,stream,indent=2)
     temporary.replace(args.out)
+    if os.name == "posix": print("Registry group ID for DOCMIND_CREDENTIALS_GID:",args.out.stat().st_gid)
     print("Credentials updated. Read the personal key privately from",private_key)
 
 if __name__=="__main__":main()

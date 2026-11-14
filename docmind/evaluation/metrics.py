@@ -153,8 +153,14 @@ def answer_level_stats(records: List[Dict]) -> Dict:
 
 
 def _answer_tokens(text):
-    text=normalize(CITATION_RE.sub("",text)).translate(str.maketrans("","",string.punctuation))
-    text="".join(c for c in text if not unicodedata.category(c).startswith("P"))
+    from docmind.text import search_normalize
+    text=search_normalize(normalize(CITATION_RE.sub("",text)))
+    cleaned=[]
+    for index,char in enumerate(text):
+        decimal_dot=(char=="." and index>0 and index+1<len(text) and text[index-1].isdecimal() and text[index+1].isdecimal())
+        if decimal_dot or not unicodedata.category(char).startswith("P") and char not in string.punctuation:
+            cleaned.append(char)
+    text="".join(cleaned)
     return [t for t in text.split() if t not in {"a", "an", "the"}]
 
 

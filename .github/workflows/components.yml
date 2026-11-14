@@ -1,0 +1,30 @@
+name: CPU component measurements
+on:
+  workflow_dispatch:
+  push:
+    branches: [improvements/hindi-evidence]
+    paths: ["scripts/release_components_cpu.py", "scripts/release_measure.py", "locks/cpu-linux-py311.txt", ".github/workflows/components.yml"]
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: "2"
+      TOKENIZERS_PARALLELISM: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install hash-locked CPU environment
+        run: pip install --require-hashes -r locks/cpu-linux-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Measure public NLI components and real-embedding ANN
+        run: python scripts/release_components_cpu.py
+      - name: Keep aggregate results without restricted text or annotation records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpu-component-summary
+          path: reports/release_workspace/cpu-components/summary.json
+          if-no-files-found: warn

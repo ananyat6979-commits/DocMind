@@ -35,6 +35,9 @@ def review_reasons(resp: AgentResponse) -> List[str]:
             reasons.append("extraction_quality_requires_review")
         import os
         if os.getenv("DOCMIND_TEST_MODE") != "1":
+            from docmind.language import language_info
+            if language_info(resp.query).get("language") != "en":
+                reasons.append("query_language_unvalidated")
             languages = [s.chunk.metadata.get("language_info",{}) for s in resp.sources]
             if any(x.get("language") != "en" for x in languages):
                 reasons.append("language_policy_unvalidated")

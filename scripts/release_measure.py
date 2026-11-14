@@ -62,22 +62,33 @@ def binary_stats(rows):
     for name,column in (("precision",1),("recall",2)):
         denominator=samples[:,0]+samples[:,column];valid=denominator>0
         point[name+"_ci95"]=np.quantile(samples[valid,0]/denominator[valid],[.025,.975]).tolist() if valid.any() else [None,None]
-    point.update(threshold=.8,independent_premise_clusters=len(groups),human_labels="original public labels, not independently reviewed")
+    point.update(threshold=.8,independent_premise_clusters=len(groups),n_failed=sum(bool(r.get("error")) for r in rows),failure_decision="no entailment; retained in requested denominator",human_labels="original public labels, not independently reviewed")
     return point
 
 
-def nli_components(data,output):
+def nli_components(data,output,device="cuda:0"):
     from docmind.attribution import NLIJudge
     import torch
     summaries={}
     for name in ("english_nli","multilingual_nli"):
         start=time.perf_counter();model,revision=MODELS[name]
-        judge=NLIJudge(model,revision=revision,local_files_only=False,device="cuda:0",batch_size=16)
+        judge=NLIJudge(model,revision=revision,local_files_only=False,device=device,batch_size=16)
         rows=[]
         for language,examples in data.items():
-            predictions=judge([(r["premise"],r["hypothesis"]) for r in examples])
-            if not all(__import__("math").isfinite(v) for v in predictions):raise FloatingPointError("Nonfinite NLI score")
-            records=[{"id":r["id"],"label":r["label"],"score":float(p),"premise_hash":hashlib.sha256(r["premise"].encode()).hexdigest()} for r,p in zip(examples,predictions)]
+            predictions=[];errors=[]
+            for offset in range(0,len(examples),16):
+                batch=examples[offset:offset+16]
+                try:
+                    values=judge([(r["premise"],r["hypothesis"]) for r in batch]);failures=[None]*len(batch)
+                except Exception:
+                    values=[];failures=[]
+                    for row in batch:
+                        try:values.append(judge([(row["premise"],row["hypothesis"])])[0]);failures.append(None)
+                        except Exception as exc:values.append(0.0);failures.append(type(exc).__name__)
+                for index,value in enumerate(values):
+                    if not __import__("math").isfinite(value):values[index]=0.0;failures[index]="NonfiniteScore"
+                predictions.extend(values);errors.extend(failures)
+            records=[{"id":r["id"],"label":r["label"],"score":float(p),"error":error,"premise_hash":hashlib.sha256(r["premise"].encode()).hexdigest()} for r,p,error in zip(examples,predictions,errors)]
             rows.extend(records);summaries[name+"_"+language]=binary_stats(records)
         write(output/"private"/(name+".json"),rows)
         summaries[name+"_load_and_score_seconds"]=time.perf_counter()-start
@@ -87,7 +98,7 @@ def nli_components(data,output):
         "license":"XNLI noncommercial terms; raw examples and per-example labels are private"}
 
 
-def ann_component(data,output):
+def ann_component(data,output,device="cuda:0"):
     import numpy as np
     import faiss
     import torch
@@ -97,7 +108,7 @@ def ann_component(data,output):
     from docmind.models import Chunk
     from docmind.embeddings import embed_texts,embed_query,reset_embedding_model
     from sentence_transformers import CrossEncoder
-    CONFIG.embedding.backend="sentence-transformers";CONFIG.embedding.device="cuda:0"
+    CONFIG.embedding.backend="sentence-transformers";CONFIG.embedding.device=device
     CONFIG.embedding.model_name,CONFIG.embedding.model_revision=MODELS["e5"]
     import pyarrow.parquet as pq
     corpus=list(dict.fromkeys((lang,r["premise"]) for lang in ("en","hi") for r in pq.read_table(output/("xnli-"+lang+".parquet")).to_pylist()))
@@ -132,7 +143,7 @@ def ann_component(data,output):
     finally:module.embed_query=original
     reset_embedding_model();gc.collect();torch.cuda.empty_cache()
     model,revision=MODELS["reranker"]
-    reranker=CrossEncoder(model,revision=revision,device="cuda:0")
+    reranker=CrossEncoder(model,revision=revision,device=device)
     values=reranker.predict([(examples[0]["hypothesis"],examples[0]["premise"]) for examples in data.values()])
     assert np.isfinite(values).all()
     del reranker;gc.collect();torch.cuda.empty_cache()
@@ -150,6 +161,7 @@ def legacy_evidence(text):
 
 
 def english_pdf_pilot(inputs,output,n=3):
+    device="cuda:0"
     import torch
     from docmind.config import CONFIG
     from docmind.models import Document
@@ -166,7 +178,7 @@ def english_pdf_pilot(inputs,output,n=3):
     cache=json.loads((inputs/"cache-en.json").read_text(encoding="utf-8"))
     pool=json.loads((inputs/"pool-en.json").read_text(encoding="utf-8"))
     CONFIG.embedding.model_name,CONFIG.embedding.model_revision=MODELS["bge"]
-    CONFIG.embedding.backend="sentence-transformers";CONFIG.embedding.device="cuda:0"
+    CONFIG.embedding.backend="sentence-transformers";CONFIG.embedding.device=device
     CONFIG.retriever.reranker_model="cross-encoder/ms-marco-MiniLM-L-6-v2"
     CONFIG.chunker.strategy="recursive";CONFIG.llm.temperature=0;CONFIG.llm.max_tokens=256
     chunks=[]
@@ -180,9 +192,8 @@ def english_pdf_pilot(inputs,output,n=3):
         "sha256":cache["pdf_sha256"],"n_units":len(cache["pages"])},chunks,matrix)
     reset_embedding_model();gc.collect();torch.cuda.empty_cache()
     model,revision=MODELS["english_nli"]
-    judge=NLIJudge(model,revision,local_files_only=False,device="cuda:0",batch_size=16)
-    attribution._JUDGE=judge
-    reader=LocalReader(max_input_tokens=8192);runner=ReActAgent(retriever=HybridRetriever(store),llm=reader,max_iterations=5)
+    judge=NLIJudge(model,revision,local_files_only=False,device=device,batch_size=16)
+    reader=LocalReader(max_input_tokens=8192);runner=ReActAgent(retriever=HybridRetriever(store),llm=reader,max_iterations=5,attribution_judge=judge)
     records=[];replays=[]
     fixed=attribution.evidence_spans
     for item in pool[:n]:

@@ -27,12 +27,13 @@ def fingerprint(testset, verified_only=True, file_ids=None, runtime=None):
     settings = {name: os.getenv(name, default) for name, default in {
         "DOCMIND_TOOL_PROTOCOL":"react", "DOCMIND_ATTRIBUTION":"0" if os.getenv("DOCMIND_TEST_MODE")=="1" else "1",
         "DOCMIND_NLI_MODEL":"typeform/distilbert-base-uncased-mnli", "DOCMIND_NLI_REVISION":"",
+        "DOCMIND_NLI_DEVICE":"cpu", "DOCMIND_NLI_BATCH_SIZE":"2",
         "DOCMIND_PARSER_MODE":"service", "DOCMIND_DENSE_INDEX":"flat"}.items()}
     versions: dict[str, str | None] = {}
     for name in ("transformers","torch","sentence-transformers","tokenizers","regex","pypdfium2","python-docx"):
         try: versions[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError: versions[name] = None
-    manifest = {"settings":settings,"versions":versions,"testset_sha256": hashlib.sha256(Path(testset).read_bytes()).hexdigest(),
+    manifest = {"answer_normalization":"unicode-decimals-v1","settings":settings,"versions":versions,"testset_sha256": hashlib.sha256(Path(testset).read_bytes()).hexdigest(),
                 "config": config, "verified_only": verified_only, "file_ids": file_ids,
                 "git_commit": revision, "code_sha256": code.hexdigest(),
                 "python": platform.python_version(), "runtime": runtime}

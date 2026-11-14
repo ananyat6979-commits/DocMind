@@ -1,0 +1,77 @@
+{
+  "scope": "Saved-answer structure diagnostics, not an attribution-quality benchmark",
+  "archives": [
+    {
+      "archive_sha256": "83e09bf79c246a3de4334e3bf1d636407a514f340233c002918d8402d93df199",
+      "files": [
+        {
+          "member": "reports/reader/answers.jsonl",
+          "counts": {
+            "records": 600,
+            "with_complete_question_and_evidence": 0,
+            "claim_boundary_changes": 2,
+            "legacy_placeholder_failures": 0,
+            "with_citation_labels": 0
+          }
+        }
+      ]
+    },
+    {
+      "archive_sha256": "11ef9420594b84ea37503dd9747dedb681b801c03dc125c41841eceb0307a739",
+      "files": [
+        {
+          "member": "reports/selective/heldout.jsonl",
+          "counts": {
+            "records": 200,
+            "with_complete_question_and_evidence": 0,
+            "claim_boundary_changes": 0,
+            "legacy_placeholder_failures": 0,
+            "with_citation_labels": 0
+          }
+        },
+        {
+          "member": "reports/selective/calibration.jsonl",
+          "counts": {
+            "records": 200,
+            "with_complete_question_and_evidence": 0,
+            "claim_boundary_changes": 1,
+            "legacy_placeholder_failures": 0,
+            "with_citation_labels": 0
+          }
+        }
+      ]
+    },
+    {
+      "archive_sha256": "fa9ee25bb76d9757ef2070852563e2003d15cfa651cbcd2394c14c2ab1b7f6dd",
+      "files": [
+        {
+          "member": "reports/critic/calibration.jsonl",
+          "counts": {
+            "records": 200,
+            "with_complete_question_and_evidence": 0,
+            "claim_boundary_changes": 2,
+            "legacy_placeholder_failures": 0,
+            "with_citation_labels": 0
+          }
+        },
+        {
+          "member": "reports/critic/heldout.jsonl",
+          "counts": {
+            "records": 200,
+            "with_complete_question_and_evidence": 0,
+            "claim_boundary_changes": 1,
+            "legacy_placeholder_failures": 0,
+            "with_citation_labels": 0
+          }
+        }
+      ]
+    }
+  ],
+  "attribution_precision": null,
+  "attribution_recall": null,
+  "limits": [
+    "Compact saved records may omit exact model input evidence",
+    "Missing inputs are not reconstructed by assumption",
+    "No automatic result is a human label"
+  ]
+}

@@ -70,8 +70,8 @@ def render():
             try: result=request("GET","/responses/"+response_id)
             except ValueError:
                 st.info("This response is no longer available.");continue
-            st.markdown(result["question"])
-            st.markdown(result["answer"])
+            st.text(result["question"])
+            st.text(result["answer"])
             st.caption(result["review_status"])
             for source in result["sources"]:
                 with st.expander(source["filename"]):st.text(source["content_preview"])
@@ -81,7 +81,7 @@ def render():
             for item in request("GET","/review/pending"):
                 rid=item["response_id"]
                 with st.form("review_"+rid):
-                    st.markdown(item["question"]);st.markdown(item["answer"])
+                    st.text(item["question"]);st.text(item["answer"])
                     for source in item["sources"]:st.text(source["content"])
                     decision=st.selectbox("Decision",["approved","edited","rejected"])
                     answer=st.text_area("Corrected answer")

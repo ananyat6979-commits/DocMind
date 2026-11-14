@@ -1,6 +1,9 @@
 """Compare trusted native parsing with the isolated Unix-socket transport."""
 import argparse
 import os
+import json
+import hashlib
+import urllib.request
 from pathlib import Path
 import tempfile
 from docmind.evaluation.release import digest,semantic_documents
@@ -9,7 +12,7 @@ from docmind.ingestion.parser_client import parse_remote
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument("--socket",required=True);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument("--socket",required=True);parser.add_argument("--manifest",type=Path);args=parser.parse_args()
     os.environ.update(DOCMIND_PARSER_SOCKET=args.socket,DOCMIND_PARSER_MODE="local",DOCMIND_ALLOW_UNSANDBOXED_PARSING="1")
     from reportlab.pdfgen import canvas
     from docx import Document
@@ -28,6 +31,23 @@ def main():
         except ValueError:pass
         else:raise AssertionError("Corrupt PDF was accepted")
         assert parse_remote(pdf,"en"),"Service did not recover after corrupt input"
+        if args.manifest:
+            for source in json.loads(args.manifest.read_text(encoding="utf-8"))["sources"]:
+                path=root/Path(source["filename"]).name
+                request=urllib.request.Request(source["url"],headers={"User-Agent":"Mozilla/5.0"})
+                with urllib.request.urlopen(request,timeout=60) as response,path.open("wb") as output:
+                    size=0
+                    while block:=response.read(65536):
+                        size+=len(block)
+                        if size>50*1024*1024:raise ValueError("Benchmark input exceeds size limit")
+                        output.write(block)
+                assert hashlib.sha256(path.read_bytes()).hexdigest()==source["pdf_sha256"],"Benchmark source changed"
+                native=load_document(path,expected_language=source["expected_language"])
+                isolated=parse_remote(path,source["expected_language"])
+                native_hash=digest(semantic_documents(native));isolated_hash=digest(semantic_documents(isolated))
+                assert native_hash==isolated_hash,"Actual benchmark transport changed extraction"
+                assert isolated_hash==source["expected_semantic_sha256"],"Cached benchmark extraction differs: "+isolated_hash
+                print("Cached benchmark and isolated output match",isolated_hash)
         print("Socket transport, rejection, recovery and output equivalence passed")
 
 if __name__=="__main__":main()

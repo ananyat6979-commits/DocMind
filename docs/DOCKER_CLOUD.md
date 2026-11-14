@@ -10,6 +10,8 @@ $env:DOCMIND_CREDENTIALS_PATH = "$env:USERPROFILE/.config/docmind/credentials.js
 docker compose up --build
 ```
 
+On Linux, set `DOCMIND_CREDENTIALS_GID` to the registry group ID printed by the helper. The registry is group-readable for the API; personal key files remain owner-only. Windows Docker file-sharing uses the host access controls.
+
 Read the generated personal `.key` file privately and enter it in the UI. The service mounts only the hashed credential registry, read-only. Set the provider key and model in the shell or private environment configuration. Never put keys in Git. Remove a credential record to revoke it; changes apply on the next request. Protect private files with host access permissions and use TLS for remote access.
 
 The API and UI bind localhost ports 8000 and 8501. The API's data volume is the only library. A separate parser receives bytes over a Unix socket. Its container has no network namespace access, accepts only Unix-family sockets, drops capabilities, runs as UID 10001, uses a read-only filesystem and a bounded temporary filesystem, and has CPU, memory and process limits. It receives no application credential file or database mount. A malformed or exhausted worker returns a bounded rejection and the service handles the next request.

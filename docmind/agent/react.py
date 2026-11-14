@@ -67,11 +67,12 @@ def strip_leaks(text: str) -> str:
 
 class ReActAgent:
     def __init__(self, retriever: Optional[HybridRetriever] = None, llm: Optional[BaseLLM] = None,
-                 max_iterations: Optional[int] = None):
+                 max_iterations: Optional[int] = None, attribution_judge=None):
         if llm is None:
             from docmind.llm.groq_client import get_llm
             llm = get_llm()
         self.llm = llm
+        self.attribution_judge = attribution_judge
         self._run_lock = threading.Lock()
         self.retriever = retriever or HybridRetriever()
         self.max_iterations = max_iterations or CONFIG.max_agent_iterations
@@ -194,7 +195,7 @@ class ReActAgent:
         if not abstained and os.getenv("DOCMIND_ATTRIBUTION", "0" if os.getenv("DOCMIND_TEST_MODE") == "1" else "1") == "1":
             from docmind.attribution import attribute, default_judge
             try:
-                attribution = attribute(cleaned, ordered, default_judge())
+                attribution = attribute(cleaned, ordered, self.attribution_judge or default_judge())
             except Exception as exc:
                 logger.warning("Attribution unavailable: %s", type(exc).__name__)
                 attribution = {"error": type(exc).__name__, "human_validated": False}

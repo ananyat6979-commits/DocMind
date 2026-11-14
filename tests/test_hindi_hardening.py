@@ -185,3 +185,48 @@ def test_admin_pin_is_independent_of_reviewer(monkeypatch):
     CONFIG.review.reviewer_pin="reviewer-pin";monkeypatch.setenv("DOCMIND_ADMIN_PIN","admin-pin")
     assert client.delete("/documents/unknown",headers={"X-Reviewer-Pin":"reviewer-pin"}).status_code==401
     assert client.delete("/documents/unknown",headers={"X-Admin-Pin":"admin-pin"}).status_code==404
+
+
+def test_hinglish_query_cannot_bypass_language_gate_via_english_sources(monkeypatch):
+    from docmind.review.policy import review_reasons
+    from docmind.models import Chunk,SearchResult
+    monkeypatch.setenv("DOCMIND_TEST_MODE","0")
+    monkeypatch.setattr(CONFIG.review,"audit_rate",0)
+    source=SearchResult(Chunk("The limit is 300 degrees.","d","s",0,metadata={"language_info":{"language":"en"}}),1,"dense")
+    response=AgentResponse("300 degrees",[source],[],"iska limit kya hai",1,citation_report={"cited":["c"],"attribution":{"supported_fraction":1.0}})
+    assert "query_language_unvalidated" in review_reasons(response)
+
+
+def test_scoring_normalizes_devanagari_digits_without_collapsing_decimals():
+    from docmind.evaluation.metrics import answer_em
+    assert answer_em("१२.५ किलोग्राम","12.5 किलोग्राम")==1
+    assert answer_em("12.5","125")==0
+    assert answer_em("क़दम","क़दम")==1
+
+
+def test_default_attribution_cache_tracks_model_revision(monkeypatch):
+    import docmind.attribution as module
+    calls=[]
+    class Judge:
+        def __init__(self,**kwargs):self.identity=kwargs;calls.append(kwargs)
+    monkeypatch.setattr(module,"NLIJudge",Judge)
+    monkeypatch.setattr(module,"_JUDGE",None);monkeypatch.setattr(module,"_JUDGE_KEY",None)
+    monkeypatch.setenv("DOCMIND_NLI_MODEL","first");monkeypatch.setenv("DOCMIND_NLI_REVISION","one")
+    first=module.default_judge();assert module.default_judge() is first
+    monkeypatch.setenv("DOCMIND_NLI_REVISION","two")
+    assert module.default_judge() is not first and len(calls)==2
+
+
+def test_orphan_sweeps_progress_past_referenced_files():
+    from docmind.uploads import sweep
+    from docmind.db import connect
+    from docmind.store import CorpusStore
+    CorpusStore()
+    root=CONFIG.data_dir/"uploads"
+    reference=root/("a"*64)/"one.txt";reference.parent.mkdir(parents=True)
+    reference.write_text("referenced");(reference.parent/"two.txt").write_text("same referenced bytes")
+    orphan=root/("b"*64)/"orphan.txt";orphan.parent.mkdir(parents=True);orphan.write_text("orphan")
+    with connect() as conn:
+        conn.execute("INSERT INTO documents(file_id,filename,source,sha256,n_units,n_chunks,ingested_at) VALUES (?,?,?,?,1,0,0)",("ref","one.txt",str(reference.resolve()),"a"*64))
+    removed=sum(sweep(min_age_seconds=0,limit=1) for _ in range(6))
+    assert removed==1 and not orphan.exists() and reference.exists()

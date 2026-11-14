@@ -70,8 +70,13 @@ class IngestionQueue:
         with connect(self.db_path) as conn:
             conn.execute("UPDATE ingestion_jobs SET status='failed',error='Interrupted during service restart' WHERE status='running'")
         def loop():
+            next_sweep=0.0
             while not self.stop_event.is_set():
                 try:
+                    if time.monotonic()>=next_sweep:
+                        from docmind.uploads import sweep
+                        sweep(self.db_path)
+                        next_sweep=time.monotonic()+60
                     if not self.run_one(): self.stop_event.wait(0.25)
                 except Exception:
                     import logging

@@ -22,6 +22,7 @@ import json
 import logging
 import math
 import time
+from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -79,7 +80,12 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
         if not manifest_path.exists() or json.loads(manifest_path.read_text())["run_id"] != manifest["run_id"]:
             raise ValueError("Checkpoint provenance mismatch. Choose a new output path for this configuration.")
     manifest_path.write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
-    done = {r["id"] for r in _read_jsonl(out)}
+    checkpoint = _read_jsonl(out)
+    ids = [r["id"] for r in checkpoint]
+    selected_ids = {item["id"] for item in testset}
+    if len(set(ids)) != len(ids) or set(ids)-selected_ids or any(r.get("run_id") != manifest["run_id"] for r in checkpoint):
+        raise ValueError("Checkpoint records do not match their manifest")
+    done = set(ids)
     for item in testset:
         if item["id"] in done:
             continue
@@ -91,7 +97,7 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
             logger.warning("Generation failed for %s: %s", item["id"], type(exc).__name__)
             _append_jsonl(out, [{"id": item["id"], "run_id": manifest["run_id"],
                 "question": item["question"], "ground_truth": item.get("ground_truth", ""),"references":item.get("references",[]),
-                "answerable": item["answerable"], "answer": "", "contexts": [],
+                "answerable": item["answerable"], "answer": "", "contexts": [], "sources": [],
                 "abstained": False, "finish_reason": "error", "error": type(exc).__name__,
                 "citation_report": {}, "needs_review": True, "review_reasons": ["generation_failure"],
                 "latency_ms": (time.perf_counter()-started)*1000,
@@ -106,6 +112,8 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
             "answerable": item["answerable"],
             "answer": resp.answer,
             "contexts": [s.chunk.content for s in resp.sources],
+            "sources": [{"chunk":asdict(s.chunk),"score":s.score,"retriever":s.retriever} for s in resp.sources],
+            "response_id":resp.response_id,
             "abstained": resp.abstained, "finish_reason": resp.finish_reason,
             "citation_report": resp.citation_report, "needs_review": resp.needs_review,
             "review_reasons": resp.review_reasons, "latency_ms": resp.latency_ms,
