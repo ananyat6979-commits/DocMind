@@ -14,6 +14,9 @@ WORKDIR /app
 COPY locks/cpu-linux-py311.txt /app/locks/cpu-linux-py311.txt
 RUN pip install --require-hashes -r /app/locks/cpu-linux-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
+COPY locks/postgres.txt /app/locks/postgres.txt
+RUN pip install --require-hashes -r /app/locks/postgres.txt
+
 COPY requirements.txt .
 
 

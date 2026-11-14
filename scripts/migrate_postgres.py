@@ -43,6 +43,7 @@ def migrate(admin_dsn,runtime_role,runtime_password,tenants):
                     if name=='chunks':
                         statement=statement.replace('UNIQUE(file_id, ord)','UNIQUE(tenant_id,file_id,ord)')
                         extra+=", embedding_vector vector(384) NOT NULL, FOREIGN KEY(tenant_id,file_id) REFERENCES documents(tenant_id,file_id) ON DELETE CASCADE"
+                    position=statement.rfind(')')
                     statement=statement[:position]+extra+statement[position:]
                 else:statement=re.sub(r'\buser\b','"user"',statement)
                 conn.execute(statement)
