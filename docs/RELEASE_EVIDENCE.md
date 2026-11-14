@@ -17,7 +17,7 @@ XNLI is a component test, not PDF attribution. Each language uses 200 seed-seven
 | English judge, Hindi | 50.0% [35.9, 65.0] | 33.3% [22.4, 44.8] |
 | Multilingual judge, Hindi | 88.6% [77.4, 97.4] | 47.0% [34.8, 59.3] |
 
-CPU and T4 runs produced the same aggregate decisions. The multilingual judge improves this Hindi component result but reduces English recall. Neither result validates real Hindi PDF claim support, claim extraction recall or false-release risk. A blanket judge replacement would conceal the English regression.
+Local CPU, free CI CPU and T4 runs produced the same aggregate decisions. The [CI records](../reports/releases/r1/cpu-ci) retain 800 numeric NLI predictions and 400 ANN rankings without source text or gold labels. Recompute their counts and intervals with `python scripts/verify_component_records.py reports/releases/r1/cpu-ci --xnli-cache <private-cache>`. The cache holds `xnli-en.parquet` and `xnli-hi.parquet` downloaded from the pinned revision. This checks scoring and cohort accounting without rerunning inference. The multilingual judge improves this Hindi component result but reduces English recall. Neither result validates real Hindi PDF claim support, claim extraction recall or false-release risk. A blanket judge replacement would conceal the English regression.
 
 ## Bounded local-reader T4 pilot
 
