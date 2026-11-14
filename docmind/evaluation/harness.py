@@ -71,6 +71,7 @@ def generate(testset_path: str, agent=None, out_path: Optional[str] = None,
                  "selected_ids": [item["id"] for item in testset],
                  "actual_model": getattr(getattr(agent,"llm",None),"_model",None),
                  "actual_reasoning_effort": getattr(getattr(agent,"llm",None),"_reasoning_effort",None),
+                 "corpus_identity": corpus_store.content_identity() if corpus_store is not None and hasattr(corpus_store,"content_identity") else None,
                  "corpus_version": corpus_store.version() if corpus_store is not None else None})
     manifest.update(n_questions=len(testset), n_verified=sum(bool(x.get("verified")) for x in testset))
     manifest_path = out.with_suffix(".manifest.json")

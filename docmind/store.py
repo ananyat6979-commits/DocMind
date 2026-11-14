@@ -95,7 +95,8 @@ class CorpusStore:
 
     def _embedding_signature(self) -> str:
         e = CONFIG.embedding
-        return f"{e.backend}:{e.model_name}:{e.model_revision}:{e.normalize_embeddings}:{e.query_instruction}"
+        from docmind.embeddings import embedding_identity
+        return embedding_identity()
 
     def ensure_embedding_compatible(self):
         with connect(self.db_path) as conn:
@@ -103,6 +104,18 @@ class CorpusStore:
             count=conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
             if count and signature!=self._embedding_signature():
                 raise EmbeddingModelMismatch("The corpus embedding identity differs from the active configuration; rebuild an isolated corpus")
+
+    def content_identity(self) -> str:
+        """Hash the actual checkpoint inputs, including tool-visible chunk identities."""
+        import hashlib
+        identity=hashlib.sha256()
+        with connect(self.db_path) as conn:
+            for row in conn.execute("SELECT file_id,sha256,lineage FROM documents ORDER BY file_id"):
+                identity.update(json.dumps(list(row),ensure_ascii=True).encode())
+            for row in conn.execute("SELECT chunk_id,file_id,content,metadata,embedding FROM chunks ORDER BY chunk_id"):
+                identity.update(json.dumps(list(row)[:-1],ensure_ascii=True).encode())
+                identity.update(row[-1])
+        return identity.hexdigest()
 
     # ---- documents ---------------------------------------------------------
     def has_file(self, file_id: str) -> bool:

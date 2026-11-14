@@ -67,7 +67,16 @@ def reset_embedding_model() -> None:
 
 def embed_texts(texts: List[str], show_progress: bool = False) -> np.ndarray:
     """Embed passages (no instruction prefix). Returns float32 (n, dim)."""
+    return _encode(texts, show_progress, query=False)
+
+
+def _encode(texts: List[str], show_progress: bool = False, query: bool = False) -> np.ndarray:
     model = get_embedding_model()
+    cfg = CONFIG.embedding
+    if cfg.backend != "hash" and cfg.model_name.startswith("intfloat/multilingual-e5"):
+        texts = [("query: " if query else "passage: ") + text for text in texts]
+    elif query and cfg.backend != "hash" and cfg.model_name.startswith("BAAI/bge"):
+        texts = [cfg.query_instruction + text for text in texts]
     vecs = model.encode(
         texts,
         batch_size=CONFIG.embedding.batch_size,
@@ -81,7 +90,18 @@ def embed_texts(texts: List[str], show_progress: bool = False) -> np.ndarray:
 def embed_query(query: str) -> np.ndarray:
     """Embed a search query. bge models are trained to see an instruction
     prefix on the query side only; omitting it costs retrieval quality."""
-    prefix = ""
-    if CONFIG.embedding.backend != "hash" and CONFIG.embedding.model_name.startswith("BAAI/bge"):
-        prefix = CONFIG.embedding.query_instruction
-    return embed_texts([prefix + query])
+    return _encode([query], query=True)
+
+
+def embedding_identity() -> str:
+    """Separate inference representations and dependency baselines."""
+    import importlib.metadata
+    import json
+    e = CONFIG.embedding
+    versions = {}
+    for name in ("transformers", "sentence-transformers", "torch", "tokenizers"):
+        try: versions[name] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError: versions[name] = "absent"
+    return json.dumps({"backend":e.backend,"model":e.model_name,"revision":e.model_revision,
+        "normalized":e.normalize_embeddings,"instruction":e.query_instruction,
+        "prefix_policy":"bge-query-e5-both-v1","versions":versions},sort_keys=True)

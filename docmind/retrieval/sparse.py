@@ -82,7 +82,8 @@ class BM25Index:
 
 
 class SparseRetriever:
-    def __init__(self):
+    def __init__(self, hindi_ngrams: bool = False):
+        self.hindi_ngrams = hindi_ngrams
         self._bm25: Optional[BM25Index] = None
         self._chunks: List[Chunk] = []
         self._file_ids: Optional[np.ndarray] = None
@@ -93,7 +94,7 @@ class SparseRetriever:
             self._bm25, self._file_ids = None, None
             return
         self._bm25 = BM25Index()
-        self._bm25.fit([tokenize(c.content) for c in self._chunks])
+        self._bm25.fit([tokenize(c.content, self.hindi_ngrams) for c in self._chunks])
         self._file_ids = np.array([c.file_id for c in self._chunks])
         logger.info(f"BM25 index ready: {len(self._chunks)} chunks")
 
@@ -102,7 +103,7 @@ class SparseRetriever:
         if self._bm25 is None:
             return []
         top_k = top_k or CONFIG.retriever.top_k_sparse
-        q = tokenize(query)
+        q = tokenize(query, self.hindi_ngrams)
         if not q:
             return []
         scores = self._bm25.get_scores(q)

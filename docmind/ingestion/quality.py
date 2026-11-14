@@ -34,6 +34,7 @@ def extraction_quality(text: str, expected_language: str | None = None,
     devanagari = sum("DEVANAGARI" in unicodedata.name(c, "") for c in letters)/count
     latin = sum("LATIN" in unicodedata.name(c, "") for c in letters)/count
     bad = sum(c == "\ufffd" or unicodedata.category(c) == "Co" for c in text)/max(len(text),1)
+    controls = sum(unicodedata.category(c) == "Cc" and c not in "\n\r\t\f" for c in text)/max(len(text),1)
     flags: list[str] = []
     if not text.strip(): status = "image_only_or_empty"
     else:
@@ -42,13 +43,14 @@ def extraction_quality(text: str, expected_language: str | None = None,
         if legacy_font: flags.append("legacy_font_name")
         if expected_language == "hi" and len(letters) >= 20 and devanagari < .2:
             flags.append("expected_hindi_script_mismatch")
+        if controls > .002: flags.append("unexpected_control_characters")
         if bad > .01: flags.append("replacement_or_private_use_characters")
         if malformed: flags.append("suspicious_combining_sequence")
-        if legacy_font or bad > .01: status = "suspected_legacy_font"
+        if legacy_font or bad > .01 or controls > .002: status = "suspected_legacy_font"
         elif flags: status = "uncertain_or_mixed"
         else: status = "usable_unicode"
     return {"version": VERSION, "status": status, "flags": flags,
             "devanagari_ratio": devanagari, "latin_ratio": latin,
-            "replacement_private_use_ratio": bad, "font_names": fonts,
+            "replacement_private_use_ratio": bad, "unexpected_control_ratio":controls, "font_names": fonts,
             "expected_language": expected_language,
-            "quarantined": status in ("suspected_legacy_font", "image_only_or_empty")}
+            "quarantined": status != "usable_unicode"}

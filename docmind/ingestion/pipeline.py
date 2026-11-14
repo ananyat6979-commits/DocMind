@@ -14,7 +14,7 @@ from dataclasses import asdict
 import importlib.metadata
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from tqdm import tqdm
 
@@ -60,7 +60,11 @@ class IngestReport:
         return [f for f in self.files if f.status == "failed"]
 
 
-def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=None) -> FileReport:
+def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=None, expected_language=None, encoding=None) -> FileReport:
+    from docmind.text import VERSION as boundary_version
+    from docmind.ingestion.quality import VERSION as quality_version
+    from docmind.language import VERSION as language_version
+    preprocessing = {"boundaries":boundary_version,"extraction_quality":quality_version,"language":language_version,"expected_language":expected_language,"encoding":encoding}
     sha = file_sha256(path)
     file_id = sha[:16]
 
@@ -69,22 +73,26 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
         store.ensure_embedding_compatible()
         doc = store.get_document(file_id)
         if doc is None: raise ValueError("Cached document disappeared; retry ingestion")
+        if doc.get("lineage",{}).get("preprocessing") != preprocessing:
+            raise ValueError("Cached preprocessing differs; explicitly rebuild this document")
         if doc.get("lineage",{}).get("chunker")!=asdict(chunker_config or CONFIG.chunker):
             raise ValueError("Cached document uses a different chunker configuration; rebuild it explicitly")
         logger.info(f"'{path.name}' already ingested (file_id={file_id}); skipping")
         return FileReport(file_id, path.name, "cached", doc["n_chunks"] if doc else 0)
 
-    units = load_document(path)
+    units = load_document(path,expected_language=expected_language,encoding=encoding)
     if not units or not any(unit.content.strip() for unit in units):
         hint=" Run OCR first if this is a scanned PDF." if path.suffix.lower()==".pdf" else ""
         raise EmptyDocumentError(f"No extractable text in '{path.name}'."+hint)
 
-    lineage = {"chunker": asdict(chunker_config or CONFIG.chunker), "embedding": {
+    lineage: Dict[str,Any] = {"preprocessing":preprocessing,"chunker": asdict(chunker_config or CONFIG.chunker), "embedding": {
         "backend": CONFIG.embedding.backend, "model": CONFIG.embedding.model_name,
         "query_instruction": CONFIG.embedding.query_instruction,"revision":CONFIG.embedding.model_revision},
         "parsers": {name: importlib.metadata.version(name) for name in ("python-docx", "pypdfium2")}}
     chunks: List[Chunk] = []
+    lineage["page_quality"] = [{"page":u.metadata.get("page"),"section":u.metadata.get("section"),**u.metadata.get("extraction_quality",{})} for u in units]
     partial = any(u.metadata.get("extraction_quality", {}).get("quarantined") for u in units)
+    lineage["partial_document"] = partial
     for unit in tqdm(units, desc=f"Chunking {path.name}", unit="unit", leave=False):
         if unit.metadata.get("extraction_quality", {}).get("quarantined"):
             continue
@@ -92,6 +100,7 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
         unit.metadata["language_info"] = language_info(unit.content)
         unit.metadata["partial_document"] = partial
         for c in chunk_document(unit,config=chunker_config):
+            c.metadata["language_info"] = language_info(c.content)
             c.file_id = file_id
             c.ord = len(chunks)           # global position within the file
             c.metadata = {**c.metadata, "file_id": file_id, "lineage": lineage}
@@ -117,6 +126,8 @@ def ingest(
     rebuild_index: bool = False,
     store: Optional[CorpusStore] = None,
     chunker_config=None,
+    expected_language: Optional[str] = None,
+    encoding: Optional[str] = None,
 ) -> IngestReport:
     """Ingest a file or a directory (recursively). Safe to call repeatedly."""
     path = Path(path)
@@ -131,7 +142,7 @@ def ingest(
 
     for f in files:
         try:
-            report.files.append(_ingest_file(f, store, rebuild_index,chunker_config))
+            report.files.append(_ingest_file(f, store, rebuild_index,chunker_config,expected_language,encoding))
         except Exception as exc:
             logger.warning(f"Failed to ingest {f.name}: {exc}")
             if path.is_file():

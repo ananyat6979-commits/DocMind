@@ -33,7 +33,7 @@ from docmind.config import CONFIG  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGES = ["torch", "sentence-transformers", "faiss-cpu", "numpy", "ragas", "langchain-groq", "groq",
-            "streamlit", "fastapi", "pdfplumber", "python-docx", "nltk"]
+            "streamlit", "fastapi", "pypdfium2", "python-docx", "regex"]
 
 SAMPLE_DOC = (
     "The Alpha Protocol governs thermal regulation in the reactor. Coolant temperature must stay below 300 "
