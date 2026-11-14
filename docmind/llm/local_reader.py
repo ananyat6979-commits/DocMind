@@ -27,7 +27,7 @@ class LocalReader(BaseLLM):
         """Retain failed attempts and unknown output counts in the timing log."""
         started=time.perf_counter()
         first: list[float] = []
-        record={"input_tokens":None,"output_tokens":None,"generation_attempted":False,
+        record: dict[str,int | float | str | bool | None] = {"input_tokens":None,"output_tokens":None,"generation_attempted":False,
                 "max_length_reached":None,"numerical_failure":False,"status":"error"}
         try:
             from transformers import LogitsProcessor,LogitsProcessorList
