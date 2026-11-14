@@ -1,0 +1,8 @@
+{
+  "workflow_run": 43597025853,
+  "source_commit": "562e24f",
+  "artifact_sha256": "283f4ba85a4abb287a67b83bba1cb15b7a3c074e2bf5e94d93e2ca35a9181bfe",
+  "publication": "Numeric predictions and rankings only. No source text, gold labels or human annotation records.",
+  "terms": "Research diagnostics. XNLI upstream noncommercial terms apply independently of the project code license.",
+  "xnli_license": "https://github.com/facebookresearch/XNLI/blob/main/LICENSE"
+}

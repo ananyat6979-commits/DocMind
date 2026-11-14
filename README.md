@@ -25,27 +25,28 @@ These are bounded experiments, not a full-wiki leaderboard, a multi-tenant deplo
 
 ## Run locally
 
-Python 3.11 or newer is required. From this checkout:
+For a reproducible Windows CPU environment, use Python 3.11 and the hash lock below. Linux and Python 3.13 notebook targets have separate [locked environments](locks/README.md). From this checkout:
 
 ```powershell
-python -m venv .venv
+py -3.11 -m venv .venv
 .venv\Scripts\Activate.ps1
-python -m pip install -r requirements-dev.txt
-python -m pip install -e .
+python -m pip install --require-hashes -r locks/cpu-windows-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e . --no-deps --no-build-isolation
 Copy-Item .env.example .env
 ```
 
-Set the keys and passwords in `.env` privately. The UI requires `DOCMIND_APP_PASSWORD`; the API requires `DOCMIND_API_KEY`; review operations require `DOCMIND_REVIEWER_PIN`; document deletion and rebuild in the UI require `DOCMIND_ADMIN_PIN`. Missing credentials disable the corresponding access. Select a currently available hosted model with `python scripts/list_models.py`, then set `DOCMIND_LLM_MODEL`. `DOCMIND_SECRETS_FILE` can point to a private dotenv file outside the checkout. Never put secrets in a notebook or archive.
+Use the [centralized deployment](docs/DOCKER_CLOUD.md) for individual credentials and the isolated parser. The following shared-key setup is development compatibility mode. Set the keys and passwords in `.env` privately. The UI requires `DOCMIND_APP_PASSWORD`; the API requires `DOCMIND_API_KEY`; review operations require `DOCMIND_REVIEWER_PIN`; document deletion and rebuild in the UI require `DOCMIND_ADMIN_PIN`. Missing credentials disable the corresponding access. Select a currently available hosted model with `python scripts/list_models.py`, then set `DOCMIND_LLM_MODEL`. `DOCMIND_SECRETS_FILE` can point to a private dotenv file outside the checkout. Never put secrets in a notebook or archive.
+
+Run the API and UI in separate terminals. PDF/DOCX ingestion requires the parser service; native parsing is an explicit trusted-input override documented in the deployment guide.
 
 ```powershell
 python scripts/cache_models.py
 streamlit run app.py
 uvicorn docmind.api.main:app --host 127.0.0.1 --port 8000
-python -m pytest -q
 python scripts/verify_benchmark_reports.py
 ```
 
-The test suite uses hash embeddings and a demo reader without downloading models. `DOCMIND_TEST_MODE=1` uses explicit development backends and must stay off in a deployed service. Run `cache_models.py` once with network access to cache the pinned retrieval and attribution models. The runtime attribution judge reads cached weights and routes to review if unavailable. Docker bakes those weights into the image; see [deployment](docs/DOCKER_CLOUD.md).
+For development checks, install `pytest pyyaml httpx ruff mypy` in the locked environment and run `python -m pytest -q`. The test suite uses hash embeddings and a demo reader without downloading models. `DOCMIND_TEST_MODE=1` uses explicit development backends and must stay off in a deployed service. Run `cache_models.py` once with network access to cache the pinned retrieval and attribution models. The runtime attribution judge reads cached weights and routes to review if unavailable. Docker bakes those weights into the image; see [deployment](docs/DOCKER_CLOUD.md).
 
 ## How it works
 

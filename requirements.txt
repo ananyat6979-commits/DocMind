@@ -1,6 +1,5 @@
 # Runtime only (app, API, CLI). Light enough for a laptop or a free notebook.
-# CPU-only torch is much smaller on Windows/Linux:
-#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Runtime installation uses hash-locked CPU/CUDA environments under locks/.
 sentence-transformers==5.7.0
 transformers==5.23.0
 torch>=2.13,<3

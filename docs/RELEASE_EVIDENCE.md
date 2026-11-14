@@ -10,6 +10,8 @@ XNLI is a component test, not PDF attribution. Each language uses 200 seed-seven
 
 The first CPU and T4 measurements below used Torch 2.11.0. A subsequent dependency check identified the [`torch.jit.script` advisory](https://github.com/advisories/GHSA-rrmf-rvhw-rf47) and [legacy wheel-installation issue](https://github.com/advisories/GHSA-xmj3-9gf7-h52w). Deployment locks now target Torch 2.13.0 and setuptools 84.2.1. The application does not directly call `torch.jit.script`; fixed dependencies still require fresh compatibility and component checks. Original results retain their recorded versions and are not relabeled as results for the updated stack. Private dependency audit reports are not committed. A PyPI audit cannot directly identify the local-version CPU/CUDA wheels, so the matching base Torch version is checked separately; that does not certify every binary artifact.
 
+The fresh [Torch 2.13 CPU baseline](../reports/releases/r1/cpu-ci-torch213) passed independent verification. Its 800 NLI scores and E5 vector hash matched the earlier CI run exactly, and HNSW recall remained 99.1% [98.5, 99.6]. Updated CPU deployment compatibility and Python CI passed. The older FP16 T4 reader profile still describes its original CUDA dependencies; it is not evidence for the updated CUDA stack.
+
 ## NLI results
 
 | Judge and language | Precision, 95% interval | Recall, 95% interval |
@@ -43,7 +45,25 @@ One reviewer completed the blinded 15-pair Hindi public-label packet in 520 acti
 
 Real multilingual E5 embeddings replaced the historical Gaussian-vector stress input for a new application-path test. HNSW Recall@10 against exact search was 99.1% [98.5, 99.6] over 100 queries and 3,340 vectors. CPU unscoped median search time was 0.140 ms versus exact 0.273 ms, excluding embedding. Scoped requests deliberately use an exact filtered scan, with linear cost. This small sentence corpus establishes fidelity on this input, not production scale, semantic relevance or an incremental persistent index. The old 50,000-vector experiment remains unchanged and is not directly comparable.
 
-The MIRACL workflow freezes 200 original public dev queries per language, retains all positive passages, up to ten judged negatives per query and deterministic distractors. Its lexical, embedding, reranker and candidate-depth comparisons are a judged-candidate component experiment, not official full-corpus MIRACL. Restricted source text stays private. Every condition reports requested-cohort and completed-only statistics; unserved rows retain zero scores in the requested denominator. Paired differences use matched completed query IDs and must not be generalized from incomplete profiles. Results remain unmeasured until their workflow finishes and artifacts validate.
+The MIRACL workflow freezes 200 original public dev queries per language, retains all positive passages, up to ten judged negatives per query and deterministic distractors. Its lexical, embedding, reranker and candidate-depth comparisons are a judged-candidate component experiment, not official full-corpus MIRACL. Restricted source text stays private. Every condition reports requested-cohort and completed-only statistics; unserved rows retain zero scores in the requested denominator. Paired differences use matched completed query IDs and must not be generalized from incomplete profiles. The lexical measurements below completed locally. Neural embedding and reranker comparisons remain unmeasured until their workflow finishes and artifacts validate.
+
+### Measured lexical ablation
+
+The [lexical records](../reports/releases/r1/miracl-lexical) contain 1,000 verified rankings: 200 questions per language, 4,024 English passages and 3,964 Hindi passages. NumPy 2.4.6 and regex 2026.11.9 match the locked environments. No neural model was loaded. Gold passages are deliberately retained in each candidate pool; these results are not full-corpus MIRACL.
+
+| Language and representation | Recall@5, 95% interval |
+|---|---:|
+| English, legacy regex | 59.46% [54.64, 64.18] |
+| English, repaired word tokens | 59.39% [54.57, 63.96] |
+| Hindi, legacy regex | 43.40% [37.58, 48.98] |
+| Hindi, repaired word tokens | 60.61% [54.97, 65.77] |
+| Hindi, words plus grapheme trigrams | 62.64% [57.06, 68.17] |
+
+The paired Hindi word-token gain is **17.21 percentage points [10.59, 23.90]**. The English change is -0.07 points [-1.57, 1.43]. Legacy Hindi fragments retained some retrieval signal; the evidence shows an improvement, not zero baseline capability.
+
+Trigrams add 2.03 points [-2.00, 6.22] over repaired Hindi words, so the extra quality gain is not established. Hindi vocabulary grows from 34,313 to 74,277 terms, index construction takes 3.44 versus 44.37 seconds, and median query time grows from 0.675 to 10.104 ms on the same Windows host. Single-run timing is descriptive, not a production SLA. Trigrams remain optional because their measured cost is substantial and their extra recall interval includes zero. No Hindi stemming or stopword change was introduced.
+
+Recompute all row scores, intervals and paired differences without neural inference using `python scripts/verify_miracl_records.py reports/releases/r1/miracl-lexical`. This downloads the pinned public topics and qrels, without source passage text. Original public judgments are not independently reviewed; the Hindi XNLI audit is a separate task.
 
 Ablation intervals are nominal 95% exploratory intervals, without a family-wise multiple-comparison guarantee. Historical injection tests do not validate the new local reader against prompt injection.
 

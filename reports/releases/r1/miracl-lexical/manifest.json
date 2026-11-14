@@ -1,0 +1,41 @@
+{
+  "scope": "MIRACL dev-derived judged-candidate lexical component, not full-corpus retrieval",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "python": "3.11.9",
+  "versions": {
+    "numpy": "2.4.6",
+    "regex": "2026.11.9"
+  },
+  "source_code_sha256": "15c8b102f0cdc333bf73ee3275ea7adb35c04f504be2fd99bf6a4c9605d764ed",
+  "n_per_language": {
+    "en": 200,
+    "hi": 200
+  },
+  "documents_per_language": {
+    "en": 4024,
+    "hi": 3964
+  },
+  "semantic_sources": {
+    "en": {
+      "cohort_sha256": "f219a17fcd93df7bff99521ba13d1fde63928d01c58dc29cedb79d3e6a537b03",
+      "corpus_sha256": "aa64b1bb9fe09ad7c1dc1525da75e7bc5cabaa74a5c0299e8f25b98d88247ffa",
+      "query_revision": "5be20db9509754dadad47689368639fcec739c00",
+      "corpus_revision": "d921ec7e349ce0d28daf30b2da9da5ee698bef0d",
+      "topics_sha256": "25d9e6d17656674fd7aa3b67ee912c71545e664a842b147bfc17e9ff391db3da",
+      "qrels_sha256": "a0af836c300e85088c4d73449492e2378280f967cac032853c9e11f3bc8a8d81",
+      "selected_ids_sha256": "b2d0d2ba2aeba6205fcc8a6bfb728a324eed7d84ea500fed8474bd86f5eb35fb"
+    },
+    "hi": {
+      "cohort_sha256": "21d8161254e7a400c57e7e764bd945a190e2e6f50e980951361568a7b7ff7579",
+      "corpus_sha256": "e2ec1ced24b7d14310fa07bc04f6c19384f0d8e19a8a39ce477b944eba2c2426",
+      "query_revision": "5be20db9509754dadad47689368639fcec739c00",
+      "corpus_revision": "d921ec7e349ce0d28daf30b2da9da5ee698bef0d",
+      "topics_sha256": "94bed8e649806246f59edfb6434ea0c59920a44f2f60a56e01d205c6bf58ef60",
+      "qrels_sha256": "4cec99e7012ffca7fd129eeea01f37984bb21702706a8398208e8fba1c14e963",
+      "selected_ids_sha256": "205c0d8f52c24ea760a7bff6fff87deb727bef06b43b1213f9d49b39cd56ef10"
+    }
+  },
+  "distractors": 2000,
+  "public_labels": "not independently reviewed",
+  "run_id": "f7322666355165af5180a70aa29f67cc3e50673a713e8f4b9224da8325a7625b"
+}

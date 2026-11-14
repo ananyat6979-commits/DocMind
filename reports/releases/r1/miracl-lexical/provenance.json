@@ -1,0 +1,9 @@
+{
+  "runtime_source_commit": "562e24f",
+  "runner": "scripts/miracl_lexical.py",
+  "runner_sha256": "15c8b102f0cdc333bf73ee3275ea7adb35c04f504be2fd99bf6a4c9605d764ed",
+  "public_task": "MIRACL dev-derived judged-candidate subset, not official full-corpus MIRACL",
+  "license": "MIRACL dataset card declares Apache-2.0; underlying Wikipedia attribution/share-alike terms remain separate. No source text or qrels are published here.",
+  "dataset_card": "https://huggingface.co/datasets/miracl/miracl",
+  "independent_metric_verification": "1000 rows, requested/cohort and completed-only intervals and paired differences verified against pinned public qrels"
+}
