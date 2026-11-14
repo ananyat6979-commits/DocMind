@@ -14,3 +14,8 @@ reports/service_load.json -text
 data/testset.json -text
 data/public/corpus.json -text
 reports/ann_scale.json -text
+
+reports/releases/r1/** -text
+
+# Preserve renderer path whitespace in generated SVG assets.
+reports/releases/r1/figures/*.svg linguist-generated=true -whitespace

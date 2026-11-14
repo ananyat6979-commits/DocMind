@@ -1,0 +1,6 @@
+{
+  "original_renderer_svg_sha256": "214bf1b07de45b4eaf20b34be5dd7c3e13fd80635ca834053125840460de6c5d",
+  "earlier_git_normalized_svg_sha256": "618f444b542421c6e72320abc3d14e39862022ab525b25bec8050422fda7df20",
+  "repair": "Preserve the original Windows renderer bytes recorded in the original manifest. The earlier Git import normalized CRLF to LF. This changes serialization only, not figure data or visible content. All other published result files retain their committed bytes.",
+  "release_artifact_policy": "reports/releases/r1/** -text"
+}
