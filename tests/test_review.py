@@ -82,3 +82,39 @@ def test_old_extraction_policy_cannot_release_automatically(monkeypatch):
     assert "stale_extraction_policy" not in review_reasons(response)
     del metadata["lineage"]
     assert "stale_extraction_policy" in review_reasons(response)
+
+
+def test_output_language_is_gated_independently_of_question_and_citation(monkeypatch):
+    from docmind.ingestion.quality import VERSION
+    monkeypatch.setenv("DOCMIND_TEST_MODE","0")
+    body="सही उत्तर तीन सौ डिग्री है"
+    response=_resp(answer=body+" (Source: long English filename explaining the coolant protocol.pdf, p.1)",query="What is the coolant temperature limit during startup?")
+    response.sources[0].chunk.metadata.update(language_info={"language":"en"},lineage={"preprocessing":{"extraction_quality":VERSION}})
+    inspected=[]
+    def detect(text):
+        inspected.append(text)
+        return {"language":"hi" if text==body else "en"}
+    monkeypatch.setattr("docmind.language.language_info",detect)
+    assert "answer_language_unvalidated" in review_reasons(response)
+    assert body in inspected
+    assert not any("Source:" in text for text in inspected)
+
+
+def test_numeric_only_answers_do_not_require_a_language_guess(monkeypatch):
+    from docmind.ingestion.quality import VERSION
+    monkeypatch.setenv("DOCMIND_TEST_MODE","0")
+    response=_resp(answer="300 (Source: a.pdf, p.1)",query="What is the coolant temperature limit?")
+    response.sources[0].chunk.metadata.update(language_info={"language":"en"},lineage={"preprocessing":{"extraction_quality":VERSION}})
+    def detect(text):
+        assert text!="300"
+        return {"language":"en"}
+    monkeypatch.setattr("docmind.language.language_info",detect)
+    assert "answer_language_unvalidated" not in review_reasons(response)
+
+
+def test_numeric_language_exception_does_not_admit_stray_marks_or_controls():
+    from docmind.review.policy import _language_neutral_number
+    for value in ("300","१२.५","₹1,000.50","50%","½"):
+        assert _language_neutral_number(value)
+    for value in ("300 degrees","३००ा","300\u202e","...",""):
+        assert not _language_neutral_number(value)

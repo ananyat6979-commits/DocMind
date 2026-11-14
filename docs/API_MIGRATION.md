@@ -50,3 +50,8 @@ Keep the old store and authorized uploads for rollback. Create an isolated `DOCM
 The policy now flags repeated long digit artifacts, while retaining ordinary numeric fragments and distinct identifier tables. Re-ingest retained uploads into a fresh isolated store to apply the new quarantine decisions. Existing production responses retrieved from stale or missing extraction-policy lineage require review. Re-uploading the same bytes does not silently reuse an old preprocessing cache; an explicit rebuild or isolated ingestion is required.
 
 The new parser equivalence manifest is `reports/releases/r2/parser_equivalence_quality_v2.json`. Historical manifests and neural results remain unchanged. Quality metadata changed, so historical downstream artifacts are not automatically evidence for this policy.
+
+
+## Answer-language review gate
+
+Fresh query routing checks the generated answer as well as the question and evidence. Citation metadata is removed before language detection. A non-English or uncertain linguistic answer receives `answer_language_unvalidated`; numbers-only values are language-neutral but still pass the existing citation and attribution checks. Short linguistic answers can therefore require review. This change does not establish language-detector accuracy, real-PDF withholding rates or Hindi claim support. Stored responses retain their recorded status. Re-query or re-review old automatic responses when applying the new policy; existing human approvals are not revoked automatically by a detector update.

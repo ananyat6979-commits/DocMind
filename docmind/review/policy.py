@@ -11,6 +11,7 @@ An answer goes to the review queue when ANY of these hold:
                           so reviewers also measure the false-accept rate
 """
 import hashlib
+import unicodedata
 from typing import List
 
 from docmind.config import CONFIG
@@ -22,6 +23,13 @@ def _audit_hit(response_id: str, rate: float) -> bool:
         return False
     bucket = int(hashlib.sha256(response_id.encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
     return bucket < rate
+
+
+def _language_neutral_number(text: str) -> bool:
+    categories=[unicodedata.category(c) for c in text]
+    return any(category.startswith("N") for category in categories) and all(
+        category[0] in "NPZ" or category in ("Sm","Sc") or c.isspace() or c=="°"
+        for c,category in zip(text,categories))
 
 
 def review_reasons(resp: AgentResponse) -> List[str]:
@@ -41,6 +49,11 @@ def review_reasons(resp: AgentResponse) -> List[str]:
             if any(version != quality_version for version in versions):
                 reasons.append("stale_extraction_policy")
             from docmind.language import language_info
+            from docmind.agent.citations import CITATION_RE
+            answer_body = CITATION_RE.sub("", resp.answer).strip()
+            numeric_only = _language_neutral_number(answer_body)
+            if not numeric_only and language_info(answer_body).get("language") != "en":
+                reasons.append("answer_language_unvalidated")
             if language_info(resp.query).get("language") != "en":
                 reasons.append("query_language_unvalidated")
             languages = [s.chunk.metadata.get("language_info",{}) for s in resp.sources]
