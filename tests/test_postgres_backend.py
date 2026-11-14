@@ -125,3 +125,56 @@ def test_api_tenant_headers_cannot_override_credentials(scopes,tmp_path,monkeypa
         assert left.status_code==right.status_code==200
         assert 'same-file' in left.text and 'same-file' not in right.text
         assert client.get('/documents',headers={'X-API-Key':'invalid'}).status_code==401
+
+
+def test_two_api_processes_share_quota_and_tenant_isolation(scopes,tmp_path,monkeypatch):
+    import socket
+    import subprocess
+    import sys
+    import time
+    import httpx
+    tokens=['process-alpha-'+os.urandom(8).hex(),'process-beta-'+os.urandom(8).hex()]
+    registry=tmp_path/'process-credentials.json'
+    registry.write_text(json.dumps([{'tenant_id':tenant,'actor_id':'reader','key_sha256':hashlib.sha256(token.encode()).hexdigest(),'roles':['reader']} for tenant,token in zip(('alpha','beta'),tokens)]))
+    add(CorpusStore(scopes[0]))
+    env={**os.environ,'DOCMIND_DATABASE_URL':scopes[0].dsn,'DOCMIND_CREDENTIALS_FILE':str(registry),'DOCMIND_REQUESTS_PER_MINUTE':'3','DOCMIND_HOME':str(tmp_path/'runtime')}
+    processes=[];urls=[]
+    try:
+        for _ in range(2):
+            with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
+            log=(tmp_path/('server-'+str(port)+'.log')).open('w')
+            process=subprocess.Popen([sys.executable,'-m','uvicorn','docmind.api.main:app','--host','127.0.0.1','--port',str(port)],env=env,stdout=log,stderr=subprocess.STDOUT)
+            log.close();processes.append(process);urls.append('http://127.0.0.1:'+str(port))
+        with httpx.Client(timeout=5) as client:
+            for url,process in zip(urls,processes):
+                deadline=time.monotonic()+30
+                while True:
+                    try:
+                        if client.get(url+'/health').status_code==200:break
+                    except httpx.HTTPError:pass
+                    if process.poll() is not None or time.monotonic()>deadline:raise AssertionError('API process did not start; inspect test server logs')
+                    time.sleep(.1)
+            for i in range(8):assert client.get(urls[i%2]+'/documents',headers={'X-API-Key':'bogus-'+str(i)}).status_code==401
+            statuses=[client.get(urls[i%2]+'/documents',headers={'X-API-Key':tokens[0]}).status_code for i in range(4)]
+            assert statuses==[200,200,200,429]
+            response=client.get(urls[1]+'/documents',headers={'X-API-Key':tokens[1],'X-Tenant-ID':'alpha'})
+            assert response.status_code==200 and 'same-file' not in response.text
+    finally:
+        for process in processes:process.terminate()
+        for process in processes:
+            try:process.wait(timeout=5)
+            except subprocess.TimeoutExpired:process.kill();process.wait(timeout=5)
+
+
+def test_terminated_claimant_is_recovered_by_another_process(scopes,tmp_path):
+    import subprocess
+    import sys
+    import time
+    job=IngestionQueue(scopes[0]).enqueue('fixture.txt')
+    env={**os.environ,'DOCMIND_TEST_POSTGRES_URL':scopes[0].dsn}
+    code="from docmind.jobs import IngestionQueue; from docmind.postgres import DatabaseScope; import os; q=IngestionQueue(DatabaseScope(os.environ['DOCMIND_TEST_POSTGRES_URL'],'alpha')); assert q._claim(lease_seconds=.3); os._exit(137)"
+    child=subprocess.run([sys.executable,'-c',code],env=env,timeout=20)
+    assert child.returncode!=0
+    time.sleep(.4)
+    recovered=IngestionQueue(scopes[0])._claim()
+    assert recovered and recovered[0]['job_id']==job

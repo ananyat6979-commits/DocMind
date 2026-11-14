@@ -146,6 +146,7 @@ class CorpusStore:
                 conn.corpus_lock()
                 if embeddings.ndim!=2 or embeddings.shape[1]!=384:raise ValueError("Production vector schema requires 384-dimensional embeddings")
                 if not np.isfinite(embeddings).all():raise ValueError("Nonfinite embeddings")
+                if np.any(np.abs(np.linalg.norm(embeddings,axis=1)-1)>.002):raise ValueError("Normalized embeddings required")
             existing_sig = self._get_meta(conn, "embedding_signature", "")
             n_existing = conn.execute("SELECT COUNT(*) AS n FROM chunks").fetchone()["n"]
             if existing_sig and existing_sig != sig and n_existing > 0:

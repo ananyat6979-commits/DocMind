@@ -30,7 +30,7 @@ jobs:
         with: {python-version: "3.11"}
       - name: Install offline test dependencies and locked database driver
         run: |
-          pip install numpy faiss-cpu pypdfium2 python-docx fastapi httpx python-multipart python-dotenv tqdm pytest regex lingua-language-detector==2.1.1
+          pip install numpy faiss-cpu pypdfium2 python-docx fastapi uvicorn httpx python-multipart python-dotenv tqdm pytest regex lingua-language-detector==2.1.1
           pip install --require-hashes -r locks/postgres.txt
       - name: Provision separate runtime role and forced tenant policies
         run: python scripts/migrate_postgres.py --tenant alpha --tenant beta
