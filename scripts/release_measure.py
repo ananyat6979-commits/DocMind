@@ -173,6 +173,16 @@ def legacy_evidence(text):
             end=matches[i+1].end();yield match.start(),end,text[match.start():end]
 
 
+def pilot_accounting(records,n):
+    if n<1 or len(records)>n:raise ValueError("Invalid requested pilot cohort")
+    completed=[r for r in records if not r.get("error")]
+    held=sum(bool(r.get("needs_review")) for r in completed)
+    failed=len(records)-len(completed);unserved=n-len(records)
+    return {"n_requested":n,"n_completed":len(completed),"failed":failed,"n_unserved":unserved,
+            "completed_only_routing_withhold_rate":held/len(completed) if completed else None,
+            "requested_not_released_rate":(held+failed+unserved)/n}
+
+
 def english_pdf_pilot(inputs,output,n=3):
     device="cuda:0"
     import torch
@@ -228,8 +238,7 @@ def english_pdf_pilot(inputs,output,n=3):
         records.append(record);write(output/"private"/"english-pilot.json",records);write(output/"private"/"replay.json",replays)
     write(output/"reader-identity.json",reader.identity)
     result={"scope":"English local-reader T4 diagnostic pilot; synthetic drafts, no human correctness labels",
-        "n_requested":n,"n_completed":sum(not r.get("error") for r in records),"failed":sum(bool(r.get("error")) for r in records),
-        "routing_withhold_rate":sum(bool(r.get("needs_review")) for r in records)/n,
+        **pilot_accounting(records,n),
         "partial_document_policy":"All answers require review because the source contains quarantined pages",
         "attribution_replays":[{"id":r["id"],"legacy_supported_fraction":r["legacy"]["supported_fraction"],"repaired_supported_fraction":r["repaired"]["supported_fraction"]} for r in replays],
         "call_measurements":[{"id":r["id"],"elapsed_seconds":r["elapsed_seconds"],"calls":r.get("calls",[]),"error":r.get("error")} for r in records],

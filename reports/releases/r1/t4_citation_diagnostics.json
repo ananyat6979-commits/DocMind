@@ -1,0 +1,52 @@
+{
+  "scope": "Three English synthetic PDF drafts; automatic judgments, not human attribution labels",
+  "source_archive_sha256": "a612ec1a348ebf56efb30eafaaccd6b0e078754288441ac8149479a9fb5ceaa8",
+  "records": [
+    {
+      "id": "en-127ef7308ecca506cef3",
+      "finish_reason": "final_answer",
+      "citation_existence_validity": 1.0,
+      "judged_supported_fraction": 0.0,
+      "n_claims": 1,
+      "needs_review": true,
+      "review_reasons": [
+        "extraction_quality_requires_review",
+        "unsupported_claim"
+      ],
+      "human_correctness_label": null,
+      "calls": 2
+    },
+    {
+      "id": "en-d4343a091397494c7b08",
+      "finish_reason": "final_answer",
+      "citation_existence_validity": 1.0,
+      "judged_supported_fraction": 1.0,
+      "n_claims": 1,
+      "needs_review": true,
+      "review_reasons": [
+        "extraction_quality_requires_review"
+      ],
+      "human_correctness_label": null,
+      "calls": 2
+    },
+    {
+      "id": "en-418ac902e33be43c1241",
+      "finish_reason": "final_answer",
+      "citation_existence_validity": 1.0,
+      "judged_supported_fraction": 1.0,
+      "n_claims": 1,
+      "needs_review": true,
+      "review_reasons": [
+        "extraction_quality_requires_review"
+      ],
+      "human_correctness_label": null,
+      "calls": 2
+    }
+  ],
+  "final_answer_count": 3,
+  "limitations": [
+    "All answers require review because the source document is partial",
+    "Citation validity does not establish entailment",
+    "No general default withholding or false-withholding estimate"
+  ]
+}

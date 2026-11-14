@@ -58,13 +58,18 @@ def main():
     from release_measure import MODELS
     torch.set_num_threads(2)
     deadline=time.monotonic()+args.max_seconds
-    corpora={};source_hashes={}
+    corpora={};source_hashes={};semantic_sources={}
     for language in ("en","hi"):
         path=args.inputs/(language+"-pool.json");raw=path.read_bytes();source_hashes[language]=hashlib.sha256(raw).hexdigest()
-        queries,documents=prepare_pool(json.loads(raw),args.distractors)
+        payload=json.loads(raw)
+        from prepare_miracl_component import QUERIES_REV,CORPUS_REV
+        metadata=payload["manifest"]
+        if metadata["language"]!=language or metadata["query_revision"]!=QUERIES_REV or metadata["corpus_revision"]!=CORPUS_REV:raise ValueError("Source revision mismatch")
+        queries,documents=prepare_pool(payload,args.distractors)
+        semantic_sources[language]={"query_revision":QUERIES_REV,"corpus_revision":CORPUS_REV,"topics_sha256":metadata["topics_sha256"],"qrels_sha256":metadata["qrels_sha256"],"selected_ids_sha256":metadata["selected_ids_sha256"],"cohort_sha256":hashlib.sha256(json.dumps(queries,sort_keys=True).encode()).hexdigest(),"corpus_sha256":hashlib.sha256(json.dumps(documents,sort_keys=True).encode()).hexdigest()}
         corpora[language]={"queries":queries,"documents":documents,"texts":[d["text"] for d in documents],"ids":[d["docid"] for d in documents]}
     versions={p:md.version(p) for p in ("torch","transformers","sentence-transformers","tokenizers","numpy","faiss-cpu")}
-    manifest={"scope":"MIRACL dev-derived judged-candidate component subset, not full-corpus MIRACL","sources":source_hashes,
+    manifest={"scope":"MIRACL dev-derived judged-candidate component subset, not full-corpus MIRACL","sources":source_hashes,"semantic_sources":semantic_sources,
         "device":args.device,"platform":platform.platform(),"processor":platform.processor(),"versions":versions,"python":platform.python_version(),"distractors":args.distractors,
         "code_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),"headers":False,"fusion_depth_per_retriever":10,
         "reranker_candidate_caps":[5,20],"models":MODELS,"n_per_language":{k:len(v["queries"]) for k,v in corpora.items()},

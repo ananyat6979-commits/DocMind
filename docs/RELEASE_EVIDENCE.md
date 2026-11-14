@@ -8,6 +8,8 @@ Historical benchmark files remain unchanged. New runs use Transformers 5.23.0, S
 
 XNLI is a component test, not PDF attribution. Each language uses 200 seed-seven test examples with original public labels. The selected multilingual model trained on XNLI development data, which is excluded here. Entailment uses a fixed 0.8 threshold. Intervals use 2,000 premise-cluster bootstrap resamples. A zero-error precision result with one positive decision per independent cluster uses an exact binomial boundary interval; the degenerate bootstrap interval is retained alongside it. This reporting correction was made after the first run without changing predictions or thresholds.
 
+The first CPU and T4 measurements below used Torch 2.11.0. A subsequent dependency check identified the [`torch.jit.script` advisory](https://github.com/advisories/GHSA-rrmf-rvhw-rf47) and [legacy wheel-installation issue](https://github.com/advisories/GHSA-xmj3-9gf7-h52w). Deployment locks now target Torch 2.13.0 and setuptools 84.2.1. The application does not directly call `torch.jit.script`; fixed dependencies still require fresh compatibility and component checks. Original results retain their recorded versions and are not relabeled as results for the updated stack. Private dependency audit reports are not committed. A PyPI audit cannot directly identify the local-version CPU/CUDA wheels, so the matching base Torch version is checked separately; that does not certify every binary artifact.
+
 ## NLI results
 
 | Judge and language | Precision, 95% interval | Recall, 95% interval |
@@ -25,6 +27,8 @@ The pinned Qwen3-4B-Instruct-2507 reader ran in FP16 with temperature zero, seed
 
 The component and reader profile took 177.84 seconds; setup-inclusive measured session time was 268.37 seconds with two GPUs allocated. The watchdog limit was 6,900 seconds. Measured elapsed allocation and conservative reservation are separate accounting quantities. The process-wide peak CUDA allocation was 11.38 GB, including component work; this is not an isolated reader memory measurement. No paid compute or new hosted evaluation requests were used.
 
+One pilot answer had citation-existence validity 1.0 and judged claim support 0.0. The other two had both scores 1.0. Thus a perfect citation score did not establish judged support. These [numeric diagnostics](../reports/releases/r1/t4_citation_diagnostics.json) have no human correctness labels.
+
 Frozen answer/evidence replay held claims and the judge fixed. Legacy versus repaired evidence segmentation produced supported fractions 0 to 0, 1 to 1 and 0 to 1. These are support judgments, not human correctness labels. All three answers required review because the source document contained quarantined pages. That 100% routing rate includes the partial-document policy and cannot be attributed to the judge alone. A clean-PDF default withholding rate remains unmeasured. The hosted default also remains unmeasured.
 
 No balanced English/Hindi PDF cohort was frozen: a usable Hindi task pool and separate fresh-condition timing were not established. The remaining compute ceiling is not a reason to invent a cohort or label drafts human gold.
@@ -40,6 +44,8 @@ One reviewer completed the blinded 15-pair Hindi public-label packet in 520 acti
 Real multilingual E5 embeddings replaced the historical Gaussian-vector stress input for a new application-path test. HNSW Recall@10 against exact search was 99.1% [98.5, 99.6] over 100 queries and 3,340 vectors. CPU unscoped median search time was 0.140 ms versus exact 0.273 ms, excluding embedding. Scoped requests deliberately use an exact filtered scan, with linear cost. This small sentence corpus establishes fidelity on this input, not production scale, semantic relevance or an incremental persistent index. The old 50,000-vector experiment remains unchanged and is not directly comparable.
 
 The MIRACL workflow freezes 200 original public dev queries per language, retains all positive passages, up to ten judged negatives per query and deterministic distractors. Its lexical, embedding, reranker and candidate-depth comparisons are a judged-candidate component experiment, not official full-corpus MIRACL. Restricted source text stays private. Every condition reports requested-cohort and completed-only statistics; unserved rows retain zero scores in the requested denominator. Paired differences use matched completed query IDs and must not be generalized from incomplete profiles. Results remain unmeasured until their workflow finishes and artifacts validate.
+
+Ablation intervals are nominal 95% exploratory intervals, without a family-wise multiple-comparison guarantee. Historical injection tests do not validate the new local reader against prompt injection.
 
 ## Service and deployment checks
 

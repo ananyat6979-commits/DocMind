@@ -96,3 +96,11 @@ def test_zero_error_precision_does_not_get_a_degenerate_certainty_interval():
     assert metrics["precision"]==1.0
     assert .85<metrics["precision_ci95"][0]<.95
     assert metrics["precision_bootstrap_ci95"]==[1.0,1.0]
+
+
+def test_pilot_keeps_failures_and_unserved_separate_from_routing():
+    from scripts.release_measure import pilot_accounting
+    result=pilot_accounting([{"needs_review":False},{"needs_review":True},{"error":"TimeoutError"}],4)
+    assert result["n_completed"]==2 and result["failed"]==1 and result["n_unserved"]==1
+    assert result["completed_only_routing_withhold_rate"]==0.5
+    assert result["requested_not_released_rate"]==0.75
