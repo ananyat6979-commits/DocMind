@@ -21,3 +21,5 @@ reports/releases/r1/** -text
 reports/releases/r1/figures/*.svg linguist-generated=true -whitespace
 
 reports/releases/r2/** -text
+
+reports/releases/r3/** -text

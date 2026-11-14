@@ -60,3 +60,20 @@ def test_success_retains_stop_behavior_and_token_counters(monkeypatch):
     assert instance.calls==1 and instance.prompt_tokens==4 and instance.completion_tokens==3
     row=instance.call_records[0]
     assert row["status"]=="completed" and row["output_tokens"]==3 and row["max_length_reached"]
+
+
+def test_opt_in_scoring_uses_generated_content_not_special_token(monkeypatch):
+    import numpy as np
+    instance=reader(monkeypatch)
+    instance.capture_token_scores=True
+    instance.tokenizer.all_special_ids=[0]
+    instance.tokenizer.decode=lambda *args,**kwargs: "300"
+    def generate(**options):
+        assert options["output_scores"] and options["return_dict_in_generate"]
+        return SimpleNamespace(sequences=np.array([[9,9,9,9,1,0]]),scores=(None,None))
+    def transition(sequences,scores,normalize_logits):
+        assert normalize_logits
+        return np.array([[np.log(.8),0]])
+    instance.model=SimpleNamespace(generate=generate,compute_transition_scores=transition)
+    assert instance.complete([])=="300"
+    assert instance.call_records[0]["geometric_mean_token_probability"]==pytest.approx(.8)
