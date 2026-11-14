@@ -12,6 +12,8 @@ The first CPU and T4 measurements below used Torch 2.11.0. A subsequent dependen
 
 The fresh [Torch 2.13 CPU baseline](../reports/releases/r1/cpu-ci-torch213) passed independent verification. Its 800 NLI scores and E5 vector hash matched the earlier CI run exactly, and HNSW recall remained 99.1% [98.5, 99.6]. Updated CPU deployment compatibility and Python CI passed. The older FP16 T4 reader profile still describes its original CUDA dependencies; it is not evidence for the updated CUDA stack.
 
+An additional updated-CUDA attempt stopped during environment setup. Its corrected retry was removed while queued after the chosen retrieval profile changed and CPU comparisons completed. Updated CUDA reader results remain unmeasured. The setup failure archive and source snapshot are retained privately.
+
 ## NLI results
 
 | Judge and language | Precision, 95% interval | Recall, 95% interval |
@@ -94,6 +96,8 @@ Ablation intervals are nominal 95% exploratory intervals, without a family-wise 
 Behavioral regressions cover Unicode boundaries, numeric fragments, citation ambiguity, review leakage and edits, authentication before quota allocation, bounded key/IP buckets, reference-aware orphan cleanup and environment allowlisting. The isolated parser uses a bounded Unix socket, no network access or secret mounts, a read-only filesystem, an unprivileged identity and resource controls. CI exercises denial, exhaustion and recovery. The same real benchmark PDF matched native and container text, page identities, offsets and model-consumed metadata, including the cached Windows extraction identity. This supports transport-only reuse for that tested input, not universal parser equivalence.
 
 The centralized UI delegates library and review access to the authenticated API. Individual credentials supply trusted audit identities. SQLite, in-process quotas and the job queue still require one API service process. Tenant isolation, distributed enforcement, incremental persistent indexing, representative API load and measured review time savings remain limitations. Container confinement is not a claim of protection against every kernel vulnerability.
+
+A bounded [native Windows check](../reports/releases/r1/windows_model_smoke.json) used the fixed CPU lock, cached real E5/NLI models and offline demo generation. Model-path assertions completed in 161.6 seconds on a synthetic eight-claim fixture; the parent process hit its 180-second cap after output was written. This is a partial compatibility observation, not a passing process-lifecycle or latency test. Startup, inference and shutdown costs were not isolated. Native Windows performance remains a measured limitation; the full offline Linux container check passed. No provider calls or model downloads were made by the native check.
 
 ## Licensing
 
