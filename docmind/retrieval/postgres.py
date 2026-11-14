@@ -36,7 +36,7 @@ class PostgresDenseRetriever:
             params.extend([encoded,int(top_k)])
             if exact or file_ids is not None:
                 statement=f"WITH eligible AS MATERIALIZED (SELECT * FROM chunks WHERE {where}) SELECT *, -(embedding_vector <#> ?::vector) AS similarity FROM eligible ORDER BY embedding_vector <#> ?::vector LIMIT ?"
-                params=[self.store.db_path.tenant]+(list(file_ids) if file_ids is not None else [])+[encoded,encoded,int(top_k)]
+                params=[self.store.db_path.tenant]+(ids if file_ids is not None else [])+[encoded,encoded,int(top_k)]
             else:
                 statement=f"SELECT *, -(embedding_vector <#> ?::vector) AS similarity FROM chunks WHERE {where} ORDER BY embedding_vector <#> ?::vector LIMIT ?"
             rows=conn.execute(statement,params).fetchall()

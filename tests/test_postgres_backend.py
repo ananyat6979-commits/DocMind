@@ -49,6 +49,7 @@ def test_tenant_isolation_covers_all_stores_and_vector_paths(scopes):
     assert not PostgresDenseRetriever(b).search_vector(query)
     assert not PostgresDenseRetriever(a).search_vector(query,file_ids=['other-file'])
     assert len(PostgresDenseRetriever(a).search_vector(query,file_ids=[chunk.file_id]))==1
+    assert len(PostgresDenseRetriever(a).search_vector(query,file_ids=iter([chunk.file_id])))==1
     response=AgentResponse('300',[],[],'temperature?',1)
     ReviewStore(left).record(response,'alice')
     assert ReviewStore(right).get(response.response_id) is None
@@ -133,6 +134,8 @@ def test_api_tenant_headers_cannot_override_credentials(scopes,tmp_path,monkeypa
         assert client.delete('/documents/'+file_id,headers={'X-API-Key':tokens[1]}).status_code==404
         assert client.delete('/documents/'+file_id,headers={'X-API-Key':tokens[0]}).status_code==200
         assert not CorpusStore(scopes[0]).has_file(file_id)
+        stats=client.get('/metrics',headers={'X-API-Key':tokens[1]}).json()
+        assert stats['requests_by_status'].get('401',0)==0
 
 
 def test_two_api_processes_share_quota_and_tenant_isolation(scopes,tmp_path,monkeypatch):

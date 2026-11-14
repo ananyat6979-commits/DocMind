@@ -1,4 +1,4 @@
-"""Bounded, durable ingestion queue for one SQLite service process."""
+"""Bounded ingestion queue: local SQLite or shared PostgreSQL leases."""
 import json
 import threading
 import time
@@ -117,7 +117,7 @@ class IngestionQueue:
                         from docmind.uploads import sweep
                         sweep(self.db_path)
                         next_sweep=time.monotonic()+60
-                    if not self.run_one(): self.stop_event.wait(0.25)
+                    if not self.run_one(): self.stop_event.wait(1 if isinstance(self.db_path,DatabaseScope) else .25)
                 except Exception:
                     import logging
                     logging.getLogger(__name__).exception("Ingestion worker failed; retrying after backoff")

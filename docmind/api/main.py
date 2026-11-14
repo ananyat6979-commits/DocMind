@@ -73,7 +73,7 @@ async def lifespan(app):
 app = FastAPI(lifespan=lifespan, title="DocMind", description="Hybrid retrieval + ReAct agent with human review", version="2.0.0")
 
 from docmind.observability import RequestMonitor
-_monitor = RequestMonitor(limit_per_minute=int(os.getenv("DOCMIND_REQUESTS_PER_MINUTE", "60")))
+_monitor = RequestMonitor(limit_per_minute=int(os.getenv("DOCMIND_REQUESTS_PER_MINUTE", "60")),limit_per_ip=int(os.getenv("DOCMIND_REQUESTS_PER_IP_PER_MINUTE","300")))
 app.middleware("http")(_monitor)
 
 
@@ -81,7 +81,7 @@ _agent: Optional[ReActAgent] = None
 _lock = threading.Lock()
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=32)
 def _persistent_stores(db_path):
     return CorpusStore(db_path), ReviewStore(db_path), EventLog(db_path)
 
@@ -430,7 +430,11 @@ def enqueue_upload(request: Request, file: UploadFile = File(...), expected_lang
 
 
 @app.get("/metrics", dependencies=[Depends(require_api_key)])
-def metrics():
+def metrics(request: Request):
+    if os.getenv('DOCMIND_DATABASE_URL'):
+        with _monitor.lock:
+            return {'requests_by_status':dict(_monitor.tenant_counts.get(request.state.principal.tenant_id,{})),
+                'quota_per_minute':_monitor.limit,'scope':'This API worker and authenticated tenant; shared quota enforcement is database-wide'}
     with _monitor.lock:
         return {"requests_by_status":dict(_monitor.counts), "quota_per_minute":_monitor.limit}
 
@@ -461,5 +465,5 @@ def response_result(response_id: str, request: Request):
 @app.get("/whoami", dependencies=[Depends(require_api_key)])
 def whoami(request: Request):
     principal=request.state.principal
-    return {"actor_id":principal.actor_id,"roles":sorted(principal.roles),
+    return {"actor_id":principal.actor_id,"tenant_id":principal.tenant_id,"roles":sorted(principal.roles),
             "identity_mode":"individual" if os.getenv("DOCMIND_CREDENTIALS_FILE") else "shared credential"}
