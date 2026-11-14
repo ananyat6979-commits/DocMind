@@ -29,5 +29,6 @@ def main():
             import traceback;traceback.print_exc();result["results"][name]={"error":type(exc).__name__,"detail":str(exc)[:500]}
         result["elapsed_seconds"]=time.perf_counter()-started;write(args.out/"summary.json",result)
         print("Finished CPU",name,flush=True)
+    if any("error" in item for item in result["results"].values()):raise SystemExit(1)
 
 if __name__=="__main__":main()

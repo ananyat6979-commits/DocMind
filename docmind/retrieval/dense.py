@@ -2,7 +2,8 @@
 Dense retrieval via FAISS IndexFlatIP (exact cosine on L2-normalized vectors).
 
 The index is an in-memory cache built from the corpus store. Filtering to a
-subset of files uses FAISS's IDSelector, so scoped search stays exact.
+subset of files uses an exact NumPy scan. Optional HNSW is used only for
+unscoped search; scoped search retains linear filtering cost.
 """
 import logging
 import os

@@ -1,0 +1,320 @@
+{
+  "scope": "English/Hindi components and English local-reader T4 pilot, hosted default unmeasured",
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "transformers": "5.23.0",
+    "sentence-transformers": "5.7.0",
+    "tokenizers": "0.23.3"
+  },
+  "python": "3.13.16",
+  "gpu": "Tesla T4",
+  "allocated_gpu_count": 2,
+  "human_review_count": 0,
+  "human_validation": "pending user annotation",
+  "results": {
+    "xnli": {
+      "scope": "XNLI test-derived binary entailment component subset; not PDF attribution",
+      "development_split_excluded": true,
+      "source_revision": "b8dd5d7af51114dbda02c0e3f6133f332186418e",
+      "models": {
+        "bge": [
+          "BAAI/bge-small-en-v1.5",
+          "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+        ],
+        "e5": [
+          "intfloat/multilingual-e5-small",
+          "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+        ],
+        "reranker": [
+          "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+          "1427fd652930e4ba29e8149678df786c240d8825"
+        ],
+        "english_nli": [
+          "typeform/distilbert-base-uncased-mnli",
+          "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+        ],
+        "multilingual_nli": [
+          "MoritzLaurer/multilingual-MiniLMv2-L6-mnli-xnli",
+          "0a71e92a985b6e1ad1828cf67ce9c459639c1dca"
+        ]
+      },
+      "results": {
+        "english_nli_en": {
+          "precision": 0.9791666666666666,
+          "recall": 0.7121212121212122,
+          "tp": 47,
+          "fp": 1,
+          "fn": 19,
+          "n": 200,
+          "precision_ci95": [
+            0.9285714285714286,
+            1.0
+          ],
+          "recall_ci95": [
+            0.6031687675070028,
+            0.819672131147541
+          ],
+          "threshold": 0.8,
+          "independent_premise_clusters": 197,
+          "human_labels": "original public labels, not independently reviewed"
+        },
+        "english_nli_hi": {
+          "precision": 0.5,
+          "recall": 0.3333333333333333,
+          "tp": 22,
+          "fp": 22,
+          "fn": 44,
+          "n": 200,
+          "precision_ci95": [
+            0.358974358974359,
+            0.65
+          ],
+          "recall_ci95": [
+            0.22388059701492538,
+            0.44830084957521227
+          ],
+          "threshold": 0.8,
+          "independent_premise_clusters": 197,
+          "human_labels": "original public labels, not independently reviewed"
+        },
+        "english_nli_load_and_score_seconds": 15.501998033999996,
+        "multilingual_nli_en": {
+          "precision": 1.0,
+          "recall": 0.48484848484848486,
+          "tp": 32,
+          "fp": 0,
+          "fn": 34,
+          "n": 200,
+          "precision_ci95": [
+            0.8911188393206471,
+            1.0
+          ],
+          "recall_ci95": [
+            0.36065573770491804,
+            0.6086956521739131
+          ],
+          "threshold": 0.8,
+          "independent_premise_clusters": 197,
+          "human_labels": "original public labels, not independently reviewed",
+          "precision_bootstrap_ci95": [
+            1.0,
+            1.0
+          ],
+          "precision_ci_method": "Exact binomial boundary interval: 32 independent positive premise clusters; post-run reporting correction"
+        },
+        "multilingual_nli_hi": {
+          "precision": 0.8857142857142857,
+          "recall": 0.4696969696969697,
+          "tp": 31,
+          "fp": 4,
+          "fn": 35,
+          "n": 200,
+          "precision_ci95": [
+            0.7741244239631336,
+            0.9736842105263158
+          ],
+          "recall_ci95": [
+            0.3484848484848485,
+            0.5932203389830508
+          ],
+          "threshold": 0.8,
+          "independent_premise_clusters": 197,
+          "human_labels": "original public labels, not independently reviewed"
+        },
+        "multilingual_nli_load_and_score_seconds": 6.958715558000023
+      },
+      "license": "XNLI noncommercial terms; raw examples and per-example labels are private"
+    },
+    "ann": {
+      "scope": "Application ANN fidelity on real E5 embeddings from XNLI text, not semantic retrieval accuracy or a scale claim",
+      "vectors": 3340,
+      "queries": 100,
+      "model": [
+        "intfloat/multilingual-e5-small",
+        "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+      ],
+      "results": {
+        "flat_unscoped": {
+          "recall10_against_exact": {
+            "mean": 1.0,
+            "ci95": [
+              1.0,
+              1.0
+            ]
+          },
+          "build_seconds": 0.003403151999975762,
+          "p50_ms": 0.3069044999790549,
+          "p95_ms": 0.366553400004932
+        },
+        "flat_scoped_exact_fallback": {
+          "recall10_against_exact": {
+            "mean": 1.0,
+            "ci95": [
+              1.0,
+              1.0
+            ]
+          },
+          "build_seconds": 0.003403151999975762,
+          "p50_ms": 0.5240925000009611,
+          "p95_ms": 0.6003049500463931
+        },
+        "hnsw_unscoped": {
+          "recall10_against_exact": {
+            "mean": 0.991,
+            "ci95": [
+              0.985,
+              0.996
+            ]
+          },
+          "build_seconds": 0.40448810700002014,
+          "p50_ms": 0.1426744999832863,
+          "p95_ms": 0.2123682000046756
+        },
+        "hnsw_scoped_exact_fallback": {
+          "recall10_against_exact": {
+            "mean": 1.0,
+            "ci95": [
+              1.0,
+              1.0
+            ]
+          },
+          "build_seconds": 0.40448810700002014,
+          "p50_ms": 0.4942399999947611,
+          "p95_ms": 0.6027306499930772
+        }
+      },
+      "reranker_finite_smoke": true,
+      "limits": [
+        "Small constructed-sentence corpus",
+        "Scoped application path deliberately uses exact filtering",
+        "Embedding time excluded from search timings"
+      ]
+    },
+    "pdf_pilot": {
+      "scope": "English local-reader T4 diagnostic pilot; synthetic drafts, no human correctness labels",
+      "n_requested": 3,
+      "n_completed": 3,
+      "failed": 0,
+      "routing_withhold_rate": 1.0,
+      "partial_document_policy": "All answers require review because the source contains quarantined pages",
+      "attribution_replays": [
+        {
+          "id": "en-127ef7308ecca506cef3",
+          "legacy_supported_fraction": 0.0,
+          "repaired_supported_fraction": 0.0
+        },
+        {
+          "id": "en-d4343a091397494c7b08",
+          "legacy_supported_fraction": 1.0,
+          "repaired_supported_fraction": 1.0
+        },
+        {
+          "id": "en-418ac902e33be43c1241",
+          "legacy_supported_fraction": 0.0,
+          "repaired_supported_fraction": 1.0
+        }
+      ],
+      "call_measurements": [
+        {
+          "id": "en-127ef7308ecca506cef3",
+          "elapsed_seconds": 20.22700766300005,
+          "calls": [
+            {
+              "input_tokens": 354,
+              "output_tokens": 57,
+              "elapsed_seconds": 4.7340537140000265,
+              "time_to_first_token_seconds": 1.5003772050000066,
+              "max_length_reached": false,
+              "numerical_failure": false
+            },
+            {
+              "input_tokens": 2264,
+              "output_tokens": 99,
+              "elapsed_seconds": 12.60341076900005,
+              "time_to_first_token_seconds": 2.862649498000053,
+              "max_length_reached": false,
+              "numerical_failure": false
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "en-d4343a091397494c7b08",
+          "elapsed_seconds": 34.51067443599999,
+          "calls": [
+            {
+              "input_tokens": 362,
+              "output_tokens": 131,
+              "elapsed_seconds": 8.524016487999972,
+              "time_to_first_token_seconds": 1.1594672909999986,
+              "max_length_reached": false,
+              "numerical_failure": false
+            },
+            {
+              "input_tokens": 2718,
+              "output_tokens": 204,
+              "elapsed_seconds": 25.785521467999956,
+              "time_to_first_token_seconds": 3.5914770759999897,
+              "max_length_reached": false,
+              "numerical_failure": false
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "en-418ac902e33be43c1241",
+          "elapsed_seconds": 21.159163396999986,
+          "calls": [
+            {
+              "input_tokens": 348,
+              "output_tokens": 48,
+              "elapsed_seconds": 3.856980993000036,
+              "time_to_first_token_seconds": 1.1628111260000082,
+              "max_length_reached": false,
+              "numerical_failure": false
+            },
+            {
+              "input_tokens": 2083,
+              "output_tokens": 155,
+              "elapsed_seconds": 17.21392775099997,
+              "time_to_first_token_seconds": 2.886469852999994,
+              "max_length_reached": false,
+              "numerical_failure": false
+            }
+          ],
+          "error": null
+        }
+      ],
+      "reader": {
+        "model": "Qwen/Qwen3-4B-Instruct-2507",
+        "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "dtype": "float16",
+        "seed": 7,
+        "temperature": 0,
+        "do_sample": false,
+        "attention": "sdpa",
+        "max_input_tokens": 8192,
+        "max_new_tokens": 256
+      },
+      "hindi_pdf_profile": "unmeasured: no eligible pages in the current inspected corpus",
+      "balanced_cohort": "not frozen: missing Hindi PDF pilot and fresh-condition timings"
+    }
+  },
+  "elapsed_seconds": 177.844033087,
+  "peak_allocated_cuda_bytes": 11375527424,
+  "archive_sha256": "a612ec1a348ebf56efb30eafaaccd6b0e078754288441ac8149479a9fb5ceaa8",
+  "compute_usage": {
+    "allocated_gpu_count": 2,
+    "session_ceiling_seconds": 6900,
+    "max_reserved_gpu_seconds": 13800,
+    "elapsed_seconds_including_setup": 268.3661108016968,
+    "paid_compute": false
+  },
+  "reporting_notes": [
+    "Original downloaded archive remains unchanged. Boundary precision interval corrected after the run.",
+    "Pilot used an earlier frozen source snapshot. Later code changes require a fresh baseline.",
+    "The original Hindi eligibility message is too broad: two short legacy-document pages passed automatic checks and yielded two unreviewed drafts; no usable Hindi task cohort was established.",
+    "No balanced English/Hindi PDF cohort or human PDF labels; this is a three-question English pilot.",
+    "Peak CUDA allocation is process-wide and includes components, not isolated reader residency."
+  ]
+}

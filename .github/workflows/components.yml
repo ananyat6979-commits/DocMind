@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [improvements/hindi-evidence]
-    paths: ["scripts/release_components_cpu.py", "scripts/release_measure.py", "locks/cpu-linux-py311.txt", ".github/workflows/components.yml"]
+    paths: ["scripts/release_components_cpu.py", "scripts/miracl_component.py", "scripts/prepare_miracl_component.py", "scripts/release_measure.py", "locks/cpu-linux-py311.txt", ".github/workflows/components.yml"]
 permissions:
   contents: read
 jobs:
@@ -26,5 +26,34 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cpu-component-summary
-          path: reports/release_workspace/cpu-components/summary.json
+          path: |
+            reports/release_workspace/cpu-components/summary.json
+            reports/release_workspace/cpu-components/nli-predictions.json
+            reports/release_workspace/cpu-components/ann-query-records.json
+          if-no-files-found: warn
+  retrieval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    env:
+      OMP_NUM_THREADS: "2"
+      TOKENIZERS_PARALLELISM: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install hash-locked CPU environment
+        run: pip install --require-hashes -r locks/cpu-linux-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Prepare frozen public candidate pools without committing source text
+        run: python scripts/prepare_miracl_component.py --out reports/release_workspace/miracl --queries 200 --distractors 2000
+      - name: Measure paired retrieval and lexical ablations
+        run: python scripts/miracl_component.py --inputs reports/release_workspace/miracl --out reports/release_workspace/miracl-cpu --device cpu --distractors 2000 --max-seconds 5400
+      - name: Keep numeric retrieval results without source text
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: miracl-component-summary
+          path: |
+            reports/release_workspace/miracl-cpu/summary.json
+            reports/release_workspace/miracl-cpu/manifest.json
+            reports/release_workspace/miracl-cpu/records.jsonl
           if-no-files-found: warn

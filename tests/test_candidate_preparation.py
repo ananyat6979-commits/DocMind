@@ -24,3 +24,13 @@ def test_hashing_covers_the_entire_compressed_source():
     while stream.read(65536):pass
     assert stream.hash.hexdigest()==hashlib.sha256(payload).hexdigest()
     assert _DOCID.search(content).group(1)==b"123#0"
+
+
+def test_component_pool_refuses_missing_gold_instead_of_dropping_query():
+    import pytest
+    from scripts.miracl_component import prepare_pool
+    payload={"manifest":{"complete":True,"language":"hi","n_requested":1},"queries":[{"id":"q","question":"Q","qrels":{"gold":1}}],"documents":[{"docid":"noise","text":"irrelevant"}]}
+    with pytest.raises(ValueError,match="Missing judged"):prepare_pool(payload,1)
+    payload["documents"].append({"docid":"gold","text":"evidence"})
+    queries,documents=prepare_pool(payload,1)
+    assert len(queries)==1 and "gold" in {d["docid"] for d in documents}

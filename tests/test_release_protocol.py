@@ -87,3 +87,12 @@ def test_checkpoint_rejects_rows_from_another_run(tmp_path):
     output.write_text(json.dumps(records[0])+"\n")
     with pytest.raises(ValueError,match="Checkpoint records"):
         generate(str(question),agent,str(output))
+
+
+def test_zero_error_precision_does_not_get_a_degenerate_certainty_interval():
+    from scripts.release_measure import binary_stats
+    rows=[{"score":.99,"label":0,"premise_hash":str(i)} for i in range(32)]
+    metrics=binary_stats(rows)
+    assert metrics["precision"]==1.0
+    assert .85<metrics["precision_ci95"][0]<.95
+    assert metrics["precision_bootstrap_ci95"]==[1.0,1.0]

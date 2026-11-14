@@ -4,6 +4,8 @@ The revised release sequence is documented in [release gates](docs/RELEASES.md).
 
 Question answering over PDF, DOCX and text files, with hybrid retrieval, quoted evidence, claim-level attribution checks and a human review queue. This is a single-corpus pilot with published measurements and known failures.
 
+See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced local-reader cohort remain unmeasured.
+
 ## Measured results
 
 Runs used available local compute and private free-tier T4 notebooks. No paid inference or compute was purchased. Intervals below are 95%; see the [technical write-up](docs/EVALUATION.md) for protocols, baselines, splits and limitations.
@@ -47,7 +49,7 @@ The test suite uses hash embeddings and a demo reader without downloading models
 
 ## How it works
 
-Uploads are validated and parsed in a resource-limited subprocess. PDF pages, DOCX tables and text become chunks with stable document identity, source metadata and ingestion lineage. SQLite stores the corpus and embeddings atomically. Dense FAISS and sparse BM25 snapshots are built together; optional HNSW reduces dense search cost. RRF fusion and an optional cross-encoder rank candidates.
+Uploads are validated and parsed through a separate confined service. Explicit native development mode uses a resource-limited subprocess. PDF pages, DOCX tables and text become chunks with stable document identity, source metadata and ingestion lineage. SQLite stores the corpus and embeddings atomically. Dense FAISS and sparse BM25 snapshots are built together; optional HNSW reduces dense search cost. RRF fusion and an optional cross-encoder rank candidates.
 
 The reader can use ReAct or native tools. Citation labels must resolve to retrieved sources; ambiguous chunk prefixes and same-name document labels are rejected. Claim attribution selects one- or two-sentence evidence with exact offsets and applies NLI. A valid citation label alone is never presented as entailment. Failed or unsupported attribution routes to review, and pending answers are withheld by default.
 
@@ -72,7 +74,7 @@ For your own documents, draft labels with `scripts/make_testset.py`, verify them
 
 ## Limits and security
 
-English-oriented retrieval and NLI; scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. The default small attribution model has particularly poor measured recall. Prompt injection remains possible. ANN is optional and recovered only 26.9% of exact top-ten neighbors in a 50,000-vector synthetic test. Flat search remains the default. Corpus refresh still rebuilds in-memory caches, so storage and ingestion are not proven at service scale. Run one application process per corpus; the two Compose services use separate corpora. Synthetic local throughput does not predict hosted inference latency.
+English-oriented retrieval and NLI; scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. The default small attribution model has particularly poor measured recall. Prompt injection remains possible. ANN is optional and recovered only 26.9% of exact top-ten neighbors in a 50,000-vector synthetic test. Flat search remains the default. Corpus refresh still rebuilds in-memory caches, so storage and ingestion are not proven at service scale. Run one API application process per corpus; the Compose UI delegates to that API. Synthetic local throughput does not predict hosted inference latency.
 
 Read [security and retention](SECURITY.md), [evaluation and failure analysis](docs/EVALUATION.md), and [public data attribution](data/public/README.md).
 

@@ -62,6 +62,12 @@ def binary_stats(rows):
     for name,column in (("precision",1),("recall",2)):
         denominator=samples[:,0]+samples[:,column];valid=denominator>0
         point[name+"_ci95"]=np.quantile(samples[valid,0]/denominator[valid],[.025,.975]).tolist() if valid.any() else [None,None]
+    positive_groups=[group for group in groups.values() if any(r["score"]>=.8 for r in group)]
+    if point["fp"]==0 and point["tp"]>0 and all(sum(r["score"]>=.8 for r in group)==1 for group in positive_groups):
+        point["precision_bootstrap_ci95"]=point["precision_ci95"]
+        point["precision_ci95"]=[.025**(1/len(positive_groups)),1.0]
+        point["precision_ci_method"]="Exact binomial boundary interval: one positive decision per independent premise cluster"
+    else:point["precision_ci_method"]="Premise-cluster percentile bootstrap"
     point.update(threshold=.8,independent_premise_clusters=len(groups),n_failed=sum(bool(r.get("error")) for r in rows),failure_decision="no entailment; retained in requested denominator",human_labels="original public labels, not independently reviewed")
     return point
 
@@ -69,7 +75,7 @@ def binary_stats(rows):
 def nli_components(data,output,device="cuda:0"):
     from docmind.attribution import NLIJudge
     import torch
-    summaries={}
+    summaries={};public_predictions=[]
     for name in ("english_nli","multilingual_nli"):
         start=time.perf_counter();model,revision=MODELS[name]
         judge=NLIJudge(model,revision=revision,local_files_only=False,device=device,batch_size=16)
@@ -90,9 +96,11 @@ def nli_components(data,output,device="cuda:0"):
                 predictions.extend(values);errors.extend(failures)
             records=[{"id":r["id"],"label":r["label"],"score":float(p),"error":error,"premise_hash":hashlib.sha256(r["premise"].encode()).hexdigest()} for r,p,error in zip(examples,predictions,errors)]
             rows.extend(records);summaries[name+"_"+language]=binary_stats(records)
+            public_predictions.extend({"model":name,**{k:r[k] for k in ("id","score","premise_hash","error")}} for r in records)
         write(output/"private"/(name+".json"),rows)
         summaries[name+"_load_and_score_seconds"]=time.perf_counter()-start
         del judge;gc.collect();torch.cuda.empty_cache()
+    write(output/"nli-predictions.json",public_predictions)
     return {"scope":"XNLI test-derived binary entailment component subset; not PDF attribution",
         "development_split_excluded":True,"source_revision":XNLI_REV,"models":MODELS,"results":summaries,
         "license":"XNLI noncommercial terms; raw examples and per-example labels are private"}
@@ -116,11 +124,12 @@ def ann_component(data,output,device="cuda:0"):
     matrix=embed_texts(premises)
     assert np.isfinite(matrix).all() and np.allclose(np.linalg.norm(matrix,axis=1),1,atol=.001)
     chunks=[Chunk(text,"d","component",i,file_id=corpus[i][0]) for i,text in enumerate(premises)]
-    questions=[r["hypothesis"] for examples in data.values() for r in examples[:50]]
+    question_records=[(lang,r) for lang,examples in data.items() for r in examples[:50]]
+    questions=[r["hypothesis"] for lang,r in question_records]
     query_language={r["hypothesis"]:lang for lang,examples in data.items() for r in examples[:50]}
     vectors={question:embed_query(question) for question in questions}
     original=module.embed_query;module.embed_query=lambda q:vectors[q]
-    results={};truth={};faiss.omp_set_num_threads(2)
+    results={};truth={};query_records=[];lookup={chunk.chunk_id:i for i,chunk in enumerate(chunks)};faiss.omp_set_num_threads(2)
     try:
         for kind in ("flat","hnsw"):
             os.environ["DOCMIND_DENSE_INDEX"]=kind
@@ -128,13 +137,16 @@ def ann_component(data,output,device="cuda:0"):
             build=time.perf_counter()-start
             for scoped in (False,True):
                 rows=[]
-                for question in questions:
-                    start=time.perf_counter();hits=retriever.search(question,10,file_ids=[query_language[question]] if scoped else None)
+                for query_index,question in enumerate(questions):
+                    language,question_record=question_records[query_index]
+                    start=time.perf_counter();hits=retriever.search(question,10,file_ids=[language] if scoped else None)
                     elapsed=(time.perf_counter()-start)*1000
                     ids=[r.chunk.chunk_id for r in hits]
                     if kind=="flat":truth[(question,scoped)]=ids
                     ref=truth[(question,scoped)]
-                    rows.append({"recall":len(set(ids)&set(ref))/len(ref) if ref else 0,"latency_ms":elapsed})
+                    row={"recall":len(set(ids)&set(ref))/len(ref) if ref else 0,"latency_ms":elapsed}
+                    rows.append(row)
+                    query_records.append({"kind":kind,"scoped":scoped,"query_id":question_record["id"],"language":language,**row,"predicted_indices":[lookup[i] for i in ids],"exact_indices":[lookup[i] for i in ref]})
                 mean,lo,hi=bootstrap_ci([r["recall"] for r in rows],2000)
                 results[kind+"_"+("scoped_exact_fallback" if scoped else "unscoped")]= {
                     "recall10_against_exact":{"mean":mean,"ci95":[lo,hi]},"build_seconds":build,
@@ -147,7 +159,8 @@ def ann_component(data,output,device="cuda:0"):
     values=reranker.predict([(examples[0]["hypothesis"],examples[0]["premise"]) for examples in data.values()])
     assert np.isfinite(values).all()
     del reranker;gc.collect();torch.cuda.empty_cache()
-    return {"scope":"Application ANN fidelity on real E5 embeddings from XNLI text, not semantic retrieval accuracy or a scale claim",
+    write(output/"ann-query-records.json",query_records)
+    return {"faiss_version":faiss.__version__,"numpy_version":np.__version__,"vector_sha256":hashlib.sha256(matrix.tobytes()).hexdigest(),"hnsw":{"M":32,"efConstruction":80,"efSearch":64,"threads":2},"scope":"Application ANN fidelity on real E5 embeddings from XNLI text, not semantic retrieval accuracy or a scale claim",
         "vectors":len(chunks),"queries":len(questions),"model":MODELS["e5"],"results":results,
         "reranker_finite_smoke":True,"limits":["Small constructed-sentence corpus","Scoped application path deliberately uses exact filtering","Embedding time excluded from search timings"]}
 

@@ -1,0 +1,21 @@
+{
+  "scope": "Single-reviewer Hindi XNLI test-label audit; not PDF attribution",
+  "n_preselected": 15,
+  "adjudicated": 11,
+  "unclear": 4,
+  "unfinished": 0,
+  "disagreements": 4,
+  "active_seconds": 520.2133000000008,
+  "disagreement_rate_among_decisive_labels": 0.36363636363636365,
+  "population_label_error_rate": null,
+  "consistency": "unmeasured",
+  "inter_annotator_agreement": "not applicable",
+  "limits": [
+    "Small randomized subset of a 200-item diagnostic cohort",
+    "Unclear labels are separate from confirmed disagreements",
+    "No population extrapolation from the decisive subset",
+    "One reviewer; focused-item timings are not precise annotation durations"
+  ],
+  "private_export_sha256": "26914cc6acd9923553722fcee327cad277cf00d96f6775bbb7697c152d05fd04",
+  "source_revision": "b8dd5d7af51114dbda02c0e3f6133f332186418e"
+}
