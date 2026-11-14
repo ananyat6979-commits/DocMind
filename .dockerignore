@@ -26,3 +26,5 @@ indexes/
 *.7z
 
 .kaggle*/
+
+.secrets/

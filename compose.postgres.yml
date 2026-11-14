@@ -1,0 +1,47 @@
+# Single-host persistent profile. Two API workers share quotas and ingestion leases.
+services:
+  ui:
+    extends: {file: docker-compose.yml, service: ui}
+  api:
+    extends: {file: docker-compose.yml, service: api}
+    command: ["uvicorn", "docmind.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+    environment:
+      DOCMIND_DATABASE_URL: ${DOCMIND_DATABASE_URL:?Use the private production environment file}
+      DOCMIND_USE_RERANKER: "0"
+      DOCMIND_RETRIEVAL_MODE: dense
+    depends_on:
+      parser: {condition: service_started}
+      postgres: {condition: service_healthy}
+  parser:
+    extends: {file: docker-compose.yml, service: parser}
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg17-trixie
+    environment:
+      POSTGRES_DB: docmind
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DOCMIND_DB_ADMIN_PASSWORD:?Use the private production environment file}
+    command: ["postgres", "-c", "shared_buffers=128MB", "-c", "max_connections=100"]
+    volumes: ["docmind-postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docmind"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    profiles: [tools]
+    build: .
+    image: docmind:local
+    command: ["python", "scripts/migrate_postgres.py"]
+    environment:
+      DOCMIND_MIGRATION_DSN: ${DOCMIND_MIGRATION_DSN:?Use the private production environment file}
+      DOCMIND_DB_PASSWORD: ${DOCMIND_DB_PASSWORD:?Use the private production environment file}
+      DOCMIND_DB_TENANTS: ${DOCMIND_DB_TENANTS:?Specify provisioned tenant identifiers}
+    depends_on:
+      postgres: {condition: service_healthy}
+    read_only: true
+    tmpfs: [/tmp]
+volumes:
+  docmind-api-data:
+  parser-socket:
+  docmind-postgres:

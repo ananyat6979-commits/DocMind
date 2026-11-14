@@ -92,6 +92,6 @@ def migrate(admin_dsn,runtime_role,runtime_password,tenants):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--tenant',action='append',required=True);args=parser.parse_args()
-    migrate(os.environ['DOCMIND_MIGRATION_DSN'],os.environ.get('DOCMIND_DB_ROLE','docmind_runtime'),os.environ['DOCMIND_DB_PASSWORD'],args.tenant)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--tenant',action='append');args=parser.parse_args()
+    migrate(os.environ['DOCMIND_MIGRATION_DSN'],os.environ.get('DOCMIND_DB_ROLE','docmind_runtime'),os.environ['DOCMIND_DB_PASSWORD'],args.tenant or os.environ.get('DOCMIND_DB_TENANTS','').split(','))
     print('Schema, forced tenant policies and runtime grants verified')
