@@ -13,8 +13,9 @@ FastAPI service.
 Security notes:
   * /ingest only accepts paths inside CONFIG.data_dir. The old version accepted
     any server path, which let a caller ingest and then query /etc/passwd.
-  * Configure DOCMIND_API_KEY for the required X-API-Key header on every route except /health.
-  * Configure DOCMIND_REVIEWER_PIN for the required X-Reviewer-Pin on review routes.
+  * Personal X-API-Key credentials establish trusted actors and operation roles.
+  * Shared-key compatibility mode uses separate reviewer/admin credentials.
+  * /health is public liveness; readiness and application operations authenticate.
 """
 import asyncio
 import hmac

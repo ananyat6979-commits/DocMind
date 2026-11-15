@@ -7,7 +7,8 @@ Rank-based, so cosine and BM25 scales never need normalizing.
 The retriever is a view over CorpusStore. Each search checks the store's
 corpus_version and rebuilds the in-memory indexes if another process (or the
 upload button) changed the corpus. Searches capture coherent dense/sparse
-snapshots; supported deployment still uses one API service process.
+snapshots in the one-process SQLite profile. The PostgreSQL profile uses persistent
+queries across API workers.
 """
 import logging
 import threading

@@ -60,7 +60,7 @@ class SearchResult:
 
 @dataclass
 class AgentResponse:
-    """Final output from the ReAct agent."""
+    """Document reader output with source evidence and review state."""
     answer: str
     sources: List[SearchResult]
     reasoning_trace: List[str]

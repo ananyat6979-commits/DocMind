@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "docmind"
 version = "2.0.0"
-description = "Hybrid retrieval + ReAct agent with citation verification and human review"
+description = "Document retrieval with quoted drafts and human review"
 requires-python = ">=3.11"
 readme = "README.md"
 dynamic = ["dependencies"]
