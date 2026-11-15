@@ -2,7 +2,8 @@
 Review queue: persistent human-in-the-loop decisions.
 
 Lifecycle of an answer:
-  auto_approved            policy found no reason to review it
+  draft                    current policy permits an explicitly unverified draft
+  auto_approved            historical automatic decision, retained for compatibility
   pending                  policy flagged it; waiting for a reviewer
   approved | edited | rejected    reviewer decision (edited keeps the corrected text)
 
@@ -64,7 +65,7 @@ class ReviewStore:
                 conn.execute("ALTER TABLE reviews ADD COLUMN response_info TEXT NOT NULL DEFAULT '{}'")
 
     def record(self, resp: AgentResponse, user: str = "anonymous") -> str:
-        status = "pending" if resp.needs_review else "auto_approved"
+        status = "pending" if resp.needs_review else ("draft" if resp.release_policy_version != "legacy" else "auto_approved")
         with connect(self.db_path) as conn:
             from docmind.postgres import Connection
             if isinstance(conn,Connection):
@@ -78,7 +79,10 @@ class ReviewStore:
                 (resp.response_id, time.time(), user, resp.query, resp.answer,
                  json.dumps(_source_payload(resp)), json.dumps(resp.review_reasons), status,
                  json.dumps({"abstained":resp.abstained,"latency_ms":resp.latency_ms,"llm_calls":resp.llm_calls,
-                     "citation_report":resp.citation_report,"finish_reason":resp.finish_reason})),
+                     "citation_report":resp.citation_report,"finish_reason":resp.finish_reason,
+                     "release_policy_version":resp.release_policy_version,"release_mode":resp.release_mode,
+                     "release_state":resp.release_state,"hold_reasons":resp.hold_reasons,
+                     "warnings":resp.warnings,"evidence":resp.evidence,"document_context":resp.document_context})),
             )
         return status
 
@@ -107,7 +111,7 @@ class ReviewStore:
         with connect(self.db_path) as conn:
             cur = conn.execute(
                 "UPDATE reviews SET status=?, reviewer=?, edited_answer=?, note=?, decided_at=?"
-                " WHERE response_id=? AND status='pending'",
+                " WHERE response_id=? AND status IN ('pending','draft')",
                 (decision, reviewer, edited_answer if decision == "edited" else None, note, time.time(), response_id),
             )
             return cur.rowcount > 0
@@ -130,7 +134,7 @@ class ReviewStore:
                 "id": d["response_id"],
                 "question": d["question"],
                 "ground_truth": d["edited_answer"] or d["answer"],
-                "answerable": bool(d["edited_answer"]) or "abstained" not in d["reasons"],
+                "answerable": bool(d["edited_answer"]) or not d["response_info"].get("abstained", "abstained" in d["reasons"]),
                 "verified": True,
                 "verification_source": "Human review decision",
                 "references": [d["edited_answer"] or d["answer"]],

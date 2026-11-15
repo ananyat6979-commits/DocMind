@@ -6,6 +6,23 @@ import uuid
 from docmind.db import connect
 from docmind.ingestion.pipeline import ingest
 
+def failure_detail(exc):
+    code = type(exc).__name__
+    actions = {
+        "ParserUnavailable": "Start the isolated parser service, then submit the upload again.",
+        "EmbeddingModelMismatch": "Build a separate corpus with the configured representation; retain the original store.",
+        "EmptyDocumentError": "Inspect extraction quality; OCR and legacy-font conversion are not included.",
+        "ValueError": "Check document limits, encoding and cached preprocessing; use an explicit rebuild for changes.",
+    }
+    return json.dumps({"code":code, "message":"Ingestion did not complete.",
+        "action":actions.get(code,"Inspect service logs using the job ID; retry only after resolving the cause.")})
+
+
+def report_payload(report):
+    return json.dumps({"file_ids":report.file_ids,"chunks_added":report.chunks_added,
+        "cached":report.n_cached,"files":[vars(item) for item in report.files]})
+
+
 SCHEMA = """CREATE TABLE IF NOT EXISTS ingestion_jobs (
     job_id TEXT PRIMARY KEY, path TEXT NOT NULL, status TEXT NOT NULL,
     created_at REAL NOT NULL, updated_at REAL NOT NULL, result TEXT, error TEXT);
@@ -39,7 +56,12 @@ class IngestionQueue:
     def get(self, job):
         with connect(self.db_path) as conn:
             row = conn.execute("SELECT job_id,status,created_at,updated_at,result,error,owner FROM ingestion_jobs WHERE job_id=?", (job,)).fetchone()
-        return dict(row) if row else None
+        if not row:return None
+        result = dict(row)
+        if result.get("error"):
+            try:result["error_detail"] = json.loads(result["error"])
+            except (ValueError, TypeError):result["error_detail"] = {"code":"legacy_error", "message":result["error"]}
+        return result
 
     def cancel(self, job):
         with connect(self.db_path) as conn:
@@ -57,10 +79,10 @@ class IngestionQueue:
             conn.execute("UPDATE ingestion_jobs SET status='running',updated_at=? WHERE job_id=?", (time.time(), row["job_id"]))
         try:
             report = ingest(row["path"], store=CorpusStore(self.db_path),**json.loads(row["options"]))
-            result = json.dumps({"file_ids":report.file_ids,"chunks_added":report.chunks_added})
+            result = report_payload(report)
             status, error = "completed", None
         except Exception as exc:
-            status, result, error = "failed", None, type(exc).__name__
+            status, result, error = "failed", None, failure_detail(exc)
         with connect(self.db_path) as conn:
             conn.execute("UPDATE ingestion_jobs SET status=?,result=?,error=?,updated_at=? WHERE job_id=?",
                          (status,result,error,time.time(),row["job_id"]))
@@ -93,9 +115,9 @@ class IngestionQueue:
         pulse=threading.Thread(target=heartbeat,daemon=True);pulse.start()
         try:
             report=ingest(row['path'],store=CorpusStore(self.db_path.fenced(row['job_id'],token)),**json.loads(row['options']))
-            status,result,error='completed',json.dumps({'file_ids':report.file_ids,'chunks_added':report.chunks_added}),None
+            status,result,error='completed',report_payload(report),None
         except Exception as exc:
-            status,result,error='failed',None,type(exc).__name__
+            status,result,error='failed',None,failure_detail(exc)
         finally:done.set();pulse.join(timeout=1)
         with connect(self.db_path) as conn:
             changed=conn.execute("UPDATE ingestion_jobs SET status=?,result=?,error=?,updated_at=EXTRACT(EPOCH FROM clock_timestamp()),lease_token=NULL WHERE job_id=? AND lease_token=? AND status='running' AND lease_until>EXTRACT(EPOCH FROM clock_timestamp())",(status,result,error,row['job_id'],token)).rowcount

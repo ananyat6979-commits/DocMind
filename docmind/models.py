@@ -76,3 +76,12 @@ class AgentResponse:
     timings: Dict[str, float] = field(default_factory=dict)
     llm_calls: int = 0
     response_id: str = field(default_factory=lambda: uuid.uuid4().hex)
+
+    release_policy_version: str = "legacy"
+    release_mode: str = "draft"
+    release_state: str = "legacy"
+    hold_reasons: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    evidence: List[Dict[str, Any]] = field(default_factory=list)
+    document_context: Dict[str, Any] = field(default_factory=dict)
+    short_answer: Optional[str] = None

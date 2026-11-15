@@ -8,7 +8,7 @@ Format:
   ...
   Final Answer: <answer with citations>
 """
-import json
+from docmind.evidence import untrusted_json
 from typing import Iterable, Optional, Set
 
 NOT_FOUND_TOKEN = "NOT_FOUND"
@@ -56,5 +56,5 @@ def format_observation(results, seen: Optional[Set[str]] = None, header: str = "
         if c.chunk_id in seen:
             lines.append(f"{head}\n(already shown above)\n")
         else:
-            lines.append(f"{head}\nuntrusted_document_json: {json.dumps(c.content, ensure_ascii=True)}\n")
+            lines.append(f"{head}\nuntrusted_document_json: {untrusted_json(c.content)}\n")
     return "\n".join(lines)

@@ -2,6 +2,7 @@
 import json
 import numpy as np
 from docmind.models import SearchResult
+from docmind.embeddings import compatible_embedding_identity
 from docmind.postgres import DatabaseScope
 from docmind.db import connect
 from docmind.store import _row_to_chunk,EmbeddingModelMismatch
@@ -23,7 +24,7 @@ class PostgresDenseRetriever:
         with connect(self.store.db_path) as conn:
             conn.corpus_lock(shared=True)
             signature=self.store._get_meta(conn,'embedding_signature','')
-            if signature and signature!=self.store._embedding_signature():raise EmbeddingModelMismatch("Active embedding identity differs")
+            if not compatible_embedding_identity(signature,self.store._embedding_signature()):raise EmbeddingModelMismatch("Active embedding identity differs")
             conn.execute("SET LOCAL hnsw.ef_search=128")
             conn.execute("SET LOCAL hnsw.iterative_scan='strict_order'")
             params=[encoded,self.store.db_path.tenant]

@@ -10,12 +10,13 @@ Reasoning models spend completion tokens on hidden reasoning. If the budget is t
 answer comes back empty, which is reported as EmptyCompletion with the fix, instead of failing later
 in a confusing way.
 """
+import asyncio
 import json
 import logging
 import random
 import re
 import time
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from docmind.config import CONFIG
 from docmind.llm.base import BaseLLM
@@ -76,6 +77,7 @@ def tool_call_to_react(raw: str) -> Optional[str]:
 
 
 class RateLimitExhausted(RuntimeError):
+    retry_after: Optional[float] = None
     """Groq asked us to wait longer than max_sleep_seconds (usually the daily token cap)."""
 
 
@@ -118,7 +120,7 @@ def list_chat_models(client) -> List[str]:
 class GroqLLM(BaseLLM):
     def __init__(self, model: Optional[str] = None, reasoning_effort: Optional[str] = None):
         if not CONFIG.llm.groq_api_key:
-            raise ValueError(
+            raise ModelUnavailable(
                 "GROQ_API_KEY not set. Add it to .env or the environment.\n"
                 "Get a free key at https://console.groq.com"
             )
@@ -127,10 +129,68 @@ class GroqLLM(BaseLLM):
         self._model = model or CONFIG.llm.groq_model
         self._reasoning_effort = reasoning_effort if reasoning_effort is not None else CONFIG.llm.reasoning_effort
         if not self._model:
-            raise ValueError(self._missing_model_message())
+            raise ModelUnavailable("Set DOCMIND_LLM_MODEL before querying; list models using the explicit model-list command")
         self.prompt_tokens = 0
         self.completion_tokens = 0
         self.calls = 0
+        self.call_records: list[dict[str, Any]] = []
+
+    async def acomplete(self, messages, stop=None, deadline=None, **kwargs):
+        """Cancellable hosted I/O. This instance belongs to one query session."""
+        from groq import AsyncGroq
+        from docmind.llm.execution import limit, CapacityExceeded, DeadlineExceeded
+        if not hasattr(self, "_async_client"):
+            self._async_client = AsyncGroq(api_key=CONFIG.llm.groq_api_key, max_retries=0)
+        self.last_usage = {"input_tokens": None, "output_tokens": None}
+        deadline = deadline if deadline is not None else time.monotonic() + 30
+        retries = int(kwargs.pop("retries", 1))
+        request = dict(model=self._model, messages=messages, temperature=kwargs.get("temperature", CONFIG.llm.temperature),
+                       max_tokens=kwargs.get("max_tokens", CONFIG.llm.max_tokens))
+        if stop:request["stop"] = stop
+        if self._reasoning_effort:request["reasoning_effort"] = self._reasoning_effort
+        for attempt in range(retries + 1):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:raise DeadlineExceeded("Query deadline exceeded")
+            semaphore = limit("hosted", 4)
+            try:
+                async with asyncio.timeout(min(.1, remaining)):await semaphore.acquire()
+            except TimeoutError as exc:
+                raise CapacityExceeded("Hosted inference capacity is busy") from exc
+            record = {"input_tokens": None, "output_tokens": None, "status": "error"}
+            attempt_started = time.monotonic()
+            try:
+                self.calls += 1
+                async with asyncio.timeout(remaining):
+                    response = await self._async_client.chat.completions.create(**request, timeout=remaining)
+                usage = response.usage
+                if usage:
+                    self.last_usage = {"input_tokens": usage.prompt_tokens, "output_tokens": usage.completion_tokens}
+                    record.update(self.last_usage)
+                    self.prompt_tokens += usage.prompt_tokens or 0
+                    self.completion_tokens += usage.completion_tokens or 0
+                value = clean_completion(response.choices[0].message.content or "")
+                if not value:raise EmptyCompletion("Provider returned no visible answer")
+                record["status"] = "completed"
+                return value
+            except Exception as exc:
+                if type(exc).__name__ == "RateLimitError" or getattr(exc, "status_code", None) == 429:
+                    error = RateLimitExhausted("Provider quota exhausted")
+                    error.retry_after = _retry_after(exc)
+                    raise error from exc
+                if getattr(exc, "status_code", None) == 404:
+                    raise ModelUnavailable("Configured provider model is unavailable") from exc
+                if isinstance(exc, TimeoutError):raise DeadlineExceeded("Query deadline exceeded") from exc
+                if type(exc).__name__ not in {"APIConnectionError", "InternalServerError"} or attempt >= retries:
+                    raise
+            finally:
+                self.call_records.append({**record, "elapsed_seconds": time.monotonic() - attempt_started})
+                semaphore.release()
+            await asyncio.sleep(min(.1, max(0, deadline - time.monotonic())))
+        raise RuntimeError("No completion was returned")
+
+    async def aclose(self):
+        if hasattr(self, "_async_client"):await self._async_client.close()
+        self._client.close()
 
     # ------------------------------------------------------------------ helpers
     def _available(self) -> str:

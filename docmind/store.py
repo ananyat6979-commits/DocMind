@@ -16,6 +16,7 @@ import numpy as np
 
 from docmind.config import CONFIG
 from docmind.db import connect
+from docmind.embeddings import compatible_embedding_identity
 from docmind.models import Chunk
 
 logger = logging.getLogger(__name__)
@@ -106,7 +107,7 @@ class CorpusStore:
         with connect(self.db_path) as conn:
             signature=self._get_meta(conn,"embedding_signature","")
             count=conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
-            if count and signature!=self._embedding_signature():
+            if count and not compatible_embedding_identity(signature, self._embedding_signature()):
                 raise EmbeddingModelMismatch("The corpus embedding identity differs from the active configuration; rebuild an isolated corpus")
 
     def content_identity(self) -> str:
@@ -138,6 +139,45 @@ class CorpusStore:
             rows = conn.execute("SELECT * FROM documents ORDER BY ingested_at DESC").fetchall()
             return [{**dict(r),"lineage":json.loads(r["lineage"])} for r in rows]
 
+    def document_context(self, file_ids=None) -> Dict:
+        """Fetch file-level quality once, without repeating it in every chunk."""
+        ids = tuple(sorted(set(file_ids))) if file_ids is not None else None
+        if ids == ():return {"partial": False, "languages": [], "documents": []}
+        version = self.version()
+        key = (version, ids)
+        cached = getattr(self, "_document_context_cache", {})
+        if key in cached:return cached[key]
+        sql = "SELECT file_id,filename,lineage FROM documents"
+        params = ()
+        if ids is not None:
+            sql += " WHERE file_id IN (" + ",".join("?" for _ in ids) + ")"
+            params = ids
+        documents = []
+        with connect(self.db_path) as connection:
+            for row in connection.execute(sql, params):
+                lineage = json.loads(row["lineage"])
+                language = lineage.get("language_info", {}).get("language", "und")
+                if language == "und" and lineage.get("schema_version") != 2:
+                    weights: dict[str, int] = {}
+                    for old in connection.execute("SELECT metadata FROM chunks WHERE file_id=?", (row["file_id"],)):
+                        metadata = json.loads(old["metadata"])
+                        hint = metadata.get("language_info", {}).get("language", "und")
+                        weights[hint] = weights.get(hint, 0) + metadata.get("char_count", 1)
+                    total = sum(weights.values())
+                    best = max(weights, key=lambda k: weights[k]) if weights else "und"
+                    if total and weights[best] / total >= .8:language = best
+                missing = [record.get("page") for record in lineage.get("page_quality", [])
+                           if record.get("quarantined") and record.get("page") is not None]
+                documents.append({"file_id": row["file_id"], "filename": row["filename"],
+                    "language": language, "partial": bool(lineage.get("partial_document")),
+                    "quarantined_pages": sorted(set(missing))})
+        result = {"partial": any(d["partial"] for d in documents),
+                  "languages": [d["language"] for d in documents], "documents": documents}
+        if len(cached) >= 8:cached = {}
+        cached[key] = result
+        self._document_context_cache = cached
+        return result
+
     def add_document(self, doc: Dict, chunks: Sequence[Chunk], embeddings: np.ndarray) -> None:
         if len(chunks) != len(embeddings):
             raise ValueError("chunks and embeddings length mismatch")
@@ -151,17 +191,17 @@ class CorpusStore:
                 if np.any(np.abs(np.linalg.norm(embeddings,axis=1)-1)>.002):raise ValueError("Normalized embeddings required")
             existing_sig = self._get_meta(conn, "embedding_signature", "")
             n_existing = conn.execute("SELECT COUNT(*) AS n FROM chunks").fetchone()["n"]
-            if existing_sig and existing_sig != sig and n_existing > 0:
+            if n_existing > 0 and not compatible_embedding_identity(existing_sig, sig):
                 raise EmbeddingModelMismatch(
                     f"Corpus was embedded with '{existing_sig}' but the active model is '{sig}'. "
-                    "Delete indexes/docmind.db (or re-ingest everything) to switch embedding models."
+                    "Build a separate corpus from retained uploads; keep the original database and review history."
                 )
             dimension=int(embeddings.shape[1])
             prior_dimension=self._get_meta(conn,"embedding_dimension","")
             if n_existing and prior_dimension and int(prior_dimension)!=dimension:
                 raise EmbeddingModelMismatch("Embedding dimensions changed; rebuild an isolated corpus")
             self._set_meta(conn,"embedding_dimension",str(dimension))
-            self._set_meta(conn, "embedding_signature", sig)
+            if not n_existing:self._set_meta(conn, "embedding_signature", sig)
             conn.execute("DELETE FROM documents WHERE file_id=?", (doc["file_id"],))
             conn.execute(
                 "INSERT OR REPLACE INTO documents(file_id, filename, source, sha256, n_units, n_chunks, ingested_at, lineage)"

@@ -16,6 +16,7 @@ Security notes:
   * Configure DOCMIND_API_KEY for the required X-API-Key header on every route except /health.
   * Configure DOCMIND_REVIEWER_PIN for the required X-Reviewer-Pin on review routes.
 """
+import asyncio
 import hmac
 import hashlib
 import logging
@@ -32,7 +33,9 @@ from functools import lru_cache
 from fastapi import Request, Query, Depends, FastAPI, File, Header, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
-from docmind.agent.react import ReActAgent
+from docmind.agent.reader import CitedReader, CitedReActReader
+from docmind.llm.execution import cpu_work, DeadlineExceeded, CapacityExceeded
+from docmind.llm.groq_client import RateLimitExhausted, ModelUnavailable, EmptyCompletion
 from docmind.config import CONFIG
 from docmind.ingestion.loader import LOADERS
 from docmind.ingestion.pipeline import ingest
@@ -70,14 +73,14 @@ async def lifespan(app):
     queue.close()
 
 
-app = FastAPI(lifespan=lifespan, title="DocMind", description="Hybrid retrieval + ReAct agent with human review", version="2.0.0")
+app = FastAPI(lifespan=lifespan, title="DocMind", description="Cited document drafts with human review", version="2.0.0")
 
 from docmind.observability import RequestMonitor
 _monitor = RequestMonitor(limit_per_minute=int(os.getenv("DOCMIND_REQUESTS_PER_MINUTE", "60")),limit_per_ip=int(os.getenv("DOCMIND_REQUESTS_PER_IP_PER_MINUTE","300")))
 app.middleware("http")(_monitor)
 
 
-_agent: Optional[ReActAgent] = None
+_agent: Optional[CitedReader] = None
 _lock = threading.Lock()
 
 
@@ -107,18 +110,22 @@ def get_queue(request):
     return request.app.state.ingestion_queue
 
 
-def get_agent() -> ReActAgent:
+def get_agent() -> CitedReader:
+    strategy = os.getenv("DOCMIND_ANSWER_STRATEGY", "single")
+    if strategy not in ("single", "react"):
+        raise ValueError("DOCMIND_ANSWER_STRATEGY must be single or react")
+    reader_class = CitedReader if strategy == "single" else CitedReActReader
     if os.getenv('DOCMIND_DATABASE_URL'):
         scope=database_scope()
         with _lock:
             if scope not in _tenant_agents:
-                _tenant_agents[scope]=ReActAgent(retriever=HybridRetriever(get_store()))
+                _tenant_agents[scope]=reader_class(retriever=HybridRetriever(get_store()))
             return _tenant_agents[scope]
     global _agent
     if _agent is None:
         with _lock:
             if _agent is None:
-                _agent = ReActAgent(retriever=HybridRetriever(get_store()))
+                _agent = reader_class(retriever=HybridRetriever(get_store()))
     return _agent
 
 
@@ -172,6 +179,7 @@ class IngestResponse(BaseModel):
     file_ids: List[str]
     chunks_added: int
     cached: int
+    files: List[dict] = Field(default_factory=list)
 
 
 class QueryRequest(BaseModel):
@@ -201,6 +209,12 @@ class QueryResponse(BaseModel):
     citation_validity: Optional[float]
     attribution: Optional[dict] = None
     attribution_status: str = "not_checked"
+    release_policy_version: str = "legacy"
+    release_mode: str = "draft"
+    release_state: str = "legacy"
+    warnings: List[str] = Field(default_factory=list)
+    evidence: List[dict] = Field(default_factory=list)
+    document_context: dict = Field(default_factory=dict)
     sources: List[SourceInfo]
     latency_ms: float
     llm_calls: int
@@ -234,7 +248,7 @@ def _ingest_response(report, label: str) -> IngestResponse:
     if report.failures and not report.file_ids:
         raise HTTPException(status_code=422, detail="; ".join(f.error for f in report.failures))
     return IngestResponse(message=f"Ingested {label}", file_ids=report.file_ids,
-                          chunks_added=report.chunks_added, cached=report.n_cached)
+                          chunks_added=report.chunks_added, cached=report.n_cached, files=[vars(f) for f in report.files])
 
 
 @app.post("/ingest", response_model=IngestResponse, dependencies=[Depends(require_api_key), Depends(require_ingestor)])
@@ -298,38 +312,68 @@ def upload(file: UploadFile = File(...), expected_language: Optional[Literal["en
 
 
 @app.post("/query", response_model=QueryResponse, dependencies=[Depends(require_api_key)])
-def query(req: QueryRequest, request: Request):
+async def query(req: QueryRequest, request: Request):
+    timeout = float(os.getenv("DOCMIND_QUERY_TIMEOUT_SECONDS", "30"))
     try:
-        agent = get_agent()
-        if agent.retriever.is_empty():
+        async with asyncio.timeout(timeout):
+            return await _query_impl(req, request)
+    except TimeoutError as exc:
+        raise HTTPException(status_code=504, detail="Query deadline exceeded; narrow the document selection") from exc
+
+
+async def _query_impl(req: QueryRequest, request: Request):
+    try:
+        agent = await cpu_work(get_agent)
+        if await cpu_work(agent.retriever.is_empty):
             raise HTTPException(status_code=409, detail="No documents ingested yet. POST /upload first.")
-        resp = agent.run(req.question, file_ids=req.file_ids)
+        timeout = float(os.getenv("DOCMIND_QUERY_TIMEOUT_SECONDS", "30"))
+        async with asyncio.timeout(timeout):
+            if hasattr(agent, "arun"):
+                resp = await agent.arun(req.question, file_ids=req.file_ids)
+            else:
+                # Compatibility for explicitly injected legacy engines, never the default.
+                resp = await cpu_work(agent.run, req.question, file_ids=req.file_ids)
+    except (DeadlineExceeded, TimeoutError):
+        raise HTTPException(status_code=504, detail="Query deadline exceeded; narrow the document selection")
+    except RateLimitExhausted as exc:
+        delay = getattr(exc, "retry_after", None)
+        headers = {"Retry-After": str(max(1, int(delay)))} if delay is not None else None
+        raise HTTPException(status_code=429, detail="Provider quota exhausted; no paid fallback is enabled", headers=headers)
+    except (CapacityExceeded, ModelUnavailable, EmptyCompletion):
+        raise HTTPException(status_code=503, detail="Generation is unavailable or busy; no paid fallback is enabled")
     except EmbeddingModelMismatch:
         raise HTTPException(status_code=503, detail="Corpus embeddings differ from the active configuration; rebuild an isolated corpus from retained uploads")
     except HTTPException:
         raise
     except Exception as exc:
-        logger.exception("Agent query failed")
+        if type(exc).__name__ in {"APIConnectionError", "APITimeoutError", "InternalServerError"}:
+            raise HTTPException(status_code=503, detail="Generation provider unavailable; no paid fallback is enabled") from exc
+        logger.exception("Reader query failed")
         raise HTTPException(status_code=500, detail="Query failed; consult server logs")
 
-    try:status = get_reviews().record(resp, user=request.state.principal.actor_id)
+    reviews = await cpu_work(get_reviews)
+    try:status = await cpu_work(reviews.record, resp, user=request.state.principal.actor_id)
     except ValueError:
         raise HTTPException(status_code=409,detail="Corpus changed during answer generation; retry the query")
-    get_events().log("query", user=request.state.principal.actor_id, response_id=resp.response_id, latency_ms=round(resp.latency_ms),
+    events = await cpu_work(get_events)
+    await cpu_work(events.log, "query", user=request.state.principal.actor_id, response_id=resp.response_id, latency_ms=round(resp.latency_ms),
                    llm_calls=resp.llm_calls, abstained=resp.abstained, needs_review=resp.needs_review,
                    n_sources=len(resp.sources), finish=resp.finish_reason,
                    request_id=getattr(request.state,"request_id",None), timings=resp.timings,
                    citation_validity=resp.citation_report.get("validity"))
-    held = status == "pending" and CONFIG.review.hold_until_approved
+    held = status == "pending" and (resp.release_policy_version != "legacy" or CONFIG.review.hold_until_approved)
     cited_ids = {s.chunk.chunk_id for s in resp.cited_sources}
     return QueryResponse(
         response_id=resp.response_id, question=req.question,
-        answer="This answer is awaiting human review." if status=="pending" and CONFIG.review.hold_until_approved else resp.answer,
+        answer="This answer is awaiting human review." if held else resp.answer,
         abstained=resp.abstained,
         review_status=status, review_reasons=resp.review_reasons,
         citation_validity=None if held else resp.citation_report.get("validity"),
         attribution=None if held else resp.citation_report.get("attribution"),
-        attribution_status="withheld" if held else "model_judgment",
+        attribution_status="withheld" if held else ("citation_found_support_not_verified" if resp.release_policy_version != "legacy" else "model_judgment"),
+        release_policy_version=resp.release_policy_version, release_mode=resp.release_mode,
+        release_state=resp.release_state, warnings=resp.warnings,
+        evidence=[] if held else resp.evidence, document_context=resp.document_context,
         sources=[SourceInfo(
             chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),file_id=s.chunk.file_id,
             page=s.chunk.metadata.get("page"), section=s.chunk.metadata.get("section"),
@@ -448,7 +492,7 @@ def response_result(response_id: str, request: Request):
     if item["user"] != request.state.principal.actor_id:
         raise HTTPException(status_code=404, detail="Response not available to this principal")
     status = item["status"]
-    visible = status in ("auto_approved", "approved", "edited")
+    visible = status in ("auto_approved", "approved", "edited", "draft")
     info = item.get("response_info", {})
     edited = status == "edited"
     report = info.get("citation_report", {})
@@ -457,7 +501,10 @@ def response_result(response_id: str, request: Request):
         abstained=False if edited else info.get("abstained",False),review_status=status,review_reasons=item["reasons"],
         citation_validity=report.get("validity") if visible and not edited else None,
         attribution=report.get("attribution") if visible and not edited else None,
-        attribution_status="human_edited_not_rechecked" if edited else ("model_judgment" if visible else "withheld"),
+        attribution_status="human_edited_not_rechecked" if edited else (("citation_found_support_not_verified" if info.get("release_policy_version", "legacy") != "legacy" else "model_judgment") if visible else "withheld"),
+        release_policy_version=info.get("release_policy_version", "legacy"), release_mode=info.get("release_mode", "draft"),
+        release_state=status, warnings=info.get("warnings", []),
+        evidence=info.get("evidence", []) if visible and not edited else [], document_context=info.get("document_context", {}),
         sources=[SourceInfo(chunk_id=s["chunk_id"],filename=s["filename"],file_id=s.get("file_id",""),
             page=s.get("page"),section=s.get("section"),content_preview=s["content"][:200],
             score=s["score"],cited=bool(s.get("cited")) and not edited) for s in item["sources"]] if visible else [],

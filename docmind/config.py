@@ -65,7 +65,7 @@ class EmbeddingConfig:
 class ChunkerConfig:
     # "fixed" skips per-sentence embedding: much faster on long documents (a novel can take many minutes
     # with "semantic"), at some cost in chunk coherence. Compare them with scripts/ablation.py --chunkers.
-    strategy: Literal["semantic", "fixed", "recursive"] = field(default_factory=lambda: cast(Literal["semantic", "fixed", "recursive"], os.getenv("DOCMIND_CHUNKER", "semantic")))
+    strategy: Literal["semantic", "fixed", "recursive"] = field(default_factory=lambda: cast(Literal["semantic", "fixed", "recursive"], os.getenv("DOCMIND_CHUNKER", "recursive")))
     min_chunk_size: int = 150
     max_chunk_size: int = 1200
     overlap_sentences: int = 1
@@ -118,6 +118,7 @@ class EvalConfig:
 
 @dataclass
 class ReviewConfig:
+    release_mode: str = field(default_factory=lambda: os.getenv("DOCMIND_RELEASE_MODE", "draft"))
     enabled: bool = True
     min_top_score: Optional[float] = field(default_factory=lambda: _env_float("DOCMIND_REVIEW_MIN_SCORE", None))
     audit_rate: float = field(default_factory=lambda: _env_float("DOCMIND_REVIEW_AUDIT_RATE", 0.10) or 0.0)

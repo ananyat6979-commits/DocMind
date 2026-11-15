@@ -105,3 +105,27 @@ def embedding_identity() -> str:
     return json.dumps({"backend":e.backend,"model":e.model_name,"revision":e.model_revision,
         "normalized":e.normalize_embeddings,"instruction":e.query_instruction,
         "prefix_policy":"bge-query-e5-both-v1","versions":versions},sort_keys=True)
+
+
+_VERSION_WARNINGS: set[tuple[str, str]] = set()
+
+
+def compatible_embedding_identity(stored: str, active: str) -> bool:
+    """Versions describe provenance; representation fields determine compatibility.
+
+    A warning is not numerical equivalence. Fresh measurements and optional probes
+    are required after dependency upgrades; existing vectors are never rewritten.
+    """
+    import json
+    if stored == active:return True
+    try:
+        previous, current = json.loads(stored), json.loads(active)
+        if not isinstance(previous, dict) or not isinstance(current, dict):return False
+        prior_versions, new_versions = previous.pop('versions', None), current.pop('versions', None)
+        if previous != current or not previous:return False
+    except (ValueError, TypeError):return False
+    key = (stored, active)
+    if prior_versions != new_versions and key not in _VERSION_WARNINGS:
+        logger.warning('Embedding dependency versions changed; representation fields match. Existing vectors remain unchanged; run fresh baselines and numerical probes.')
+        if len(_VERSION_WARNINGS) < 128:_VERSION_WARNINGS.add(key)
+    return True

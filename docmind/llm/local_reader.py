@@ -1,6 +1,7 @@
 """Pinned local reader for the measured T4 profile, independent of hosted credentials."""
 import time
 import math
+import threading
 from docmind.llm.base import BaseLLM
 
 MODEL = "Qwen/Qwen3-4B-Instruct-2507"
@@ -20,6 +21,7 @@ class LocalReader(BaseLLM):
         from transformers import AutoTokenizer,AutoModelForCausalLM
         torch.manual_seed(7)
         self.torch=torch;self.device=device
+        self.inference_lock = threading.Lock()
         self.tokenizer=AutoTokenizer.from_pretrained(MODEL,revision=REVISION,trust_remote_code=False)
         self.model=AutoModelForCausalLM.from_pretrained(MODEL,revision=REVISION,trust_remote_code=False,
             dtype=torch.float16,device_map={"":device},attn_implementation="sdpa").eval()
@@ -57,6 +59,16 @@ class LocalReader(BaseLLM):
             options={"max_new_tokens":min(int(kwargs.get("max_tokens",self.max_new_tokens)),self.max_new_tokens),
                 "do_sample":False,"pad_token_id":self.tokenizer.eos_token_id,
                 "logits_processor":LogitsProcessorList([CheckFinite()])}
+            deadline = kwargs.get("deadline")
+            if deadline is not None:
+                from transformers import StoppingCriteria,StoppingCriteriaList
+                class BeforeDeadline(StoppingCriteria):
+                    def __call__(self, input_ids, scores, **unused):
+                        if deadline is not None and time.monotonic() >= deadline:
+                            from docmind.llm.execution import DeadlineExceeded
+                            raise DeadlineExceeded("Local reader deadline exceeded")
+                        return False
+                options["stopping_criteria"] = StoppingCriteriaList([BeforeDeadline()])
             capture=getattr(self,"capture_token_scores",False)
             if capture:options.update(return_dict_in_generate=True,output_scores=True)
             if stop:options.update(stop_strings=stop,tokenizer=self.tokenizer)

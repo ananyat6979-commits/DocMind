@@ -10,6 +10,7 @@ Design (fixes the old "second upload silently reuses the first file's index" bug
   * Indexes are derived from the store, so they cannot disagree with it.
 """
 import logging
+import json
 from dataclasses import asdict
 import importlib.metadata
 from dataclasses import dataclass, field
@@ -18,6 +19,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from tqdm import tqdm
 
+from docmind.db import connect
 from docmind.config import CONFIG
 from docmind.embeddings import embed_texts
 from docmind.ingestion.chunker import chunk_document
@@ -37,6 +39,8 @@ class FileReport:
     status: str            # "ingested" | "cached" | "reingested" | "failed"
     n_chunks: int = 0
     error: str = ""
+    stored_filename: str = ""
+    quality: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -60,6 +64,13 @@ class IngestReport:
         return [f for f in self.files if f.status == "failed"]
 
 
+def quality_summary(lineage):
+    records = lineage.get("page_quality", [])
+    return {"partial": bool(lineage.get("partial_document")),
+        "quarantined_pages": [r["page"] for r in records if r.get("quarantined") and r.get("page") is not None],
+        "readable_units": sum(not r.get("quarantined") for r in records), "total_units": len(records)}
+
+
 def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=None, expected_language=None, encoding=None) -> FileReport:
     from docmind.text import VERSION as boundary_version
     from docmind.ingestion.quality import VERSION as quality_version
@@ -69,16 +80,32 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
     file_id = sha[:16]
 
     existed = store.has_file(file_id)
+    if chunker_config is None:
+        from docmind.config import ChunkerConfig
+        import os
+        if existed:
+            previous = store.get_document(file_id)
+            recipe = (previous or {}).get("lineage", {}).get("chunker")
+            if recipe:chunker_config = ChunkerConfig(**{**asdict(CONFIG.chunker), "strategy":recipe["strategy"]})
+        elif not os.getenv("DOCMIND_CHUNKER"):
+            with connect(store.db_path) as connection:
+                rows = connection.execute("SELECT lineage FROM documents").fetchall()
+            recipes = {json.dumps(json.loads(r["lineage"]).get("chunker"), sort_keys=True) for r in rows}
+            recipes.discard("null")
+            if len(recipes) == 1:chunker_config = ChunkerConfig(**json.loads(next(iter(recipes))))
+            elif rows:raise ValueError("Existing corpus has mixed or missing chunker recipes; choose an explicit chunker for new ingestion")
     if existed and not rebuild:
         store.ensure_embedding_compatible()
         doc = store.get_document(file_id)
         if doc is None: raise ValueError("Cached document disappeared; retry ingestion")
-        if doc.get("lineage",{}).get("preprocessing") != preprocessing:
+        prior = doc.get("lineage", {}).get("preprocessing", {})
+        compatible = prior.get("boundaries") == boundary_version and prior.get("language") in (language_version, "language-v1") and prior.get("extraction_quality") in (quality_version, "extraction-quality-v2")
+        if not compatible or any(prior.get(key) != preprocessing[key] for key in ("expected_language", "encoding")):
             raise ValueError("Cached preprocessing differs; explicitly rebuild this document")
         if doc.get("lineage",{}).get("chunker")!=asdict(chunker_config or CONFIG.chunker):
             raise ValueError("Cached document uses a different chunker configuration; rebuild it explicitly")
         logger.info(f"'{path.name}' already ingested (file_id={file_id}); skipping")
-        return FileReport(file_id, path.name, "cached", doc["n_chunks"] if doc else 0)
+        return FileReport(file_id, path.name, "cached", doc["n_chunks"], stored_filename=doc["filename"], quality=quality_summary(doc.get("lineage", {})))
 
     units = load_document(path,expected_language=expected_language,encoding=encoding)
     if not units or not any(unit.content.strip() for unit in units):
@@ -87,8 +114,12 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
 
     lineage: Dict[str,Any] = {"preprocessing":preprocessing,"chunker": asdict(chunker_config or CONFIG.chunker), "embedding": {
         "backend": CONFIG.embedding.backend, "model": CONFIG.embedding.model_name,
-        "query_instruction": CONFIG.embedding.query_instruction,"revision":CONFIG.embedding.model_revision},
+        "query_instruction": CONFIG.embedding.query_instruction,"revision":CONFIG.embedding.model_revision,
+        "inference_identity": json.loads(store._embedding_signature())},
         "parsers": {name: importlib.metadata.version(name) for name in ("python-docx", "pypdfium2")}}
+    from docmind.language import document_language
+    lineage["language_info"] = document_language(units)
+    lineage["schema_version"] = 2
     chunks: List[Chunk] = []
     lineage["page_quality"] = [{"page":u.metadata.get("page"),"section":u.metadata.get("section"),**u.metadata.get("extraction_quality",{})} for u in units]
     partial = any(u.metadata.get("extraction_quality", {}).get("quarantined") for u in units)
@@ -103,7 +134,8 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
             c.metadata["language_info"] = language_info(c.content)
             c.file_id = file_id
             c.ord = len(chunks)           # global position within the file
-            c.metadata = {**c.metadata, "file_id": file_id, "lineage": lineage}
+            c.metadata = {**c.metadata, "file_id": file_id, "document_language_info": lineage["language_info"],
+                          "lineage": {"schema_version": 2, "document_ref": file_id, "preprocessing": preprocessing}}
             chunks.append(c)
 
     if not chunks:
@@ -118,7 +150,7 @@ def _ingest_file(path: Path, store: CorpusStore, rebuild: bool, chunker_config=N
         chunks, embeddings,
     )
     logger.info(f"Ingested '{path.name}': {len(units)} units -> {len(chunks)} chunks (file_id={file_id})")
-    return FileReport(file_id, path.name, "reingested" if existed else "ingested", len(chunks))
+    return FileReport(file_id, path.name, "reingested" if existed else "ingested", len(chunks), stored_filename=path.name, quality=quality_summary(lineage))
 
 
 def ingest(

@@ -1,0 +1,122 @@
+import asyncio
+import json
+import time
+from types import SimpleNamespace
+
+import pytest
+from fastapi.testclient import TestClient
+
+from docmind.agent.reader import CitedReader
+from docmind.config import CONFIG
+from docmind.llm.execution import DeadlineExceeded
+from docmind.llm.demo import DemoLLM
+from docmind.models import Chunk, SearchResult
+from docmind.review.store import ReviewStore
+
+
+def source():
+    return SearchResult(Chunk('The shutdown valve closes within two seconds.', 'd', 'manual.pdf', 0,
+        metadata={'page': 1, 'language_info': {'language': 'en'}, 'document_language_info': {'language': 'en'}},
+        file_id='manual', chunk_id='exact-id'), 1, 'dense')
+
+
+class Retriever:
+    def search(self, question, file_ids=None):return [source()]
+    def is_empty(self):return False
+
+
+class AsyncReader:
+    def __init__(self):self.active = 0; self.peak = 0
+    async def acomplete(self, messages, **kwargs):
+        self.active += 1; self.peak = max(self.peak, self.active)
+        try:
+            await asyncio.sleep(.05)
+            return json.dumps({'claims': [{'text': 'Two seconds.', 'evidence': [
+                {'chunk_id': 'exact-id', 'quote': source().chunk.content}]}]})
+        finally:self.active -= 1
+
+
+def test_concurrent_requests_are_independent_and_unblocked(monkeypatch):
+    monkeypatch.setattr('docmind.language.language_info', lambda text: {'language': 'en'})
+    backend = AsyncReader(); reader = CitedReader(Retriever(), backend)
+    async def exercise():
+        return await asyncio.gather(*(reader.arun(f'Closing time question {i}') for i in range(4)))
+    results = asyncio.run(exercise())
+    assert backend.peak == 4
+    assert len({r.response_id for r in results}) == 4
+    assert all(r.llm_calls == 1 and r.release_state == 'draft' for r in results)
+    assert all(r.evidence[0]['text'] == source().chunk.content for r in results)
+    reviews = ReviewStore()
+    for result in results:
+        assert reviews.record(result) == 'draft'
+        saved = reviews.get(result.response_id)
+        assert saved['response_info']['evidence'] == result.evidence
+    assert reviews.pending() == []
+    assert reviews.decide(results[0].response_id, 'edited', 'human', 'Three seconds.')
+
+
+def test_real_short_language_veto():
+    from tests.test_draft_release import response
+    from docmind.review.release import apply_policy
+    assert apply_policy(response()).release_state == 'draft'
+    for text in ('Deux secondes.', 'Zwei Sekunden.', 'Kaksi sekuntia.'):
+        assert 'answer_language_unvalidated' in apply_policy(response(text)).hold_reasons
+
+
+def test_deadline_cancels_async_reader():
+    class Slow:
+        async def acomplete(self, messages, **kwargs):await asyncio.sleep(10)
+    with pytest.raises((DeadlineExceeded, TimeoutError)):
+        CitedReader(Retriever(), Slow(), deadline_seconds=.02).run('How long?')
+
+
+def test_current_api_persists_quotes_and_hides_held_evidence(monkeypatch):
+    import docmind.api.main as m
+    monkeypatch.setenv('DOCMIND_API_KEY', 'test-key')
+    monkeypatch.setattr('docmind.language.language_info', lambda text: {'language': 'en'})
+    monkeypatch.setattr(m, '_agent', CitedReader(Retriever(), DemoLLM()))
+    client = TestClient(m.app, headers={'X-API-Key': 'test-key'})
+    item = client.post('/query', json={'question': 'What is the closing time?'}).json()
+    assert item['review_status'] == 'draft' and item['evidence']
+    fetched = client.get('/responses/' + item['response_id']).json()
+    assert fetched['evidence'] == item['evidence']
+    assert fetched['attribution_status'] == 'citation_found_support_not_verified'
+    monkeypatch.setattr(CONFIG.review, 'release_mode', 'strict')
+    monkeypatch.setattr(CONFIG.review, 'hold_until_approved', False)
+    held = client.post('/query', json={'question': 'What is the closing time?'}).json()
+    assert held['review_status'] == 'pending' and not held['evidence'] and not held['sources']
+    assert 'two seconds' not in held['answer'].lower()
+
+
+def test_frozen_and_adaptive_loops_have_separate_retrieval_contracts(monkeypatch, scripted):
+    from docmind.agent.reader import CitedReActReader
+    monkeypatch.setattr('docmind.language.language_info', lambda text: {'language': 'en'})
+    class Counting(Retriever):
+        def __init__(self):self.queries = []
+        def search(self, question, file_ids=None):
+            self.queries.append(question);return super().search(question, file_ids)
+    final = json.dumps({'claims': [{'text': 'Two seconds.', 'evidence': [
+        {'chunk_id': 'exact-id', 'quote': source().chunk.content}]}]})
+    for adaptive in (False, True):
+        retrieval = Counting()
+        backend = scripted(['Thought: Search again.\nAction: search_documents("closing time")', 'Final Answer: ' + final])
+        result = CitedReActReader(retrieval, backend, adaptive=adaptive).run('How long?')
+        assert result.llm_calls == 2 and result.release_state == 'draft'
+        assert len(retrieval.queries) == (2 if adaptive else 1)
+
+
+def test_api_cancels_stalled_upstream_and_returns_504(monkeypatch):
+    import docmind.api.main as m
+    cancelled=[]
+    class Stalled:
+        async def acomplete(self, messages, **kwargs):
+            try:await asyncio.sleep(20)
+            finally:cancelled.append(True)
+    monkeypatch.setenv('DOCMIND_API_KEY', 'test-key')
+    monkeypatch.setenv('DOCMIND_QUERY_TIMEOUT_SECONDS', '.05')
+    monkeypatch.setattr(m, '_agent', CitedReader(Retriever(), Stalled()))
+    client=TestClient(m.app, headers={'X-API-Key':'test-key'})
+    started=time.monotonic()
+    response=client.post('/query',json={'question':'What is the closing time?'})
+    assert response.status_code==504 and time.monotonic()-started < 2
+    assert cancelled==[True]

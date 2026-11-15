@@ -1,5 +1,5 @@
 """
-Semantic Chunker: the most important differentiator from naive RAG.
+Experimental semantic chunker; recursive chunking is the new-corpus default.
 
 The core idea: sentences within the same topic have high cosine similarity
 in embedding space. When we see a sharp drop in similarity between adjacent
@@ -44,8 +44,11 @@ def _find_breakpoints(sentences: List[str], config=None, embedding_model=None) -
 
     cfg = config or CONFIG.chunker
     model = embedding_model or get_embedding_model()
+    inputs = sentences
+    if CONFIG.embedding.backend != "hash" and CONFIG.embedding.model_name.startswith("intfloat/multilingual-e5"):
+        inputs = ["passage: " + sentence for sentence in sentences]
     embeddings = model.encode(
-        sentences,
+        inputs,
         batch_size=CONFIG.embedding.batch_size,
         normalize_embeddings=True,
         show_progress_bar=False,

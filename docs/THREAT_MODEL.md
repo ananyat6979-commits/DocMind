@@ -10,7 +10,7 @@ The UI delegates authority to the API and has no library volume or generation ke
 
 The separate parser receives bytes over a bounded Unix socket. Its container has no application volume or credential mount. It runs without network-family sockets, Linux capabilities or writable application files, and has bounded memory, CPU, process count, wall time and output. Environment construction uses an allowlist. The container workflows exercise isolation, recovery and transport equivalence. A local native parser is resource-limited trusted-input development mode and has no filesystem/network sandbox.
 
-Document text is serialized as untrusted JSON. This serialization is not a prompt-injection proof. Evidence attribution, citation disambiguation and human review add checks but cannot establish safety against arbitrary documents. Model artifacts are pinned and remote model code is disabled in the local reader. Dependency and model revisions are part of fresh measurement identities.
+Document text is serialized as untrusted JSON. This serialization is not a prompt-injection proof. Unique quote location, citation disambiguation and human review add checks but cannot establish safety against arbitrary documents. The default shows eligible unverified drafts; quoted text can still contradict or fail to support a claim. NLI diagnostics cannot release or withhold a draft. Strict human approval is an administrator setting. Real evidence failures and unvalidated languages remain held; complete-document abstentions are visible as potentially missed retrieval. Model artifacts are pinned and remote model code is disabled in the local reader. Dependency and model revisions are part of fresh measurement identities.
 
 ## Residual risks
 

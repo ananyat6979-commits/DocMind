@@ -41,7 +41,19 @@ def run_bounded(arguments, timeout=60):
         if process.stdout is not None: process.stdout.close()
 
 
-def handle(stream):
+class ReceiveDeadline:
+    def __init__(self, stream, deadline):
+        self.stream, self.deadline = stream, deadline
+    def recv(self, count):
+        remaining = self.deadline - time.monotonic()
+        if remaining <= 0:raise TimeoutError("Total parser receive deadline exceeded")
+        if hasattr(self.stream, "settimeout"):self.stream.settimeout(remaining)
+        return self.stream.recv(count)
+
+
+def handle(stream, receive_seconds=10, total_seconds=75):
+    total_deadline = time.monotonic() + total_seconds
+    stream = ReceiveDeadline(stream, min(total_deadline, time.monotonic() + receive_seconds))
     size=struct.unpack("!I",receive_exact(stream,4))[0]
     if not 1<=size<=4096: raise ValueError("Invalid header length")
     header=json.loads(receive_exact(stream,size))
@@ -59,7 +71,9 @@ def handle(stream):
                 chunk=stream.recv(min(remaining,65536))
                 if not chunk: raise ValueError("Truncated input")
                 destination.write(chunk);remaining-=len(chunk)
-        documents=run_bounded([sys.executable,"-m","docmind.ingestion.parse_worker",str(path),language or ""])
+        remaining_time = total_deadline - time.monotonic()
+        if remaining_time <= 0:raise TimeoutError("Total parser connection deadline exceeded")
+        documents=run_bounded([sys.executable,"-m","docmind.ingestion.parse_worker",str(path),language or ""], timeout=min(60, remaining_time))
         return {"ok":True,"documents":documents}
 
 
@@ -74,11 +88,13 @@ def main():
         while True:
             stream,_=server.accept()
             with stream:
-                stream.settimeout(65)
+                connection_deadline=time.monotonic()+75
+                stream.settimeout(10)
                 try: result=handle(stream)
                 except Exception: result={"ok":False,"error":"Document rejected or resource limit exceeded"}
                 encoded=json.dumps(result,ensure_ascii=True).encode()
                 if len(encoded)>MAX_OUTPUT: encoded=b'{"ok":false,"error":"Output limit exceeded"}'
+                stream.settimeout(max(.01, connection_deadline-time.monotonic()))
                 try: stream.sendall(struct.pack("!I",len(encoded))+encoded)
                 except OSError: pass
 

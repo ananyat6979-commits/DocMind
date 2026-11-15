@@ -18,6 +18,14 @@ class DemoLLM(BaseLLM):
     is_demo = True
 
     def complete(self, messages: List[Dict[str, str]], stop=None, **kwargs) -> str:
+        if any('Return only JSON.' in m['content'] for m in messages if m['role'] == 'system'):
+            payload = json.loads(messages[-1]['content'])
+            evidence = payload.get('untrusted_evidence', [])
+            if not evidence:
+                return json.dumps({'abstained': True, 'claims': []})
+            passage = evidence[0]
+            quote = passage['text'][:400]
+            return json.dumps({'short_answer': quote[:128], 'claims': [{'text': quote, 'evidence': [{'chunk_id': passage['chunk_id'], 'quote': quote}]}]}, ensure_ascii=False)
         observations = [m["content"] for m in messages if m["role"] == "user" and m["content"].startswith("Observation:")]
         if not observations:
             q = re.search(r"Question:\s*(.*?)\n", messages[-1]["content"] + "\n", re.S)

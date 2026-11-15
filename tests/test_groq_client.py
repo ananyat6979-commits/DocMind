@@ -49,13 +49,15 @@ def groq(monkeypatch):
     return FakeGroq
 
 
-def test_missing_model_error_lists_what_the_key_can_use(groq, monkeypatch):
+def test_missing_model_error_does_not_make_an_implicit_network_request(groq, monkeypatch):
     monkeypatch.setattr(CONFIG.llm, "groq_model", "")
-    with pytest.raises(ValueError) as e:
+    class NoNetwork(groq):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.models.list = lambda: pytest.fail("Implicit model listing is outside the query deadline")
+    monkeypatch.setattr(sys.modules["groq"], "Groq", NoNetwork)
+    with pytest.raises(ModelUnavailable, match="DOCMIND_LLM_MODEL"):
         GroqLLM()
-    msg = str(e.value)
-    assert "DOCMIND_LLM_MODEL" in msg and "model-a" in msg and "model-b" in msg
-    assert "whisper" not in msg and "tts" not in msg and "guard" not in msg      # non-chat models filtered
 
 
 def test_retired_model_gives_actionable_error_not_a_raw_404(groq):
@@ -209,4 +211,4 @@ def test_chunker_env_switch(monkeypatch):
     monkeypatch.setenv("DOCMIND_CHUNKER", "fixed")
     assert c.DocMindConfig().chunker.strategy == "fixed"
     monkeypatch.delenv("DOCMIND_CHUNKER")
-    assert c.DocMindConfig().chunker.strategy == "semantic"
+    assert c.DocMindConfig().chunker.strategy == "recursive"

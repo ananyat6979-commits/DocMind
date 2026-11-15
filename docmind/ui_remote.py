@@ -45,7 +45,7 @@ def render():
         documents=request("GET","/documents")
         for document in documents:
             if document.get("lineage",{}).get("partial_document"):
-                st.warning(document["filename"]+": some pages were quarantined; answers require review.")
+                st.warning(document["filename"]+": some pages were quarantined; answers cover readable pages only.")
         if "ingestor" in roles:
             uploaded=st.sidebar.file_uploader("Add a document",type=["pdf","docx","txt","md"])
             if uploaded is not None and st.sidebar.button("Upload document"):
@@ -54,6 +54,14 @@ def render():
             if st.session_state.get("ingestion_job") and st.sidebar.button("Check upload status"):
                 job=request("GET","/ingest/jobs/"+st.session_state.ingestion_job)
                 st.sidebar.write(job["status"])
+                if job.get("error_detail"):st.sidebar.warning(job["error_detail"].get("action", job["error_detail"].get("message")))
+                if job.get("result"):
+                    for item in json.loads(job["result"]).get("files", []):
+                        st.sidebar.write(item["filename"] + ": " + item["status"])
+                        if item.get("stored_filename") != item["filename"]:
+                            st.sidebar.caption("Cached in library as " + item.get("stored_filename", ""))
+                        missing=item.get("quality", {}).get("quarantined_pages", [])
+                        if missing:st.sidebar.warning("Quarantined pages: " + ", ".join(map(str, missing)))
         if "admin" in roles and documents:
             chosen=st.sidebar.selectbox("Document to remove",documents,format_func=lambda d:d["filename"])
             if st.sidebar.button("Remove document"):
@@ -73,6 +81,17 @@ def render():
             st.text(result["question"])
             st.text(result["answer"])
             st.caption(result["review_status"])
+            if result.get("release_state") == "draft":
+                st.caption("Unverified draft. Citation found; automated support has not been established.")
+            for document in result.get("document_context", {}).get("documents", []):
+                if document.get("quarantined_pages"):
+                    st.warning(document["filename"] + ": unreadable pages " + ", ".join(map(str, document["quarantined_pages"])))
+            for warning in result.get("warnings", []):
+                st.warning(warning.replace("_", " "))
+            for evidence in result.get("evidence", []):
+                if evidence.get("status") in ("literal", "normalized"):
+                    st.text(evidence.get("quote", evidence.get("text", "")))
+                    st.caption(str(evidence.get("filename", "")) + " | page " + str(evidence.get("page", "")))
             for source in result["sources"]:
                 with st.expander(source["filename"]):st.text(source["content_preview"])
             if st.button("Refresh response",key="refresh_"+response_id):st.rerun()

@@ -38,7 +38,7 @@ Embedding signatures now include model revision. Existing corpora without compat
 
 ## E5 dense default
 
-The measured English/Hindi component release defaults to pinned multilingual E5-small with dense retrieval. Existing BGE vectors, even with 384 dimensions, are a different representation. The identity also includes inference-library versions. `/ready` and `/query` return 503 when a nonempty corpus does not match the active identity; the original documents remain listed.
+The measured English/Hindi component release defaults to pinned multilingual E5-small with dense retrieval. Existing BGE vectors, even with 384 dimensions, are a different representation. The identity records inference-library versions for provenance. Version-only changes now warn and require fresh baselines rather than causing a read outage. Representation changes still make `/ready` and `/query` return 503; the original documents remain listed.
 
 Keep the old store and authorized uploads for rollback. Create an isolated `DOCMIND_HOME` for the new corpus and re-ingest retained source files through the authenticated ingestion path. For Compose, stop the old stack while retaining its volumes, then start a separately named project such as `docker compose -p docmind-e5 up --build`. Re-upload authorized source files to its new API library. Historical responses and review labels remain associated with their original inputs.
 
@@ -55,3 +55,16 @@ The new parser equivalence manifest is `reports/releases/r2/parser_equivalence_q
 ## Answer-language review gate
 
 Fresh query routing checks the generated answer as well as the question and evidence. Citation metadata is removed before language detection. A non-English or uncertain linguistic answer receives `answer_language_unvalidated`; numbers-only values are language-neutral but still pass the existing citation and attribution checks. Short linguistic answers can therefore require review. This change does not establish language-detector accuracy, real-PDF withholding rates or Hindi claim support. Stored responses retain their recorded status. Re-query or re-review old automatic responses when applying the new policy; existing human approvals are not revoked automatically by a detector update.
+
+
+## Quoted draft policy
+
+New answers carry `release_policy_version=cited-draft-v1`, `release_state`, `warnings`, `evidence` and `document_context`. Eligible answers have review status `draft`, never `auto_approved`; this is not human gold. Existing stored records keep their policy and decisions. A reviewer may approve, edit or reject a draft explicitly. Edited answers expose neither stale quote matches nor old attribution. Approved/edited records alone are eligible for reviewed-label export.
+
+The default single-call reader replaces the serialized interactive loop. `DOCMIND_ANSWER_STRATEGY=react` selects the bounded frozen-evidence control. `DOCMIND_RELEASE_MODE=strict` holds all fresh answers for human approval. A hard hold hides both text and quotes, regardless of the legacy visibility setting. Quota, availability and deadline failures return 429, 503 and 504 respectively. Hosted calls use explicit async I/O and disabled SDK retries; native retrieval and optional diagnostics use bounded workers.
+
+Recursive chunking applies to a new empty corpus. Existing corpus ingestion inherits its recorded recipe unless explicitly supplied. Cached documents retain chunk IDs and old full metadata remains readable. An explicit rebuild/re-chunk creates new chunk identities and invalidates dependent answers; this is not re-embedding. There is no automatic atomic re-embedding command. Preserve the original store, reviews and uploads, and build a separate corpus using the recovery procedure above.
+
+Extraction quality v3 permits only recognized line-leading Word bullet glyphs followed by text. Other private-use corruption remains quarantined. Cached v2 extraction remains readable with its original metadata; reprocessing is explicit. Historical neural measurements do not validate changed extraction.
+
+The fresh v3 parser equivalence manifest is `reports/releases/r4/parser_equivalence_quality_v3.json`. It compares current extraction only and does not retroactively validate historical downstream outputs.

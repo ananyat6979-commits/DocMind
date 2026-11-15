@@ -50,7 +50,8 @@ if _APP_PASSWORD and not st.session_state.get("authed"):
     st.stop()
 
 STATUS_BADGE = {
-    "auto_approved": "Auto-approved",
+    "auto_approved": "Legacy automatic release",
+    "draft": "Unverified cited draft",
     "pending": "Awaiting human review",
     "approved": "Approved by reviewer",
     "edited": "Corrected by reviewer",
@@ -60,10 +61,10 @@ STATUS_BADGE = {
 
 @st.cache_resource
 def get_services():
-    from docmind.agent.react import ReActAgent
+    from docmind.agent.reader import CitedReader
     from docmind.retrieval.hybrid import HybridRetriever
     store = CorpusStore()
-    return {"store": store, "agent": ReActAgent(retriever=HybridRetriever(store)),
+    return {"store": store, "agent": CitedReader(retriever=HybridRetriever(store)),
             "reviews": ReviewStore(), "events": EventLog()}
 
 
@@ -141,7 +142,7 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    st.caption("Pipeline: semantic chunks, FAISS + BM25, RRF, cross-encoder rerank, ReAct agent with citation verification.")
+    st.caption("Cited drafts with quoted evidence. Recursive chunks and dense retrieval for new corpora; optional retrieval modes are experimental.")
     if st.button("Clear history"):
         st.session_state.history = []
         st.rerun()
@@ -187,7 +188,7 @@ with tab_ask:
         for resp in reversed(st.session_state.history):
             status = reviews.status_of(resp.response_id) or "unavailable"
             st.markdown(f"**Q: {resp.query}**")
-            hold = status not in ("approved", "edited", "auto_approved")
+            hold = status not in ("approved", "edited", "auto_approved", "draft")
             if hold:
                 st.info("This answer is hidden until a reviewer decides." if status == "pending" else "This response is rejected or no longer available.")
             else:
@@ -203,14 +204,20 @@ with tab_ask:
                        f"{STATUS_BADGE.get(status, status)}"
                        + (f" | citation labels matched {v:.0%}" if v is not None else ""))
 
+            if not hold and status != "edited":
+                for evidence in resp.evidence:
+                    if evidence.get("status") in ("literal", "normalized"):
+                        st.text(evidence["text"])
+                        st.caption("Quoted from " + evidence["filename"] + "; support is not independently verified.")
+                for warning in resp.warnings:st.warning(warning.replace("_", " "))
             attribution = resp.citation_report.get("attribution")
             if attribution and not hold and status != "edited":
                 with st.expander("Claim evidence checks"):
                     if attribution.get("error"):
-                        st.info("Evidence checking is unavailable. Human review is required.")
+                        st.info("Automated support check unavailable. This draft is unverified.")
                     for claim in attribution.get("claims", []):
                         st.markdown(claim["claim"])
-                        st.caption("Supported by the evidence check" if claim["supported"] else "Support was not established")
+                        st.caption("Model support judgment, not human verification" if claim["supported"] else "Support was not established")
                         if claim.get("quote"):
                             st.text(claim["quote"])
                             st.caption(f"Evidence characters {claim['start']} to {claim['end']}")
