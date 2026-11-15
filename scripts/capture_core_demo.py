@@ -100,7 +100,7 @@ def capture(out):
             shot(page,'4 / 6  Inspect the quoted passage and retrieved source')
             question.fill('पुस्तकालय की सामान्य ऋण अवधि कितने दिन है?')
             page.get_by_role('button',name='Ask',exact=True).click()
-            page.get_by_text('This answer is awaiting human review.',exact=True).wait_for(timeout=60000)
+            page.get_by_text('This response is not released.',exact=True).wait_for(timeout=60000)
             shot(page,'5 / 6  The unvalidated Hindi answer stays held')
             access.fill(credentials['keys']['reviewer']);access.press('Enter')
             page.get_by_text('Signed in as demo-reviewer',exact=True).wait_for(timeout=60000)
