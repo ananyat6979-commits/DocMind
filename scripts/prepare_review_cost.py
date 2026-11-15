@@ -47,7 +47,7 @@ def prepare(directory,output):
     encoded=json.dumps(items,ensure_ascii=True,separators=(',',':'));sha=hashlib.sha256(encoded.encode()).hexdigest()
     packet={'sha256':sha,'items':items}
     output.parent.mkdir(parents=True,exist_ok=True)
-    output.write_text(HTML.replace('__DATA__',json.dumps(packet,ensure_ascii=True).replace('<','\u003c')),encoding='utf-8')
+    output.write_text(HTML.replace('__DATA__',json.dumps(packet,ensure_ascii=True).replace('<',chr(92)+'u003c')),encoding='utf-8')
     output.with_suffix('.private-key.json').write_text(json.dumps({'packet_sha256':sha,'selection_seed':17,'sampling':'Equal six-per-score-quartile sample plus all missing-score items; layouts assigned within evidence-length pairs, practice excluded','records':key},indent=2),encoding='utf-8')
     return {'packet_sha256':sha,'items':len(items),'practice':2,'cap_minutes':20}
 

@@ -66,6 +66,12 @@ class ReviewStore:
     def record(self, resp: AgentResponse, user: str = "anonymous") -> str:
         status = "pending" if resp.needs_review else "auto_approved"
         with connect(self.db_path) as conn:
+            from docmind.postgres import Connection
+            if isinstance(conn,Connection):
+                conn.corpus_lock(shared=True)
+                for source in resp.sources:
+                    if not conn.execute("SELECT 1 FROM chunks WHERE chunk_id=? AND file_id=?",(source.chunk.chunk_id,source.chunk.file_id)).fetchone():
+                        raise ValueError("Corpus changed during answer generation; retry the query")
             conn.execute(
                 "INSERT OR REPLACE INTO reviews(response_id, created_at, user, question, answer, sources_json,"
                 " reasons_json, status, response_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",

@@ -71,12 +71,13 @@ def migrate(admin_dsn,runtime_role,runtime_password,tenants):
         conn.execute("REVOKE ALL ON api_quota FROM PUBLIC")
         conn.execute("""CREATE OR REPLACE FUNCTION take_quota(key_hash TEXT,ip_hash TEXT,key_limit INTEGER,ip_limit INTEGER)
         RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER SET search_path=docmind,pg_catalog AS $$
-        DECLARE stamp DOUBLE PRECISION := EXTRACT(EPOCH FROM clock_timestamp()); item TEXT; maximum INTEGER; values_now DOUBLE PRECISION[];
+        DECLARE stamp DOUBLE PRECISION; item TEXT; maximum INTEGER; values_now DOUBLE PRECISION[];
         BEGIN
           IF key_limit<1 OR ip_limit<1 OR length(key_hash)<>64 OR length(ip_hash)<>64 THEN RETURN false; END IF;
           PERFORM pg_advisory_xact_lock(7628143952);
+          stamp := EXTRACT(EPOCH FROM clock_timestamp());
           DELETE FROM api_quota WHERE times[array_length(times,1)]<=stamp-60;
-          IF (SELECT count(*) FROM api_quota)>2000 THEN RETURN false; END IF;
+          IF (SELECT count(*) FROM api_quota)+(NOT EXISTS(SELECT 1 FROM api_quota WHERE identity='key:'||key_hash))::integer+(NOT EXISTS(SELECT 1 FROM api_quota WHERE identity='ip:'||ip_hash))::integer>2000 THEN RETURN false; END IF;
           FOR item,maximum IN SELECT 'key:'||key_hash,key_limit UNION ALL SELECT 'ip:'||ip_hash,ip_limit LOOP
             SELECT ARRAY(SELECT t FROM unnest(times) t WHERE t>stamp-60) INTO values_now FROM api_quota WHERE identity=item;
             IF coalesce(array_length(values_now,1),0)>=maximum THEN RETURN false; END IF;

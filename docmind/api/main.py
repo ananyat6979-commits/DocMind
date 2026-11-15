@@ -312,7 +312,9 @@ def query(req: QueryRequest, request: Request):
         logger.exception("Agent query failed")
         raise HTTPException(status_code=500, detail="Query failed; consult server logs")
 
-    status = get_reviews().record(resp, user=request.state.principal.actor_id)
+    try:status = get_reviews().record(resp, user=request.state.principal.actor_id)
+    except ValueError:
+        raise HTTPException(status_code=409,detail="Corpus changed during answer generation; retry the query")
     get_events().log("query", user=request.state.principal.actor_id, response_id=resp.response_id, latency_ms=round(resp.latency_ms),
                    llm_calls=resp.llm_calls, abstained=resp.abstained, needs_review=resp.needs_review,
                    n_sources=len(resp.sources), finish=resp.finish_reason,

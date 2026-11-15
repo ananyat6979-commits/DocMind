@@ -189,3 +189,12 @@ def test_terminated_claimant_is_recovered_by_another_process(scopes,tmp_path):
     time.sleep(.4)
     recovered=IngestionQueue(scopes[0])._claim()
     assert recovered and recovered[0]['job_id']==job
+
+
+def test_deleted_sources_cannot_be_recorded_as_new_answers(scopes):
+    from docmind.models import SearchResult
+    from docmind.services import erase_document
+    store=CorpusStore(scopes[0]);chunk,_=add(store)
+    response=AgentResponse('300',[SearchResult(chunk,1,'dense')],[],'temperature?',1)
+    assert erase_document(chunk.file_id,store=store)
+    with pytest.raises(ValueError,match='Corpus changed'):ReviewStore(scopes[0]).record(response,'reader')
