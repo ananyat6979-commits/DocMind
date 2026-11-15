@@ -26,3 +26,10 @@ python scripts/plot_calibration_closure.py reports/releases/r3/calibration
 `executed_source.json` identifies every executed public source file from commit `3519c1d9ce16efea830114a3c017e75ce892b52b`. The private result archive was checked against all 59 file hashes before publication. Original source paragraphs, reference answers, the blinded review packet and raw review exports stay outside Git. Public question IDs, generated short answers, machine-computed benchmark labels, protocol metadata and aggregate statistics support traceability. The elapsed free T4 session was 981.46 seconds including setup; both allocated devices remain covered by the private compute ledger. There were no hosted-provider calls.
 
 Source: [HotpotQA dataset](https://huggingface.co/datasets/hotpotqa/hotpot_qa), pinned dataset revision `1908d6afbbead072334abe2965f91bd2709910ab`, validation parquet SHA-256 `c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6`. The dataset declares CC BY-SA 4.0. Credit HotpotQA authors and underlying Wikipedia contributors; source redistribution and attribution obligations still apply. Public answer labels were not independently human-reviewed for this study. Historical results are unchanged.
+
+
+A post-hoc paired comparison on the same 118 answers with both scores found token-confidence AUROC 0.759 versus verifier AUROC 0.562, difference 0.197 [0.086, 0.303] under a nominal paired stratified bootstrap. This distinguishes feature ranking, not release risk. All gold article titles appeared in the top five for 108 held-out questions, yet only 32 matched the reference exactly. Title coverage does not establish that the needed sentence survived the evidence cap. The [failure diagnostics](failure_analysis.json) preserve that limit. Recompute with the pinned source parquet:
+
+```sh
+python scripts/analyze_calibration_closure.py reports/releases/r3/calibration --source reports/hotpot/source/validation.parquet --allow-download
+```

@@ -1,0 +1,52 @@
+{
+  "reference_validation": "All 256 public predictions rescored against the pinned public dataset; exact-match and token-F1 agree. No human labels inferred.",
+  "source_sha256": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+  "article_title_diagnostic": {
+    "calibration": {
+      "requested": 128,
+      "all_gold_article_titles_in_top5": {
+        "n": 102,
+        "exact_match_correct": 34,
+        "exact_match": 0.3333333333333333
+      },
+      "missing_at_least_one_gold_article_title": {
+        "n": 26,
+        "exact_match_correct": 2,
+        "exact_match": 0.07692307692307693
+      },
+      "abstained": 14,
+      "truncated": 3
+    },
+    "heldout": {
+      "requested": 128,
+      "all_gold_article_titles_in_top5": {
+        "n": 108,
+        "exact_match_correct": 32,
+        "exact_match": 0.2962962962962963
+      },
+      "missing_at_least_one_gold_article_title": {
+        "n": 20,
+        "exact_match_correct": 4,
+        "exact_match": 0.2
+      },
+      "abstained": 7,
+      "truncated": 3
+    }
+  },
+  "article_title_scope": "Post-hoc source-title coverage only. Does not check which supporting sentence survived the 384-token evidence cap or whether a complete multi-hop answer is derivable.",
+  "paired_ranking_common_rows": {
+    "n": 118,
+    "auroc": {
+      "token_confidence": 0.7588075880758808,
+      "verification_score": 0.5621612466124661
+    },
+    "token_minus_verifier": 0.19664634146341464,
+    "stratified_paired_bootstrap95_nominal": [
+      0.08637364498644991,
+      0.30284552845528456
+    ],
+    "seed": 7,
+    "resamples": 2000,
+    "scope": "Exploratory comparison on identical candidate answers with both scores; no held-out threshold selection"
+  }
+}
