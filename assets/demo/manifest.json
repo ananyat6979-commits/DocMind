@@ -1,0 +1,38 @@
+{
+  "scope": "Actual Streamlit/API workflow, synthetic sources, pinned E5 retrieval and extractive demo generation; not generative QA quality or a production SLA",
+  "frame_descriptions": [
+    "1 / 6  Authenticated document library with synthetic English and Hindi sources",
+    "2 / 6  Ask a question over the document library",
+    "3 / 6  A visible draft is explicitly unverified",
+    "4 / 6  Inspect the quoted passage and retrieved source",
+    "5 / 6  The unvalidated Hindi answer stays held",
+    "6 / 6  Authorized reviewer view; the item is still pending"
+  ],
+  "display_duration_ms": 75000,
+  "hosted_calls": 0,
+  "human_decisions": 0,
+  "paid_compute": false,
+  "embedding_model": "intfloat/multilingual-e5-small",
+  "embedding_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "script_sha256": "be74f10021e735eb18109ec140a55f84ef203aa5d4d1f2e3a9123f2cc570640a",
+  "source_commit": "67074b079554ba3f26670702b3de95417740cfd0",
+  "gif_sha256": "4406454e569e93ae192015900e7a11faaccb9caf4978fd816aff2cd80a7c9565",
+  "ui_frame_sha256": {
+    "ui-5.png": "17b57060149eb7f81029b7f7cf7843b32ee4310693009a1090d6b29e716e5873",
+    "ui-4.png": "3e3d327d2a64e1ac2821b6a47070490480f3e77e780f2d0a72fd593206c37b4b",
+    "ui-3.png": "2bea3f2c8f2aa33fbca5d32668b181d962b1afb8993f749e3871a8e250a084d0",
+    "ui-1.png": "64a357e462f19bfb97a82dfbfc9c443c50ab13dd9a116e1aa93685f4a9043c36",
+    "ui-2.png": "da651f96b0395e75b130f8872712fe1021aa1e90b3a7beda67aa097410b3995d",
+    "ui-6.png": "9e33d0eec66bef6e2caf47a6bbb6b33a2bd6bd326e79e469c28cbb0876f14d35"
+  },
+  "captions_are_not_app_ui": true,
+  "frame_sha256": {
+    "frame-4.png": "d3541ffaab690e7adb86e0943a3aff3b2edcaf7499ddae37bb9554e0266fec31",
+    "frame-2.png": "85d520f2929d1ca4b3b476e589c423991d39f3bc2fc68727ffa788321f746666",
+    "frame-5.png": "0284c6d1c887fa5d4a90a48159698bc0531afa2d575bc40ef9da4b4621aa61d2",
+    "frame-6.png": "9e2ede24eae549cf1ed468586649b5880f002f21e2e3d5df34d4c767ccc61046",
+    "frame-1.png": "00a87ba29bf134450c2512e41a9563c6dfb3127da7092715b1b2179fe55d1ba4",
+    "frame-3.png": "77c3ad2235128343f945f070f72050abb2116d936fec5465cf885451aa046c23"
+  },
+  "capture_elapsed_seconds": 20.694482945000004
+}

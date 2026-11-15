@@ -10,6 +10,12 @@ See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh com
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
+## Workflow demo
+
+![Real 75-second document workflow](assets/demo/docmind-workflow.gif)
+
+Actual UI capture with synthetic documents, real E5 retrieval and an offline extractive reader. Added headings are presentation captions. [Plain screenshots and provenance](assets/demo/README.md) are separate; this demonstration does not measure generative answer quality.
+
 ## Measured results
 
 Runs used available local compute and private free-tier T4 notebooks. No paid inference or compute was purchased. Intervals below are 95%; see the [technical write-up](docs/EVALUATION.md) for protocols, baselines, splits and limitations.

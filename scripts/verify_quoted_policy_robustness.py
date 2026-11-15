@@ -30,7 +30,9 @@ def verify(root):
     source=read('executed_source.json');manifest=read('manifest.json');usage=read('compute_usage.json')
     assert source['sha256']['scripts/quoted_policy_robustness.py']==manifest['script_sha256']
     assert source['source_commit']==usage['source_commit']
-    assert usage['session_ceiling_seconds']==1800 and usage['elapsed_seconds_including_setup']<=1800
+    assert usage['session_ceiling_seconds'] in (1200,1800)
+    assert usage['elapsed_seconds_including_setup']<=usage['session_ceiling_seconds']
+    assert usage['reserved_gpu_seconds']==2*usage['session_ceiling_seconds']
     assert len(usage['allocated_devices'])==2 and not usage['paid_compute']
     for name,sha in read('publication_manifest.json')['sha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==sha
     return {'requested':180,'attempted':len(records),'verified':True}
