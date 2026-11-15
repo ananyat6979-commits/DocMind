@@ -10,6 +10,8 @@ See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh com
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
+[Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) · [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
+
 ## Workflow demo
 
 ![Real 75-second document workflow](assets/demo/docmind-workflow.gif)
