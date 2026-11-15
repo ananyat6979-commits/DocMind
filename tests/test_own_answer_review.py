@@ -14,3 +14,16 @@ def test_packet_contains_real_answers_but_hides_routing_and_automatic_scores(tmp
     assert 'release_state' not in packet and 'invalid_citation' not in packet and 'score' not in packet
     linkage=json.loads((root/'actual-answer-linkage.private.json').read_text())
     assert linkage[0]['release_state']=='held'
+
+
+def test_timed_partial_review_never_invents_labels_or_population_risk():
+    from scripts.analyze_own_answer_review import summarize
+    import pytest
+    packet={'sha256':'p','cap_seconds':1800,'items':[{'id':'a','claims':[{'id':'c'}]},{'id':'b','claims':[]}]}
+    linkage=[{'id':'a','release_state':'draft'},{'id':'b','release_state':'held'}]
+    labels={'packet_sha256':'p','elapsed_ms':1000,'records':[{'id':'a','finished':True,'human_adjudicated':True,'answer_correctness':'incorrect','claims':{'c':'unsupported'}}]}
+    result=summarize(packet,linkage,labels)
+    assert result['unfinished_or_missing']==1 and result['incorrect_reviewed_drafts']==1
+    assert result['false_release_risk']=='insufficient evidence' and result['reviewed_subset_false_release_fraction'] is None
+    labels['records'][0]['claims']={}
+    with pytest.raises(ValueError,match='claim label'):summarize(packet,linkage,labels)
