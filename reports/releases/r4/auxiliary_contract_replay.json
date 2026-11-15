@@ -1,0 +1,107 @@
+{
+  "scope": "Post-hoc same-output auxiliary scoring-field contract replay, no generation retries or human correctness labels",
+  "legacy_source_commit": "500c7e0d7f372007d6ed9af49ac1cfa63428de6f",
+  "repaired_evidence_sha256": "31041ea876e9ea0bb6b2fee85e1ca874645701975b2142af92f8a54c817ea039",
+  "script_sha256": "5971e9a6660f596b168f3665e2c09e3a52ca602c5f2654fcd5f864f92ebef272",
+  "private_input_sha256": {
+    "own_records": "977d4d0bfb57d964527e030fce48205cd78c7870efd358342336cd1ffa50aae3",
+    "docmind-quoted-robustness-results.zip": "a4dd37dbea29df569ce0c922342ec4fe64dcb482f87c358347dbeb42dab15eb6",
+    "docmind-quoted-complete-schema-results.zip": "717cb86b114205649a560f1583667dbbcaeff0a4dcd11f4e94ef00a58f051dfd"
+  },
+  "groups": {
+    "own_documents": {
+      "requested": 19,
+      "unserved_or_failed_not_replayed": 0,
+      "legacy": {
+        "attempted": 19,
+        "format_failures": 5,
+        "drafts": 10,
+        "held": 9,
+        "invalid_metric_fields": 0
+      },
+      "repaired": {
+        "attempted": 19,
+        "format_failures": 0,
+        "drafts": 10,
+        "held": 9,
+        "invalid_metric_fields": 5
+      },
+      "recovered_payloads": 5,
+      "recovered_drafts": 0,
+      "recovered_still_held": 5,
+      "recovered_hold_reason:language_policy_unvalidated": 5
+    },
+    "docmind-quoted-robustness-results": {
+      "requested": 180,
+      "unserved_or_failed_not_replayed": 0,
+      "legacy": {
+        "attempted": 180,
+        "format_failures": 103,
+        "drafts": 58,
+        "held": 122,
+        "invalid_metric_fields": 0,
+        "contaminated_drafts_raw_control_attack": 1,
+        "contaminated_drafts_raw_control_poisoning": 0,
+        "contaminated_drafts_json_current_benign": 0,
+        "contaminated_drafts_json_current_attack": 0,
+        "contaminated_drafts_json_current_poisoning": 0,
+        "contaminated_drafts_raw_control_benign": 0
+      },
+      "repaired": {
+        "attempted": 180,
+        "format_failures": 103,
+        "drafts": 58,
+        "held": 122,
+        "invalid_metric_fields": 0,
+        "contaminated_drafts_raw_control_attack": 1,
+        "contaminated_drafts_raw_control_poisoning": 0,
+        "contaminated_drafts_json_current_benign": 0,
+        "contaminated_drafts_json_current_attack": 0,
+        "contaminated_drafts_json_current_poisoning": 0,
+        "contaminated_drafts_raw_control_benign": 0
+      }
+    },
+    "docmind-quoted-complete-schema-results": {
+      "requested": 180,
+      "unserved_or_failed_not_replayed": 57,
+      "legacy": {
+        "attempted": 123,
+        "format_failures": 4,
+        "drafts": 101,
+        "held": 22,
+        "invalid_metric_fields": 0,
+        "contaminated_drafts_raw_control_attack": 3,
+        "contaminated_drafts_raw_control_poisoning": 0,
+        "contaminated_drafts_json_current_benign": 0,
+        "contaminated_drafts_json_current_attack": 1,
+        "contaminated_drafts_json_current_poisoning": 2,
+        "contaminated_drafts_raw_control_benign": 0
+      },
+      "repaired": {
+        "attempted": 123,
+        "format_failures": 0,
+        "drafts": 103,
+        "held": 20,
+        "invalid_metric_fields": 4,
+        "contaminated_drafts_raw_control_attack": 3,
+        "contaminated_drafts_raw_control_poisoning": 0,
+        "contaminated_drafts_json_current_benign": 0,
+        "contaminated_drafts_json_current_attack": 1,
+        "contaminated_drafts_json_current_poisoning": 2,
+        "contaminated_drafts_raw_control_benign": 0
+      },
+      "recovered_payloads": 4,
+      "recovered_drafts": 2,
+      "recovered_still_held": 2,
+      "recovered_hold_reason:query_language_unvalidated": 2
+    }
+  },
+  "new_model_calls": 0,
+  "new_gpu_seconds": 0,
+  "limitations": [
+    "Development regression after inspecting failures, not independent validation",
+    "Numeric contamination is a heuristic, not semantic correctness or general attack success",
+    "Quote matching does not establish authority, entailment or question relevance",
+    "Changed displayed answers require separate human labels; original review packet and frozen results remain unchanged"
+  ]
+}

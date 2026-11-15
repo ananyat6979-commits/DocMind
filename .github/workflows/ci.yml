@@ -48,3 +48,6 @@ jobs:
 
       - name: Verify bounded complete-schema confirmation
         run: python scripts/verify_quoted_policy_robustness.py reports/releases/r4/quoted_complete_schema_t4
+
+      - name: Verify own-document numeric records
+        run: python scripts/verify_own_document_profile.py reports/releases/r4/own_document_t4

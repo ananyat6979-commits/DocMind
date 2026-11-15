@@ -1,0 +1,11 @@
+{
+  "scope": "Saved-output deterministic diagnosis, no generation retries or output repair",
+  "format_failure_subtypes": {
+    "short_answer_bound": 1,
+    "short_answer_link": 4
+  },
+  "gold_page_in_top_five": 14,
+  "pdf_requested": 17,
+  "page_metric_limit": "A gold page hit does not imply complete supporting evidence was retrieved",
+  "candidate_scores_are_human_correctness": false
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Exploratory diagnostics of the frozen selected cohort; exact-match correctness, not human factual correctness",
+  "groups": {
+    "pdf": {
+      "n": 17,
+      "candidate_em_nominal_wilson95": [
+        0.03287977376379267,
+        0.3433635059488588
+      ],
+      "calls": 17,
+      "input_tokens": 28351,
+      "output_tokens": 4803,
+      "summed_question_elapsed_seconds": 457.83740032099985,
+      "candidate_em_correct": 2,
+      "calls_per_candidate_em_correct": 8.5,
+      "tokens_per_candidate_em_correct": 16577.0,
+      "seconds_per_candidate_em_correct": 228.91870016049992
+    },
+    "docx": {
+      "n": 2,
+      "candidate_em_nominal_wilson95": [
+        0.09453120573423074,
+        0.9054687942657693
+      ],
+      "calls": 2,
+      "input_tokens": 1769,
+      "output_tokens": 417,
+      "summed_question_elapsed_seconds": 31.30542244000003,
+      "candidate_em_correct": 1,
+      "calls_per_candidate_em_correct": 2.0,
+      "tokens_per_candidate_em_correct": 2186.0,
+      "seconds_per_candidate_em_correct": 31.30542244000003
+    }
+  },
+  "interval_limit": "Nominal question-level intervals describe this selected diagnostic task distribution, not document populations. Two repeated DOCX tasks are not independent of the PDF cohort.",
+  "cost_limit": "Amortized attempt cost per exact-match success includes unsuccessful attempts, excludes setup and ingestion; this small sample cannot establish a deployment SLA."
+}

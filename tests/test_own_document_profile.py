@@ -42,3 +42,18 @@ def test_requested_denominator_retains_unserved_own_document_questions():
     assert result['groups']['pdf']['unserved']==2
     assert result['groups']['docx']['unserved']==1
     assert result['groups']['pdf']['false_release_risk']=='insufficient evidence'
+
+
+def test_published_own_document_records_reject_changed_token_accounting(tmp_path):
+    import shutil
+    from pathlib import Path
+    from scripts.verify_own_document_profile import verify
+    source = Path(__file__).resolve().parents[1] / 'reports/releases/r4/own_document_t4'
+    target = tmp_path / 'published'
+    shutil.copytree(source, target)
+    assert verify(target)['requested_tasks'] == 19
+    records = json.loads((target / 'numeric_records.json').read_text())
+    records[0]['tokens'] += 1
+    (target / 'numeric_records.json').write_text(json.dumps(records))
+    with pytest.raises(AssertionError):
+        verify(target)

@@ -1,0 +1,11 @@
+{
+  "closed_account_wall_seconds": 9255.949,
+  "active_reserved_seconds": 0.0,
+  "conservative_gpu_upper": 18600,
+  "project_cap_gpu_seconds": 21600,
+  "remaining_gpu_seconds": 3000,
+  "allocated_devices_counted": 2,
+  "paid_compute": false,
+  "new_hosted_evaluation_calls": 0,
+  "counting": "Account wall seconds rounded upward to a minute, counting both allocated devices"
+}

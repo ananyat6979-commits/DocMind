@@ -1,0 +1,584 @@
+[
+  {
+    "task_id": "repair-nist-95:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.1111111111111111,
+    "call_records": [
+      {
+        "input_tokens": 2008,
+        "output_tokens": 476,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 44.37449265599997,
+        "time_to_first_token_seconds": 2.5356433419999576
+      }
+    ],
+    "calls": 1,
+    "tokens": 2484,
+    "elapsed_seconds": 44.464253344999975,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "repair-nist-16:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.2222222222222222,
+    "call_records": [
+      {
+        "input_tokens": 1635,
+        "output_tokens": 278,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 23.694538767999973,
+        "time_to_first_token_seconds": 1.2297571870000183
+      }
+    ],
+    "calls": 1,
+    "tokens": 1913,
+    "elapsed_seconds": 23.724143227000013,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-9:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "token_f1": 0.2,
+    "call_records": [
+      {
+        "input_tokens": 1602,
+        "output_tokens": 327,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 28.264835591999997,
+        "time_to_first_token_seconds": 1.246973969999999
+      }
+    ],
+    "calls": 1,
+    "tokens": 1929,
+    "elapsed_seconds": 28.295666213999937,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-10:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.6666666666666666,
+    "call_records": [
+      {
+        "input_tokens": 1587,
+        "output_tokens": 309,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 29.825278049000076,
+        "time_to_first_token_seconds": 1.3870699330000207
+      }
+    ],
+    "calls": 1,
+    "tokens": 1896,
+    "elapsed_seconds": 29.85696899100003,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-3:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.26666666666666666,
+    "call_records": [
+      {
+        "input_tokens": 1691,
+        "output_tokens": 115,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 13.230070941999998,
+        "time_to_first_token_seconds": 1.6095884889999752
+      }
+    ],
+    "calls": 1,
+    "tokens": 1806,
+    "elapsed_seconds": 13.255611273999989,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-5:pdf",
+    "format": "pdf",
+    "status": "format_failure",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "no_clean_final_answer"
+    ],
+    "call_records": [
+      {
+        "input_tokens": 1571,
+        "output_tokens": 685,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 62.98050867199993,
+        "time_to_first_token_seconds": 1.425359528999934
+      }
+    ],
+    "calls": 1,
+    "tokens": 2256,
+    "elapsed_seconds": 63.00656595099997,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-11:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "token_f1": 0.0,
+    "call_records": [
+      {
+        "input_tokens": 1643,
+        "output_tokens": 110,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 11.910464265999963,
+        "time_to_first_token_seconds": 1.4972503710000638
+      }
+    ],
+    "calls": 1,
+    "tokens": 1753,
+    "elapsed_seconds": 11.936496036999984,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-8:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "token_f1": 0.6,
+    "call_records": [
+      {
+        "input_tokens": 1826,
+        "output_tokens": 409,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 40.54184576600005,
+        "time_to_first_token_seconds": 1.744530869000073
+      }
+    ],
+    "calls": 1,
+    "tokens": 2235,
+    "elapsed_seconds": 40.57449349000001,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-1:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.15384615384615385,
+    "call_records": [
+      {
+        "input_tokens": 1698,
+        "output_tokens": 158,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 15.766729478000002,
+        "time_to_first_token_seconds": 1.5054156840000132
+      }
+    ],
+    "calls": 1,
+    "tokens": 1856,
+    "elapsed_seconds": 15.793150215000082,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-7:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.36363636363636365,
+    "call_records": [
+      {
+        "input_tokens": 1715,
+        "output_tokens": 360,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 34.74035195299996,
+        "time_to_first_token_seconds": 1.5269318929999827
+      }
+    ],
+    "calls": 1,
+    "tokens": 2075,
+    "elapsed_seconds": 34.76889085799996,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-4:pdf",
+    "format": "pdf",
+    "status": "format_failure",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "no_clean_final_answer"
+    ],
+    "call_records": [
+      {
+        "input_tokens": 1677,
+        "output_tokens": 144,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 14.80015800199999,
+        "time_to_first_token_seconds": 1.531039557999975
+      }
+    ],
+    "calls": 1,
+    "tokens": 1821,
+    "elapsed_seconds": 14.825034880999965,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "repair-project-6:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 1,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 1.0,
+    "call_records": [
+      {
+        "input_tokens": 1414,
+        "output_tokens": 98,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 9.716689427999995,
+        "time_to_first_token_seconds": 1.1863144879999936
+      }
+    ],
+    "calls": 1,
+    "tokens": 1512,
+    "elapsed_seconds": 9.741426113999978,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "nist-33:pdf",
+    "format": "pdf",
+    "status": "format_failure",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "no_clean_final_answer"
+    ],
+    "call_records": [
+      {
+        "input_tokens": 1786,
+        "output_tokens": 363,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 35.061219204000054,
+        "time_to_first_token_seconds": 1.6079774529999895
+      }
+    ],
+    "calls": 1,
+    "tokens": 2149,
+    "elapsed_seconds": 35.087615959000004,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-12:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 0.10810810810810811,
+    "call_records": [
+      {
+        "input_tokens": 1514,
+        "output_tokens": 195,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 18.09357108300003,
+        "time_to_first_token_seconds": 1.2200337599999784
+      }
+    ],
+    "calls": 1,
+    "tokens": 1709,
+    "elapsed_seconds": 18.12040295500003,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-2:pdf",
+    "format": "pdf",
+    "status": "format_failure",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "no_clean_final_answer"
+    ],
+    "call_records": [
+      {
+        "input_tokens": 1640,
+        "output_tokens": 235,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 22.735405052000033,
+        "time_to_first_token_seconds": 1.416622527999948
+      }
+    ],
+    "calls": 1,
+    "tokens": 1875,
+    "elapsed_seconds": 22.76067509099994,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "repair-project-8:pdf",
+    "format": "pdf",
+    "status": "completed",
+    "exact_match": 1,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 1.0,
+    "call_records": [
+      {
+        "input_tokens": 1311,
+        "output_tokens": 373,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 32.339218343000084,
+        "time_to_first_token_seconds": 1.1257302680000976
+      }
+    ],
+    "calls": 1,
+    "tokens": 1684,
+    "elapsed_seconds": 32.37682863099997,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "synthetic-nist-6:pdf",
+    "format": "pdf",
+    "status": "format_failure",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "no_clean_final_answer"
+    ],
+    "call_records": [
+      {
+        "input_tokens": 2033,
+        "output_tokens": 168,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 19.22416373300007,
+        "time_to_first_token_seconds": 1.9536418339999955
+      }
+    ],
+    "calls": 1,
+    "tokens": 2201,
+    "elapsed_seconds": 19.24917708800001,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "repair-project-6:docx",
+    "format": "docx",
+    "status": "completed",
+    "exact_match": 1,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "token_f1": 1.0,
+    "call_records": [
+      {
+        "input_tokens": 855,
+        "output_tokens": 148,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 11.170204485999989,
+        "time_to_first_token_seconds": 0.5708951079999451
+      }
+    ],
+    "calls": 1,
+    "tokens": 1003,
+    "elapsed_seconds": 11.196336834000022,
+    "numerical_failure": false,
+    "truncated": false
+  },
+  {
+    "task_id": "repair-project-8:docx",
+    "format": "docx",
+    "status": "completed",
+    "exact_match": 0,
+    "answerable": true,
+    "gold_quote_location_found": true,
+    "abstained": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote"
+    ],
+    "token_f1": 0.64,
+    "call_records": [
+      {
+        "input_tokens": 914,
+        "output_tokens": 269,
+        "generation_attempted": true,
+        "max_length_reached": false,
+        "numerical_failure": false,
+        "status": "completed",
+        "elapsed_seconds": 20.083643020999943,
+        "time_to_first_token_seconds": 0.6012630309999167
+      }
+    ],
+    "calls": 1,
+    "tokens": 1183,
+    "elapsed_seconds": 20.109085606000008,
+    "numerical_failure": false,
+    "truncated": false
+  }
+]

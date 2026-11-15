@@ -1,0 +1,40 @@
+{
+  "scope": "English own-document cached-parsing local-reader smoke test, same reviewer confirmed sources; not independent annotation or hosted product validation",
+  "cohort_sha256": "0d6047848ea57fbad0107d28c96ba1b6321511b05665bf027d9ceefaa0f61a6c",
+  "groups": {
+    "pdf": {
+      "requested": 17,
+      "attempted": 17,
+      "format_completed": 12,
+      "unserved": 0,
+      "format_failures": 5,
+      "runtime_errors": 0,
+      "candidate_em_correct": 2,
+      "requested_candidate_em": 0.11764705882352941,
+      "drafts": 9,
+      "held": 8,
+      "numerical_failures": 0,
+      "truncations": 0,
+      "human_answer_correctness": "pending separate actual-answer review",
+      "false_release_risk": "insufficient evidence"
+    },
+    "docx": {
+      "requested": 2,
+      "attempted": 2,
+      "format_completed": 2,
+      "unserved": 0,
+      "format_failures": 0,
+      "runtime_errors": 0,
+      "candidate_em_correct": 1,
+      "requested_candidate_em": 0.5,
+      "drafts": 1,
+      "held": 1,
+      "numerical_failures": 0,
+      "truncations": 0,
+      "human_answer_correctness": "pending separate actual-answer review",
+      "false_release_risk": "insufficient evidence"
+    }
+  },
+  "paid_compute": false,
+  "hosted_calls": 0
+}

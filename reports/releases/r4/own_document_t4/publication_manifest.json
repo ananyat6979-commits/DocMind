@@ -1,0 +1,14 @@
+{
+  "scope": "Numeric internal consistency and frozen-source provenance, not independent replication or public redistribution of private gold",
+  "sha256": {
+    "compute_usage.json": "8d95001f932d9f6d69953ce499b73188f92a08e6d08eb9697081be34b113da80",
+    "design.json": "f12a27f2925028cd8e824643b5a1256c6ea82912d8a65963e314f565f333a662",
+    "executed_source.json": "24b88ff2054924615c77aeaf01fd22d9eab94d7d113bb985125368a3f9be0617",
+    "format_diagnostics.json": "2929db5877ec7173a3647920a95b1b9722153c0f863384b41c26d13ac9cddb10",
+    "memory.json": "3eef31e87fa2aca6f9710d1eda4a20f29ccd6630d8decc21f164c6002beb526f",
+    "numeric_records.json": "b02da5c965ef71dc8eb955d49dd72b43a4cfbc2d51c6cbb86c71745da3cdff99",
+    "reader_identity.json": "40407a6f1e7b6249739c601889400966c5847c2cbc62cdd2dfa83eb54e106041",
+    "summary.json": "2941df0680fa3fb285b3aa70af6438fc95c37ef67b744f87e12d1ba164d3890e",
+    "cost_and_uncertainty.json": "9519ea0a3b9eb11d7c7524ba24bba00c5b5d33b843f91429ff99565b65ea71a3"
+  }
+}
