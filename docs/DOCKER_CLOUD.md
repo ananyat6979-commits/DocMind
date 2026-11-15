@@ -45,3 +45,5 @@ Dense mode builds only the dense index view; sparse mode builds only the lexical
 ## Persistent multi-process option
 
 The default SQLite Compose deployment remains a one-process profile. [PostgreSQL deployment](POSTGRES_DEPLOYMENT.md) provides a separate two-worker profile with forced tenant row policies, persistent pgvector writes, shared quotas and renewable ingestion leases. It uses the same confined parser and centralized UI. Live CI covers tenant denials, synchronized quotas, killed-worker recovery and stale writes. Database search and neural HTTP load have separate bounded measurement records under `reports/releases/r3`; neither is a hosted-reader SLA. Follow the profile's migration and private-credential procedure rather than scaling the SQLite service.
+
+Compose forwards `DOCMIND_RELEASE_MODE` (default `draft`), `DOCMIND_ATTRIBUTION` (default `0`), `DOCMIND_ANSWER_STRATEGY` (default `single`) and `DOCMIND_QUERY_TIMEOUT_SECONDS` (default `30`) to the API in both profiles. Set `DOCMIND_RELEASE_MODE=strict` in the private environment configuration to require human approval. These are operator settings, not query-body permissions.

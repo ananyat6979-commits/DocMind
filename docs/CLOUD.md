@@ -20,4 +20,4 @@ Only `scripts/protocol_benchmark.py` needs a hosted key. Store it privately outs
 
 ## State and secrets
 
-Run a single process per corpus. Keep the database, review content and upload directory private; SQLite includes source text. Transfer only data you are authorized to process. Do not upload a whole working directory: ignored files can still contain secrets. Use a source allowlist and inspect the archive before upload. No particular free hosting service or indefinite GPU availability is guaranteed by this project.
+Run one API service process per SQLite corpus; the documented PostgreSQL profile supports two workers with shared enforcement. Keep the database, review content and upload directory private; SQLite includes source text. Transfer only data you are authorized to process. Do not upload a whole working directory: ignored files can still contain secrets. Use a source allowlist and inspect the archive before upload. No particular free hosting service or indefinite GPU availability is guaranteed by this project.
