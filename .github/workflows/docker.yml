@@ -131,6 +131,12 @@ jobs:
       id-token: write
       attestations: write
     steps:
+      - name: Authenticate to the image registry for attestation
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Attest the published image digest
         uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661
         with:
