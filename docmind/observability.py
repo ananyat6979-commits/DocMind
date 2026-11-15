@@ -23,7 +23,7 @@ class RequestMonitor:
         self.ip_buckets = defaultdict(deque)
         self.lock = threading.Lock()
         self.counts = defaultdict(int)
-        self.tenant_counts = defaultdict(lambda: defaultdict(int))
+        self.tenant_counts: dict[str,dict[str,int]] = defaultdict(lambda: defaultdict(int))
 
     def _quota(self, buckets, identity, limit, now):
         for old in list(buckets):
@@ -103,8 +103,8 @@ class RequestMonitor:
         response.headers["X-Request-ID"] = request_id
         with self.lock:
             self.counts[str(response.status_code)] += 1
-            principal=getattr(request.state,'principal',None)
-            if principal:self.tenant_counts[principal.tenant_id][str(response.status_code)] += 1
+            observed_principal=getattr(request.state,'principal',None)
+            if observed_principal:self.tenant_counts[observed_principal.tenant_id][str(response.status_code)] += 1
         logging.getLogger("docmind.requests").info(json.dumps({"request_id":request_id,"method":request.method,
             "route":getattr(request.scope.get("route"),"path",request.url.path),"status":response.status_code,
             "actor_id":getattr(getattr(request.state,"principal",None),"actor_id",None),
