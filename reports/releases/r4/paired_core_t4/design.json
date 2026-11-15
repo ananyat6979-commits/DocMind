@@ -1,0 +1,294 @@
+{
+  "version": "paired-core-v1",
+  "seed": 7,
+  "rows": [
+    {
+      "id": "5ae791cf55429952e35ea978",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5a84a5dc5542992a431d1a82",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5abdc0ad55429933744ab81b",
+      "type": "comparison",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ae4843455429970de88d997",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a714dea5542994082a3e7a9",
+      "type": "comparison",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ac120c55542992a796dedfc",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ab1c693554299722f9b4c66",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ac176555542994d76dcce47",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a7265815542990c210a411b",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ae12bcc5542997b2ef7d11a",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a7d119d5542995ed0d165d5",
+      "type": "comparison",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5adbd19855429944faac236a",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a76b56d554299373536017b",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ab2e3c45542991669774126",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ae1b53b5542997283cd2255",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5add24375542992c1e3a2542",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a7570a65542996c70cfaefd",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5a7320ac5542991f9a20c620",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a72a9ab5542992359bc315a",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5a8a70ea55429970aeb702e4",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a77452155429972597f14e1",
+      "type": "comparison",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5abbf8bc5542993f40c73c35",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5a78d70b55429974737f78d1",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ab3bcc55542992ade7c6e66",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ae39e9c5542990afbd1e195",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5a88fa9e5542993b751ca8de",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ab9530a55429970cfb8ea62",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5a74bc1555429929fddd84dd",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ab7ece25542995dae37e9f3",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ab5e13c5542992aa134a3bf",
+      "type": "comparison",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ab30d1155429976abd1bc3d",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5ae4a91d5542995ad6573e09",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ab68a71554299710c8d1ec2",
+      "type": "comparison",
+      "order": [
+        "single",
+        "react"
+      ]
+    },
+    {
+      "id": "5abaee845542996606241696",
+      "type": "bridge",
+      "order": [
+        "react",
+        "single"
+      ]
+    },
+    {
+      "id": "5ade78e255429939a52fe8d0",
+      "type": "bridge",
+      "order": [
+        "single",
+        "react"
+      ]
+    }
+  ],
+  "cohort_sha256": "6caba7e74e979fc024520b9cfb21a028cdc5bc0b1b96cb6900ec1e0e8a7f0385",
+  "pilot_worst_pair_seconds": 58.532283275000054,
+  "timing_margin": 1.25,
+  "reserve_fraction": 0.2,
+  "selection_uses_outcomes": false,
+  "adaptive_first_to_drop": true,
+  "scope": "English local-reader frozen-evidence cost-benefit control",
+  "output_token_cap": 1024
+}

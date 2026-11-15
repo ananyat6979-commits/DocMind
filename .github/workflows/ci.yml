@@ -39,3 +39,6 @@ jobs:
 
       - name: Verify persistent ANN scale records
         run: python scripts/verify_scale_profile.py reports/releases/r3/scale
+
+      - name: Verify frozen local-reader paired control
+        run: python scripts/verify_paired_core_profile.py reports/releases/r4/paired_core_t4

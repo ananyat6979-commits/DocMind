@@ -1,0 +1,154 @@
+{
+  "scope": "Pre-outcome sensitivity under hypothetical independent paired Bernoulli outcomes; not empirical power or a promotion threshold",
+  "test": "Positive direction of a two-sided .05 exact McNemar test; upper binomial tail <= .025",
+  "reported_result_intervals": "Paired bootstrap intervals are separate; the simulated test is not their exact power calculation",
+  "seed": 7,
+  "simulations_per_scenario": 10000,
+  "rows": [
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0065
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.017
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.0456
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.1
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0096
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.0214
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.0465
+    },
+    {
+      "n_pairs": 20,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.0879
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0121
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.057
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.1793
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.408
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0149
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.0501
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.1264
+    },
+    {
+      "n_pairs": 50,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.2536
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0141
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.1021
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.3732
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.3,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.7456
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0,
+      "estimated_detection_probability": 0.0168
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.05,
+      "estimated_detection_probability": 0.0875
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.1,
+      "estimated_detection_probability": 0.2442
+    },
+    {
+      "n_pairs": 100,
+      "assumed_discordance": 0.5,
+      "assumed_react_minus_single": 0.15,
+      "estimated_detection_probability": 0.52
+    }
+  ],
+  "limitations": "Shared articles can violate question independence. Fresh question IDs do not establish unseen training data, document disjointness or general loop utility."
+}

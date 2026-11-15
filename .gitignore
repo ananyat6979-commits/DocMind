@@ -78,3 +78,6 @@ reports/release_review/
 .secrets/
 
 .kaggle-core-profile/
+
+.kaggle-quoted-robustness/
+.kaggle-own-documents/

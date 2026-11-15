@@ -1,0 +1,16 @@
+{
+  "source_archive_sha256": "c95cf87a50e185fe94d54d3ff916f56733cb7b350a583996f384a6646bc8e8b2",
+  "raw_completions_public": false,
+  "human_correctness": "unmeasured",
+  "sha256": {
+    "compute_usage.json": "62d7708cffb63ab8349133a1e584f287eb948f8eabc7aba569c7d3910e75bfaf",
+    "design.json": "c66eddd222468b5ce4fb52c472a19323442428f7d569bb59ed6d56b03f2cfda4",
+    "diagnostics.json": "d36fd5e8b114fa94d0e438d318412a6782ca4538a80d69041d8efa148f1fdc32",
+    "executed_source.json": "1be624fa109ab8b46eb813973bb2b7667dc85905c29a316024cf193902b1cc0e",
+    "input_manifest.json": "c67a2c81dc112945cb47bf216f7615827609aaf544aebab7eb3bae997a890942",
+    "memory.json": "1ca6b1af789dd41b37d24eea4e13a0a991e1310186a25bb437117caa33d8ef4d",
+    "numeric_records.json": "c095e1253fae238b0e333ccd9d3425040eea9405b2013e8045977ac54d5ff02d",
+    "reader_identity.json": "08df6021ff2aeb7c1a3ab76b8223b4de13632e7b06edf488849947f74e91ff48",
+    "summary.json": "e3b0ea8bd3a6f2a8af18eae8d45d078466c1e697a2923f18bdf9adf2bebaf54e"
+  }
+}

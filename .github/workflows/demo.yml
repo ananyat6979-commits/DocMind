@@ -38,6 +38,8 @@ jobs:
         with:
           name: offline-workflow-capture
           path: |
+            reports/release_workspace/demo-capture/ui-*.png
+            reports/release_workspace/demo-capture/captions.json
             reports/release_workspace/demo-capture/frame-*.png
             reports/release_workspace/demo-capture/docmind-workflow.gif
             reports/release_workspace/demo-capture/manifest.json

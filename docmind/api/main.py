@@ -195,6 +195,8 @@ class SourceInfo(BaseModel):
     page: Optional[int] = None
     section: Optional[str] = None
     content_preview: str
+    content: str = ""
+    content_truncated: bool = False
     score: float
     cited: bool
 
@@ -326,6 +328,11 @@ async def _query_impl(req: QueryRequest, request: Request):
         agent = await cpu_work(get_agent)
         if await cpu_work(agent.retriever.is_empty):
             raise HTTPException(status_code=409, detail="No documents ingested yet. POST /upload first.")
+        if req.file_ids:
+            store = await cpu_work(get_store)
+            selected = await cpu_work(store.document_context, req.file_ids)
+            if {d["file_id"] for d in selected["documents"]} != set(req.file_ids):
+                raise HTTPException(status_code=404, detail="Selected documents are unavailable; refresh the library")
         timeout = float(os.getenv("DOCMIND_QUERY_TIMEOUT_SECONDS", "30"))
         async with asyncio.timeout(timeout):
             if hasattr(agent, "arun"):
@@ -370,7 +377,7 @@ async def _query_impl(req: QueryRequest, request: Request):
         review_status=status, review_reasons=resp.review_reasons,
         citation_validity=None if held else resp.citation_report.get("validity"),
         attribution=None if held else resp.citation_report.get("attribution"),
-        attribution_status="withheld" if held else ("citation_found_support_not_verified" if resp.release_policy_version != "legacy" else "model_judgment"),
+        attribution_status="withheld" if held else (("absence_not_verified" if resp.abstained else "citation_found_support_not_verified") if resp.release_policy_version != "legacy" else "model_judgment"),
         release_policy_version=resp.release_policy_version, release_mode=resp.release_mode,
         release_state=resp.release_state, warnings=resp.warnings,
         evidence=[] if held else resp.evidence, document_context=resp.document_context,
@@ -378,6 +385,7 @@ async def _query_impl(req: QueryRequest, request: Request):
             chunk_id=s.chunk.chunk_id, filename=s.chunk.filename(),file_id=s.chunk.file_id,
             page=s.chunk.metadata.get("page"), section=s.chunk.metadata.get("section"),
             content_preview=(s.chunk.content[:200] + "...") if len(s.chunk.content) > 200 else s.chunk.content,
+            content=s.chunk.content[:8000], content_truncated=len(s.chunk.content)>8000,
             score=round(s.score, 4), cited=s.chunk.chunk_id in cited_ids) for s in ([] if held else resp.sources)],
         latency_ms=round(resp.latency_ms, 1), llm_calls=resp.llm_calls,
     )
@@ -501,12 +509,13 @@ def response_result(response_id: str, request: Request):
         abstained=False if edited else info.get("abstained",False),review_status=status,review_reasons=item["reasons"],
         citation_validity=report.get("validity") if visible and not edited else None,
         attribution=report.get("attribution") if visible and not edited else None,
-        attribution_status="human_edited_not_rechecked" if edited else (("citation_found_support_not_verified" if info.get("release_policy_version", "legacy") != "legacy" else "model_judgment") if visible else "withheld"),
+        attribution_status="human_edited_not_rechecked" if edited else ((("absence_not_verified" if info.get("abstained") else "citation_found_support_not_verified") if info.get("release_policy_version", "legacy") != "legacy" else "model_judgment") if visible else "withheld"),
         release_policy_version=info.get("release_policy_version", "legacy"), release_mode=info.get("release_mode", "draft"),
         release_state=status, warnings=info.get("warnings", []),
         evidence=info.get("evidence", []) if visible and not edited else [], document_context=info.get("document_context", {}),
         sources=[SourceInfo(chunk_id=s["chunk_id"],filename=s["filename"],file_id=s.get("file_id",""),
-            page=s.get("page"),section=s.get("section"),content_preview=s["content"][:200],
+            page=s.get("page"),section=s.get("section"),content_preview=s["content"][:200]+("..." if len(s["content"])>200 else ""),
+            content=s["content"][:8000],content_truncated=len(s["content"])>8000,
             score=s["score"],cited=bool(s.get("cited")) and not edited) for s in item["sources"]] if visible else [],
         latency_ms=info.get("latency_ms",0),llm_calls=info.get("llm_calls",0))
 

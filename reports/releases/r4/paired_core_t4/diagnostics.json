@@ -1,0 +1,72 @@
+{
+  "scope": "Post-hoc diagnostics on the frozen experiment, without reruns or human correctness labels",
+  "arms": {
+    "single": {
+      "calls_distribution": {
+        "1": 35
+      },
+      "release_states": {
+        "draft": 20,
+        "held": 15
+      },
+      "hold_reasons": {
+        "invalid_citation": 9,
+        "invalid_or_missing_quote": 9,
+        "no_citations": 8,
+        "no_clean_final_answer": 4,
+        "query_language_unvalidated": 4,
+        "answer_language_unvalidated": 7
+      },
+      "candidate_correct": 5,
+      "draft_candidate_exact_matches": 4,
+      "drafts": 20,
+      "abstentions": 3,
+      "numerical_failures": 0,
+      "total_tokens": 47648,
+      "total_seconds": 522.5410602649997
+    },
+    "react": {
+      "calls_distribution": {
+        "1": 35
+      },
+      "release_states": {
+        "held": 18,
+        "draft": 17
+      },
+      "hold_reasons": {
+        "invalid_citation": 13,
+        "invalid_or_missing_quote": 13,
+        "no_citations": 12,
+        "no_clean_final_answer": 10,
+        "answer_language_unvalidated": 7,
+        "query_language_unvalidated": 4
+      },
+      "candidate_correct": 8,
+      "draft_candidate_exact_matches": 5,
+      "drafts": 17,
+      "abstentions": 4,
+      "numerical_failures": 0,
+      "total_tokens": 55875,
+      "total_seconds": 940.900701028
+    }
+  },
+  "pilot_stages": {
+    "512": {
+      "attempts": 20,
+      "truncations": 4,
+      "format_failures": 7
+    },
+    "1024": {
+      "attempts": 20,
+      "truncations": 0,
+      "format_failures": 3
+    }
+  },
+  "limitations": [
+    "No multi-step tool calls were exercised: both arms used one call per question.",
+    "Format-failure raw completions were not retained, so their detailed causes cannot be reconstructed.",
+    "The initial reader identity records 512 tokens; the preserved second pilot and frozen final design used 1024.",
+    "Candidate exact match is not visible-answer correctness or factual risk. Language holds include false positives on English benchmark questions.",
+    "Fresh source code changes require new baselines; this result belongs to its executed source snapshot."
+  ]
+}

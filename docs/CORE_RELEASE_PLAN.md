@@ -42,3 +42,9 @@ Shrink adaptive comparison B first, then the primary cohort, using pilot timings
 Scoped vector search deliberately uses exact linear work in selected documents. Report selected chunk count, latency and timeout failures; do not present unscoped ANN throughput as scoped or end-to-end latency. Extra infrastructure beyond these correctness changes is deferred.
 
 The bounded secondary reservation may prioritize the new quoted-policy 180-case robustness comparison before Hindi diagnostics. Both together remain within 1800 wall seconds and 3600 conservatively charged GPU-seconds; missing work remains unmeasured. This does not add compute to the project ceiling.
+
+## Authorized human-budget amendment and completed primary
+
+The user subsequently authorized more human review. The aggregate PDF/review allowance is now 150 minutes, an increase of 60 minutes; no GPU, paid-service or hosted-call allowance changes. The original export completed five items in 19 recorded minutes, with most additional wall time reported away or paused. Four need explicit source/answer confirmation, so they are not silently repaired into gold. A new 20-minute packet prefills those corrections and 30 declared synthetic source proposals. It records separate clarity, answer-correctness and evidence-support decisions with an explicit pause control. Reserve 30 minutes for actual answer/claim review; incomplete proposals remain unreviewed. The original 15 to 25 completed-item expectation was a planning estimate, not an achieved count.
+
+The primary profile completed 35 paired questions under its frozen pilot-selected design. See the published R4 control. No multi-step calls occurred, and no adaptive benefit is inferred. The new quoted-policy robustness run retains raw completions privately for future format-failure diagnosis, uses the corrected numeric-value matcher and preserves failed/unserved requested rows. It remains within the existing 1800-wall-second secondary reservation.

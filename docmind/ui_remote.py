@@ -84,7 +84,18 @@ def render():
             st.text(result["answer"])
             st.caption(result["review_status"])
             if result.get("release_state") == "draft":
-                st.caption("Unverified draft. Citation found; automated support has not been established.")
+                st.caption("Unverified absence report. Relevant information may have been missed." if result.get("abstained")
+                    else "Unverified draft. Citation found; automated support has not been established.")
+            if result.get("review_status") == "pending":
+                messages = {
+                    "query_language_unvalidated":"The question language has not been validated.",
+                    "answer_language_unvalidated":"The answer language has not been validated.",
+                    "language_policy_unvalidated":"Language support for the selected evidence has not been validated.",
+                    "incomplete_document_abstention":"Some pages are unreadable, so absence cannot be confirmed.",
+                    "strict_human_approval":"This deployment requires human approval.",
+                }
+                reasons = [messages.get(reason, reason.replace("_", " ")) for reason in result.get("review_reasons", [])]
+                if reasons:st.info("Human review required: " + " ".join(reasons))
             for document in result.get("document_context", {}).get("documents", []):
                 if document.get("quarantined_pages"):
                     st.warning(document["filename"] + ": unreadable pages " + ", ".join(map(str, document["quarantined_pages"])))
@@ -93,9 +104,14 @@ def render():
             for evidence in result.get("evidence", []):
                 if evidence.get("status") in ("literal", "normalized"):
                     st.text(evidence.get("quote", evidence.get("text", "")))
-                    st.caption(str(evidence.get("filename", "")) + " | page " + str(evidence.get("page", "")))
+                    location = evidence.get("filename", "")
+                    if evidence.get("page") is not None:location += " | page " + str(evidence["page"])
+                    elif evidence.get("section"):location += " | " + str(evidence["section"])
+                    st.caption(location)
             for source in result["sources"]:
-                with st.expander(source["filename"]):st.text(source["content_preview"])
+                with st.expander(source["filename"]):
+                    st.caption("Retrieved passage" if not source.get("content_truncated") else "Retrieved passage truncated at the response limit")
+                    st.text(source.get("content") or source["content_preview"])
             if st.button("Refresh response",key="refresh_"+response_id):st.rerun()
         if "reviewer" in roles:
             st.subheader("Human review")
@@ -104,9 +120,14 @@ def render():
                 with st.form("review_"+rid):
                     st.text(item["question"]);st.text(item["answer"])
                     for source in item["sources"]:st.text(source["content"])
-                    decision=st.selectbox("Decision",["approved","edited","rejected"])
+                    reasons=item.get("reasons", [])
+                    if reasons:st.caption("Review reasons: " + ", ".join(reason.replace("_", " ") for reason in reasons))
+                    decision=st.selectbox("Decision",["Choose a decision","approved","edited","rejected"])
                     answer=st.text_area("Corrected answer")
                     note=st.text_input("Review note")
                     if st.form_submit_button("Save decision"):
+                        if decision == "Choose a decision":
+                            st.warning("Choose a review decision before saving.")
+                            continue
                         request("POST","/review/"+rid,{"decision":decision,"edited_answer":answer or None,"note":note});st.rerun()
     except ValueError as exc:st.error(str(exc))

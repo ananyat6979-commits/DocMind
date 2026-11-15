@@ -1,0 +1,15 @@
+{
+  "amendment": "Human review extension authorized by user; no compute increase",
+  "additional_seconds": 3600,
+  "total_pdf_review_allowance_seconds": 9000,
+  "previously_charged_seconds": 5077.1869,
+  "remaining_seconds_before_confirmation": 3922.8131,
+  "source_confirmation_cap_seconds": 1200,
+  "actual_answer_review_reserved_seconds": 1800,
+  "buffer_seconds": 922.8131,
+  "original_export_recorded_running_seconds": 1140,
+  "original_export_wall_time_note": "User reports mostly away or paused outside the recorded timer; active work is not independently measured",
+  "synthetic_drafts_are_human_authored": false,
+  "confirmation_packet_sha256": "4eaf24eb07f74d16205fa13eb7654f731b694161ff2ca81806645603dfe5afbe",
+  "human_labels_in_git": false
+}

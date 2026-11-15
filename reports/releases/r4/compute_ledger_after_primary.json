@@ -1,0 +1,15 @@
+{
+  "project_cap_gpu_seconds": 21600,
+  "allocated_devices_counted": 2,
+  "prior_closed_upper_gpu_seconds": 7080,
+  "primary_elapsed_including_setup_seconds": 2587.998218753,
+  "closed_upper_gpu_seconds": 12256,
+  "closed_account_wall_seconds_reported": 6100.718,
+  "account_reserved_seconds": 0,
+  "secondary_wall_cap_seconds": 1800,
+  "secondary_reserved_gpu_seconds": 3600,
+  "remaining_after_secondary_reservation_gpu_seconds": 5744,
+  "paid_compute": false,
+  "account_scope": "Same free account; no active reservation at snapshot",
+  "snapshot_date_utc": "2026-11-15"
+}

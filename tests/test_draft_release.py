@@ -48,3 +48,17 @@ def test_missing_quote_and_invalid_mode_fail_closed(monkeypatch):
     assert apply_policy(value).release_state=='held'
     monkeypatch.setattr(CONFIG.review,'release_mode','unknown')
     with pytest.raises(ValueError):apply_policy(response())
+
+
+def test_short_english_boolean_requires_english_file_context(monkeypatch):
+    monkeypatch.setattr('docmind.language.language_info', lambda text: {'language':'und','flags':['short_text']})
+    for answer in ('Yes.', 'No.', 'True', 'False'):
+        assert apply_policy(response(answer)).release_state=='draft'
+        assert apply_policy(response(answer, 'fr')).release_state=='held'
+
+
+def test_english_abstention_cannot_validate_foreign_or_unknown_source_scope(monkeypatch):
+    monkeypatch.setattr('docmind.language.language_info', lambda text: {'language':'en'})
+    for language in ('hi','fr','und'):
+        item=response(language=language);item.abstained=True;item.cited_sources=[]
+        assert 'language_policy_unvalidated' in apply_policy(item).hold_reasons

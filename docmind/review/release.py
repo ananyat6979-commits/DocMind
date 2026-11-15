@@ -32,7 +32,7 @@ def _unvalidated_language(response: AgentResponse, cited) -> list[str]:
             return True
         if language != "und":
             return False
-        if _language_neutral_number(value) or _ENGLISH_NUMBER.fullmatch(value.strip()):
+        if _language_neutral_number(value) or _ENGLISH_NUMBER.fullmatch(value.strip()) or value.strip().casefold() in ("yes", "yes.", "no", "no.", "true", "true.", "false", "false."):
             return inherit
         if inherit and "short_text" in info.get("flags", []):
             # File context is necessary, not blanket permission for Latin script.
@@ -49,7 +49,7 @@ def _unvalidated_language(response: AgentResponse, cited) -> list[str]:
         reasons.append("query_language_unvalidated")
     if not response.abstained and not permitted(response.answer, english_files):
         reasons.append("answer_language_unvalidated")
-    if cited and not english_files:
+    if (cited and not english_files) or (response.abstained and not english_files):
         reasons.append("language_policy_unvalidated")
     for source in cited:
         language = source.chunk.metadata.get("language_info", {}).get("language", "und")

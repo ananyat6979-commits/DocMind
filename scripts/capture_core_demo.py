@@ -73,13 +73,12 @@ def capture(out):
     fonts=[Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'),Path('/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf')]
     font=next((ImageFont.truetype(str(path),18) for path in fonts if path.exists()),ImageFont.load_default())
     def shot(page,description):
-        index=len(frames)+1;raw=out/('raw-'+str(index)+'.private.png');page.screenshot(path=str(raw))
+        index=len(frames)+1;raw=out/('ui-'+str(index)+'.png');page.screenshot(path=str(raw))
         with Image.open(raw) as original:
             image=Image.new('RGB',(original.width,original.height+94),'#15243a');image.paste(original,(0,56))
             draw=ImageDraw.Draw(image);draw.text((20,15),description,fill='white',font=font)
             draw.text((20,original.height+65),'Synthetic sources | Real E5 retrieval | Extractive demo reader | No human decisions',fill='white',font=font)
             image.save(out/('frame-'+str(index)+'.png'));frames.append(image.copy());descriptions.append(description)
-        raw.unlink()
     with sync_playwright() as playwright:
         browser=playwright.chromium.launch()
         try:
@@ -91,7 +90,7 @@ def capture(out):
             shot(page,'1 / 6  Authenticated document library with synthetic English and Hindi sources')
             question=page.get_by_label('Ask a question',exact=True)
             question.fill('What is the coolant temperature limit during startup?')
-            shot(page,'2 / 6  Ask a question over the selected library')
+            shot(page,'2 / 6  Ask a question over the document library')
             page.get_by_role('button',name='Ask',exact=True).click()
             page.get_by_text('Unverified draft. Citation found; automated support has not been established.',exact=True).wait_for(timeout=60000)
             shot(page,'3 / 6  A visible draft is explicitly unverified')
@@ -105,6 +104,7 @@ def capture(out):
             access.fill(credentials['keys']['reviewer']);access.press('Enter')
             page.get_by_text('Signed in as demo-reviewer',exact=True).wait_for(timeout=60000)
             page.get_by_text('Human review',exact=True).scroll_into_view_if_needed()
+            page.get_by_text('Choose a decision',exact=True).wait_for(timeout=30000)
             shot(page,'6 / 6  Authorized reviewer view; the item is still pending')
         finally:browser.close()
     frames[0].save(out/'docmind-workflow.gif',save_all=True,append_images=frames[1:],duration=[12500]*6,loop=0,optimize=True,
@@ -114,8 +114,11 @@ def capture(out):
         'embedding_model':credentials['embedding_model'],'embedding_revision':credentials['embedding_revision'],
         'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'source_commit':os.getenv('GITHUB_SHA'),
         'gif_sha256':hashlib.sha256((out/'docmind-workflow.gif').read_bytes()).hexdigest(),
+        'ui_frame_sha256':{path.name:hashlib.sha256(path.read_bytes()).hexdigest() for path in out.glob('ui-*.png')},
+        'captions_are_not_app_ui':True,
         'frame_sha256':{path.name:hashlib.sha256(path.read_bytes()).hexdigest() for path in out.glob('frame-*.png')},
         'capture_elapsed_seconds':time.monotonic()-started}
+    (out/'captions.json').write_text(json.dumps({'captions_are_not_app_ui':True,'captions':descriptions},indent=2)+'\n')
     (out/'manifest.json').write_text(json.dumps(report,indent=2)+'\n');(out/'stop.requested').write_text('Capture complete')
     print(json.dumps({k:report[k] for k in ('display_duration_ms','hosted_calls','human_decisions','paid_compute')}))
 

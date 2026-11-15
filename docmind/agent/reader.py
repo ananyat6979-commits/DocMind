@@ -3,6 +3,7 @@ import asyncio
 import os
 import time
 import logging
+import re
 
 from docmind.config import CONFIG
 from docmind.evidence import parse_payload, untrusted_json, validate_claims
@@ -107,7 +108,7 @@ class CitedReActReader(CitedReader):
         self.max_calls = max_calls
 
     async def arun(self, question, file_ids=None):
-        from docmind.agent.react import parse_action, FINAL_RE
+        from docmind.agent.react import parse_action
         started = time.monotonic()
         seconds = self.deadline_seconds or float(os.getenv("DOCMIND_QUERY_TIMEOUT_SECONDS", "30"))
         backend = self.llm
@@ -135,9 +136,10 @@ class CitedReActReader(CitedReader):
                         messages.append({"role": "user", "content": "Final call. Emit Final Answer: and the required JSON now."})
                     raw = await session.complete(messages, temperature=0, max_tokens=self.output_tokens)
                     trace.append(raw)
-                    final = FINAL_RE.search(raw)
-                    if final or raw.lstrip().startswith('{'):
-                        answer = final.group(1).strip() if final else raw
+                    structured = raw.lstrip().startswith(('{', '```'))
+                    final = None if structured else re.search(r"^\s*Final Answer:\s*(.*)", raw, re.I | re.M | re.S)
+                    if structured or final:
+                        answer = final.group(1).strip() if final is not None else raw
                         response = await cpu_work(self.assemble, question, list(observed.values()), answer, started, session, file_ids)
                         response.reasoning_trace = trace
                         return response
