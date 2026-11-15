@@ -1,0 +1,35 @@
+{
+  "scope": "Post-hoc paired operational sensitivity on the frozen requested cohort; no new inference",
+  "n": 35,
+  "source_numeric_sha256": "c095e1253fae238b0e333ccd9d3425040eea9405b2013e8045977ac54d5ff02d",
+  "intervals": "Nominal paired percentile bootstrap, 2000 resamples, seed seven; not multiplicity corrected",
+  "metrics": {
+    "tokens": {
+      "single_mean": 1361.3714285714286,
+      "react_mean": 1596.4285714285713,
+      "react_minus_single_mean": 235.05714285714285,
+      "paired_difference_bootstrap95_nominal": [
+        190.62214285714288,
+        287.65785714285715
+      ]
+    },
+    "elapsed_seconds": {
+      "single_mean": 14.929744578999992,
+      "react_mean": 26.88287717222857,
+      "react_minus_single_mean": 11.95313259322858,
+      "paired_difference_bootstrap95_nominal": [
+        8.464307951151476,
+        15.958904405097067
+      ]
+    },
+    "calls": {
+      "single_mean": 1.0,
+      "react_mean": 1.0,
+      "react_minus_single_mean": 0.0,
+      "paired_difference_bootstrap95_nominal": [
+        0.0,
+        0.0
+      ]
+    }
+  }
+}
