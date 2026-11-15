@@ -25,3 +25,19 @@ Ingestion claims have renewable 60-second leases and at most three attempts. Ano
 The checked-in Compose profile binds UI and API only to loopback. An operator supplies TLS ingress for external access, monitoring, database backups, backup restore drills and storage capacity planning. Two workers on one host are not regional failover. The profile does not migrate existing SQLite data automatically: re-ingest documents and transfer reviewed labels using reviewed export procedures. Do not copy source databases across tenants.
 
 Transport and indexing changes do not validate answer accuracy. Reader profiles and historical evaluation artifacts remain separate. Do not enable automatic Hindi or other unmeasured-language answers because a deployment check passed.
+
+
+## Backup procedure and bounded restore check
+
+The `postgres` CI suite uses synthetic committed corpus vectors, pending reviews, events and a queued job. It runs `pg_dump -Fc`, restores into a fresh database in the same cluster, then verifies byte-identical vectors, review/job state and tenant denials through runtime credentials. The dump remains private; only a boolean summary is retained as an artifact. This tests the procedure, not a configured operator backup schedule or cross-cluster disaster recovery.
+
+An operator can create a local private dump with:
+
+```sh
+mkdir -p .secrets/backups
+chmod 700 .secrets/backups
+docker compose --env-file .secrets/production/compose.env -f compose.postgres.yml exec -T postgres pg_dump -U postgres -Fc docmind > .secrets/backups/docmind.dump
+chmod 600 .secrets/backups/docmind.dump
+```
+
+Protect and copy backups according to the deployment's retention and encryption policy. Restoring to another cluster also requires role provisioning and extension availability. Do not restore over a running production database without an operator-controlled recovery plan. Private credential registries and operator keys require separate protected backup and rotation procedures.

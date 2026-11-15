@@ -1,6 +1,6 @@
 # Security and deployment boundary
 
-DocMind is a single-user or shared pilot, with one process per SQLite corpus. It has shared API, reviewer and administrator credentials, not tenant isolation or per-document ACLs. Use TLS at a reverse proxy before remote access. Bind the native API to loopback until that boundary is configured. Do not use confidential documents with the hosted reader: retrieved passages leave the machine.
+DocMind is an experimental service. The default SQLite profile supports one API process and a shared library. Personal credentials provide trusted identities and roles. The opt-in [PostgreSQL profile](docs/POSTGRES_DEPLOYMENT.md) adds tenant-isolated libraries, shared quotas and worker leases; readers still share documents within their tenant. Neither profile provides arbitrary per-document ACLs. Use TLS at a reverse proxy before remote access. Bind the native API to loopback until that boundary is configured. Do not use confidential documents with the hosted reader: retrieved passages leave the machine.
 
 ## Access and secrets
 
@@ -16,9 +16,9 @@ Document text is untrusted. Citation identity and NLI checks cannot make prompt 
 
 ## Operations and retention
 
-The async ingestion queue is durable and bounded to 20 waiting jobs. Requests have bounded bodies and text fields, request IDs, structured timing logs and per-key quotas. Quotas and metrics are local to one process and reset on restart. They are not a distributed denial-of-service defense. Health is a public liveness endpoint; readiness, metrics and library access require credentials.
+The async ingestion queue is durable and bounded to 20 waiting jobs. Requests have bounded bodies and text fields, request IDs, structured timing logs and per-key quotas. In SQLite mode quotas and metrics are local to one process and reset on restart. PostgreSQL mode stores shared key/IP quotas in the database and rejects quota-backend outages; its displayed metrics are scoped to the current tenant and worker. They are not a distributed denial-of-service defense. Health is a public liveness endpoint; readiness, metrics and library access require credentials.
 
-SQLite contains document text, embeddings, review content and telemetry. Protect the data directory and backups with OS permissions and encryption where appropriate. Deletion removes the document rows, associated review content and owned upload copies. Secure deletion is enabled for SQLite rows, but external backups, filesystem snapshots, transaction journals, logs, memory and the hosted provider may retain copies. There is no automatic retention scheduler or certified erasure. Use an explicit retention policy for any pilot.
+SQLite or PostgreSQL contains document text, embeddings, review content and telemetry. PostgreSQL row policies bind all service data operations to server-derived tenant identity. Runtime credentials cannot migrate or bypass policies; a fully compromised process with arbitrary SQL can change its tenant setting. Migration credentials are separate and are not mounted into API or parser services. Protect the data directory and backups with OS permissions and encryption where appropriate. Deletion removes the document rows, associated review content and owned upload copies. Secure deletion is enabled for SQLite rows, but external backups, filesystem snapshots, transaction journals, logs, memory and the hosted provider may retain copies. There is no automatic retention scheduler or certified erasure. Use an explicit retention policy for any pilot.
 
 ## Vulnerability reports
 

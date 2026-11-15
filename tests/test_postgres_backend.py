@@ -198,3 +198,16 @@ def test_deleted_sources_cannot_be_recorded_as_new_answers(scopes):
     response=AgentResponse('300',[SearchResult(chunk,1,'dense')],[],'temperature?',1)
     assert erase_document(chunk.file_id,store=store)
     with pytest.raises(ValueError,match='Corpus changed'):ReviewStore(scopes[0]).record(response,'reader')
+
+
+def test_checkpoint_identity_remains_tenant_bound_for_identical_corpora(scopes):
+    left,right=[CorpusStore(scope) for scope in scopes]
+    add(left);add(right)
+    assert left.content_identity()!=right.content_identity()
+
+
+def test_runtime_cannot_migrate_or_disable_row_policies(scopes):
+    statements=['ALTER TABLE chunks DISABLE ROW LEVEL SECURITY','CREATE TABLE docmind.runtime_escape(value TEXT)','SET ROLE postgres']
+    for statement in statements:
+        with pytest.raises(Exception):
+            with connect(scopes[0]) as conn:conn.execute(statement)

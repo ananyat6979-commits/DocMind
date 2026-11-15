@@ -113,6 +113,8 @@ class CorpusStore:
         """Hash the actual checkpoint inputs, including tool-visible chunk identities."""
         import hashlib
         identity=hashlib.sha256()
+        from docmind.postgres import DatabaseScope
+        if isinstance(self.db_path,DatabaseScope):identity.update(b"tenant\0"+self.db_path.tenant.encode()+b"\0")
         with connect(self.db_path) as conn:
             for row in conn.execute("SELECT file_id,sha256,lineage FROM documents ORDER BY file_id"):
                 identity.update(json.dumps(list(row),ensure_ascii=True).encode())

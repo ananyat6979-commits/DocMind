@@ -12,7 +12,7 @@ The first CPU and T4 measurements below used Torch 2.11.0. A subsequent dependen
 
 The fresh [Torch 2.13 CPU baseline](../reports/releases/r1/cpu-ci-torch213) passed independent verification. Its 800 NLI scores and E5 vector hash matched the earlier CI run exactly, and HNSW recall remained 99.1% [98.5, 99.6]. Updated CPU deployment compatibility and Python CI passed. The older FP16 T4 reader profile still describes its original CUDA dependencies; it is not evidence for the updated CUDA stack.
 
-An additional updated-CUDA attempt stopped during environment setup. Its corrected retry was removed while queued after the chosen retrieval profile changed and CPU comparisons completed. Updated CUDA reader results remain unmeasured. The setup failure archive and source snapshot are retained privately.
+An additional updated-CUDA attempt stopped during environment setup. Its corrected retry was removed while queued after the chosen retrieval profile changed and CPU comparisons completed. That attempt produced no updated CUDA reader result. Subsequent updated-stack local-reader components are recorded separately in [gap-closure evidence](CLOSURE_EVIDENCE.md), including the 256-question direct-reader calibration component and 180-case ReAct robustness component. They do not validate a balanced English/Hindi PDF cohort or hosted generation. The setup failure archive and source snapshot are retained privately.
 
 ## NLI results
 

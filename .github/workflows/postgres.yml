@@ -55,4 +55,5 @@ jobs:
         if: always()
         with:
           name: database-restore-check
+          include-hidden-files: true
           path: .secrets/restore/restore-summary.json
