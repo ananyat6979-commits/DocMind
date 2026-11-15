@@ -19,3 +19,5 @@ Container boundaries depend on the host kernel and runtime. The parser serialize
 Extraction quality heuristics can quarantine readable content or miss corruption. Unicode ratios alone do not validate Hindi. OCR and legacy-font conversion are unsupported. Unmeasured languages require review. Short and Romanized Hindi text can remain undetermined.
 
 NLI confidence is not a calibrated truth probability. Existing selective-prediction experiments did not establish useful safe automatic coverage. Small human subsets do not validate general multilingual attribution or claim-extraction recall. Hosted generation remains outside the local-reader profile's evidence.
+
+An adversarial document can assert a false fact directly. Quote existence and high NLI entailment cannot authenticate that fact, and the historical suite includes successful raw role-spoofing cases. The quoted-draft policy needs its own measured robustness results; older release-gate results are not evidence for it. Human review is not a demonstrated safety guarantee.

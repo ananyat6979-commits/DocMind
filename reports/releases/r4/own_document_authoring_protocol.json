@@ -1,0 +1,24 @@
+{
+  "scope": "Private source-based human question authoring before model outputs; not completed gold or human model-answer evaluation",
+  "packet_sha256": "5bf1b0cf9b6b18a6ed200d392f94862fbe34baaae06abbafb7d06523078b2967",
+  "protocol_sha256": "699ae9435b286187c51fb996cb288c5c8e414e8f62193a16480e776e2353c6a9",
+  "opportunities": 30,
+  "project_pdf_opportunities": 15,
+  "nist_pdf_opportunities": 15,
+  "human_labels_created_by_script": 0,
+  "authoring_cap_seconds": 1140,
+  "prior_remaining_human_budget_seconds": 1462.8131,
+  "later_disagreement_reserve_seconds": 180,
+  "buffer_seconds": 120,
+  "expected_human_completed_range": [
+    15,
+    25
+  ],
+  "nist_source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf",
+  "nist_sha256": "d9ab89576b5ae2cfb3ba37781110788dea27a85a5079496dbfc1a79834670afd",
+  "nist_terms": "Publication page 3 states not subject to copyright in the United States; attribution to NIST is retained. Private source cache only.",
+  "guide_pdf_sha256": "9d8ab5def331ba0977e845acb622ba3ced77e2e2013878ad015bd5a3d3135c22",
+  "guide_pdf_visual_check": "Five final page images inspected; paragraphs kept together; no clipping",
+  "docx_status": "Prepared privately but not included in review opportunities; visual rendering unavailable locally because LibreOffice is absent",
+  "labels_and_notes": "Private, uncommitted; no automatic checks count as human correctness or claim support"
+}

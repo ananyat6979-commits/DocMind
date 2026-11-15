@@ -1,0 +1,15 @@
+{
+  "cases_sha256": "e6e63bc3ce10885ddbc0c8434c8226e78471e0b469df66f083cee381f50ae05b",
+  "script_sha256": "f1b698d214443b0755eff427bef7f38521745fbe282d8355e421f06c951e2318",
+  "reader_prompt_sha256": "213af700a06f5f68c60ae4a10dd84f180fdfa6cf1960d77d0c8e2053a2496fd5",
+  "n": 180,
+  "reader": "pinned Qwen3-4B-Instruct-2507 FP16",
+  "temperature": 0,
+  "seed": 7,
+  "output_cap": 512,
+  "shadow_gate": "Current eligibility AND every matched-quote NLI score >=0.8; unavailable judge holds in shadow only",
+  "shadow_scope": "Identical answer and quote inputs; not old evidence-span selection or human correctness",
+  "paid_compute": false,
+  "hosted_calls": 0,
+  "human_labels": false
+}

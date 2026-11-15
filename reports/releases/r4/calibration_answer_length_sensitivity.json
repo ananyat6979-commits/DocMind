@@ -1,0 +1,46 @@
+{
+  "scope": "Post-hoc descriptive sensitivity of historical English HotpotQA held-out EM to raw answer length. No factual labels inferred and no threshold selected.",
+  "source_sha256": "3baba868fc0fe09abf4069fdcdfe9ac65727630fe80cf0de6f91c8139895aea5",
+  "word_count": "Whitespace split of the recorded full answer",
+  "groups": {
+    "all": {
+      "n": 128,
+      "exact_match_correct": 36,
+      "exact_match_accuracy": 0.28125,
+      "em_failures_with_token_f1_at_least_half": 16
+    },
+    "at_most_8_words": {
+      "n": 72,
+      "exact_match_correct": 36,
+      "exact_match_accuracy": 0.5,
+      "em_failures_with_token_f1_at_least_half": 11
+    },
+    "more_than_8_words": {
+      "n": 56,
+      "exact_match_correct": 0,
+      "exact_match_accuracy": 0.0,
+      "em_failures_with_token_f1_at_least_half": 5
+    },
+    "verifier_equal_one": {
+      "n": 96,
+      "exact_match_correct": 32,
+      "exact_match_accuracy": 0.3333333333333333,
+      "em_failures_with_token_f1_at_least_half": 16,
+      "em_errors_over_8_words": 38
+    },
+    "verifier_at_least_0999": {
+      "n": 102,
+      "exact_match_correct": 34,
+      "exact_match_accuracy": 0.3333333333333333,
+      "em_failures_with_token_f1_at_least_half": 16,
+      "em_errors_over_8_words": 41
+    }
+  },
+  "top_20_concise_token_confidence": {
+    "n": 20,
+    "exact_match_correct": 14,
+    "exact_match_accuracy": 0.7,
+    "em_failures_with_token_f1_at_least_half": 4
+  },
+  "interpretation": "Verbose answers, aliases and partial matches can fail EM. Token-F1 is also not factual correctness. The original fixed-grid policies did not qualify under their EM protocol; this is not proof of factual overconfidence or safe release risk."
+}

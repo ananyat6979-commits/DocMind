@@ -4,7 +4,7 @@ DocMind answers questions over PDF, DOCX and text documents using dense retrieva
 
 The [locked core-release plan](docs/CORE_RELEASE_PLAN.md) separates engineering checks from experimental and human evidence. The authenticated API and isolated parser are the deployment path; [centralized deployment](docs/DOCKER_CLOUD.md) documents setup. Native parsing and direct local UI require explicit trusted-development overrides. An opt-in [PostgreSQL profile](docs/POSTGRES_DEPLOYMENT.md) adds tenant isolation and persistent incremental vectors.
 
-The default now follows measured cost and language coverage: E5-small with dense retrieval. Hindi Recall@5 was 75.9% versus 0.8% for English BGE in the declared MIRACL candidate pool. English was 74.1% versus 75.4%, with an uncertain difference. This is component evidence; Hindi answers still require review. Existing corpora need an [isolated migration](docs/API_MIGRATION.md#e5-dense-default).
+The default is pinned E5-small with dense retrieval. The Hindi comparison uses an English-only BGE model as a failure control; only one multilingual embedder was tested, within candidate pools containing gold passages. It does not establish a best multilingual retriever. Hindi Recall@5 was 75.9% versus 0.8% for English BGE in the declared MIRACL candidate pool. English was 74.1% versus 75.4%, with an uncertain difference. This is component evidence; Hindi answers still require review. Existing corpora need an [isolated migration](docs/API_MIGRATION.md#e5-dense-default).
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced local-reader cohort remain unmeasured.
 
