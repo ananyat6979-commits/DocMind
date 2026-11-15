@@ -1,0 +1,45 @@
+{
+  "scope": "Two independent API processes, shared PostgreSQL and private upload directory, real E5/NLI, synthetic fixture and demo generation; no generative-reader or hosted SLA",
+  "requested": 24,
+  "concurrency": 4,
+  "api_processes": 2,
+  "provider_calls": 0,
+  "model_downloads": false,
+  "quota_per_minute": 1000,
+  "script_sha256": "be62ebb72b4ebba412680390e5be968bac1127b77faae433e7ad82d1f751668f",
+  "source_commit": "9a47aa5d7cfc170f2b8883909191cd36a0c48f40",
+  "fixture_sha256": "b596a5136c8658a45f71a2eeafdd5b68d929509c96983ff595f35e732ffd2e9d",
+  "both_ready_seconds": 1.0738244850000171,
+  "cross_process_ingestion_seconds": 8.903098505000003,
+  "cold_query_seconds_by_process": [
+    0.48168051899995135,
+    7.837362208000002
+  ],
+  "warm_load": {
+    "requested": 24,
+    "recorded": 24,
+    "completed": 24,
+    "failed": 0,
+    "unserved": 0,
+    "status_counts": {
+      "200": 24
+    },
+    "elapsed_seconds": 6.279715871999997,
+    "completed_per_second": 3.821828963155996,
+    "completed_only_p50_ms": 1022.4042474999919,
+    "completed_only_p95_ms": 1498.2231292499762,
+    "all_completed_have_request_id": true
+  },
+  "stored_attribution": {
+    "responses": 26,
+    "completed_nli": 26,
+    "judges": [
+      {
+        "model": "typeform/distilbert-base-uncased-mnli",
+        "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+      }
+    ]
+  },
+  "neural_path_verified": true,
+  "total_wall_seconds": 25.063161321999985
+}

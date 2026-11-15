@@ -31,3 +31,6 @@ jobs:
 
       - name: Verify broader synthetic robustness records
         run: python scripts/verify_robustness_closure.py reports/releases/r3/robustness
+
+      - name: Verify published infrastructure records
+        run: python scripts/verify_infrastructure_profiles.py reports/releases/r3/infrastructure

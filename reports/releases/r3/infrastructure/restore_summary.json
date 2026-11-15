@@ -1,0 +1,9 @@
+{
+  "scope": "Synthetic same-cluster fresh-database dump/restore; not an operator backup or cross-region disaster-recovery test",
+  "corpus_vector_equivalent": true,
+  "pending_review_restored": true,
+  "queued_job_restored": true,
+  "event_restored": true,
+  "tenant_isolation_preserved": true,
+  "source_commit": "6c7d85ca9225f2ac1d7841463e4d52126fcba889"
+}
