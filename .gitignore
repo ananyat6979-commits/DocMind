@@ -76,3 +76,5 @@ reports/release_review/
 .kaggle-robustness-closure/
 
 .secrets/
+
+.kaggle-core-profile/

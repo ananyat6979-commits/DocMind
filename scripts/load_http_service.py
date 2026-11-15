@@ -90,6 +90,7 @@ def main():
         env.update(DOCMIND_HOME=tmp, DOCMIND_TEST_MODE="0" if args.real_models else "1",
             DOCMIND_API_KEY=key, DOCMIND_SECRETS_FILE=str(Path(tmp)/"missing.env"),
             DOCMIND_REQUESTS_PER_MINUTE="1000", DOCMIND_REVIEW_AUDIT_RATE="0",
+            DOCMIND_ATTRIBUTION="1" if args.real_models else "0",
             DOCMIND_DEVICE="cpu", HF_HUB_OFFLINE="1", OMP_NUM_THREADS="2",
             MKL_NUM_THREADS="2", OPENBLAS_NUM_THREADS="2", TOKENIZERS_PARALLELISM="false")
         data = Path(tmp)/"data"
