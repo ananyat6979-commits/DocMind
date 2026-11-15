@@ -87,6 +87,7 @@ def capture(out):
             access=page.get_by_label('Personal access key',exact=True);access.fill(credentials['keys']['reader']);access.press('Enter')
             page.get_by_text('Signed in as demo-reader',exact=True).wait_for(timeout=60000)
             assert access.get_attribute('type')=='password'
+            page.get_by_label('Ask a question',exact=True).wait_for(timeout=30000)
             shot(page,'1 / 6  Authenticated document library with synthetic English and Hindi sources')
             question=page.get_by_label('Ask a question',exact=True)
             question.fill('What is the coolant temperature limit during startup?')
