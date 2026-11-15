@@ -42,3 +42,17 @@ jobs:
           python -m pytest tests/test_production_init.py -q
           python scripts/init_production.py --directory .secrets/ci --tenant alpha --tenant beta
           docker compose --env-file .secrets/ci/compose.env -f compose.postgres.yml config --quiet
+
+      - name: Verify a consistent dump restored into a fresh database
+        run: |
+          mkdir -p .secrets/restore
+          python scripts/check_postgres_restore.py --manifest .secrets/restore/probe.json --seed
+          docker exec ${{ job.services.postgres.id }} pg_dump -U postgres -Fc docmind > .secrets/restore/database.dump
+          docker exec ${{ job.services.postgres.id }} createdb -U postgres docmind_restored
+          docker exec -i ${{ job.services.postgres.id }} pg_restore -U postgres -d docmind_restored < .secrets/restore/database.dump
+          DOCMIND_TEST_POSTGRES_URL=postgresql://docmind_runtime:integration-runtime-only-credentials@localhost:5432/docmind_restored python scripts/check_postgres_restore.py --manifest .secrets/restore/probe.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-restore-check
+          path: .secrets/restore/restore-summary.json
