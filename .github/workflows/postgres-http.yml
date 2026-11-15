@@ -25,9 +25,9 @@ jobs:
       DOCMIND_DB_PASSWORD: scale-runtime-only-credentials
       DOCMIND_TEST_POSTGRES_URL: postgresql://docmind_runtime:scale-runtime-only-credentials@localhost:5432/docmind
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/build-push-action@v6
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           load: true
@@ -43,7 +43,7 @@ jobs:
         timeout-minutes: 12
         run: |
           docker run --rm --network host -e DOCMIND_TEST_POSTGRES_URL -e DOCMIND_TEST_MODE=0 -e GITHUB_SHA -e DOCMIND_HOME=/tmp/profile -e OMP_NUM_THREADS=2 -v "$PWD/reports/release_workspace/closure/postgres-http-output:/out" docmind:scale python -u scripts/load_postgres_http.py --out /out/run
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: postgres-real-model-http

@@ -14,3 +14,5 @@ Repeat using Python 3.13/Linux and Python 3.11/Windows with corresponding output
 
 
 `postgres.txt` is an optional hash-locked Psycopg 3.3.9/binary overlay, installed after a locked CPU or CUDA environment. Its typing and timezone dependencies are already pinned in the base locks. The Docker image includes this overlay so one image supports either storage profile. Install it with `pip install --require-hashes -r locks/postgres.txt`. Database schema migrations use separate administrator credentials; merely installing the driver does not enable tenant mode.
+
+The isolated parser has its own small `parser-linux-py311.txt` hash lock, resolved from `requirements-lock-parser.in`. Its image base is pinned by digest; this does not imply that a parser or dependency has no vulnerabilities.

@@ -25,8 +25,8 @@ jobs:
       DOCMIND_DB_PASSWORD: integration-runtime-only-credentials
       DOCMIND_TEST_POSTGRES_URL: postgresql://docmind_runtime:integration-runtime-only-credentials@localhost:5432/docmind
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: {python-version: "3.11"}
       - name: Install offline test dependencies and locked database driver
         run: |
@@ -51,7 +51,7 @@ jobs:
           docker exec ${{ job.services.postgres.id }} createdb -U postgres docmind_restored
           docker exec -i ${{ job.services.postgres.id }} pg_restore -U postgres -d docmind_restored < .secrets/restore/database.dump
           DOCMIND_TEST_POSTGRES_URL=postgresql://docmind_runtime:integration-runtime-only-credentials@localhost:5432/docmind_restored python scripts/check_postgres_restore.py --manifest .secrets/restore/probe.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: database-restore-check

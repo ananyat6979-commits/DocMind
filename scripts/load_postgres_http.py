@@ -31,7 +31,7 @@ def run(out):
         env.update(DOCMIND_HOME=tmp,DOCMIND_TEST_MODE='0',DOCMIND_DATABASE_URL=dsn,DOCMIND_CREDENTIALS_FILE=str(credentials),
             DOCMIND_SECRETS_FILE=str(root/'missing.env'),DOCMIND_REQUESTS_PER_MINUTE='1000',DOCMIND_REVIEW_AUDIT_RATE='0',
             DOCMIND_DEVICE='cpu',HF_HUB_OFFLINE='1',OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',OPENBLAS_NUM_THREADS='2',TOKENIZERS_PARALLELISM='false',
-            DOCMIND_PARSER_MODE='local',DOCMIND_ALLOW_UNSANDBOXED_PARSING='1')
+            DOCMIND_ATTRIBUTION='1',DOCMIND_PARSER_MODE='local',DOCMIND_ALLOW_UNSANDBOXED_PARSING='1')
         data=root/'data/tenants'/hashlib.sha256(scope.encode()).hexdigest();data.mkdir(parents=True)
         text='Coolant must stay below 300 degrees during startup. Operators verify the pump every shift. '*4
         (data/'coolant.txt').write_text(text);report['fixture_sha256']=hashlib.sha256(text.encode()).hexdigest()

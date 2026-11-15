@@ -14,8 +14,8 @@ jobs:
       OMP_NUM_THREADS: "2"
       TOKENIZERS_PARALLELISM: "false"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: {python-version: "3.11"}
       - name: Install hash-locked CPU environment
         run: pip install --require-hashes -r locks/cpu-linux-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
@@ -23,7 +23,7 @@ jobs:
         run: python scripts/release_components_cpu.py
       - name: Keep aggregate results without restricted text or annotation records
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: cpu-component-summary
           path: |
@@ -40,8 +40,8 @@ jobs:
       OMP_NUM_THREADS: "2"
       TOKENIZERS_PARALLELISM: "false"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with: {python-version: "3.11"}
       - name: Install hash-locked CPU environment
         run: pip install --require-hashes -r locks/cpu-linux-py311.txt --extra-index-url https://download.pytorch.org/whl/cpu
@@ -51,7 +51,7 @@ jobs:
         run: python scripts/miracl_component.py --inputs reports/release_workspace/miracl --out reports/release_workspace/miracl-cpu --device cpu --distractors 2000 --max-seconds 5400
       - name: Keep numeric retrieval results without source text
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: miracl-component-summary
           path: |
