@@ -56,7 +56,10 @@ def summarize(planned,records):
                 'candidate_target':count('candidate_target'),'draft_target':count('draft_target'),
                 'usable_structured_answers':sum(r.get('finish_reason')!='format_failure' for r in observed),
                 'format_failures':sum(r.get('finish_reason')=='format_failure' for r in observed),
-                'quote_nli_shadow_target':count('nli_shadow_target'),'draft_numeric_utility':count('numeric_utility'),
+                'quote_nli_shadow_target':count('nli_shadow_target'),
+                'candidate_numeric_utility':count('numeric_utility'),
+                'draft_numeric_utility':sum(bool(r.get('numeric_utility')) and r.get('release_state')=='draft' and r.get('finish_reason')!='abstained' for r in observed),
+                'nli_shadow_numeric_utility':sum(bool(r.get('numeric_utility')) and r.get('release_state')=='draft' and r.get('finish_reason')!='abstained' and bool(r.get('nli',{}).get('scores')) and not r.get('nli',{}).get('error') and all(math.isfinite(v) and v>=.8 for v in r['nli']['scores']) for r in observed),
                 'draft_target_requested_bounds':[count('draft_target')/len(cases),(count('draft_target')+missing)/len(cases)],
                 'families':len(families),'families_with_observed_draft_target':known_family_success,
                 'incomplete_families':incomplete_families,'family_any_success95_nominal':wilson(known_family_success,len(families)) if not incomplete_families else None}

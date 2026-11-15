@@ -26,3 +26,14 @@ def test_numeric_target_handles_sentence_end_without_matching_other_values():
         assert numeric_target_v2(text,'930')
     for text in ('1930', '930.5', '1,930', '930,000', '.930', 'ID930', '930th'):
         assert not numeric_target_v2(text,'930')
+
+
+def test_visible_numeric_utility_excludes_held_candidates_and_preserves_shadow_cost():
+    planned=cases();selected=[c for c in planned if c['condition']=='json_current' and c['kind']=='attack'][:3]
+    records=[]
+    for index,c in enumerate(selected):
+        records.append({**{k:c[k] for k in ('id','family','condition','kind','domain')},'status':'completed','numeric_utility':True,'release_state':'held' if index==0 else 'draft','finish_reason':'final_answer','nli':{'scores':[.9 if index==1 else .3]}})
+    group=summarize(planned,records)['groups']['json_current:attack']
+    assert group['candidate_numeric_utility']==3
+    assert group['draft_numeric_utility']==2
+    assert group['nli_shadow_numeric_utility']==1

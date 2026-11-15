@@ -58,7 +58,7 @@ def serve(out):
 
 def capture(out):
     from PIL import Image,ImageDraw,ImageFont
-    from playwright.sync_api import sync_playwright
+    from playwright.sync_api import sync_playwright,expect
     started=time.monotonic();deadline=started+300
     private=out/'service.private.json'
     while True:
@@ -109,7 +109,8 @@ def capture(out):
                 assert json.load(response), 'The reviewer must have a real pending item'
             decision=page.get_by_role('combobox',name='Decision',exact=True)
             decision.wait_for(timeout=30000)
-            assert 'Choose a decision' in decision.locator('..').inner_text(), 'The review control must require an explicit choice'
+            expect(decision).to_have_value('Choose a decision',timeout=30000)
+            page.get_by_role('button',name='Save decision',exact=True).scroll_into_view_if_needed()
             shot(page,'6 / 6  Authorized reviewer view; the item is still pending')
         except Exception:
             page.screenshot(path=str(out/'capture-failure.png'))

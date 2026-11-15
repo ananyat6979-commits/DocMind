@@ -27,3 +27,7 @@ The service release requires filesystem and network confinement, bounded socket 
 ## Publication
 
 Keep restricted text, translations, annotation files and private review notes outside Git. Establish redistribution terms per document and dataset. Record XNLI noncommercial terms and the upstream MS MARCO research restriction alongside mMARCO's declared Apache license. Model licenses do not override upstream dataset restrictions. Automatic annotation never substitutes for the human review budget.
+
+## Core-reader follow-up
+
+The [locked follow-up](CORE_RELEASE_PLAN.md) and [current evidence](CORE_RESULTS.md) document the later unverified quoted-draft default, bounded concurrency, fresh local-reader control and authorized 150-minute aggregate human-review allowance. These changes supersede the initial 90-minute planning cap without changing the six-hour GPU ceiling or historical results. Hindi and French remain gated until their relevant measurements pass.
