@@ -8,7 +8,7 @@ The default now follows measured cost and language coverage: E5-small with dense
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced local-reader cohort remain unmeasured.
 
-See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. Human review timing and the larger scale profile have separate status records.
+See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
 ## Measured results
 
@@ -25,7 +25,7 @@ Runs used available local compute and private free-tier T4 notebooks. No paid in
 | Selective prediction, both SQuAD2 studies | **0% automatic coverage** at calibrated 10%, 20% and 30% risk targets | No useful calibrated gate was demonstrated |
 | Document injection, 50 cases per prompt | Attack success **12% [0, 32]** versus **30% [0, 60]** | Stronger prompt failed to improve this direct-reader test |
 
-These are bounded experiments, not a full-wiki leaderboard or a safety certification. The opt-in backend has live tenant-isolation checks; actual deployment availability remains an operator responsibility. Human review time savings remain unmeasured until the private timing export is validated. [Records and provenance](reports/benchmarks), [provider protocol comparison](reports/protocols/summary.json), [local service load](reports/service_load.json).
+These are bounded experiments, not a full-wiki leaderboard or a safety certification. The opt-in backend has live tenant-isolation checks; actual deployment availability remains an operator responsibility. The completed human timing study does not demonstrate review-time savings. [Records and provenance](reports/benchmarks), [provider protocol comparison](reports/protocols/summary.json), [local service load](reports/service_load.json).
 
 ## Run locally
 

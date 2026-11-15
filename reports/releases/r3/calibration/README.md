@@ -14,7 +14,7 @@ The fixed-grid verifier threshold of 1.0 still selected 96 held-out answers, wit
 
 ![Held-out descriptive coverage and risk](coverage-risk.png)
 
-Curves are descriptive held-out diagnostics. Dotted curves are nominal one-sided upper bounds. Thresholds were selected exclusively on calibration data with a family correction across 126 fixed comparisons and a minimum of 30 selected calibration answers. Every qualifying-policy comparison routes all 128 held-out items to review. The legacy numeric key `reviewed` in the frozen execution summary means **review required**, not completed human annotation. Actual human timing and correctness review are separate and pending. No assumed seconds per review are presented as measured.
+Curves are descriptive held-out diagnostics. Dotted curves are nominal one-sided upper bounds. Thresholds were selected exclusively on calibration data with a family correction across 126 fixed comparisons and a minimum of 30 selected calibration answers. Every qualifying-policy comparison routes all 128 held-out items to review. The legacy numeric key `reviewed` in the frozen execution summary means **review required**, not completed human annotation. The separate [completed human study](../review_cost/README.md) retains its timer overrun and censored durations; it does not supply a general cost per review for this cohort. No assumed seconds per review are presented as measured.
 
 Reproduce numeric checks without neural inference:
 
