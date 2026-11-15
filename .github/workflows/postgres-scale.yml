@@ -9,7 +9,7 @@ permissions:
 jobs:
   real-embedding-profile:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 85
     services:
       postgres:
         image: pgvector/pgvector:0.8.7-pg17-trixie
@@ -40,7 +40,7 @@ jobs:
           mkdir -p reports/release_workspace/closure/scale-output
           chmod 777 reports/release_workspace/closure/scale-output
       - name: Embed and persist fifty thousand unique public paragraphs, then measure ANN
-        timeout-minutes: 32
+        timeout-minutes: 70
         run: |
           docker run --rm --network host -e DOCMIND_TEST_POSTGRES_URL -e DOCMIND_TEST_MODE=0 -e DOCMIND_HOME=/tmp/profile -e OMP_NUM_THREADS=2 -v "$PWD/reports/release_workspace/closure/scale-output:/out" docmind:scale python -u scripts/profile_postgres_scale.py --out /out
       - name: Restart the database and verify fresh-process persistence

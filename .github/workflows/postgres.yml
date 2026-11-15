@@ -36,3 +36,9 @@ jobs:
         run: python scripts/migrate_postgres.py --tenant alpha --tenant beta
       - name: Exercise live isolation, persistent search, shared quotas and lease recovery
         run: python -m pytest tests/test_postgres_backend.py -v
+
+      - name: Validate private deployment initialization and Compose wiring
+        run: |
+          python -m pytest tests/test_production_init.py -q
+          python scripts/init_production.py --directory .secrets/ci --tenant alpha --tenant beta
+          docker compose --env-file .secrets/ci/compose.env -f compose.postgres.yml config --quiet

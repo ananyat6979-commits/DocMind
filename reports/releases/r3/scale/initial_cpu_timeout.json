@@ -1,0 +1,14 @@
+{
+  "scope": "Failed CPU setup/profile attempt, not an ANN result",
+  "ci_run": 43639534066,
+  "source_commit": "e391647",
+  "embedding_step_cap_minutes": 32,
+  "requested_unique_paragraphs": 50000,
+  "observed_progress": "843 of 1563 embedding batches before timeout",
+  "retained_complete_vector_matrix": false,
+  "documents_written": 0,
+  "ann_recall": null,
+  "load_results": null,
+  "log_archive_sha256": "dbbd2048c953dc7c331f0addcca43144194b401c9bf4c2516c8e7dfcf1f3fb68",
+  "followup": "Bound CPU embedding stage at 70 minutes and job at 85 minutes; no additional GPU reservation"
+}
