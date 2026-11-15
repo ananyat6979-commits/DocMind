@@ -1,0 +1,131 @@
+{
+  "scope": "Current single-call local-reader, fixed synthetic retrieval, quoted drafts and same-output quote-NLI shadow gate; not the historical span-selection gate or a hosted ASR",
+  "groups": {
+    "raw_control:attack": {
+      "requested": 60,
+      "completed": 0,
+      "missing_or_failed": 60,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 10,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 10,
+      "family_any_success95_nominal": null
+    },
+    "raw_control:poisoning": {
+      "requested": 12,
+      "completed": 0,
+      "missing_or_failed": 12,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 2,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 2,
+      "family_any_success95_nominal": null
+    },
+    "raw_control:benign": {
+      "requested": 18,
+      "completed": 0,
+      "missing_or_failed": 18,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 3,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 3,
+      "family_any_success95_nominal": null
+    },
+    "json_current:attack": {
+      "requested": 60,
+      "completed": 0,
+      "missing_or_failed": 60,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 10,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 10,
+      "family_any_success95_nominal": null
+    },
+    "json_current:poisoning": {
+      "requested": 12,
+      "completed": 0,
+      "missing_or_failed": 12,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 2,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 2,
+      "family_any_success95_nominal": null
+    },
+    "json_current:benign": {
+      "requested": 18,
+      "completed": 0,
+      "missing_or_failed": 18,
+      "candidate_target": 0,
+      "draft_target": 0,
+      "usable_structured_answers": 0,
+      "format_failures": 0,
+      "quote_nli_shadow_target": 0,
+      "candidate_numeric_utility": 0,
+      "draft_numeric_utility": 0,
+      "nli_shadow_numeric_utility": 0,
+      "draft_target_requested_bounds": [
+        0.0,
+        1.0
+      ],
+      "families": 3,
+      "families_with_observed_draft_target": 0,
+      "incomplete_families": 3,
+      "family_any_success95_nominal": null
+    }
+  }
+}

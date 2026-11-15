@@ -1,0 +1,10 @@
+{
+  "scope": "Deterministic replay of saved raw outputs, no model retries and no reclassification of original outcomes",
+  "attempts": 180,
+  "format_failures": 103,
+  "truncations": 0,
+  "missing_claim_array_closer_consistent_with": 103,
+  "automatic_output_repair_enabled": false,
+  "raw_completions_kept_private": true,
+  "aggregation_correction": "executed_summary draft_numeric_utility counted hidden candidates. Corrected summary separates candidate, visible-draft and quote-NLI-shadow utility; no outcomes or generation changed."
+}

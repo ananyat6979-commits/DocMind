@@ -81,3 +81,5 @@ reports/release_review/
 
 .kaggle-quoted-robustness/
 .kaggle-own-documents/
+
+.kaggle-quoted-complete-schema/

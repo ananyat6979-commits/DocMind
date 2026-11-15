@@ -1,0 +1,17 @@
+{
+  "source_archive_sha256": "a4dd37dbea29df569ce0c922342ec4fe64dcb482f87c358347dbeb42dab15eb6",
+  "source_text_license": "Original synthetic fixtures",
+  "raw_completions_public": false,
+  "posthoc_aggregation_correction": true,
+  "sha256": {
+    "answer_records.json": "0eeaee547103b730926c8f126f41723dc839dcd46c060e030d993c0facc23948",
+    "compute_usage.json": "d5a999ef06626576c13976691f4bb3ac8f4afbbf53189c3c4f3eac72c0ab25d7",
+    "executed_source.json": "dd1bd5f8aac2e54cfe49f5abb22b25013e175a575f7a101f71ed8e3498e8a5e0",
+    "executed_summary.json": "f3bcba14710b06a0b1a6324982d97c953ab8b75788a84d56ad37176362cbaa18",
+    "format_diagnostics.json": "a2c5f58b83c331f84573ce631aebbcf46889ec5fd4ead0dea64a206b7551a4e8",
+    "manifest.json": "5d45cc5e667d1831228301c19c9d4afeadabb27f4fd8964a0b0be5a4dd39bd46",
+    "planned.json": "8fc863b67c2fb1999a678041c10ad2cf027ec072e9efec550fcea5ac2c7a8f0d",
+    "reader_identity.json": "555325c055de2f8aeaacf445375b6a311d60d84ea23fd127e5936533e331998d",
+    "summary.json": "8e31b17ab5002ac4688f1fbae4cd550e662206060452f8cc41c46011c57b7298"
+  }
+}

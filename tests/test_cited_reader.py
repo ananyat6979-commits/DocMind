@@ -220,3 +220,13 @@ def test_unknown_selected_document_does_not_become_a_not_found_answer(monkeypatc
     client=TestClient(m.app,headers={'X-API-Key':'test-key'})
     result=client.post('/query',json={'question':'What is the closing time?','file_ids':['missing-file']})
     assert result.status_code==404 and 'refresh' in result.json()['detail']
+
+
+def test_complete_reader_prompt_schema_is_valid_json_with_root_short_answer():
+    import json
+    from docmind.agent.reader import SYSTEM
+    example=SYSTEM.split('complete example: ',1)[1].split('\n',1)[0].rstrip('.')
+    payload=json.loads(example)
+    assert isinstance(payload['claims'],list) and len(payload['claims'])==1
+    assert payload['short_answer'] in payload['claims'][0]['text']
+    assert 'short_answer' not in payload['claims'][0]

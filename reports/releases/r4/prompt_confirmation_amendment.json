@@ -1,0 +1,17 @@
+{
+  "scope": "Prospective complete-schema prompt confirmation on the same fixed synthetic fixtures; development regression, not an independent held-out attack suite",
+  "reason": "All 103 malformed outputs parse after the same diagnostic closing-array insertion; automatic repair remains disabled",
+  "prior_outputs_and_scores_immutable": true,
+  "new_condition_retries_failed_attempts": false,
+  "new_condition_evaluates_all_planned_cases": true,
+  "closed_upper_gpu_seconds": 14887,
+  "prompt_confirmation_wall_cap_seconds": 1200,
+  "prompt_confirmation_reserved_gpu_seconds": 2400,
+  "own_document_wall_cap_seconds": 1800,
+  "own_document_reserved_gpu_seconds": 3600,
+  "total_upper_with_reservations": 20887,
+  "project_cap_gpu_seconds": 21600,
+  "reserve_reallocated_from": "Unused primary reservation after the primary session closed",
+  "hosted_calls": 0,
+  "paid_compute": false
+}
