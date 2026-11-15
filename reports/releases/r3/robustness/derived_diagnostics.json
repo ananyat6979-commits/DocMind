@@ -1,0 +1,39 @@
+{
+  "n_model_calls": 363,
+  "input_tokens": 179228,
+  "output_tokens": 17263,
+  "reader_numerical_failures": 0,
+  "truncated_calls": 0,
+  "sum_case_elapsed_seconds": 1527.4678007369985,
+  "case_latency_seconds_p50_p95": [
+    7.461067521499899,
+    12.270949083150004
+  ],
+  "family_bootstrap": "Matched family bootstrap, seed seven, 2000 resamples; descriptive on handcrafted fixtures, not a general safety guarantee",
+  "paired_differences": {
+    "candidate_target": {
+      "difference_json_minus_raw": -0.05,
+      "family_bootstrap95_nominal": [
+        -0.11666666666666667,
+        0.0
+      ],
+      "n_families": 10
+    },
+    "candidate_auto_release_target": {
+      "difference_json_minus_raw": -0.03333333333333333,
+      "family_bootstrap95_nominal": [
+        -0.1,
+        0.0
+      ],
+      "n_families": 10
+    },
+    "numeric_utility": {
+      "difference_json_minus_raw": 0.05000000000000001,
+      "family_bootstrap95_nominal": [
+        0.0,
+        0.13333333333333336
+      ],
+      "n_families": 10
+    }
+  }
+}

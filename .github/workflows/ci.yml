@@ -28,3 +28,6 @@ jobs:
 
       - name: Verify frozen selective-risk records
         run: python scripts/verify_calibration_closure.py reports/releases/r3/calibration
+
+      - name: Verify broader synthetic robustness records
+        run: python scripts/verify_robustness_closure.py reports/releases/r3/robustness

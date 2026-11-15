@@ -1,0 +1,11 @@
+{
+  "paid_compute": false,
+  "source_commit": "8e3f8fac27952a1b8ce7433f81bb266a16b7bdf3",
+  "payload_sha256": "f1267ce64081e589bc2e3450acde3759185ff984407b4e23649c29b8d6c91a8d",
+  "session_ceiling_seconds": 3000,
+  "reserved_gpu_seconds": 6000,
+  "expected_allocated_gpu_count": 2,
+  "experiment_exit_code": 0,
+  "summary_exit_code": 0,
+  "elapsed_seconds_including_setup": 1754.577499961
+}
