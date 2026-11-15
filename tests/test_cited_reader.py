@@ -230,3 +230,18 @@ def test_complete_reader_prompt_schema_is_valid_json_with_root_short_answer():
     assert isinstance(payload['claims'],list) and len(payload['claims'])==1
     assert payload['short_answer'] in payload['claims'][0]['text']
     assert 'short_answer' not in payload['claims'][0]
+
+
+def test_invalid_auxiliary_summary_does_not_release_unmatched_evidence(monkeypatch):
+    monkeypatch.setenv('DOCMIND_RELEASE_MODE', 'draft')
+    monkeypatch.setenv('DOCMIND_ATTRIBUTION', '0')
+    session = SimpleNamespace(calls=1, usage=lambda: {})
+    payload = {'short_answer': 'unlinked', 'claims': [{'text': 'Two seconds.', 'evidence': [
+        {'chunk_id': 'exact-id', 'quote': source().chunk.content}]}]}
+    engine = CitedReader(Retriever())
+    response = engine.assemble('How long does the shutdown valve take to close?', [source()], json.dumps(payload), time.monotonic(), session)
+    assert response.release_state == 'draft' and response.short_answer is None
+    assert response.answer == 'Two seconds.' and response.finish_reason == 'final_answer'
+    payload['claims'][0]['evidence'][0]['quote'] = 'invented evidence'
+    response = engine.assemble('How long does the shutdown valve take to close?', [source()], json.dumps(payload), time.monotonic(), session)
+    assert response.release_state == 'held' and 'invalid_or_missing_quote' in response.hold_reasons

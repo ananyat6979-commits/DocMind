@@ -96,7 +96,7 @@ async def execute(plan,lookup,out):
                 engine=(CitedReader if arm=='single' else CitedReActReader)(Frozen(sources),backend,deadline_seconds=min(180,max(.01,end-time.monotonic())))
                 response=await engine.arun(item['question'])
                 quote=response.citation_report.get('quote_validation',{})
-                failure=response.finish_reason=='format_failure' or not quote.get('short_answer_explicit')
+                failure=response.finish_reason=='format_failure' or not quote.get('short_answer_explicit') or not quote.get('short_answer_valid', False)
                 record.update(status='format_failure' if failure else 'completed',format_failure=failure,
                     short_answer_words=len((response.short_answer or '').split()),answer=response.answer,short_answer=response.short_answer,
                     release_state=response.release_state,hold_reasons=response.hold_reasons)

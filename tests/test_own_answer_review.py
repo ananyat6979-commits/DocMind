@@ -27,3 +27,13 @@ def test_timed_partial_review_never_invents_labels_or_population_risk():
     assert result['false_release_risk']=='insufficient evidence' and result['reviewed_subset_false_release_fraction'] is None
     labels['records'][0]['claims']={}
     with pytest.raises(ValueError,match='claim label'):summarize(packet,linkage,labels)
+
+
+def test_missing_quote_text_stays_missing_without_inventing_support(tmp_path):
+    root=tmp_path/'review';root.mkdir();profile=tmp_path/'profile';(profile/'private').mkdir(parents=True)
+    gold=[{'task_id':'q:pdf','question':'What is the limit?','source_page':16,'group':'nist','source_filename':'nist.pdf','answerable':True}]
+    records=[{'task_id':'q:pdf','format':'pdf','status':'completed','answer':'Twelve.','release_state':'held','evidence':[{'claim':'Twelve.','text':None,'status':'missing'}]}]
+    (profile/'private/gold.json').write_text(json.dumps(gold));(profile/'private/records.json').write_text(json.dumps(records))
+    result=prepare(root,profile);packet=json.loads((root/'actual-answer-packet.private.json').read_text())
+    assert result['claims']==1 and packet['items'][0]['claims'][0]['quote']==''
+    assert result['human_labels_created']==0

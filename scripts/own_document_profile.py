@@ -130,7 +130,8 @@ def run(root,out):
             response=engine.run(task['question'],file_ids=[files[task['source_filename']]])
             failure=response.finish_reason=='format_failure'
             row.update(status='format_failure' if failure else 'completed',question=task['question'],answer=response.answer,short_answer=response.short_answer,abstained=response.abstained,release_state=response.release_state,hold_reasons=response.hold_reasons,evidence=response.evidence,document_context=response.document_context,sources=[{'chunk_id':s.chunk.chunk_id,'content':s.chunk.content,'metadata':s.chunk.metadata} for s in response.sources])
-            if not failure:
+            row['metric_field_valid'] = response.citation_report.get('quote_validation', {}).get('short_answer_valid', False)
+            if not failure and row['metric_field_valid']:
                 if not task['answerable']:row['exact_match']=int(response.abstained)
                 else:
                     aliases=[task['answer']]+[a.strip() for a in task['aliases'].split('|') if a.strip()]

@@ -30,7 +30,7 @@ def prepare(root,profile):
     for index,r in enumerate(selected):
         g=lookup[r['task_id']];identity='answer-'+str(index+1);claims=[]
         grouped={}
-        for e in r.get('evidence',[]):grouped.setdefault(e.get('claim',''),[]).append(e.get('text',e.get('quote','')))
+        for e in r.get('evidence',[]):grouped.setdefault(e.get('claim',''),[]).append(e.get('text') or e.get('quote') or '')
         for i,(claim,quotes) in enumerate(grouped.items()):claims.append({'id':'claim-'+str(i+1),'claim':claim,'quote':'\n\n'.join(quotes)})
         page=g['source_page'];project=g['group']=='project'
         items.append({'id':identity,'question':g['question'],'answer':r.get('answer','No candidate was returned.'),'claims':claims,'href':'corpus/'+g['source_filename']+'#page='+str(page),'image':('pdf-qa/final-'+str(page)+'.png' if project else 'nist-qa/page-'+str(page)+'.png')})

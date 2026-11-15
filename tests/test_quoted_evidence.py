@@ -58,3 +58,28 @@ def test_offset_mapping_randomized_combining_text():
             if located.status in ('literal', 'normalized'):
                 assert located.text == text[located.start:located.end]
                 assert canonical_text(located.text)[0] == canonical
+
+
+@pytest.mark.parametrize('short,reason', [
+    ('unlinked summary', 'short_answer_link'),
+    ('x' * 257, 'short_answer_bound'),
+    (None, 'short_answer_bound'),
+    ('', 'short_answer_link'),
+])
+def test_auxiliary_metric_failure_preserves_claims_but_cannot_be_scored(short, reason):
+    source = SearchResult(Chunk('The valve closes in two seconds.', 'doc', 'a.txt', 0, file_id='f'), 1, 'dense')
+    claim = {'text': 'Two seconds.', 'evidence': [{'chunk_id': source.chunk.chunk_id, 'quote': 'two seconds'}]}
+    result = validate_claims({'short_answer': short, 'claims': [claim]}, [source])
+    assert result['answer'] == 'Two seconds.' and result['quotes_matched']
+    assert result['short_answer'] is None and not result['short_answer_valid']
+    assert result['metric_field_errors'] == [reason] and not result['errors']
+    claim['evidence'][0]['quote'] = 'invented passage'
+    assert validate_claims({'short_answer': short, 'claims': [claim]}, [source])['errors'] == ['quote_missing']
+
+
+def test_auxiliary_abstention_conflict_is_not_a_displayed_answer():
+    result = validate_claims({'abstained': True, 'claims': [], 'short_answer': 'made up'}, [])
+    assert result['answer'] == '' and result['short_answer'] is None
+    assert result['metric_field_errors'] == ['short_answer_abstention_conflict']
+    with pytest.raises(ValueError, match='conflict'):
+        validate_claims({'abstained': True, 'claims': [{'text': 'made up'}]}, [])

@@ -122,7 +122,7 @@ def run(out, deadline):
             response=engine.run(item['question'])
             quote_report=response.citation_report.get('quote_validation',{})
             explicit=quote_report.get('short_answer_explicit',False)
-            format_failure=response.finish_reason=='format_failure' or not explicit
+            format_failure=response.finish_reason=='format_failure' or not explicit or not quote_report.get('short_answer_valid', False)
             record.update(status='format_failure' if format_failure else 'completed', format_failure=format_failure,
                 answer=response.answer,short_answer=response.short_answer,short_answer_words=len((response.short_answer or '').split()),
                 abstained=response.abstained,release_state=response.release_state,hold_reasons=response.hold_reasons,

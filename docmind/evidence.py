@@ -8,7 +8,7 @@ import regex
 
 from docmind.models import SearchResult
 
-VERSION = "quoted-evidence-v1"
+VERSION = "quoted-evidence-v2"
 _ESCAPED = {0x85, 0x2028, 0x2029, 0x61C, 0x200E, 0x200F, 0x200B, 0x2060}
 _ESCAPED.update(range(0x202A, 0x202F))
 _ESCAPED.update(range(0x2066, 0x206A))
@@ -149,15 +149,24 @@ def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) ->
     if "answer" in payload:
         if not isinstance(payload["answer"], str) or canonical_text(payload["answer"])[0] != canonical_text(answer)[0]:
             raise ValueError("Answer contains text outside the linked claims")
+    # This auxiliary scoring field is never displayed. Invalid metadata must not
+    # erase otherwise valid claims, nor become a credited benchmark prediction.
     short_answer = payload.get("short_answer", answer)
+    metric_errors = []
     if not isinstance(short_answer, str) or len(short_answer) > 256:
-        raise ValueError("Short answer must be a bounded string")
-    if abstained and short_answer.strip():raise ValueError("An abstention cannot contain a short answer")
-    short_normalized = canonical_text(short_answer)[0]
-    if not abstained and (not short_normalized or short_normalized not in canonical_text(answer)[0]):
-        raise ValueError("Short answer must be a substring of the displayed claims")
+        metric_errors.append("short_answer_bound")
+    elif abstained and short_answer.strip():
+        metric_errors.append("short_answer_abstention_conflict")
+    elif not abstained:
+        normalized = canonical_text(short_answer)[0]
+        if not normalized or normalized not in canonical_text(answer)[0]:
+            metric_errors.append("short_answer_link")
+    if metric_errors:
+        short_answer = None
     return {"version": VERSION, "answer": answer, "short_answer": short_answer,
-            "short_answer_explicit": "short_answer" in payload, "abstained": abstained,
+            "short_answer_explicit": "short_answer" in payload,
+            "short_answer_valid": not metric_errors, "metric_field_errors": metric_errors,
+            "abstained": abstained,
             "claims": evidence, "errors": sorted(set(errors)),
             "quotes_matched": bool(evidence) and not errors,
             "claim_support": "not_independently_verified"}
