@@ -1,0 +1,25 @@
+{
+  "scope": "English own-document cached-parsing local-reader smoke test, same reviewer confirmed sources; not independent annotation or hosted product validation",
+  "seed": 7,
+  "pdf_questions": 17,
+  "requested_tasks": 19,
+  "cohort_sha256": "0d6047848ea57fbad0107d28c96ba1b6321511b05665bf027d9ceefaa0f61a6c",
+  "confirmation_packet_sha256": "4eaf24eb07f74d16205fa13eb7654f731b694161ff2ca81806645603dfe5afbe",
+  "confirmation_export_sha256": "88722fc541d98330e532ba58ba1f6e707a2ead6a4c82829f3f3a1e9b14164913",
+  "original_export_sha256": "c6e70e22df39c81a9ad489a6160c7e02bce6ae4790b6eccc6a91c9208e8df095",
+  "parser_cache_sha256": "9a3787a35da4e11ebd1fc1bea1fb3aaaec075d70352ac1ae12f99d547639cebd",
+  "labels_checked": 17,
+  "labels_finished": 16,
+  "recorded_confirmation_seconds": 1200.0,
+  "selection_uses_model_outcomes": false,
+  "wall_cap_seconds": 1800,
+  "reserved_gpu_seconds": 3600,
+  "output_token_cap": 1024,
+  "retries": 0,
+  "paired_docx_is_additional_independent_sample": false,
+  "docx_layout_visually_verified": false,
+  "source_license_notes": {
+    "guide": "Original project fixture",
+    "nist": "NIST public US-government publication; attribution retained; private source copy"
+  }
+}
