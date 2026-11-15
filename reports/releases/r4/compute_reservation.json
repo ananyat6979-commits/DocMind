@@ -1,0 +1,15 @@
+{
+  "schema": "core-compute-reservation-v1",
+  "paid_compute": false,
+  "project_gpu_ceiling_seconds": 21600,
+  "closed_prior_use_upper_bound_gpu_seconds": 7080,
+  "prior_account_used_seconds": 3504.539,
+  "main_reserved_wall_seconds": 4800,
+  "main_reserved_gpu_seconds": 9600,
+  "allocated_devices_counted": 2,
+  "hindi_reserved_gpu_seconds": 3600,
+  "unreserved_gpu_seconds": 1320,
+  "hosted_evaluation_enabled": false,
+  "free_quota_check": "2026-11-15: 29.03 GPU hours remaining; earlier calibration and robustness sessions complete",
+  "note": "Reservation, not completed usage. Setup and pilots count. Reconcile with the closed account snapshot before any next submission."
+}
