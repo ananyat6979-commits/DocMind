@@ -12,7 +12,7 @@ The three-sentence README, actual 75-second UI capture, frozen results, methods 
 
 The exact-match confound is already reported separately. The original calibrated-policy result remains a result under its EM-defined error metric; it does not establish factual risk. Replacing that metric with human correctness requires suitable new labels and a new calibration study. Verbose answers or disagreeing human subsets do not justify silently rewriting historical outcomes.
 
-The own-document source-confirmation export now supports a frozen 17-question PDF cohort and two paired DOCX checks. The actual generated-answer and claim-support review remains separate. This small, source-confirmed task subset is not representative multilingual validation, and synthetic proposals are not human-authored questions.
+The own-document source-confirmation export now supports a frozen 17-question PDF cohort and two paired DOCX checks. The separate actual-answer review is complete: 10 answers were judged correct, two incorrect and five unclear; these bounded labels do not establish release safety. This small, source-confirmed task subset is not representative multilingual validation, and synthetic proposals are not human-authored questions.
 
 Sources checked for this decision:
 

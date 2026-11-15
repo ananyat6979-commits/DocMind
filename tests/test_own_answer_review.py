@@ -37,3 +37,25 @@ def test_missing_quote_text_stays_missing_without_inventing_support(tmp_path):
     result=prepare(root,profile);packet=json.loads((root/'actual-answer-packet.private.json').read_text())
     assert result['claims']==1 and packet['items'][0]['claims'][0]['quote']==''
     assert result['human_labels_created']==0
+
+
+def test_metric_sensitivity_requires_identical_reviewed_inputs():
+    import hashlib
+    import pytest
+    from scripts.analyze_own_answer_review import metric_sensitivity
+    # Synthetic test judgments exercise accounting, not research annotations.
+    claims = [{'id': 'c', 'claim': 'Ten.', 'quote': 'Ten.'}]
+    # Packet preparation uses stable sequential claim identities.
+    claims[0]['id'] = 'claim-1'
+    packet = {'sha256': 'p', 'cap_seconds': 1800, 'items': [{'id': 'a', 'answer': 'Ten.', 'claims': claims}]}
+    digest = hashlib.sha256(json.dumps({'answer': 'Ten.', 'claims': claims}, sort_keys=True).encode()).hexdigest()
+    linkage = [{'id': 'a', 'task_id': 'q:pdf', 'release_state': 'draft', 'input_sha256': digest}]
+    labels = {'packet_sha256': 'p', 'elapsed_ms': 1000, 'records': [{'id': 'a', 'finished': True,
+        'human_adjudicated': True, 'answer_correctness': 'incorrect', 'claims': {'claim-1': 'unsupported'}}]}
+    records = [{'task_id': 'q:pdf', 'answer': 'Ten.', 'exact_match': 0,
+        'evidence': [{'claim': 'Ten.', 'text': 'Ten.', 'chunk_id': 'c', 'status': 'literal'}], 'sources': [{'chunk_id': 'c'}]}]
+    result = metric_sensitivity(packet, linkage, labels, records)
+    assert result['claim_location_by_human_support'] == {'citation_found=True:quote_located=True:unsupported': 1}
+    records[0]['answer'] = 'Changed answer.'
+    with pytest.raises(ValueError, match='Changed answer/evidence'):
+        metric_sensitivity(packet, linkage, labels, records)

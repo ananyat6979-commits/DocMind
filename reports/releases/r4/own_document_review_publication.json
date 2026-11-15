@@ -1,0 +1,8 @@
+{
+  "scope": "Aggregate-only single-reviewer evidence; hashes establish publication integrity, not semantic correctness or independent replication",
+  "sha256": {
+    "own_document_actual_answer_review.json": "b5cc9293702de2f229bca8cc15389d87b4d1cec7db52b7e94248f50dc209ba9a",
+    "own_document_human_metric_sensitivity.json": "fe8cc8c0df482f4e0502689fd6b80da83907ee1a50787a4d975b27894a751b4a",
+    "review_budget_after_actual_answers.json": "a4a325a93494c15b983f3a07ed4e466aae8608311e47f828e6b4f2760d7d196d"
+  }
+}

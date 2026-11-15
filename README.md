@@ -1,12 +1,14 @@
 # DocMind
 
-DocMind answers questions over PDF, DOCX and text documents using dense retrieval, a single reader call and quoted source passages. Drafts are explicitly unverified: deterministic quote matching locates evidence, while human review handles missing citations, incomplete-document abstentions and unmeasured languages. Published experiments include negative retrieval, attribution and calibration results; the quoted-draft path has a small frozen-evidence local-reader control, with end-to-end human correctness still under study.
+DocMind answers questions over PDF, DOCX and text documents using dense retrieval, a single reader call and quoted source passages. Drafts are explicitly unverified: deterministic quote matching locates evidence, while human review handles missing citations, incomplete-document abstentions and unmeasured languages. Published experiments include negative retrieval, attribution and calibration results; the quoted-draft path has a small frozen-evidence local-reader control, with only a small selected single-reviewer end-to-end study.
 
 The [current core evidence](docs/CORE_RESULTS.md) records completed results and remaining measurement limits. The [locked core-release plan](docs/CORE_RELEASE_PLAN.md) separates engineering checks from experimental and human evidence. The authenticated API and isolated parser are the deployment path; [centralized deployment](docs/DOCKER_CLOUD.md) documents setup. Native parsing and direct local UI require explicit trusted-development overrides. An opt-in [PostgreSQL profile](docs/POSTGRES_DEPLOYMENT.md) adds tenant isolation and persistent incremental vectors.
 
 The default is pinned E5-small with dense retrieval. The Hindi comparison uses an English-only BGE model as a failure control; only one multilingual embedder was tested, within candidate pools containing gold passages. It does not establish a best multilingual retriever. Hindi Recall@5 was 75.9% versus 0.8% for English BGE in the declared MIRACL candidate pool. English was 74.1% versus 75.4%, with an uncertain difference. This is component evidence; Hindi answers still require review. Existing corpora need an [isolated migration](docs/API_MIGRATION.md#e5-dense-default).
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced English/Hindi local-reader cohort remain unmeasured. The [fresh English protocol control](reports/releases/r4/paired_core_t4/README.md) completed 35 paired questions: candidate EM was 14.3% for single-call and 22.9% for ReAct, with an uncertain paired difference. Both used one call per question, so adaptive retrieval was not exercised.
+
+The [own-document smoke test](reports/releases/r4/own_document_t4/summary.json) completed 17 source-confirmed English PDF questions plus two paired DOCX tasks. PDF candidate exact match was 2/17 (nominal 95% interval 3.3% to 34.3%); a [single-reviewer check](reports/releases/r4/own_document_actual_answer_review.json) labeled 10 answers correct, two incorrect and five unclear. Three correct answers were held and two visible drafts were incorrect. A separate saved-output parser replay recovers five auxiliary-field failures, but document-language holds persist. This small selected cohort does not establish general end-to-end accuracy.
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
@@ -15,7 +17,7 @@ See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new dis
 [![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
 [![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)
 
-Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:3c237c1408336ba68cd501571ce996c66e2d3959fa43256d98c5ed1c46cbfa6b`. [Inventory and signed provenance](reports/releases/r4/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
+Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:c61a10e73cdc548531b0428b6d0e5fd2059b8a5dd2177492033bb6af3a92ed19`. [Inventory and signed provenance](reports/releases/r4/image_publication_after_contract.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
 
 ## Workflow demo
 

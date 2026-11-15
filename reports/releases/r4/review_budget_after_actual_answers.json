@@ -1,0 +1,9 @@
+{
+  "total_pdf_review_allowance_seconds": 9000,
+  "charged_before_actual_answer_review_seconds": 6277.1869,
+  "actual_answer_review_recorded_seconds": 1544.983,
+  "charged_total_seconds": 7822.1699,
+  "remaining_seconds": 1177.8301000000001,
+  "active_work_independently_observed": false,
+  "raw_human_labels_in_git": false
+}
