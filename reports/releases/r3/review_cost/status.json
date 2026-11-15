@@ -1,11 +1,9 @@
 {
-  "status": "awaiting validated private human export",
-  "packet_sha256": "15b6d2c010d3e9448b68fd76f11c13270d97d9bd7b8ad4679b3ed2493e41ed65",
-  "selected_nonpractice": 27,
-  "practice_items": 2,
-  "review_cap_minutes": 20,
-  "completed_human_labels_published": 0,
-  "measured_review_seconds": null,
-  "population_time_savings": null,
-  "scope": "Single-reviewer English document-interface timing component, separate from Hindi PDF claims. No assumed duration is called measured."
+  "status": "completed labels with capped timing",
+  "summary": "completed_summary.json",
+  "completed_nonpractice_labels": 27,
+  "full_per_item_time_comparison": "unmeasured: 16 study-item durations censored",
+  "self_reported_review_minutes_lower_bound": 45,
+  "elapsed_review_minutes": 53.961483333333334,
+  "raw_labels_committed": false
 }

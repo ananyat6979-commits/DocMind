@@ -1,0 +1,78 @@
+{
+  "status": "validated labels with capped timing",
+  "packet_sha256": "15b6d2c010d3e9448b68fd76f11c13270d97d9bd7b8ad4679b3ed2493e41ed65",
+  "selected_nonpractice": 27,
+  "finished_nonpractice": 27,
+  "missing_nonpractice": 0,
+  "total_visible_seconds_including_practice_and_unfinished": 1200.230400000006,
+  "start_to_export_wall_seconds": 3237.689,
+  "fully_timed_nonpractice": 11,
+  "timing_censored_nonpractice": 16,
+  "finished_zero_recorded_time": 15,
+  "timer_cap_reached": true,
+  "between_layout_time_savings": null,
+  "timing_limit": "The legacy timer stopped accumulating at its cap while labels could still be saved. Zero times after the cap are missing durations, not instant reviews. The final positive-duration item is conservatively treated as censored. Timing comparisons are unvalidated.",
+  "layout_descriptives": {
+    "A": {
+      "completed_labels": 13,
+      "fully_timed_subset": 6,
+      "median_visible_seconds": 95.00569999999925,
+      "mean_visible_seconds": 106.71413333333408,
+      "seconds_sum": 640.2848000000045,
+      "question_validity": {
+        "valid": 12,
+        "unclear": 1
+      },
+      "answer_correctness": {
+        "correct": 11,
+        "incorrect": 1,
+        "unclear": 1
+      }
+    },
+    "B": {
+      "completed_labels": 14,
+      "fully_timed_subset": 5,
+      "median_visible_seconds": 84.00920000000298,
+      "mean_visible_seconds": 84.90224000000059,
+      "seconds_sum": 424.511200000003,
+      "question_validity": {
+        "valid": 13,
+        "invalid": 1
+      },
+      "answer_correctness": {
+        "correct": 12,
+        "incorrect": 2
+      }
+    }
+  },
+  "question_answer_labels_are_separate": true,
+  "human_vs_benchmark_em_disagreements": 17,
+  "sampling_complete": true,
+  "population_extrapolation": false,
+  "scope": "Single-reviewer English public-document interface study. Layouts use different matched questions. Visible-page time includes possible idle time and excludes reading before Start; 500ms timing resolution. Missing or time-stopped items can bias completion.",
+  "review_cost_claim": "Descriptive subset only. No general time-saving or Hindi attribution claim.",
+  "human_claim_support_labels": 0,
+  "inter_annotator_agreement": null,
+  "automatic_release_risk": "Insufficient evidence: no calibrated candidate releases in this study",
+  "export_sha256": "4a0d00bebbfdec7d75f969183b2fc22f25b43c2295e5db60d4d33050d93d8bcb",
+  "shared_packet_html_sha256": "5d89b96a132ac9bd7f9322d1cd9adc8692fa7e85d44df0ed499133196c80e560",
+  "self_reported_active_review_minutes": {
+    "lower_bound": 45,
+    "basis": "Reviewer estimate, with unquantified interruptions; not instrumented active time"
+  },
+  "protocol_deviation": "Reviewer continued labeling after the requested 20-minute cap; legacy UI allowed this while its timer stopped accumulating.",
+  "budget_accounting": {
+    "pdf_review_cap_seconds": 5400,
+    "prior_pdf_quality_seconds_charged": 699.4979,
+    "current_elapsed_seconds_charged": 3237.689,
+    "conservative_total_seconds_charged": 3937.1868999999997,
+    "remaining_seconds": 1462.8130999999998,
+    "basis": "Charge the full elapsed review interval because interruptions were not timed. Separate public-label audit budget is unchanged."
+  },
+  "human_vs_em_counts": {
+    "human_correct_em_mismatch": 17,
+    "human_correct_em_match": 6,
+    "human_incorrect_em_mismatch": 3
+  },
+  "human_vs_em_interpretation": "Single-reviewer judgments, not adjudicated gold. Disagreements can reflect reference aliases, partial-answer acceptance, reference problems or reviewer error. No public-label error rate is inferred."
+}
