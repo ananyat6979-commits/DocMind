@@ -24,6 +24,11 @@ def write(path, value):
 
 
 def excluded_ids():
+    override = os.getenv('DOCMIND_PAIRED_EXCLUSIONS_FILE')
+    if override:
+        values=json.loads(Path(override).read_text(encoding='utf-8'))
+        if not isinstance(values,list) or any(not isinstance(value,str) for value in values):raise ValueError('Invalid historical exclusions')
+        return set(values)
     ids = set()
     for directory in ('reports/benchmarks', 'reports/releases'):
         for path in (ROOT/directory).rglob('*.json'):
