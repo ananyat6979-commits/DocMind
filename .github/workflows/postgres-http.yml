@@ -1,0 +1,52 @@
+name: postgres HTTP
+on:
+  push:
+    branches: [improvements/hindi-evidence]
+    paths: ["scripts/load_postgres_http.py", ".github/workflows/postgres-http.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-embedding-profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.7-pg17-trixie
+        env:
+          POSTGRES_PASSWORD: scale-admin-only
+          POSTGRES_DB: docmind
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d docmind"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DOCMIND_MIGRATION_DSN: postgresql://postgres:scale-admin-only@localhost:5432/docmind
+      DOCMIND_DB_PASSWORD: scale-runtime-only-credentials
+      DOCMIND_TEST_POSTGRES_URL: postgresql://docmind_runtime:scale-runtime-only-credentials@localhost:5432/docmind
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: docmind:scale
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Provision isolated runtime tenant
+        run: |
+          docker run --rm --network host -e DOCMIND_MIGRATION_DSN -e DOCMIND_DB_PASSWORD docmind:scale python scripts/migrate_postgres.py --tenant http-profile
+          mkdir -p reports/release_workspace/closure/postgres-http-output
+          chmod 777 reports/release_workspace/closure/postgres-http-output
+      - name: Measure two real neural API processes with shared database state
+        timeout-minutes: 12
+        run: |
+          docker run --rm --network host -e DOCMIND_TEST_POSTGRES_URL -e DOCMIND_TEST_MODE=0 -e GITHUB_SHA -e DOCMIND_HOME=/tmp/profile -e OMP_NUM_THREADS=2 -v "$PWD/reports/release_workspace/closure/postgres-http-output:/out" docmind:scale python -u scripts/load_postgres_http.py --out /out/run
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postgres-real-model-http
+          path: |
+            reports/release_workspace/closure/postgres-http-output/run/summary.json
+            reports/release_workspace/closure/postgres-http-output/run/rows.jsonl
