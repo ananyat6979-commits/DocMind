@@ -104,8 +104,20 @@ def capture(out):
             access.fill(credentials['keys']['reviewer']);access.press('Enter')
             page.get_by_text('Signed in as demo-reviewer',exact=True).wait_for(timeout=60000)
             page.get_by_text('Human review',exact=True).scroll_into_view_if_needed()
-            page.get_by_text('Choose a decision',exact=True).wait_for(timeout=30000)
+            pending_request=urllib.request.Request('http://127.0.0.1:8787/review/pending',headers={'X-API-Key':credentials['keys']['reviewer']})
+            with urllib.request.urlopen(pending_request,timeout=10) as response:
+                assert json.load(response), 'The reviewer must have a real pending item'
+            decision=page.get_by_role('combobox',name='Decision',exact=True)
+            decision.wait_for(timeout=30000)
+            assert 'Choose a decision' in decision.locator('..').inner_text(), 'The review control must require an explicit choice'
             shot(page,'6 / 6  Authorized reviewer view; the item is still pending')
+        except Exception:
+            page.screenshot(path=str(out/'capture-failure.png'))
+            body=page.locator('body').inner_text()
+            for secret in credentials['keys'].values():body=body.replace(secret,'[redacted]')
+            (out/'capture-failure.txt').write_text(body,encoding='utf-8')
+            print(body[-6000:])
+            raise
         finally:browser.close()
     frames[0].save(out/'docmind-workflow.gif',save_all=True,append_images=frames[1:],duration=[12500]*6,loop=0,optimize=True,
         comment=b'Offline workflow demonstration; synthetic sources; extractive reader; no hosted inference or human labels.')

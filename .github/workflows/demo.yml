@@ -43,6 +43,7 @@ jobs:
             reports/release_workspace/demo-capture/frame-*.png
             reports/release_workspace/demo-capture/docmind-workflow.gif
             reports/release_workspace/demo-capture/manifest.json
+            reports/release_workspace/demo-capture/capture-failure.*
           if-no-files-found: warn
       - name: Stop isolated demo
         if: always()
