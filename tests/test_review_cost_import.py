@@ -26,3 +26,14 @@ def test_wrong_packet_and_fabricated_time_are_rejected():
     with pytest.raises(ValueError):module.summarize(export,key)
     export,key=fixture();export['visible_ms']=1300000
     with pytest.raises(ValueError):module.summarize(export,key)
+
+
+def test_post_cap_labels_are_retained_without_zero_time_savings():
+    export,key=fixture();export['visible_ms']=1200000;export['records'][0].update(visible_ms=1200000,finished=True,finished_at='2026-01-01T00:20:01Z')
+    key['records'].append({'review_id':'late','practice':False,'layout':'B','benchmark_exact_match':False})
+    export['records'].append({'review_id':'late','visible_ms':0,'question_validity':'valid','answer_correctness':'incorrect','finished':True,'finished_at':'2026-01-01T00:45:00Z'})
+    export['exported_at']='2026-01-01T00:46:00Z'
+    result=module.summarize(export,key)
+    assert result['finished_nonpractice']==2 and result['timing_censored_nonpractice']==2
+    assert result['fully_timed_nonpractice']==0 and result['between_layout_time_savings'] is None
+    assert result['layout_descriptives']['B']['median_visible_seconds'] is None

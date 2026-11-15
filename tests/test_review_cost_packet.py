@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import pytest
 from pathlib import Path
 
 spec=importlib.util.spec_from_file_location('review_cost_packet',Path(__file__).resolve().parents[1]/'scripts/prepare_review_cost.py')
@@ -15,3 +16,7 @@ def test_packet_escapes_hostile_source_and_omits_reference_labels(tmp_path):
     text=output.read_text()
     assert text.count('</script>')==1 and '<img' not in text and 'PRIVATE_REFERENCE' not in text
     assert 'benchmark_exact_match' not in text
+
+    with pytest.raises(FileExistsError):module.prepare(source,output)
+    assert 'main" hidden' in text and 'Math.min(now-last,20*60*1000-state.visible_ms)' in text
+    assert 'protocol_sha256' in text
