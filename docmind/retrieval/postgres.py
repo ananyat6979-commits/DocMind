@@ -24,6 +24,7 @@ class PostgresDenseRetriever:
         with connect(self.store.db_path) as conn:
             conn.corpus_lock(shared=True)
             signature=self.store._get_meta(conn,'embedding_signature','')
+            if not signature and conn.execute('SELECT 1 FROM chunks LIMIT 1').fetchone() is None:return []
             if not compatible_embedding_identity(signature,self.store._embedding_signature()):raise EmbeddingModelMismatch("Active embedding identity differs")
             conn.execute("SET LOCAL hnsw.ef_search=128")
             conn.execute("SET LOCAL hnsw.iterative_scan='strict_order'")

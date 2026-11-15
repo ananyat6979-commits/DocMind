@@ -126,6 +126,9 @@ def test_api_tenant_headers_cannot_override_credentials(scopes,tmp_path,monkeypa
         assert left.status_code==right.status_code==200
         assert 'same-file' in left.text and 'same-file' not in right.text
         assert client.get('/documents',headers={'X-API-Key':'invalid'}).status_code==401
+        # Direct-insert fixtures have no chunker lineage. Select the new-ingest
+        # recipe explicitly, without guessing or changing those existing chunks.
+        monkeypatch.setenv('DOCMIND_CHUNKER', 'recursive')
         # Synchronous upload and deletion must use the authenticated backend too.
         response=client.post('/upload',headers={'X-API-Key':tokens[0]},files={'file':('tenant.txt',b'The reactor coolant remains below 300 degrees during startup. Operators inspect the pump each shift.','text/plain')})
         assert response.status_code==200,response.text
