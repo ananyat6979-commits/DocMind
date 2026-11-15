@@ -22,7 +22,7 @@ Native parsing requires both `DOCMIND_PARSER_MODE=local` and `DOCMIND_ALLOW_UNSA
 
 CPU and CUDA environments are recorded under `locks/`, including hashes. The CPU image installs the Linux Python 3.11 lock and pinned model revisions. The full image's offline neural smoke checks remain separate from the small parser-isolation checks. The local Docker daemon must be running to execute either suite locally.
 
-Liveness only proves the HTTP process runs. Authenticated readiness checks generation configuration, database access and corpus embedding identity, not all neural inference paths. SQLite state, in-process quotas and the ingestion queue support one service process. Distributed operation, tenant authorization, incremental persistent indexes and kernel isolation beyond the configured container boundary remain limitations.
+Liveness only proves the HTTP process runs. Authenticated readiness checks generation configuration, database access and corpus embedding identity, not all neural inference paths. SQLite state, in-process quotas and the ingestion queue support one service process. The default profile has no distributed operation or tenant authorization. The opt-in PostgreSQL profile below addresses shared state and tenant libraries; multi-host storage, regional failover and kernel isolation beyond the configured container boundary remain limitations.
 
 Compose forwards the explicit retrieval mode, embedding identity, optional reranker identity and score-policy settings. Known default model revisions are pinned in configuration. Alternate models require their exact revision and a custom image with those weights cached before offline startup. The standard image caches E5-small, legacy BGE, the English reranker and the English NLI judge.
 
@@ -40,3 +40,8 @@ The runtime UID does not own application source or the baked model cache. Persis
 
 
 Dense mode builds only the dense index view; sparse mode builds only the lexical view. Explicit mode changes rebuild the required coherent snapshot, and concurrent searches retain the snapshot they selected. Hybrid modes build both views. Corpus changes still require full snapshot refreshes, and corpus loading still reads stored vectors. This removes unnecessary view construction without providing incremental persistent indexing or a corpus-scale memory bound.
+
+
+## Persistent multi-process option
+
+The default SQLite Compose deployment remains a one-process profile. [PostgreSQL deployment](POSTGRES_DEPLOYMENT.md) provides a separate two-worker profile with forced tenant row policies, persistent pgvector writes, shared quotas and renewable ingestion leases. It uses the same confined parser and centralized UI. Live CI covers tenant denials, synchronized quotas, killed-worker recovery and stale writes. Database search and neural HTTP load have separate bounded measurement records under `reports/releases/r3`; neither is a hosted-reader SLA. Follow the profile's migration and private-credential procedure rather than scaling the SQLite service.

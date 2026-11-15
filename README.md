@@ -2,11 +2,13 @@
 
 The revised release sequence is documented in [release gates](docs/RELEASES.md). Production UI access now goes through the authenticated API and separate parser service; follow [centralized deployment](docs/DOCKER_CLOUD.md). Native parsing and the direct local UI require explicit trusted-development overrides. English/Hindi component and PDF measurements are separate, and unmeasured languages remain gated.
 
-Question answering over PDF, DOCX and text files, with pinned multilingual E5 dense retrieval, optional hybrid/reranking profiles, quoted evidence, claim-level attribution checks and a human review queue. This is a single-corpus pilot with published measurements and known failures.
+Question answering over PDF, DOCX and text files, with pinned multilingual E5 dense retrieval, optional hybrid/reranking profiles, quoted evidence, claim-level attribution checks and a human review queue. The default local profile is a single-corpus pilot. An opt-in [persistent PostgreSQL deployment](docs/POSTGRES_DEPLOYMENT.md) adds tenant isolation and shared worker coordination.
 
 The default now follows measured cost and language coverage: E5-small with dense retrieval. Hindi Recall@5 was 75.9% versus 0.8% for English BGE in the declared MIRACL candidate pool. English was 74.1% versus 75.4%, with an uncertain difference. This is component evidence; Hindi answers still require review. Existing corpora need an [isolated migration](docs/API_MIGRATION.md#e5-dense-default).
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced local-reader cohort remain unmeasured.
+
+See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. Human review timing and the larger scale profile have separate status records.
 
 ## Measured results
 
@@ -23,7 +25,7 @@ Runs used available local compute and private free-tier T4 notebooks. No paid in
 | Selective prediction, both SQuAD2 studies | **0% automatic coverage** at calibrated 10%, 20% and 30% risk targets | No useful calibrated gate was demonstrated |
 | Document injection, 50 cases per prompt | Attack success **12% [0, 32]** versus **30% [0, 60]** | Stronger prompt failed to improve this direct-reader test |
 
-These are bounded experiments, not a full-wiki leaderboard, a multi-tenant deployment, or a safety certification. The review loop is implemented, but its human time savings have not been measured. [Records and provenance](reports/benchmarks), [provider protocol comparison](reports/protocols/summary.json), [local service load](reports/service_load.json).
+These are bounded experiments, not a full-wiki leaderboard or a safety certification. The opt-in backend has live tenant-isolation checks; actual deployment availability remains an operator responsibility. Human review time savings remain unmeasured until the private timing export is validated. [Records and provenance](reports/benchmarks), [provider protocol comparison](reports/protocols/summary.json), [local service load](reports/service_load.json).
 
 ## Run locally
 
@@ -52,11 +54,11 @@ For development checks, install `pytest pyyaml httpx ruff mypy` in the locked en
 
 ## How it works
 
-Uploads are validated and parsed through a separate confined service. Explicit native development mode uses a resource-limited subprocess. PDF pages, DOCX tables and text become chunks with stable document identity, source metadata and ingestion lineage. SQLite stores the corpus and embeddings atomically. Dense FAISS and sparse BM25 snapshots are built together; optional HNSW reduces dense search cost. RRF fusion and an optional cross-encoder rank candidates.
+Uploads are validated and parsed through a separate confined service. Explicit native development mode uses a resource-limited subprocess. PDF pages, DOCX tables and text become chunks with stable document identity, source metadata and ingestion lineage. The local SQLite profile stores the corpus and embeddings atomically and builds only the dense or sparse views needed by the selected mode. The opt-in PostgreSQL profile updates a persistent pgvector HNSW index in the same transaction as document metadata; its scoped dense queries use exact filtered search. RRF fusion and an optional cross-encoder rank candidates.
 
 The reader can use ReAct or native tools. Citation labels must resolve to retrieved sources; ambiguous chunk prefixes and same-name document labels are rejected. Claim attribution selects one- or two-sentence evidence with exact offsets and applies NLI. A valid citation label alone is never presented as entailment. Failed or unsupported attribution routes to review, and pending answers are withheld by default.
 
-The UI and API support approve, correct and reject decisions. Review exports remain separate from the frozen public test set. Structured request logs carry request IDs and timings; `/health` is public liveness, while `/ready`, `/metrics`, queries and the library require authentication. This is a shared authorization boundary, not per-user access control.
+The UI and API support approve, correct and reject decisions. Review exports remain separate from the frozen public test set. Structured request logs carry request IDs and timings; `/health` is public liveness, while `/ready`, `/metrics`, queries and the library require authentication. Personal credentials establish audit identity and operation roles. The PostgreSQL profile additionally isolates tenant libraries; readers within a tenant share that library. Final responses retain individual ownership checks.
 
 ## Reproduce the evidence
 
@@ -77,7 +79,7 @@ For your own documents, draft labels with `scripts/make_testset.py`, verify them
 
 ## Limits and security
 
-English-oriented retrieval and NLI; scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. The default small attribution model has particularly poor measured recall. Prompt injection remains possible. ANN is optional and recovered only 26.9% of exact top-ten neighbors in a 50,000-vector synthetic test. Flat search remains the default. Corpus refresh still rebuilds in-memory caches, so storage and ingestion are not proven at service scale. Run one API application process per corpus; the Compose UI delegates to that API. Synthetic local throughput does not predict hosted inference latency.
+English and Hindi retrieval components are measured; Hindi automatic answers and further languages remain gated. The default English attribution judge has poor measured recall, and scanned PDFs need OCR. Hosted inference sends retrieved text to Groq. Prompt injection remains possible, including one contaminated candidate in the broader current-serialization test. SQLite still rebuilds derived caches and supports one service process. Use the separate PostgreSQL profile for persistent indexing, tenant policies, shared quotas and leased workers. Small fixture tests and synthetic throughput do not establish production availability or hosted inference latency. Historical synthetic ANN failures and newer real-embedding profiles remain separately documented.
 
 Read [security and retention](SECURITY.md), [evaluation and failure analysis](docs/EVALUATION.md), and [public data attribution](data/public/README.md).
 
