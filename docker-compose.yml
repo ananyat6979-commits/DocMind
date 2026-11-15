@@ -15,7 +15,7 @@ services:
     build: .
     image: docmind:local
     group_add: ["${DOCMIND_CREDENTIALS_GID:-1000}"]
-    command: ["uvicorn", "docmind.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["python", "-m", "docmind.api.server", "--host", "0.0.0.0", "--port", "8000"]
     ports: ["127.0.0.1:8000:8000"]
     environment:
       GROQ_API_KEY: ${GROQ_API_KEY:-}

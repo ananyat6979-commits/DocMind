@@ -4,7 +4,7 @@ services:
     extends: {file: docker-compose.yml, service: ui}
   api:
     extends: {file: docker-compose.yml, service: api}
-    command: ["uvicorn", "docmind.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+    command: ["python", "-m", "docmind.api.server", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
     environment:
       DOCMIND_DATABASE_URL: ${DOCMIND_DATABASE_URL:?Use the private production environment file}
       DOCMIND_USE_RERANKER: "0"

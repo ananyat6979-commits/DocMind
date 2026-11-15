@@ -41,3 +41,6 @@ chmod 600 .secrets/backups/docmind.dump
 ```
 
 Protect and copy backups according to the deployment's retention and encryption policy. Restoring to another cluster also requires role provisioning and extension availability. Do not restore over a running production database without an operator-controlled recovery plan. Private credential registries and operator keys require separate protected backup and rotation procedures.
+
+
+The shared `python -m docmind.api.server` entry point disables forwarded-header interpretation. This preserves socket-peer identity for IP quotas, including loopback requests. Uvicorn otherwise supports trusted forwarded headers, so alternate launch commands must also use `--no-proxy-headers` unless a separately designed proxy trust boundary is configured. See [Uvicorn settings](https://uvicorn.dev/settings/). Live two-process tests rotate spoofed `X-Forwarded-For` values and verify that they cannot bypass the shared peer-IP quota.

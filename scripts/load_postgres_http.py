@@ -44,7 +44,7 @@ def run(out):
             for i in range(2):
                 with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
                 urls.append('http://127.0.0.1:'+str(port))
-                command="from docmind.config import CONFIG; CONFIG.llm.provider='demo'; import uvicorn; uvicorn.run('docmind.api.main:app',host='127.0.0.1',port="+str(port)+",log_level='warning')"
+                command="from docmind.config import CONFIG; CONFIG.llm.provider='demo'; import uvicorn; uvicorn.run('docmind.api.main:app',host='127.0.0.1',port="+str(port)+",log_level='warning',proxy_headers=False)"
                 with (out/('server-'+str(i)+'.log')).open('wb') as log:servers.append(subprocess.Popen([sys.executable,'-c',command],cwd=ROOT,env=env,stdout=log,stderr=log))
             for i in range(2):
                 while True:

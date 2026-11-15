@@ -46,7 +46,7 @@ Run the API and UI in separate terminals. PDF/DOCX ingestion requires the parser
 ```powershell
 python scripts/cache_models.py
 streamlit run app.py
-uvicorn docmind.api.main:app --host 127.0.0.1 --port 8000
+python -m docmind.api.server --host 127.0.0.1 --port 8000
 python scripts/verify_benchmark_reports.py
 ```
 

@@ -148,13 +148,13 @@ def test_two_api_processes_share_quota_and_tenant_isolation(scopes,tmp_path,monk
     registry=tmp_path/'process-credentials.json'
     registry.write_text(json.dumps([{'tenant_id':tenant,'actor_id':'reader','key_sha256':hashlib.sha256(token.encode()).hexdigest(),'roles':['reader']} for tenant,token in zip(('alpha','beta'),tokens)]))
     add(CorpusStore(scopes[0]))
-    env={**os.environ,'DOCMIND_DATABASE_URL':scopes[0].dsn,'DOCMIND_CREDENTIALS_FILE':str(registry),'DOCMIND_REQUESTS_PER_MINUTE':'3','DOCMIND_HOME':str(tmp_path/'runtime')}
+    env={**os.environ,'DOCMIND_DATABASE_URL':scopes[0].dsn,'DOCMIND_CREDENTIALS_FILE':str(registry),'DOCMIND_REQUESTS_PER_MINUTE':'3','DOCMIND_REQUESTS_PER_IP_PER_MINUTE':'5','DOCMIND_HOME':str(tmp_path/'runtime')}
     processes=[];urls=[]
     try:
         for _ in range(2):
             with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
             log=(tmp_path/('server-'+str(port)+'.log')).open('w')
-            process=subprocess.Popen([sys.executable,'-m','uvicorn','docmind.api.main:app','--host','127.0.0.1','--port',str(port)],env=env,stdout=log,stderr=subprocess.STDOUT)
+            process=subprocess.Popen([sys.executable,'-m','docmind.api.server','--host','127.0.0.1','--port',str(port)],env=env,stdout=log,stderr=subprocess.STDOUT)
             log.close();processes.append(process);urls.append('http://127.0.0.1:'+str(port))
         with httpx.Client(timeout=5) as client:
             for url,process in zip(urls,processes):
@@ -170,6 +170,8 @@ def test_two_api_processes_share_quota_and_tenant_isolation(scopes,tmp_path,monk
             assert statuses==[200,200,200,429]
             response=client.get(urls[1]+'/documents',headers={'X-API-Key':tokens[1],'X-Tenant-ID':'alpha'})
             assert response.status_code==200 and 'same-file' not in response.text
+            assert client.get(urls[0]+'/whoami',headers={'X-API-Key':tokens[1],'X-Forwarded-For':'198.51.100.1'}).status_code==200
+            assert client.get(urls[1]+'/whoami',headers={'X-API-Key':tokens[1],'X-Forwarded-For':'198.51.100.2'}).status_code==429
     finally:
         for process in processes:process.terminate()
         for process in processes:

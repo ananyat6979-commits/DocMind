@@ -117,7 +117,7 @@ def main():
             "'embedding_revision':CONFIG.embedding.model_revision,'retrieval_mode':CONFIG.retriever.mode,"
             "'versions':{k:packages.get(k) for k in ['torch','transformers','sentence-transformers','fastapi','uvicorn']}}; "
             "Path(sys.argv[1]).write_text(json.dumps(identity),encoding='utf-8'); "
-            "import uvicorn; uvicorn.run('docmind.api.main:app',host='127.0.0.1',port="+str(port)+",log_level='warning')")
+            "import uvicorn; uvicorn.run('docmind.api.main:app',host='127.0.0.1',port="+str(port)+",log_level='warning',proxy_headers=False)")
         with (out/"server.log").open("wb") as log:
             try:
                 server = subprocess.Popen([sys.executable, "-c", command, str(out/"runtime.json")], cwd=ROOT, env=env, stdout=log, stderr=log)
