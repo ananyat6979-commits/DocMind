@@ -1,0 +1,155 @@
+{
+  "scope": "Hindi user-payload serialization and pinned tokenizer on CPU only; not chat-template cost, T4 prefill, generation latency or answer correctness",
+  "source_status": "Private restricted-source synthetic diagnostic drafts, not human gold",
+  "n": 7,
+  "records": [
+    {
+      "input_sha256": "9590ea549bd672b827954b186d1068a8edbfba0a6d2f5637f5a42b5e50ba3f35",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 1444,
+          "tokens": 1153,
+          "cpu_encode_p50_ms": 2.8022,
+          "cpu_encode_p95_ms": 4.041605000000001,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 842,
+          "tokens": 341,
+          "cpu_encode_p50_ms": 0.8019499999999999,
+          "cpu_encode_p95_ms": 1.126675,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "17d2ce936ed2a642e59be1cb4bed1ef5d1ddd33379c5d12645a002302cc69e1e",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 1372,
+          "tokens": 1088,
+          "cpu_encode_p50_ms": 2.9299999999999997,
+          "cpu_encode_p95_ms": 3.793095,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 818,
+          "tokens": 340,
+          "cpu_encode_p50_ms": 0.93485,
+          "cpu_encode_p95_ms": 1.1898399999999998,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "8ba61b262582b10ef1007f8a46d704e8c25c4b7feffbf23e7fd569b566b78106",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 698,
+          "tokens": 537,
+          "cpu_encode_p50_ms": 1.5636999999999999,
+          "cpu_encode_p95_ms": 2.264915,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 422,
+          "tokens": 157,
+          "cpu_encode_p50_ms": 0.477,
+          "cpu_encode_p95_ms": 0.717295,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "79ab9960e8cf9b805f1ec120e0cb26dd9d178496c0609753030e166cc93193bc",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 854,
+          "tokens": 671,
+          "cpu_encode_p50_ms": 1.74405,
+          "cpu_encode_p95_ms": 1.88368,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 491,
+          "tokens": 180,
+          "cpu_encode_p50_ms": 0.45985,
+          "cpu_encode_p95_ms": 0.593215,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "157eb73bc8b6f3aff3ff93b5d11288faa941561e18a5e3bca76bdf0baf17191e",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 854,
+          "tokens": 672,
+          "cpu_encode_p50_ms": 1.8266499999999999,
+          "cpu_encode_p95_ms": 2.02923,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 494,
+          "tokens": 182,
+          "cpu_encode_p50_ms": 0.48650000000000004,
+          "cpu_encode_p95_ms": 0.55498,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "db2ca4e0cfcf5b5190c59329d27e8c947141259d2542b4ba6e313156bc89bdcf",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 1372,
+          "tokens": 1102,
+          "cpu_encode_p50_ms": 2.96155,
+          "cpu_encode_p95_ms": 3.23933,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 766,
+          "tokens": 272,
+          "cpu_encode_p50_ms": 0.7130000000000001,
+          "cpu_encode_p95_ms": 0.81027,
+          "timing_repeats": 20
+        }
+      }
+    },
+    {
+      "input_sha256": "6e2f38a8677ff66c99872f602436a3f612f7654f1852c42a72d46e6f82de160b",
+      "conditions": {
+        "ascii_json": {
+          "bytes": 1529,
+          "tokens": 1233,
+          "cpu_encode_p50_ms": 3.1418999999999997,
+          "cpu_encode_p95_ms": 3.4810449999999995,
+          "timing_repeats": 20
+        },
+        "readable_unicode_json": {
+          "bytes": 851,
+          "tokens": 303,
+          "cpu_encode_p50_ms": 0.76965,
+          "cpu_encode_p95_ms": 0.9475149999999999,
+          "timing_repeats": 20
+        }
+      }
+    }
+  ],
+  "total_ascii_tokens": 6456,
+  "total_unicode_tokens": 1775,
+  "token_reduction_fraction": 0.7250619578686492,
+  "normalization": "Source Unicode preserved. Only JSON escaping changes; directional and selected invisible controls stay escaped.",
+  "hosted_calls": 0,
+  "model_generations": 0,
+  "human_labels_created": 0,
+  "paid_compute": false,
+  "tokenizer": {
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "file_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizers_version": "0.23.3"
+  },
+  "script_sha256": "fb8b804b8819623fcee4e41c261ee0cdd4a283cd692851d4d549a457f3e9c97d"
+}

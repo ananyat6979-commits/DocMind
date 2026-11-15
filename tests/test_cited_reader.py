@@ -75,6 +75,11 @@ def test_current_api_persists_quotes_and_hides_held_evidence(monkeypatch):
     monkeypatch.setenv('DOCMIND_API_KEY', 'test-key')
     monkeypatch.setattr('docmind.language.language_info', lambda text: {'language': 'en'})
     monkeypatch.setattr(m, '_agent', CitedReader(Retriever(), DemoLLM()))
+    from docmind.store import CorpusStore
+    import numpy as np
+    chunk=source().chunk
+    CorpusStore().add_document({'file_id':chunk.file_id,'filename':'manual.pdf','source':'manual.pdf','sha256':'fixture','n_units':1},
+        [chunk],np.ones((1,384),dtype='float32')/np.sqrt(384))
     client = TestClient(m.app, headers={'X-API-Key': 'test-key'})
     item = client.post('/query', json={'question': 'What is the closing time?'}).json()
     assert item['review_status'] == 'draft' and item['evidence']
@@ -120,3 +125,21 @@ def test_api_cancels_stalled_upstream_and_returns_504(monkeypatch):
     response=client.post('/query',json={'question':'What is the closing time?'})
     assert response.status_code==504 and time.monotonic()-started < 2
     assert cancelled==[True]
+
+
+def test_sqlite_rejects_deleted_evidence_and_removes_abstention_context(make_file):
+    from docmind.ingestion.pipeline import ingest
+    from docmind.store import CorpusStore
+    from docmind.models import AgentResponse
+    from docmind.services import erase_document
+    from tests.conftest import ALPHA
+    store=CorpusStore();file_id=ingest(make_file('manual.txt', ALPHA),store=store).file_ids[0]
+    chunk=store.load_corpus()[0][0];result=SearchResult(chunk,1,'dense');reviews=ReviewStore()
+    abstention=AgentResponse('Not found.',[],[],'An absent fact?',1,abstained=True,
+        document_context={'documents':[{'file_id':file_id}]})
+    reviews.record(abstention)
+    assert erase_document(file_id,store)
+    assert reviews.get(abstention.response_id) is None
+    stale=AgentResponse('A stale answer.',[result],[],'Question',1,cited_sources=[result])
+    with pytest.raises(ValueError,match='Corpus changed'):reviews.record(stale)
+    assert reviews.get(stale.response_id) is None

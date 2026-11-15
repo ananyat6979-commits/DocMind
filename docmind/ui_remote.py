@@ -38,6 +38,8 @@ def render():
     except ValueError as exc:
         st.error(str(exc));return
     st.sidebar.caption("Signed in as "+principal["actor_id"])
+    if principal.get("generation_mode") == "offline_extractive_demo":
+        st.info("Offline workflow demonstration. The extractive reader does not measure generative answer quality.")
     if st.session_state.get("response_actor")!=principal["actor_id"]:
         st.session_state.response_ids=[];st.session_state.response_actor=principal["actor_id"]
     roles=principal["roles"]

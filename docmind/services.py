@@ -19,10 +19,12 @@ def erase_document(file_id, store=None):
         ids = {r[0] for r in conn.execute("SELECT chunk_id FROM chunks WHERE file_id=?", (file_id,))}
         has_reviews = conn.execute("SELECT 1 FROM sqlite_master WHERE name='reviews'").fetchone()
         if has_reviews:
-            rows = conn.execute("SELECT response_id, sources_json FROM reviews").fetchall()
+            rows = conn.execute("SELECT response_id, sources_json, response_info FROM reviews").fetchall()
             for row in rows:
                 sources = json.loads(row["sources_json"])
-                if any(s.get("chunk_id") in ids or s.get("file_id") == file_id for s in sources):
+                context = json.loads(row["response_info"] or "{}").get("document_context", {})
+                if any(s.get("chunk_id") in ids or s.get("file_id") == file_id for s in sources) or any(
+                    d.get("file_id") == file_id for d in context.get("documents", [])):
                     conn.execute("DELETE FROM reviews WHERE response_id=?", (row["response_id"],))
         conn.execute("DELETE FROM documents WHERE file_id=?", (file_id,))
         store._bump(conn)

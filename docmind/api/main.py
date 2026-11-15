@@ -515,4 +515,5 @@ def response_result(response_id: str, request: Request):
 def whoami(request: Request):
     principal=request.state.principal
     return {"actor_id":principal.actor_id,"tenant_id":principal.tenant_id,"roles":sorted(principal.roles),
-            "identity_mode":"individual" if os.getenv("DOCMIND_CREDENTIALS_FILE") else "shared credential"}
+            "identity_mode":"individual" if os.getenv("DOCMIND_CREDENTIALS_FILE") else "shared credential",
+            "generation_mode":"offline_extractive_demo" if CONFIG.llm.provider == "demo" else "hosted_unmeasured"}
