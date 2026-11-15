@@ -1,0 +1,17 @@
+{
+  "project_cap_gpu_seconds": 21600,
+  "closed_free_account_wall_seconds": 8498.121,
+  "active_reserved_account_seconds": 0,
+  "allocated_devices_counted": 2,
+  "account_rounded_upper_gpu_seconds": 17040,
+  "previous_wrapper_upper_gpu_seconds": 17025,
+  "closed_upper_gpu_seconds": 17040,
+  "own_document_reserved_gpu_seconds": 3600,
+  "own_document_wall_cap_seconds": 1800,
+  "remaining_unreserved_gpu_seconds": 960,
+  "total_upper_with_own_document_reservation": 20640,
+  "paid_compute": false,
+  "hosted_evaluation_calls": 0,
+  "counting": "Round account wall time upward to a minute and count both allocated T4s; use the larger of account and cumulative wrapper bounds",
+  "snapshot_date_utc": "2026-11-15"
+}

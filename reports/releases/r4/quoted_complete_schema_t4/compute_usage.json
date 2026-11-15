@@ -1,0 +1,15 @@
+{
+  "paid_compute": false,
+  "source_commit": "2ad6bc15b7408268d1ae1a203be299d481bb7ca9",
+  "payload_sha256": "5afdcb41c94d81e1ef2121eae7f8c239a1f6a372bf04167516857e02b27b85d6",
+  "session_ceiling_seconds": 1200,
+  "reserved_gpu_seconds": 2400,
+  "expected_allocated_gpu_count": 2,
+  "allocated_devices": [
+    "Tesla T4",
+    "Tesla T4"
+  ],
+  "experiment_exit_code": 0,
+  "summary_exit_code": 0,
+  "elapsed_seconds_including_setup": 1068.78830538
+}

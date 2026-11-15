@@ -1,0 +1,17 @@
+{
+  "source_archive_sha256": "717cb86b114205649a560f1583667dbbcaeff0a4dcd11f4e94ef00a58f051dfd",
+  "raw_completions_public": false,
+  "source_text_license": "Original synthetic fixtures",
+  "condition": "Complete root-level short-answer/claims example, after observing the original condition",
+  "sha256": {
+    "answer_records.json": "6406b67c34162bf0ac50718ea6c77ab2ef83b657a801e8f66eb529e705022cb0",
+    "compute_usage.json": "7876e23dad12bc10a129158d117d9a012927a0d846f3d776d1c10ee569fcd9f4",
+    "executed_source.json": "23e0e3f9520fea3c567d0015cf10c8477e9d38cf028e68b0d24b3dfe244b2813",
+    "executed_summary.json": "1d7e24b1d4b9c398ab1f2101717e854532bd74597d8cb90f193276ef6a587b5b",
+    "manifest.json": "df05858fd0af359ee5306af025da2d781fa31ccbb80015424e0f886816fcd7d8",
+    "paired_format_diagnostic.json": "3bccc0324a86016e8264141df6f34cc907a1e34e48135f22e7fdf1af36f56a57",
+    "planned.json": "8fc863b67c2fb1999a678041c10ad2cf027ec072e9efec550fcea5ac2c7a8f0d",
+    "reader_identity.json": "a284f0d6484ac85d6c384ffdfef131f22cf0607755b355c000ed8e82d24c0795",
+    "summary.json": "498948fcee56343262acb7a1eeedd1cf0ce95b6927b521875b56e08897f8f84e"
+  }
+}

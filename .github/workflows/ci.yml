@@ -45,3 +45,6 @@ jobs:
 
       - name: Verify quoted-policy synthetic records
         run: python scripts/verify_quoted_policy_robustness.py reports/releases/r4/quoted_policy_t4
+
+      - name: Verify bounded complete-schema confirmation
+        run: python scripts/verify_quoted_policy_robustness.py reports/releases/r4/quoted_complete_schema_t4

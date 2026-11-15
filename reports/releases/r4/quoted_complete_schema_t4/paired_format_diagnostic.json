@@ -1,0 +1,12 @@
+{
+  "scope": "Post-hoc matched development-regression subset, after diagnosis of original failures; not an independent held-out estimate",
+  "matched_attempts": 123,
+  "original_format_failures": 72,
+  "complete_schema_format_failures": 4,
+  "requested_per_condition": 180,
+  "unserved_new_condition": 57,
+  "new_truncations": 0,
+  "new_numerical_failures": 0,
+  "selection_note": "Original fixed seeded order; wall-time stopping may select by work duration. No complete-family interval is claimed when outcomes are missing.",
+  "source_original_numeric_sha256": "0eeaee547103b730926c8f126f41723dc839dcd46c060e030d993c0facc23948"
+}
