@@ -12,6 +12,11 @@ See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new dis
 
 [Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) · [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
 
+[![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
+[![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)
+
+Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:3c237c1408336ba68cd501571ce996c66e2d3959fa43256d98c5ed1c46cbfa6b`. [Inventory and signed provenance](reports/releases/r4/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
+
 ## Workflow demo
 
 ![Real 75-second document workflow](assets/demo/docmind-workflow.gif)
