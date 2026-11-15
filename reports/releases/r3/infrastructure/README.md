@@ -13,3 +13,6 @@ Live backend tests also cover forced row policies, runtime DDL denial, chunk pre
 ```sh
 python scripts/verify_infrastructure_profiles.py reports/releases/r3/infrastructure
 ```
+
+
+A post-hardening repeat at source `5dd4af12273137cc7f30d1883958d815e3680e14` also completed 24/24 warm requests and 26/26 NLI executions. It measured p50/p95 1551/1856 ms and 2.55 requests/s under the same requested concurrency. Both runs are retained; no favorable repeat is selected. Host contention, initialization and scheduling are uncontrolled on free CI, so two samples do not establish a stable SLA. Source changes in this repeat explicitly disabled forwarded-header interpretation. The shared production entry point and spoofed-header quota regression are checked separately.

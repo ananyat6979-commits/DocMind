@@ -9,5 +9,11 @@
     "workflow_run": 43680417608,
     "source_commit": "6c7d85ca9225f2ac1d7841463e4d52126fcba889",
     "artifact_sha256": "461fc8992afb529bced37421a0fcc27fb702cda23c88bbdf1fbf12bc46e73646"
+  },
+  "http_socket_peer_repeat": {
+    "workflow_run": 43681038000,
+    "source_commit": "5dd4af12273137cc7f30d1883958d815e3680e14",
+    "source_script_sha256_verified": true,
+    "artifact_sha256": "e85dae22b255924380dbf339b2a5d1d24024cfd7a098ebeaf98572d934a4fe81"
   }
 }

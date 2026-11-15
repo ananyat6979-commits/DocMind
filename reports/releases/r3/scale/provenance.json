@@ -1,0 +1,7 @@
+{
+  "workflow_run": 43678694942,
+  "source_commit": "6841403efa4d56868987ebd99cbd565abc8c6471",
+  "source_script_sha256": "6b965b9e64f7eb1be145ed3e42a54cf2530c547144d3535aba73b6de69d720e0",
+  "source_provenance_basis": "Successful workflow checkout and Docker source COPY at the named commit; script hash derived from Git, not a runtime attestation",
+  "artifact_sha256": "42c2fadaefb6cabe3c030a8843f936404366e783f8ad606e1b98a8f1a93d379f"
+}

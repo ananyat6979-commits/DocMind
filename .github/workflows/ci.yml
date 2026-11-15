@@ -34,3 +34,6 @@ jobs:
 
       - name: Verify published infrastructure records
         run: python scripts/verify_infrastructure_profiles.py reports/releases/r3/infrastructure
+
+      - name: Verify persistent ANN scale records
+        run: python scripts/verify_scale_profile.py reports/releases/r3/scale
