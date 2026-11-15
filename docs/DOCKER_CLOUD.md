@@ -53,3 +53,13 @@ Compose forwards `DOCMIND_RELEASE_MODE` (default `draft`), `DOCMIND_ATTRIBUTION`
 The application base image is pinned by digest. Main publication requests a BuildKit SBOM and full build provenance. A separate main-only job signs a build-provenance attestation for the exact pushed image digest; its OIDC and attestation permissions are confined to that job. Working-branch builds cannot use that signing job. These controls identify build origin and inventory, not absence of vulnerabilities or commercial clearance for model training data.
 
 After publication, verify the immutable digest with `gh attestation verify oci://ghcr.io/ananyat6979-commits/docmind@sha256:DIGEST --repo ananyat6979-commits/DocMind`. Replace DIGEST with the published value. The image bakes in pinned model weights and is substantially larger than the static showcase. The public model card records dataset/model licensing limitations; the code license does not override them.
+
+## One-command offline inspection
+
+After pulling the image, this runs the actual default retrieval/quote pipeline on a tiny original synthetic corpus, using cached E5 and an extractive demonstration reader:
+
+```sh
+docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,size=512m ghcr.io/ananyat6979-commits/docmind:latest python scripts/offline_demo.py
+```
+
+It requires no API key, opens no listening port and makes no hosted call. It prints an explicitly unverified draft and exact quoted evidence. It is a component demonstration, not a generative accuracy baseline or a substitute for the authenticated UI/API/parser deployment. Use a published immutable digest in place of latest for a fixed source version. A fresh image pull downloads the baked model weights; they are not fetched at runtime.

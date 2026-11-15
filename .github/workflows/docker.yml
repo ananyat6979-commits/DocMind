@@ -88,6 +88,10 @@ jobs:
             reports/release_workspace/http-load/real-model-http/summary.json
             reports/release_workspace/http-load/real-model-http/rows.jsonl
 
+      - name: Offline default-reader demonstration with real cached retrieval
+        run: |
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,size=512m ${{ env.IMAGE }}:ci python scripts/offline_demo.py
+
       - name: Smoke 3, the UI starts and reports healthy
         run: |
           docker run -d --name dm -p 8501:8501 ${{ env.IMAGE }}:ci
