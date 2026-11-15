@@ -83,3 +83,5 @@ reports/release_review/
 .kaggle-own-documents/
 
 .kaggle-quoted-complete-schema/
+
+.site-dist/
