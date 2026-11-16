@@ -8480,5 +8480,16 @@
       "context_sha256": "13ce5c7d9868cacd60322f2124b07a164c2db63f4c2bb906b7842aad5d29561b",
       "response_sha256": "25be13a14db438a477588ee467c2caad93a4979dfedb20ac03427a74fc62a641"
     }
-  ]
+  ],
+  "baselines": [
+    "all_responses",
+    "ungated_non_refusal",
+    "numeric_guard_without_nli",
+    "fixed NLI policies on the declared grid"
+  ],
+  "metric_unit": "Response support: no annotated unsupported spans. Supported-response recall includes correct refusals; separate quality-failure counts prevent treating it as answer utility.",
+  "risk_point_target": 0.05,
+  "storage": "No Actions artifact or cache uploads: bounded job outputs and numeric result bundles in job logs only",
+  "primary_selection": "stratified",
+  "pooled_selection": "Predeclared sensitivity, never a replacement primary chosen from held-out results"
 }
