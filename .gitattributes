@@ -28,3 +28,5 @@ reports/releases/r4/** -text
 *.gif binary
 
 reports/releases/r5/** -text
+
+reports/releases/r6/** -text
