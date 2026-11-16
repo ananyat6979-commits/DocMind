@@ -91,6 +91,7 @@ def render():
                     "query_language_unvalidated":"The question language has not been validated.",
                     "answer_language_unvalidated":"The answer language has not been validated.",
                     "language_policy_unvalidated":"Language support for the selected evidence has not been validated.",
+                    "numeric_evidence_conflict":"A number or numeric bound could not be supported by the cited passages.",
                     "incomplete_document_abstention":"Some pages are unreadable, so absence cannot be confirmed.",
                     "strict_human_approval":"This deployment requires human approval.",
                 }
