@@ -1,0 +1,74 @@
+{
+  "scope": "Fresh English gold-input policy diagnostic, not reader generation or newly human-reviewed answers",
+  "source_commit": "39fcdec67ed35478cf8cb2e8e5800c7fb6655f2b",
+  "design_sha256": "519a3f8b8391a421de38240c1d7484d386fcb83de1768219c012ee890fba905d",
+  "groups": {
+    "frozen_v4": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 35,
+      "held_answerable_gold_inputs": 32,
+      "held_unanswerable_gold_inputs": 3,
+      "hold_reasons": {
+        "query_language_unvalidated": 10,
+        "answer_language_unvalidated": 28,
+        "language_policy_unvalidated": 1,
+        "invalid_citation": 9,
+        "invalid_or_missing_quote": 9,
+        "no_citations": 9
+      }
+    },
+    "language_only": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 28,
+      "held_answerable_gold_inputs": 28,
+      "held_unanswerable_gold_inputs": 0,
+      "hold_reasons": {
+        "answer_language_unvalidated": 28,
+        "language_policy_unvalidated": 1,
+        "query_language_unvalidated": 2,
+        "invalid_citation": 9,
+        "invalid_or_missing_quote": 9,
+        "no_citations": 9
+      }
+    },
+    "numeric_only": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 35,
+      "held_answerable_gold_inputs": 32,
+      "held_unanswerable_gold_inputs": 3,
+      "hold_reasons": {
+        "query_language_unvalidated": 10,
+        "answer_language_unvalidated": 28,
+        "language_policy_unvalidated": 1,
+        "invalid_citation": 9,
+        "invalid_or_missing_quote": 9,
+        "no_citations": 9
+      }
+    },
+    "combined": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 28,
+      "held_answerable_gold_inputs": 28,
+      "held_unanswerable_gold_inputs": 0,
+      "hold_reasons": {
+        "answer_language_unvalidated": 28,
+        "language_policy_unvalidated": 1,
+        "query_language_unvalidated": 2,
+        "invalid_citation": 9,
+        "invalid_or_missing_quote": 9,
+        "no_citations": 9
+      }
+    }
+  },
+  "new_reader_calls": 0,
+  "limitations": [
+    "Public reference inputs, not generated-answer correctness or risk calibration",
+    "No new human review, paragraph-disjoint from historical artifacts but articles may overlap",
+    "One fixed test, no threshold selection from its outcomes; unexpected holds retained",
+    "Valid answers with repeated identical spans can still fail the unique-quote contract"
+  ]
+}

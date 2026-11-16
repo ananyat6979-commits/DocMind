@@ -1,0 +1,3976 @@
+[
+  {
+    "id": "56de1563cffd8e1900b4b5c2",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de1563cffd8e1900b4b5c2",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de1563cffd8e1900b4b5c2",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de1563cffd8e1900b4b5c2",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571136b8a58dae1900cd6d24",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571136b8a58dae1900cd6d24",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571136b8a58dae1900cd6d24",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571136b8a58dae1900cd6d24",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ff56304bcaa1900d76f31",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "language_policy_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "nl"
+  },
+  {
+    "id": "572ff56304bcaa1900d76f31",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "language_policy_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "nl"
+  },
+  {
+    "id": "572ff56304bcaa1900d76f31",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "language_policy_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "nl"
+  },
+  {
+    "id": "572ff56304bcaa1900d76f31",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "language_policy_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "nl"
+  },
+  {
+    "id": "5730126ba23a5019007fcd0d",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5730126ba23a5019007fcd0d",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5730126ba23a5019007fcd0d",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5730126ba23a5019007fcd0d",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266193dd62a815002e832b",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266193dd62a815002e832b",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266193dd62a815002e832b",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266193dd62a815002e832b",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572671a5f1498d1400e8dfe5",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572671a5f1498d1400e8dfe5",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572671a5f1498d1400e8dfe5",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572671a5f1498d1400e8dfe5",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5810c4770dc0001aeeffb8",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5810c4770dc0001aeeffb8",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5810c4770dc0001aeeffb8",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5810c4770dc0001aeeffb8",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5817e3770dc0001aeeffec",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5817e3770dc0001aeeffec",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5817e3770dc0001aeeffec",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a5817e3770dc0001aeeffec",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5729fefbaf94a219006aa73b",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729fefbaf94a219006aa73b",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729fefbaf94a219006aa73b",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729fefbaf94a219006aa73b",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de4a474396321400ee2786",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de4a474396321400ee2786",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de4a474396321400ee2786",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de4a474396321400ee2786",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57105da9a58dae1900cd69a1",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57105da9a58dae1900cd69a1",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57105da9a58dae1900cd69a1",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57105da9a58dae1900cd69a1",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5a6690d6f038b7001ab0bff1",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a6690d6f038b7001ab0bff1",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a6690d6f038b7001ab0bff1",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a6690d6f038b7001ab0bff1",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "57332442d058e614000b5720",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57332442d058e614000b5720",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57332442d058e614000b5720",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57332442d058e614000b5720",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5a55167b134fea001a0e1901",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a55167b134fea001a0e1901",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a55167b134fea001a0e1901",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a55167b134fea001a0e1901",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "572810ec2ca10214002d9d06",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572810ec2ca10214002d9d06",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572810ec2ca10214002d9d06",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572810ec2ca10214002d9d06",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe91c77cf76001a686436",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe91c77cf76001a686436",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe91c77cf76001a686436",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe91c77cf76001a686436",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "57293d116aef051400154bca",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57293d116aef051400154bca",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57293d116aef051400154bca",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57293d116aef051400154bca",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ea985951b619008f8264",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ea985951b619008f8264",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ea985951b619008f8264",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ea985951b619008f8264",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fadcbb2c2fd140056832c",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fadcbb2c2fd140056832c",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fadcbb2c2fd140056832c",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fadcbb2c2fd140056832c",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57378e311c456719005744af",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57378e311c456719005744af",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57378e311c456719005744af",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57378e311c456719005744af",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe73c77cf76001a6863d3",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe73c77cf76001a6863d3",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe73c77cf76001a6863d3",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfe73c77cf76001a6863d3",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5729d51d3f37b3190047858f",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729d51d3f37b3190047858f",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729d51d3f37b3190047858f",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729d51d3f37b3190047858f",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728e5f43acd2414000e0174",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728e5f43acd2414000e0174",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728e5f43acd2414000e0174",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728e5f43acd2414000e0174",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e16182e3433e1400422e28",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e16182e3433e1400422e28",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e16182e3433e1400422e28",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e16182e3433e1400422e28",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad04ecf77cf76001a686faf",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad04ecf77cf76001a686faf",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad04ecf77cf76001a686faf",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad04ecf77cf76001a686faf",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a3e4e57378766001a002565",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a3e4e57378766001a002565",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a3e4e57378766001a002565",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a3e4e57378766001a002565",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15170645df0001a2d1738",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15170645df0001a2d1738",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15170645df0001a2d1738",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15170645df0001a2d1738",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15676645df0001a2d17f8",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15676645df0001a2d17f8",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15676645df0001a2d17f8",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad15676645df0001a2d17f8",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "57267947f1498d1400e8e0ec",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267947f1498d1400e8e0ec",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267947f1498d1400e8e0ec",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267947f1498d1400e8e0ec",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376df3c3c5551400e51ed9",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376df3c3c5551400e51ed9",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376df3c3c5551400e51ed9",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376df3c3c5551400e51ed9",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728f7774b864d190016512f",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728f7774b864d190016512f",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728f7774b864d190016512f",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728f7774b864d190016512f",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e17e6ee3433e1400422f80",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e17e6ee3433e1400422f80",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e17e6ee3433e1400422f80",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56e17e6ee3433e1400422f80",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286b003acd2414000df9c3",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286b003acd2414000df9c3",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286b003acd2414000df9c3",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286b003acd2414000df9c3",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572863c72ca10214002da2d8",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572863c72ca10214002da2d8",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572863c72ca10214002da2d8",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572863c72ca10214002da2d8",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57338255d058e614000b5c0e",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57338255d058e614000b5c0e",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57338255d058e614000b5c0e",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57338255d058e614000b5c0e",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25efad7d075001a428f56",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25efad7d075001a428f56",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25efad7d075001a428f56",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25efad7d075001a428f56",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "573005b9947a6a140053cf6a",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573005b9947a6a140053cf6a",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573005b9947a6a140053cf6a",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573005b9947a6a140053cf6a",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "570d4606b3d812140066d61b",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "570d4606b3d812140066d61b",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "570d4606b3d812140066d61b",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "570d4606b3d812140066d61b",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fc8a904bcaa1900d76d21",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fc8a904bcaa1900d76d21",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fc8a904bcaa1900d76d21",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fc8a904bcaa1900d76d21",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ba2c708984140094cf5b",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ba2c708984140094cf5b",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ba2c708984140094cf5b",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726ba2c708984140094cf5b",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad2a71ad7d075001a429e05",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad2a71ad7d075001a429e05",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad2a71ad7d075001a429e05",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad2a71ad7d075001a429e05",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "56dddf4066d3e219004dad5f",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56dddf4066d3e219004dad5f",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56dddf4066d3e219004dad5f",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56dddf4066d3e219004dad5f",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57340d124776f419006617c1",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57340d124776f419006617c1",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57340d124776f419006617c1",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57340d124776f419006617c1",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffd9e04bcaa1900d76fc9",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffd9e04bcaa1900d76fc9",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffd9e04bcaa1900d76fc9",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffd9e04bcaa1900d76fc9",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57264e455951b619008f6f65",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57264e455951b619008f6f65",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57264e455951b619008f6f65",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57264e455951b619008f6f65",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572881704b864d1900164a51",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572881704b864d1900164a51",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572881704b864d1900164a51",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572881704b864d1900164a51",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727ff083acd2414000df1ab",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727ff083acd2414000df1ab",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727ff083acd2414000df1ab",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727ff083acd2414000df1ab",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57269bb8708984140094cb95",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57269bb8708984140094cb95",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57269bb8708984140094cb95",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57269bb8708984140094cb95",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728eb1a3acd2414000e01c7",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728eb1a3acd2414000e01c7",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728eb1a3acd2414000e01c7",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728eb1a3acd2414000e01c7",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57268b43dd62a815002e88f1",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57268b43dd62a815002e88f1",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57268b43dd62a815002e88f1",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57268b43dd62a815002e88f1",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572f5703a23a5019007fc573",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572f5703a23a5019007fc573",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572f5703a23a5019007fc573",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572f5703a23a5019007fc573",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725b92e38643c19005acbd4",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725b92e38643c19005acbd4",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725b92e38643c19005acbd4",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725b92e38643c19005acbd4",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a299dd62a815002e8b9e",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a299dd62a815002e8b9e",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a299dd62a815002e8b9e",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a299dd62a815002e8b9e",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729081d3f37b31900477fab",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729081d3f37b31900477fab",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729081d3f37b31900477fab",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5729081d3f37b31900477fab",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffe6fb2c2fd14005686ef",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffe6fb2c2fd14005686ef",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffe6fb2c2fd14005686ef",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572ffe6fb2c2fd14005686ef",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a46cdd62a815002e8bd0",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a46cdd62a815002e8bd0",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a46cdd62a815002e8bd0",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726a46cdd62a815002e8bd0",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725f8f5ec44d21400f3d7b1",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725f8f5ec44d21400f3d7b1",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725f8f5ec44d21400f3d7b1",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5725f8f5ec44d21400f3d7b1",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572658daf1498d1400e8dcaf",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572658daf1498d1400e8dcaf",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572658daf1498d1400e8dcaf",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572658daf1498d1400e8dcaf",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad56fe65b96ef001a10aec6",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad56fe65b96ef001a10aec6",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad56fe65b96ef001a10aec6",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad56fe65b96ef001a10aec6",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "57286dfa2ca10214002da332",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286dfa2ca10214002da332",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286dfa2ca10214002da332",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286dfa2ca10214002da332",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfec9277cf76001a68650a",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfec9277cf76001a68650a",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfec9277cf76001a68650a",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5acfec9277cf76001a68650a",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3ebc4396321400ee26e8",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3ebc4396321400ee26e8",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3ebc4396321400ee26e8",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3ebc4396321400ee26e8",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3efccffd8e1900b4b6fe",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3efccffd8e1900b4b6fe",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3efccffd8e1900b4b6fe",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "56de3efccffd8e1900b4b6fe",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad3f5b0604f3c001a3ff9ad",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad3f5b0604f3c001a3ff9ad",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad3f5b0604f3c001a3ff9ad",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad3f5b0604f3c001a3ff9ad",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad1373b645df0001a2d11ce",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad1373b645df0001a2d11ce",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad1373b645df0001a2d11ce",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad1373b645df0001a2d11ce",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a66a156f038b7001ab0c073",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a66a156f038b7001ab0c073",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a66a156f038b7001ab0c073",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a66a156f038b7001ab0c073",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "572fec30947a6a140053cdf2",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fec30947a6a140053cdf2",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fec30947a6a140053cdf2",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572fec30947a6a140053cdf2",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728facd4b864d1900165174",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728facd4b864d1900165174",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728facd4b864d1900165174",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5728facd4b864d1900165174",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571156152419e3140095559e",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571156152419e3140095559e",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571156152419e3140095559e",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571156152419e3140095559e",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5710f2e2a58dae1900cd6b75",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5710f2e2a58dae1900cd6b75",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5710f2e2a58dae1900cd6b75",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5710f2e2a58dae1900cd6b75",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573796edc3c5551400e51f35",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573796edc3c5551400e51f35",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573796edc3c5551400e51f35",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "573796edc3c5551400e51f35",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5a58e3833e1742001a15ce86",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a58e3833e1742001a15ce86",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a58e3833e1742001a15ce86",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5a58e3833e1742001a15ce86",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "572940973f37b319004781a8",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572940973f37b319004781a8",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572940973f37b319004781a8",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572940973f37b319004781a8",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726fa525951b619008f83fa",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726fa525951b619008f83fa",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726fa525951b619008f83fa",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726fa525951b619008f83fa",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4cc135b96ef001a10a0f5",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4cc135b96ef001a10a0f5",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4cc135b96ef001a10a0f5",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4cc135b96ef001a10a0f5",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4d5e15b96ef001a10a29a",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4d5e15b96ef001a10a29a",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4d5e15b96ef001a10a29a",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad4d5e15b96ef001a10a29a",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad5501f5b96ef001a10ac93",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad5501f5b96ef001a10ac93",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad5501f5b96ef001a10ac93",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad5501f5b96ef001a10ac93",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5726d9935951b619008f7fef",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726d9935951b619008f7fef",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726d9935951b619008f7fef",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5726d9935951b619008f7fef",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339555d058e614000b5df5",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339555d058e614000b5df5",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339555d058e614000b5df5",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339555d058e614000b5df5",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339902d058e614000b5e74",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339902d058e614000b5e74",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339902d058e614000b5e74",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57339902d058e614000b5e74",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad262ffd7d075001a4290e4",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad262ffd7d075001a4290e4",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad262ffd7d075001a4290e4",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad262ffd7d075001a4290e4",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad289c2d7d075001a42999e",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad289c2d7d075001a42999e",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad289c2d7d075001a42999e",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad289c2d7d075001a42999e",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "57274a1edd62a815002e9a9d",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274a1edd62a815002e9a9d",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274a1edd62a815002e9a9d",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274a1edd62a815002e9a9d",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727515f708984140094dc12",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727515f708984140094dc12",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727515f708984140094dc12",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5727515f708984140094dc12",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57302e45947a6a140053d232",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57302e45947a6a140053d232",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57302e45947a6a140053d232",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57302e45947a6a140053d232",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274712708984140094dbb0",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274712708984140094dbb0",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274712708984140094dbb0",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57274712708984140094dbb0",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376a1bc3c5551400e51ec3",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376a1bc3c5551400e51ec3",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376a1bc3c5551400e51ec3",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57376a1bc3c5551400e51ec3",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572759665951b619008f8886",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572759665951b619008f8886",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572759665951b619008f8886",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572759665951b619008f8886",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572995d46aef051400154fe9",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572995d46aef051400154fe9",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572995d46aef051400154fe9",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572995d46aef051400154fe9",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572756265951b619008f886f",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572756265951b619008f886f",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572756265951b619008f886f",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572756265951b619008f886f",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266c015951b619008f7239",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266c015951b619008f7239",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266c015951b619008f7239",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57266c015951b619008f7239",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267640f1498d1400e8e076",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267640f1498d1400e8e076",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267640f1498d1400e8e076",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57267640f1498d1400e8e076",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571090abb654c5140001f998",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571090abb654c5140001f998",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571090abb654c5140001f998",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571090abb654c5140001f998",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad295d4d7d075001a429afa",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad295d4d7d075001a429afa",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad295d4d7d075001a429afa",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad295d4d7d075001a429afa",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "572818f54b864d1900164470",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572818f54b864d1900164470",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572818f54b864d1900164470",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572818f54b864d1900164470",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572a0e0e1d04691400779707",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572a0e0e1d04691400779707",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572a0e0e1d04691400779707",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "572a0e0e1d04691400779707",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5733e5a14776f4190066145f",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5733e5a14776f4190066145f",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5733e5a14776f4190066145f",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5733e5a14776f4190066145f",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571cde695efbb31900334e1a",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571cde695efbb31900334e1a",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571cde695efbb31900334e1a",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "571cde695efbb31900334e1a",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286192ff5b5019007da1de",
+    "condition": "frozen_v4",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286192ff5b5019007da1de",
+    "condition": "language_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286192ff5b5019007da1de",
+    "condition": "numeric_only",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated",
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "57286192ff5b5019007da1de",
+    "condition": "combined",
+    "answerable": true,
+    "release_state": "held",
+    "hold_reasons": [
+      "answer_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25553d7d075001a428d36",
+    "condition": "frozen_v4",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25553d7d075001a428d36",
+    "condition": "language_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25553d7d075001a428d36",
+    "condition": "numeric_only",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  },
+  {
+    "id": "5ad25553d7d075001a428d36",
+    "condition": "combined",
+    "answerable": false,
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "abstained",
+    "document_language": "en"
+  }
+]
