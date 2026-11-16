@@ -1,0 +1,14 @@
+{
+  "source_commit": "0c094d780598d8f67c50308ac182ed796b8b3746",
+  "image": "ghcr.io/ananyat6979-commits/docmind",
+  "digest": "sha256:ed9e123036983af3b380253e9a75616fe39b7ff7d060611096bdd067dd0cf750",
+  "anonymous_pull_verified": true,
+  "buildkit_predicate_types": [
+    "https://slsa.dev/provenance/v1",
+    "https://spdx.dev/Document"
+  ],
+  "signed_provenance_workflow": "https://github.com/ananyat6979-commits/DocMind/actions/runs/43824760904",
+  "main_only_attestation_job": "success",
+  "offline_demo_network_disabled_test": "passed",
+  "scope": "Build origin and inventory, not model safety or vulnerability certification"
+}
