@@ -1,0 +1,28 @@
+{
+  "scope": "Timed single-reviewer actual-answer subset, descriptive only; no population extrapolation",
+  "packet_sha256": "f40009abb4ec1083b5b54729364de27e1a930771440b856f14eae2ad674f15fc",
+  "requested_review_answers": 5,
+  "finished_review_answers": 5,
+  "unfinished_or_missing": 0,
+  "recorded_running_seconds": 522.757,
+  "active_work_independently_observed": false,
+  "answer_correctness": {
+    "correct": 4,
+    "incorrect": 1
+  },
+  "reviewed_drafts": 5,
+  "decisive_reviewed_drafts": 5,
+  "incorrect_reviewed_drafts": 1,
+  "reviewed_subset_false_release_fraction": null,
+  "false_release_risk": "insufficient evidence",
+  "correct_held_answers": 0,
+  "incorrect_answerable_abstentions": 0,
+  "claim_labels": {
+    "supported": 10,
+    "unsupported": 1
+  },
+  "attribution_recall": "unmeasured: no complete independent claim-extraction gold",
+  "human_annotation_sources": "One reviewer, also involved in source/question confirmation; no inter-annotator agreement or independent replication",
+  "missing_label_policy": "No automatic judgments or time-based completion weights substitute for missing human labels",
+  "export_sha256": "4a664fb26fbcd2bc315b24320cca97f4a05f4c61b20cdba9af5a77e4df80a72a"
+}

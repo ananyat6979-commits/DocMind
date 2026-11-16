@@ -21,7 +21,9 @@ Public reference labels are used as published, without new independent human rev
 
 On the 17 primary PDF responses, the prior policy has nine drafts and eight holds. The combined repair has sixteen drafts and one hold. Human-correct held answers decrease from three to one on identical reviewed answer/evidence inputs. The remaining correct hold has an ambiguous quote. The two known incorrect drafts remain drafts: numeric checks do not solve semantic support or question relevance.
 
-Five recovered answer/evidence inputs differ from the originally reviewed placeholders. Their old labels are not reused. A separate blinded ten-minute packet contains these five answers and eleven extracted claims. These inputs remain unreviewed until actual human exports are received. Fewer than 25 reviewed candidate releases still gives insufficient evidence about population false-release risk. This replay uses cached historical extraction and does not apply new layout geometry or regenerate answers.
+Five recovered answer/evidence inputs differ from the originally reviewed placeholders. Their old labels were not reused. A separate blinded review completed all five in 522.757 recorded running seconds: four answers were judged correct and one incorrect; ten claims were supported and one unsupported.
+
+The [combined identical-input review](current_answer_human_review.json) now covers all 17 current PDF answers: 14 correct and three incorrect. Sixteen are visible drafts, including all three incorrect answers; one correct answer remains held for an ambiguous quote. Across 36 extracted claims, 32 were supported and four unsupported. These are unchanged reader completions with repaired parsing and routing, not a new generation experiment or proof of improved intrinsic reader accuracy. The two original incorrect drafts and one newly recovered incorrect draft show that the semantic correctness gap remains open. Fewer than 25 reviewed candidate releases still gives insufficient evidence about population false-release risk. This replay uses cached historical extraction and does not apply new layout geometry or regenerate answers.
 
 ## Runtime defects and limits
 

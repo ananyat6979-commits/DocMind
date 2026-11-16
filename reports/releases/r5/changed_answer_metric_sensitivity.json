@@ -1,0 +1,20 @@
+{
+  "scope": "Post-hoc human versus exact-match and citation-location diagnostic on the unchanged baseline; no inference or automatic human labels",
+  "packet_sha256": "f40009abb4ec1083b5b54729364de27e1a930771440b856f14eae2ad674f15fc",
+  "answer_em_by_human_label": {
+    "0:correct": 4,
+    "0:incorrect": 1
+  },
+  "claim_location_by_human_support": {
+    "citation_found=True:quote_located=True:supported": 10,
+    "citation_found=True:quote_located=True:unsupported": 1
+  },
+  "input_identity_verified": true,
+  "limitations": [
+    "Selected English diagnostic cohort and a single reviewer involved in source confirmation",
+    "Claim labels cover extracted claims only, not complete claim-extraction gold",
+    "Location is not entailment; no independent NLI accuracy or attribution recall claim",
+    "This sensitivity does not relabel historical calibration outcomes or estimate population false-release risk"
+  ],
+  "export_sha256": "4a664fb26fbcd2bc315b24320cca97f4a05f4c61b20cdba9af5a77e4df80a72a"
+}

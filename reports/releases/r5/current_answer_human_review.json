@@ -1,0 +1,30 @@
+{
+  "scope": "Combined single-reviewer current displayed-answer replay, selected English cohort; no new generation or population inference",
+  "requested_pdf_answers": 17,
+  "answer_correctness": {
+    "correct": 14,
+    "incorrect": 3
+  },
+  "draft_answer_correctness": {
+    "correct": 13,
+    "incorrect": 3
+  },
+  "held_answer_correctness": {
+    "correct": 1
+  },
+  "claim_support_labels": {
+    "supported": 32,
+    "unsupported": 4
+  },
+  "review_recorded_seconds_across_packets": 2067.74,
+  "false_release_risk": "insufficient evidence",
+  "false_release_fraction": null,
+  "input_identity": "Task, question and exact displayed answer/evidence fingerprint must match; changed inputs never inherit labels",
+  "limitations": [
+    "One reviewer also involved in source confirmation",
+    "Historical cached extraction; no fresh PDF generation",
+    "Current sample remains below the preregistered 25-reviewed-release floor",
+    "No independent claim-extraction gold or calibrated safety guarantee"
+  ],
+  "profile_sha256": "111232d9b35c1cb7a595bc9f421442be92ad6e5db0940d8750c68802a1d57f36"
+}

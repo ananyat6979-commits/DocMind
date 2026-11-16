@@ -1,0 +1,9 @@
+{
+  "scope": "Aggregate-only human results, source identity and recorded review accounting",
+  "sha256": {
+    "changed_answer_human_review.json": "2bc541f4cc3a28fe404f08b50c10ff4deaae5812e1cb9e47a1a63a0f1ab9aa84",
+    "changed_answer_metric_sensitivity.json": "2264d7f8003421b7d13f3b2e619563a45c103b8a453543411550a90310d4e98a",
+    "current_answer_human_review.json": "7cc30fe06906ac5e5723189ce52302c6ab214623462e51303124434ceeb02728",
+    "review_budget_after_changed_answers.json": "59077a2945dc0d92fba502a694bb961133dec509502722d2c71043459217312e"
+  }
+}

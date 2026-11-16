@@ -53,3 +53,12 @@ Passing CI, publishing source or publishing a container is not proof of a runnin
 ## Reproduction
 
 Run `python scripts/verify_paired_core_profile.py reports/releases/r4/paired_core_t4` and the existing historical verification commands in CI. Publication manifests and executed-source hashes identify exact snapshots. Internal consistency checks are not external replication. Private human labels, restricted text, review notes and raw outputs remain outside Git.
+
+
+## Quality follow-up
+
+The [R5 quality report](../reports/releases/r5/README.md) preserves a first 100-case routing result as development evidence and reports a disjoint 100-case confirmation. Holds fall from 40 to 11; all remaining cases fail unique quote location. On the 89 citation-clean gold inputs, language-related holds fall from 29 to zero. This is a public-reference policy component, not new reader generation or calibrated risk.
+
+An identical-output own-document replay now has 16 drafts and one hold. Human judgments are reused only for identical question/answer/evidence inputs, and the five recovered inputs received a separate blinded review. The current selected 17-answer cohort has 14 correct and three incorrect answers. All three incorrect answers remain drafts; one correct answer remains held. Narrow numeric guards did not solve the observed semantic errors. The larger independent human correctness and risk-calibration gaps remain open.
+
+Uploads now reject nonportable names before writing and clean temporary files after failures. PDF geometry warnings quarantine observed interleaved columns without changing extracted text; a new parser manifest covers layout metadata. Existing PDF caches need explicit reprocessing for refreshed language and layout metadata. Historical neural results are not silently promoted to the new preprocessing version.

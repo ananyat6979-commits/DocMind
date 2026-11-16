@@ -229,3 +229,48 @@ def test_new_packet_cap_and_source_links_are_frozen_with_inputs(tmp_path):
         and "cap=600000" in html
         and "docmind-quality-answer-labels.json" in html
     )
+
+
+def test_changed_current_inputs_cannot_inherit_an_old_correct_judgment():
+    from scripts.analyze_own_answer_review import combine_reviews
+    from scripts.replay_quality_policy import fingerprint
+
+    packet = {
+        "sha256": "p",
+        "cap_seconds": 600,
+        "items": [{"id": "a", "question": "How long?", "answer": "Ten.", "claims": []}],
+    }
+    links = [
+        {
+            "id": "a",
+            "task_id": "q:pdf",
+            "release_state": "draft",
+            "input_sha256": fingerprint("Ten.", []),
+        }
+    ]
+    labels = {
+        "packet_sha256": "p",
+        "elapsed_ms": 1000,
+        "records": [
+            {
+                "id": "a",
+                "finished": True,
+                "human_adjudicated": True,
+                "answer_correctness": "correct",
+                "claims": {},
+            }
+        ],
+    }
+    rows = [
+        {
+            "task_id": "q:pdf",
+            "format": "pdf",
+            "question": "How long?",
+            "answer": "Eleven.",
+            "evidence": [],
+            "release_state": "draft",
+        }
+    ]
+    result = combine_reviews(rows, [(packet, links, labels)])
+    assert result["answer_correctness"] == {"unreviewed_identical_input": 1}
+    assert result["false_release_fraction"] is None
