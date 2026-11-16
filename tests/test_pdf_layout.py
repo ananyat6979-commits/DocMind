@@ -72,3 +72,18 @@ def test_actual_interleaved_pdf_is_quarantined_after_worker_postprocessing(tmp_p
         "ambiguous_column_or_table_order"
         in unit.metadata["extraction_quality"]["flags"]
     )
+
+
+def test_geometry_failure_is_explicit_quarantine_not_silent_success(
+    tmp_path, monkeypatch
+):
+    from tests.test_pdf_and_testset_filter import build_tight_pdf
+    from docmind.ingestion import loader
+
+    def unavailable(*args):
+        raise ValueError("unsupported geometry")
+
+    monkeypatch.setattr(loader, "pdf_layout_flags", unavailable)
+    unit = loader.load_pdf(build_tight_pdf(tmp_path / "geometry.pdf"))[0]
+    assert unit.content and unit.metadata["extraction_quality"]["quarantined"]
+    assert "layout_geometry_unavailable" in unit.metadata["extraction_quality"]["flags"]

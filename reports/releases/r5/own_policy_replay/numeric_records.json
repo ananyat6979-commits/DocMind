@@ -1,0 +1,742 @@
+[
+  {
+    "task_id": "repair-nist-95:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-nist-95:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-nist-95:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-nist-95:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-nist-16:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "repair-nist-16:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "repair-nist-16:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "repair-nist-16:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "synthetic-nist-9:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-9:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-9:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-9:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-10:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-10:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-10:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-10:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-3:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-3:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-3:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-3:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-5:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-5:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-5:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-5:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-11:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-11:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-11:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-11:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote",
+      "no_citations"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-8:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-8:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-8:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "query_language_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-8:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-1:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-1:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-1:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-1:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-7:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "synthetic-nist-7:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "synthetic-nist-7:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "synthetic-nist-7:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "incorrect"
+  },
+  {
+    "task_id": "synthetic-nist-4:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-4:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-4:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-4:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-6:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-6:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-6:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-6:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "nist-33:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "nist-33:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "nist-33:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "nist-33:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-12:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-12:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-12:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-12:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-2:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-2:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-2:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-2:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-8:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-8:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-8:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "repair-project-8:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "correct"
+  },
+  {
+    "task_id": "synthetic-nist-6:pdf",
+    "format": "pdf",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-6:pdf",
+    "format": "pdf",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-6:pdf",
+    "format": "pdf",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "language_policy_unvalidated"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "synthetic-nist-6:pdf",
+    "format": "pdf",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-6:docx",
+    "format": "docx",
+    "condition": "frozen_v4",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-6:docx",
+    "format": "docx",
+    "condition": "language_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-6:docx",
+    "format": "docx",
+    "condition": "numeric_only",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-6:docx",
+    "format": "docx",
+    "condition": "combined",
+    "release_state": "draft",
+    "hold_reasons": [],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-8:docx",
+    "format": "docx",
+    "condition": "frozen_v4",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-8:docx",
+    "format": "docx",
+    "condition": "language_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-8:docx",
+    "format": "docx",
+    "condition": "numeric_only",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  },
+  {
+    "task_id": "repair-project-8:docx",
+    "format": "docx",
+    "condition": "combined",
+    "release_state": "held",
+    "hold_reasons": [
+      "invalid_citation",
+      "invalid_or_missing_quote"
+    ],
+    "finish_reason": "final_answer",
+    "human_correctness_if_identical": "not_reviewed_identical_input"
+  }
+]

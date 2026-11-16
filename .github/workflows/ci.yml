@@ -56,3 +56,6 @@ jobs:
 
       - name: Verify own-document numeric records
         run: python scripts/verify_own_document_profile.py reports/releases/r4/own_document_t4
+
+      - name: Verify quality follow-up records
+        run: python scripts/verify_quality_control.py reports/releases/r5

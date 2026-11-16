@@ -1,0 +1,20 @@
+{
+  "schema": "parser-output-equivalence-v1",
+  "sources": [
+    {
+      "filename": "english.pdf",
+      "url": "https://azimpremjiuniversity.edu.in/media/publications/downloads/magazine/i-wonder_Issue-8_June-2022.pdf",
+      "pdf_sha256": "ffb2340fa5e0892ffcf6e754912d44fc2af96083e8d2954dcb856c912e40f899",
+      "expected_semantic_sha256": "2d34b9c0d7a14f0b02d112fe94797a6e8abbac7334779524923eb28f22731f52",
+      "expected_language": "en",
+      "license": "CC BY-NC 4.0 for articles, with separate image credits; private research cache only",
+      "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "attribution": "i wonder... Issue 8, June 2022, Azim Premji University; article authors as credited in the PDF",
+      "layout_checked_pages": 92,
+      "layout_flagged_pages": 0
+    }
+  ],
+  "note": "Fresh trusted native extraction identity for quality v3; isolated transport requires its own CI result. Historical manifests and neural outputs remain unchanged.",
+  "quality_policy": "extraction-quality-v3",
+  "scope": "Fresh PDF layout metadata; prior downstream neural results are not reused as extraction-equivalent"
+}

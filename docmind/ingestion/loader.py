@@ -108,7 +108,11 @@ def load_pdf(path: Path) -> List[Document]:
                 except (AttributeError, TypeError, ValueError):
                     logger.debug("Font metadata unavailable")
                 quality = extraction_quality(text, font_names=fonts)
-                layout_flags = pdf_layout_flags(textpage, page.get_width())
+                try:
+                    layout_flags = pdf_layout_flags(textpage, page.get_width())
+                except Exception:
+                    logger.warning("PDF layout inspection unavailable")
+                    layout_flags = ["layout_geometry_unavailable"]
                 quality["layout_version"] = "pdf-layout-v1"
                 quality["layout_sample_character_cap"] = 512
                 if layout_flags:
@@ -341,8 +345,14 @@ def load_document(
         if old.get("layout_version"):
             quality["layout_version"] = old["layout_version"]
             quality["layout_sample_character_cap"] = old["layout_sample_character_cap"]
-            if "ambiguous_column_or_table_order" in old.get("flags", []):
-                quality["flags"].append("ambiguous_column_or_table_order")
+            layout_flags = [
+                flag
+                for flag in old.get("flags", [])
+                if flag
+                in ("ambiguous_column_or_table_order", "layout_geometry_unavailable")
+            ]
+            if layout_flags:
+                quality["flags"].extend(layout_flags)
                 quality.update(status="uncertain_or_mixed", quarantined=True)
         unit.metadata["extraction_quality"] = quality
     return units

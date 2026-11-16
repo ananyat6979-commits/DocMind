@@ -1,0 +1,70 @@
+{
+  "scope": "Fresh English gold-input policy diagnostic, not reader generation or newly human-reviewed answers",
+  "source_commit": "2bdda9d5ba1c3a13492c257d43ce45cf950c0ca1",
+  "design_sha256": "1817865b324486b2426cbb556fed0cd2deaf35a6d059c345d95e0f5a63f8bc99",
+  "groups": {
+    "frozen_v4": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 40,
+      "held_answerable_gold_inputs": 35,
+      "held_unanswerable_gold_inputs": 5,
+      "hold_reasons": {
+        "answer_language_unvalidated": 29,
+        "invalid_citation": 11,
+        "invalid_or_missing_quote": 11,
+        "no_citations": 11,
+        "query_language_unvalidated": 14
+      }
+    },
+    "language_only": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 11,
+      "held_answerable_gold_inputs": 11,
+      "held_unanswerable_gold_inputs": 0,
+      "hold_reasons": {
+        "answer_language_unvalidated": 11,
+        "invalid_citation": 11,
+        "invalid_or_missing_quote": 11,
+        "no_citations": 11,
+        "query_language_unvalidated": 1
+      }
+    },
+    "numeric_only": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 40,
+      "held_answerable_gold_inputs": 35,
+      "held_unanswerable_gold_inputs": 5,
+      "hold_reasons": {
+        "answer_language_unvalidated": 29,
+        "invalid_citation": 11,
+        "invalid_or_missing_quote": 11,
+        "no_citations": 11,
+        "query_language_unvalidated": 14
+      }
+    },
+    "combined": {
+      "requested": 100,
+      "completed": 100,
+      "held_gold_inputs": 11,
+      "held_answerable_gold_inputs": 11,
+      "held_unanswerable_gold_inputs": 0,
+      "hold_reasons": {
+        "answer_language_unvalidated": 11,
+        "invalid_citation": 11,
+        "invalid_or_missing_quote": 11,
+        "no_citations": 11,
+        "query_language_unvalidated": 1
+      }
+    }
+  },
+  "new_reader_calls": 0,
+  "limitations": [
+    "Public reference inputs, not generated-answer correctness or risk calibration",
+    "No new human review, paragraph-disjoint from historical artifacts but articles may overlap",
+    "One fixed test, no threshold selection from its outcomes; unexpected holds retained",
+    "Valid answers with repeated identical spans can still fail the unique-quote contract"
+  ]
+}

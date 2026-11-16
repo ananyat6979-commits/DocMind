@@ -1,0 +1,14 @@
+{
+  "scope": "Artifact identity and internal consistency; not independent replication or human-label validation",
+  "sha256": {
+    "english_policy_confirmation/numeric_records.json": "b3a65516fcca82ae67121b58c6bc60620cecedb12d0eb4a392abe586dc0c6fe5",
+    "english_policy_confirmation/summary.json": "6027fb496ef2206b112bace3bf2d7b76b9fb12f622b9b919eaaa5ca55f5277eb",
+    "english_policy_confirmation_design.json": "1817865b324486b2426cbb556fed0cd2deaf35a6d059c345d95e0f5a63f8bc99",
+    "english_policy_control/numeric_records.json": "150c47fe67f8e733c5a8084c3d5552886559bae6d482bafc6bbb0f0f50e97c6a",
+    "english_policy_control/summary.json": "75e5426837eef7f8aa43a5d9ef03dd842ecf6e24f8a8dccc0a222c8a34d2cc65",
+    "english_policy_control_design.json": "519a3f8b8391a421de38240c1d7484d386fcb83de1768219c012ee890fba905d",
+    "own_policy_replay/numeric_records.json": "8afe49dc832700988c3a6a3f10e34a81c546a08d7e7541d3ac8d6e7939b50bf2",
+    "own_policy_replay/summary.json": "58fb0fcd73964b32a430e572f5d0a7b12960e4986cace1cc1fc8896e246a0a1a",
+    "parser_equivalence_layout_v1.json": "fff2f825ca4af6a707c462d83f64649955c03a65504d29ff1e916d028e2ed084"
+  }
+}

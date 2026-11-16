@@ -1,0 +1,70 @@
+{
+  "scope": "Post-hoc same-output policy replay, cached historical extraction unchanged; not fresh generation or independent validation",
+  "groups": {
+    "frozen_v4": {
+      "requested_pdf": 17,
+      "drafts": 9,
+      "held": 8,
+      "correct_held_identical_inputs": 3,
+      "incorrect_drafts_identical_inputs": 2,
+      "draft_inputs_needing_new_labels": 0,
+      "hold_reasons": {
+        "query_language_unvalidated": 2,
+        "language_policy_unvalidated": 5,
+        "invalid_citation": 1,
+        "invalid_or_missing_quote": 1,
+        "no_citations": 1
+      }
+    },
+    "language_only": {
+      "requested_pdf": 17,
+      "drafts": 16,
+      "held": 1,
+      "correct_held_identical_inputs": 1,
+      "incorrect_drafts_identical_inputs": 2,
+      "draft_inputs_needing_new_labels": 5,
+      "hold_reasons": {
+        "invalid_citation": 1,
+        "invalid_or_missing_quote": 1,
+        "no_citations": 1
+      }
+    },
+    "numeric_only": {
+      "requested_pdf": 17,
+      "drafts": 9,
+      "held": 8,
+      "correct_held_identical_inputs": 3,
+      "incorrect_drafts_identical_inputs": 2,
+      "draft_inputs_needing_new_labels": 0,
+      "hold_reasons": {
+        "query_language_unvalidated": 2,
+        "language_policy_unvalidated": 5,
+        "invalid_citation": 1,
+        "invalid_or_missing_quote": 1,
+        "no_citations": 1
+      }
+    },
+    "combined": {
+      "requested_pdf": 17,
+      "drafts": 16,
+      "held": 1,
+      "correct_held_identical_inputs": 1,
+      "incorrect_drafts_identical_inputs": 2,
+      "draft_inputs_needing_new_labels": 5,
+      "hold_reasons": {
+        "invalid_citation": 1,
+        "invalid_or_missing_quote": 1,
+        "no_citations": 1
+      }
+    }
+  },
+  "new_reader_calls": 0,
+  "false_release_risk": "insufficient evidence",
+  "human_reuse": "Only exact reviewed answer/evidence fingerprints; changed inputs are unreviewed",
+  "layout_limit": "This replay does not reparse historical PDFs or apply fresh layout geometry",
+  "input_sha256": {
+    "records": "977d4d0bfb57d964527e030fce48205cd78c7870efd358342336cd1ffa50aae3",
+    "cache": "9a3787a35da4e11ebd1fc1bea1fb3aaaec075d70352ac1ae12f99d547639cebd",
+    "human_export": "69a21365c1a74d19a21ccb0b82c9c72fde05aaed5bca5a89660c73513ff1220f"
+  }
+}
