@@ -1,14 +1,15 @@
 """Deterministic quote location checks. Matching text does not prove entailment."""
-from dataclasses import asdict, dataclass
+
 import json
 import unicodedata
+from dataclasses import asdict, dataclass
 from typing import Any, Sequence
 
 import regex
 
 from docmind.models import SearchResult
 
-VERSION = "quoted-evidence-v2"
+VERSION = "quoted-evidence-v3"
 _ESCAPED = {0x85, 0x2028, 0x2029, 0x61C, 0x200E, 0x200F, 0x200B, 0x2060}
 _ESCAPED.update(range(0x202A, 0x202F))
 _ESCAPED.update(range(0x2066, 0x206A))
@@ -18,9 +19,21 @@ _ESCAPED.update(range(0xE0000, 0xE0080))
 def untrusted_json(value: Any) -> str:
     """Readable Unicode JSON with explicit directional/separator escaping."""
     serialized = json.dumps(value, ensure_ascii=False)
-    return "".join(chr(92) + "u" + format(ord(c), "04x") if ord(c) in _ESCAPED and ord(c) <= 0xFFFF else (chr(92) + "u" + format(0xD800 + ((ord(c)-0x10000) >> 10), "04x") +
-                         chr(92) + "u" + format(0xDC00 + ((ord(c)-0x10000) & 0x3FF), "04x") if ord(c) in _ESCAPED else c)
-                   for c in serialized)
+    return "".join(
+        chr(92) + "u" + format(ord(c), "04x")
+        if ord(c) in _ESCAPED and ord(c) <= 0xFFFF
+        else (
+            chr(92)
+            + "u"
+            + format(0xD800 + ((ord(c) - 0x10000) >> 10), "04x")
+            + chr(92)
+            + "u"
+            + format(0xDC00 + ((ord(c) - 0x10000) & 0x3FF), "04x")
+            if ord(c) in _ESCAPED
+            else c
+        )
+        for c in serialized
+    )
 
 
 def canonical_text(text: str) -> tuple[str, list[tuple[int, int]]]:
@@ -40,9 +53,11 @@ def canonical_text(text: str) -> tuple[str, list[tuple[int, int]]]:
             characters.append(character)
             positions.append((match.start(), match.end()))
     while characters and characters[-1] == " ":
-        characters.pop(); positions.pop()
+        characters.pop()
+        positions.pop()
     if characters and characters[0] == " ":
-        characters.pop(0); positions.pop(0)
+        characters.pop(0)
+        positions.pop(0)
     return "".join(characters), positions
 
 
@@ -73,7 +88,9 @@ def match_quote(text: str, quote: str) -> QuoteMatch:
         return QuoteMatch("ambiguous")
     if exact:
         start = exact[0]
-        return QuoteMatch("literal", start, start + len(quote), text[start:start + len(quote)])
+        return QuoteMatch(
+            "literal", start, start + len(quote), text[start : start + len(quote)]
+        )
     canonical, positions = canonical_text(text)
     needle, _ = canonical_text(quote)
     if not needle:
@@ -102,7 +119,9 @@ def parse_payload(text: str) -> dict[str, Any]:
     return payload
 
 
-def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) -> dict[str, Any]:
+def validate_claims(
+    payload: dict[str, Any], sources: Sequence[SearchResult]
+) -> dict[str, Any]:
     """Validate every displayed claim; never accept an unlinked answer summary."""
     claims = payload.get("claims", [])
     if not isinstance(claims, list) or len(claims) > 8:
@@ -123,7 +142,9 @@ def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) ->
             raise ValueError("Invalid claim")
         text = claim["text"].strip()
         if not text or len(text) > 4000 or "(source:" in text.casefold():
-            raise ValueError("Claim text is empty, oversized or contains inline citations")
+            raise ValueError(
+                "Claim text is empty, oversized or contains inline citations"
+            )
         references = claim.get("evidence")
         if not isinstance(references, list) or not 1 <= len(references) <= 4:
             raise ValueError("Every claim requires bounded evidence")
@@ -132,7 +153,11 @@ def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) ->
             if not isinstance(reference, dict):
                 raise ValueError("Invalid evidence reference")
             chunk_id, quote = reference.get("chunk_id"), reference.get("quote")
-            if not isinstance(chunk_id, str) or not isinstance(quote, str) or len(quote) > 4000:
+            if (
+                not isinstance(chunk_id, str)
+                or not isinstance(quote, str)
+                or len(quote) > 4000
+            ):
                 raise ValueError("Invalid quote fields")
             source = lookup.get(chunk_id)
             if source is None:
@@ -141,13 +166,34 @@ def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) ->
             matched = match_quote(source.chunk.content, quote)
             if matched.status not in ("literal", "normalized"):
                 errors.append("quote_" + matched.status)
-            evidence.append({"claim_index": index, "claim": text, "chunk_id": chunk_id,
-                "file_id": source.chunk.file_id, "filename": source.chunk.filename(),
-                "page": source.chunk.metadata.get("page"), "section": source.chunk.metadata.get("section"),
-                **asdict(matched)})
+            evidence.append(
+                {
+                    "claim_index": index,
+                    "claim": text,
+                    "chunk_id": chunk_id,
+                    "file_id": source.chunk.file_id,
+                    "filename": source.chunk.filename(),
+                    "page": source.chunk.metadata.get("page"),
+                    "section": source.chunk.metadata.get("section"),
+                    **asdict(matched),
+                }
+            )
+    from docmind.claim_checks import numeric_conflicts
+
+    support_errors: list[dict[str, Any]] = []
+    for index, text in enumerate(texts):
+        refs = [e for e in evidence if e["claim_index"] == index]
+        if refs and all(e["status"] in ("literal", "normalized") for e in refs):
+            support_errors.extend(
+                {"claim_index": index, "reason": reason}
+                for reason in numeric_conflicts(text, [e["text"] for e in refs])
+            )
     answer = " ".join(texts)
     if "answer" in payload:
-        if not isinstance(payload["answer"], str) or canonical_text(payload["answer"])[0] != canonical_text(answer)[0]:
+        if (
+            not isinstance(payload["answer"], str)
+            or canonical_text(payload["answer"])[0] != canonical_text(answer)[0]
+        ):
             raise ValueError("Answer contains text outside the linked claims")
     # This auxiliary scoring field is never displayed. Invalid metadata must not
     # erase otherwise valid claims, nor become a credited benchmark prediction.
@@ -163,10 +209,17 @@ def validate_claims(payload: dict[str, Any], sources: Sequence[SearchResult]) ->
             metric_errors.append("short_answer_link")
     if metric_errors:
         short_answer = None
-    return {"version": VERSION, "answer": answer, "short_answer": short_answer,
-            "short_answer_explicit": "short_answer" in payload,
-            "short_answer_valid": not metric_errors, "metric_field_errors": metric_errors,
-            "abstained": abstained,
-            "claims": evidence, "errors": sorted(set(errors)),
-            "quotes_matched": bool(evidence) and not errors,
-            "claim_support": "not_independently_verified"}
+    return {
+        "version": VERSION,
+        "answer": answer,
+        "short_answer": short_answer,
+        "short_answer_explicit": "short_answer" in payload,
+        "short_answer_valid": not metric_errors,
+        "metric_field_errors": metric_errors,
+        "abstained": abstained,
+        "claims": evidence,
+        "errors": sorted(set(errors)),
+        "support_errors": support_errors,
+        "quotes_matched": bool(evidence) and not errors,
+        "claim_support": "not_independently_verified",
+    }

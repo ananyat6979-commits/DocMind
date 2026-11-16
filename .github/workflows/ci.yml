@@ -18,6 +18,11 @@ jobs:
                       streamlit python-dotenv tqdm pytest pyyaml ruff mypy regex lingua-language-detector==2.1.1
       - name: Syntax and undefined-name checks
         run: ruff check docmind scripts tests
+      - name: Strong lint for repaired runtime paths
+        run: |
+          ruff check --select F,B,I,E701,E702 docmind/claim_checks.py docmind/evidence.py \
+            docmind/language.py docmind/review/release.py docmind/ingestion/loader.py \
+            docmind/ingestion/pipeline.py docmind/api/main.py
       - name: Type checks
         run: python -m mypy docmind app.py --ignore-missing-imports --check-untyped-defs
       - name: Tests (hash embedder, lexical reranker, demo LLM)
