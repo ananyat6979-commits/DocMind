@@ -82,7 +82,10 @@ def _english_corroborated(value):
 
 def detection_sample(value: str, limit: int = 4000) -> str:
     """Sample across the document and suppress duplicated sentences, without changing source text."""
-    parts = re.split(r"(?<=[.!?à¥¤à¥¥])\s+|[\r\n]+", value)
+    parts = re.split(
+        r"(?<=[.!?ÃƒÆ’Ã‚Â Ãƒâ€šÃ‚Â¥Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â Ãƒâ€šÃ‚Â¥Ãƒâ€šÃ‚Â¥])\s+|[\r\n]+",
+        value,
+    )
     unique = list(dict.fromkeys(part.strip() for part in parts if part.strip()))
     prose = " ".join(unique)
     if len(prose) <= limit:
@@ -155,6 +158,24 @@ def short_language_hint(text: str) -> str:
     if float(best.value) >= 0.6 and margin >= 0.2:
         return best.language.iso_code_639_1.name.lower()
     return "und"
+
+
+@lru_cache(maxsize=512)
+def short_foreign_prose(text: str) -> bool:
+    """Veto identified foreign phrases, not isolated quoted names."""
+    words = re.findall(r"[^\W_]+", text, re.UNICODE)
+    if len(words) < 2:
+        return False
+    scores = _english_context_detector().compute_language_confidence_values(text)
+    if not scores:
+        return False
+    best = scores[0]
+    code = best.language.iso_code_639_1.name.lower()
+    return (
+        code not in ("en", "la")
+        and float(best.value) >= 0.6
+        and float(best.value) - float(scores[1].value) >= 0.2
+    )
 
 
 def document_language(units) -> dict[str, Any]:

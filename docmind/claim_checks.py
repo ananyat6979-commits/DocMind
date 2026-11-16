@@ -14,12 +14,20 @@ _WORDS = dict(
     )
 )
 _BOUND = re.compile(
-    r"\b(not exceed|no more than|at most|less than|below|under|at least|greater than|more than|above|over|exceeds?|exceeding)\s+("
+    r"\b(not below|not under|no less than|not less than|not more than|not exceed|no more than|at most|less than|below|under|at least|greater than|more than|above|over|exceeds?|exceeding)\s+("
     + NUMBER
     + r")",
     re.I,
 )
-_UPPER = {"not exceed", "no more than", "at most", "less than", "below", "under"}
+_UPPER = {
+    "not more than",
+    "not exceed",
+    "no more than",
+    "at most",
+    "less than",
+    "below",
+    "under",
+}
 _UNITS = {
     "second": 1,
     "minute": 60,
@@ -95,9 +103,15 @@ def numeric_conflicts(claim, quotes):
         if not converted:
             errors.append("unsupported_numeric_literal")
     source_bounds = {
-        (_number(m.group(2)), m.group(1) in _UPPER) for m in _BOUND.finditer(evidence)
+        (_number(m.group(2)), m.group(1) in _UPPER)
+        for m in _BOUND.finditer(evidence)
+        if not re.search(
+            r"\b(?:not|never|no)\b", evidence[max(0, m.start() - 15) : m.start()]
+        )
     }
     for m in _BOUND.finditer(text):
+        if re.search(r"\b(?:not|never|no)\b", text[max(0, m.start() - 15) : m.start()]):
+            continue
         value, upper = _number(m.group(2)), m.group(1) in _UPPER
         if (value, not upper) in source_bounds and (value, upper) not in source_bounds:
             errors.append("opposing_numeric_bound")

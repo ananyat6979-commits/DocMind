@@ -130,3 +130,36 @@ def test_interrogatives_need_not_appear_in_evidence_and_names_use_document_conte
         value.sources[0].chunk.content = "The source explicitly names " + name + "."
         assert apply_policy(value).release_state == "draft"
     assert apply_policy(response("Deux secondes.")).release_state == "held"
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "a significant increase",
+        "security requirements",
+        "General Data Protection Regulation",
+        "Hyderabad",
+    ],
+)
+def test_source_identical_short_english_fragments_inherit_document_language(answer):
+    value = response(answer)
+    value.sources[0].chunk.content = (
+        "The English source explicitly states " + answer + "."
+    )
+    assert apply_policy(value).release_state == "draft"
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "Deux secondes.",
+        "Zwei Sekunden.",
+        "Kaksi sekuntia.",
+        "यह हिन्दी उत्तर है।",
+        "kya hai",
+    ],
+)
+def test_english_context_never_clears_foreign_prose_or_hinglish(answer):
+    value = response(answer)
+    value.sources[0].chunk.content = "A quotation appears here: " + answer
+    assert apply_policy(value).release_state == "held"

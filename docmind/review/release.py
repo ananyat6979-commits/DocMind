@@ -7,7 +7,7 @@ from docmind.config import CONFIG
 from docmind.models import AgentResponse
 from docmind.review.policy import _audit_hit, _language_neutral_number
 
-VERSION = "cited-draft-v2"
+VERSION = "cited-draft-v3"
 _COMPLETE = re.compile(
     r"\b(?:list of all|complete list|in total|never mentions|no mention|entire document|all occurrences|exhaustive|comprehensive summary)\b",
     re.I,
@@ -63,24 +63,25 @@ def _unvalidated_language(response: AgentResponse, cited) -> list[str]:
             )
         ):
             return True
-        if inherit and not query and len(value) <= 100:
-            proper_words = re.findall(r"[^\W_]+", value, re.UNICODE)
-            proper_fragment = (
-                bool(proper_words)
-                and all(w[0].isupper() for w in proper_words)
+        if inherit and not query and len(value) <= 160:
+            fragment_words = re.findall(r"[^\W_]+", value, re.UNICODE)
+            latin_fragment = (
+                bool(fragment_words)
+                and len(fragment_words) <= 12
                 and all(
                     not c.isalpha() or "LATIN" in unicodedata.name(c, "") for c in value
                 )
             )
-            if proper_fragment and value.strip().rstrip(".!?") in " ".join(
-                s.chunk.content for s in cited
-            ):
-                # Explicit contemporary foreign phrase veto still applies.
-                from docmind.language import short_language_hint
+            from docmind.evidence import canonical_text
 
-                hint = short_language_hint(value)
-                if len(proper_words) == 1 or hint in ("en", "und", "la"):
-                    return True
+            literal = canonical_text(value.strip().rstrip(".!?"))[0]
+            source_literal = any(
+                literal and literal in canonical_text(s.chunk.content)[0] for s in cited
+            )
+            if latin_fragment and source_literal:
+                from docmind.language import short_foreign_prose
+
+                return not short_foreign_prose(value)
         if language == "en":
             return True
         if language != "und":
