@@ -1,0 +1,184 @@
+{
+  "scope": "Public human-annotated response-support component; not current-reader generation, PDF end-to-end accuracy or a production release guarantee",
+  "pooled_calibration_selection": {
+    "policy": null,
+    "reason": "No fixed policy meets the corrected calibration bound",
+    "stratified": false
+  },
+  "stratified_calibration_selection": {
+    "policy": null,
+    "reason": "No fixed policy meets the corrected calibration bound",
+    "stratified": true
+  },
+  "pooled_heldout": {
+    "requested": 450,
+    "completed": 390,
+    "released": 0,
+    "coverage": 0.0,
+    "unsupported_released": 0,
+    "support_release_precision": null,
+    "support_release_recall": 0.0,
+    "unsupported_risk": null,
+    "risk_upper95_nominal": 1,
+    "quality_problem_released": 0,
+    "risk_evidence": "insufficient evidence"
+  },
+  "stratified_heldout": {
+    "requested": 450,
+    "completed": 390,
+    "released": 0,
+    "coverage": 0.0,
+    "unsupported_released": 0,
+    "support_release_precision": null,
+    "support_release_recall": 0.0,
+    "unsupported_risk": null,
+    "risk_upper95_nominal": 1,
+    "quality_problem_released": 0,
+    "risk_evidence": "insufficient evidence"
+  },
+  "models": [
+    {
+      "id": "legacy_nli",
+      "model": "typeform/distilbert-base-uncased-mnli",
+      "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+    },
+    {
+      "id": "comparison_nli",
+      "model": "cross-encoder/nli-deberta-v3-small",
+      "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+      "license": "Apache-2.0; model license does not clear upstream data rights"
+    }
+  ],
+  "baselines": {
+    "all_responses": {
+      "requested": 450,
+      "released": 450,
+      "coverage": 1.0,
+      "unsupported_released": 149,
+      "unsupported_risk": 0.33111111111111113,
+      "risk_upper95_nominal": 0.36946883927460666,
+      "quality_problem_released": 3
+    },
+    "ungated_non_refusal": {
+      "requested": 450,
+      "released": 446,
+      "coverage": 0.9911111111111112,
+      "unsupported_released": 149,
+      "unsupported_risk": 0.33408071748878926,
+      "risk_upper95_nominal": 0.3726852181342729,
+      "quality_problem_released": 0
+    },
+    "numeric_guard_without_nli": {
+      "requested": 450,
+      "released": 317,
+      "coverage": 0.7044444444444444,
+      "unsupported_released": 92,
+      "unsupported_risk": 0.2902208201892745,
+      "risk_upper95_nominal": 0.3350851217252251,
+      "quality_problem_released": 0
+    }
+  },
+  "per_task": {
+    "QA": {
+      "pooled": {
+        "requested": 150,
+        "completed": 121,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      },
+      "stratified": {
+        "requested": 150,
+        "completed": 121,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      }
+    },
+    "Summary": {
+      "pooled": {
+        "requested": 150,
+        "completed": 148,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      },
+      "stratified": {
+        "requested": 150,
+        "completed": 148,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      }
+    },
+    "Data2txt": {
+      "pooled": {
+        "requested": 150,
+        "completed": 121,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      },
+      "stratified": {
+        "requested": 150,
+        "completed": 121,
+        "released": 0,
+        "coverage": 0.0,
+        "unsupported_released": 0,
+        "support_release_precision": null,
+        "support_release_recall": 0.0,
+        "unsupported_risk": null,
+        "risk_upper95_nominal": 1,
+        "quality_problem_released": 0,
+        "risk_evidence": "insufficient evidence"
+      }
+    }
+  },
+  "implementation": "NLI verification only; no new reader or production-policy change",
+  "statuses": {
+    "0:completed": 895,
+    "0:claim_cap": 155,
+    "1:completed": 895,
+    "1:claim_cap": 155
+  },
+  "new_reader_calls": 0,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "limitations": [
+    "Binomial bounds require independent matched-distribution examples; source disjointness does not remove task or PDF domain shift",
+    "Original public human annotations, not independent labels of current PDF answers",
+    "Wrong refusals and truncation are separate utility failures, not automatically unsupported spans",
+    "Window selection and premise clipping can miss support; every requested response remains in denominators",
+    "No current product release guarantee or domain-transfer claim"
+  ]
+}

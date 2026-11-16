@@ -1,0 +1,21 @@
+{
+  "run_id": 43832881455,
+  "url": "https://github.com/ananyat6979-commits/DocMind/actions/runs/43832881455",
+  "source_commit": "e84de736ba22de90e148dd9d7e7a8b4c80dd89f2",
+  "model_bundles": [
+    {
+      "model_index": 0,
+      "bundle_sha256": "30c467f912fb704432c8dde377158bd8ec58e17414b5cdf3708443acffdccfad"
+    },
+    {
+      "model_index": 1,
+      "bundle_sha256": "2fa510fb368d4b8e1bfacb26ce7f69a67c132d7551966bdcff61295f4f0ad81c"
+    }
+  ],
+  "summary_bundle_sha256": "aa35d19c102582b2149a8aaf39ab1bf388faa8ab97fc3dce7465ec2a324ff5db",
+  "new_reader_calls": 0,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "raw_source_text_in_git": false,
+  "scope": "Public response-support component, not current-reader PDF safety"
+}

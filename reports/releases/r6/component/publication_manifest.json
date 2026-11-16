@@ -1,0 +1,15 @@
+{
+  "sha256": {
+    "calibration_selection.json": "afdb50d783ee7e8343f3b04071d4b8d2f86a269b5a9b632e01ed5024eb8ccca2",
+    "execution.json": "8dfe0fead8b198af3becc56b0be33f2ed6d6cd1aa73d49e74c6b7e19759f213e",
+    "fixed_policy_curves.json": "ccfa387ee04501bf6d0df76a312b7256daacf063e5f8a0f4291d2183d7bad5ca",
+    "model_0_identity.json": "b2894ba773b7f1e8f9fe3d71aaf39a32ddc9bd07d9d17cf5eba8dfa70d1aa017",
+    "model_0_timing.json": "a81054a1d2b1a1746b2e3df90abdaf9221cf0c705bc6a3b35b10cef8c7c584c7",
+    "model_1_identity.json": "b35753322c24f7dfc3a6879e8bc9d2d10a42b2610c746f46befbb688f3b859db",
+    "model_1_timing.json": "644e53b345ebfeb0a48376042c721a74e5273290d209482a5da62b79eeba2403",
+    "numeric_records.json": "58fac2b53bac1bfe37e09bfb2272e0fc24179e11966835c5283f8543f4c192f5",
+    "summary.json": "63aedbcb6bea7e7a484ddc949b08d27f4f3dec3396398c0ba44900e79d213dfc",
+    "support-risk-coverage.png": "8a9d821dba799b072d1b087bad55584637f5f5bd9fcb0563f7cf1ad8a0dd4d02",
+    "support-risk-coverage.svg": "0260e17ee463ac506b3f45b4322b0d2788e617e6a3fbe077a08a458ed7f8fb9e"
+  }
+}

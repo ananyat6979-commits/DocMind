@@ -17,6 +17,29 @@ def read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def same(actual, expected):
+    """Allow math-library rounding only; counts and identities remain exact."""
+    if isinstance(expected, dict):
+        return (
+            isinstance(actual, dict)
+            and actual.keys() == expected.keys()
+            and all(same(actual[key], value) for key, value in expected.items())
+        )
+    if isinstance(expected, list):
+        return (
+            isinstance(actual, list)
+            and len(actual) == len(expected)
+            and all(
+                same(left, right) for left, right in zip(actual, expected, strict=True)
+            )
+        )
+    if isinstance(expected, float):
+        return type(actual) is float and math.isclose(
+            actual, expected, rel_tol=1e-12, abs_tol=1e-12
+        )
+    return type(actual) is type(expected) and actual == expected
+
+
 def verify(directory, design_path):
     design = read(design_path)
     rows = read(directory / "numeric_records.json")
@@ -39,6 +62,11 @@ def verify(directory, design_path):
                 and math.isfinite(score)
                 and 0 <= score <= 1
             )
+    by_case = {}
+    for row in rows:
+        truth = (row["unsupported"], row["quality_problem"])
+        assert row["id"] not in by_case or by_case[row["id"]] == truth
+        by_case[row["id"]] = truth
     for split, count in (
         ("calibration", design["calibration_responses"]),
         ("heldout", design["heldout_responses"]),
@@ -68,25 +96,38 @@ def verify(directory, design_path):
     assert selection["selection_uses_heldout_labels"] is False
     for label, stratified in (("pooled", False), ("stratified", True)):
         chosen = fit(rows, design, stratified=stratified)
-        assert selection[label] == chosen
-        assert summary[label + "_calibration_selection"] == chosen
-        assert summary[label + "_heldout"] == evaluate(rows, chosen["policy"], design)
+        assert same(selection[label], chosen)
+        assert same(summary[label + "_calibration_selection"], chosen)
+        assert same(
+            summary[label + "_heldout"], evaluate(rows, chosen["policy"], design)
+        )
         for task in ("QA", "Summary", "Data2txt"):
             subset = [row for row in rows if row["task"] == task]
-            assert summary["per_task"][task][label] == evaluate(
-                subset, chosen["policy"], design
+            assert same(
+                summary["per_task"][task][label],
+                evaluate(subset, chosen["policy"], design),
             )
     curves = [
         {"policy": p, "heldout": evaluate(rows, p, design)} for p in policies(design)
     ]
-    assert read(directory / "fixed_policy_curves.json") == curves
-    assert summary["baselines"] == baseline_results(rows, design)
+    assert same(read(directory / "fixed_policy_curves.json"), curves)
+    assert same(summary["baselines"], baseline_results(rows, design))
     assert summary["statuses"] == dict(
         Counter(str(r["model_index"]) + ":" + r["status"] for r in rows)
     )
     assert all(
         summary[key] == 0 for key in ("new_reader_calls", "gpu_seconds", "hosted_calls")
     )
+    manifest_path = directory / "publication_manifest.json"
+    if manifest_path.exists():
+        for name, digest in read(manifest_path)["sha256"].items():
+            assert Path(name).name == name and "/" not in name and "\\" not in name
+            assert hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest
+        for index, model in enumerate(design["models"]):
+            identity = read(directory / f"model_{index}_identity.json")
+            assert identity["revision"] == model["revision"]
+            assert identity["design_sha256"] == selection["design_sha256"]
+            assert identity["device"] == "cpu" and identity["gpu_seconds"] == 0
     return {
         "verified": True,
         "requested_per_model": len(expected),

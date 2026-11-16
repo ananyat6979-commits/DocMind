@@ -1,0 +1,14 @@
+{
+  "pooled": {
+    "policy": null,
+    "reason": "No fixed policy meets the corrected calibration bound",
+    "stratified": false
+  },
+  "stratified": {
+    "policy": null,
+    "reason": "No fixed policy meets the corrected calibration bound",
+    "stratified": true
+  },
+  "selection_uses_heldout_labels": false,
+  "design_sha256": "80a7bc1feda56832fe50599e80c1bbce381d9acd8eef938d5f67affebfcb3392"
+}

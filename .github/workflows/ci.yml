@@ -59,3 +59,6 @@ jobs:
 
       - name: Verify quality follow-up records
         run: python scripts/verify_quality_control.py reports/releases/r5
+
+      - name: Verify public response-support component records
+        run: python scripts/verify_support_risk.py reports/releases/r6/component

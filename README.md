@@ -10,6 +10,10 @@ See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh com
 
 The [latest quality follow-up](reports/releases/r5/README.md) reduced holds from 40 to 11 in a fixed 100-question English reference-input confirmation. In the selected own-document replay, one reviewer judged 14/17 current answers correct, but three incorrect drafts remain visible. These are routing and small-cohort diagnostics, not calibrated safety or independent reader accuracy.
 
+The [public human-annotated support benchmark](reports/releases/r6/README.md) compares two NLI models on 600 calibration and 450 source-disjoint held-out responses. Neither met the frozen calibration requirements. Selected coverage is zero, with undefined risk; this mixed-task component does not establish PDF safety.
+
+A [source-disjoint public support-component study](reports/releases/r6/README.md) compared two NLI models using 600 calibration and 450 held-out recorded responses. Neither selected a qualifying policy. Fixed-policy curves, support precision/recall and exact upper bounds are published; this does not validate current PDF answers.
+
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
 [Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) · [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.

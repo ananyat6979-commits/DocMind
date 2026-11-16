@@ -1,0 +1,9 @@
+{
+  "elapsed_seconds_including_setup": 1595.2978764030001,
+  "time_cap_seconds": 1800,
+  "implementation": "NLI verification only; no new reader or production-policy change",
+  "statuses": {
+    "completed": 895,
+    "claim_cap": 155
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "legacy_nli",
+  "model": "typeform/distilbert-base-uncased-mnli",
+  "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90",
+  "device": "cpu",
+  "dtype": "torch.float32",
+  "torch": "2.13.0+cpu",
+  "transformers": "5.23.0",
+  "design_sha256": "80a7bc1feda56832fe50599e80c1bbce381d9acd8eef938d5f67affebfcb3392",
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "source_commit": "e84de736ba22de90e148dd9d7e7a8b4c80dd89f2",
+  "implementation_sha256": {
+    "scripts/support_risk_component.py": "e772baa238c31b734c69aab1ad5b2d49180953ec52e06da08ccae8b708c2feb8",
+    "docmind/attribution.py": "a172ad5de260a3fb6b585193e30e82fe1d2b899f2c102fa9606e6e7de20ae585",
+    "docmind/claim_checks.py": "727b3910fc96ff4d6c559bf5139dd2e1a3ab7021309eed2f619eb9f1aa4ccedc",
+    "docmind/text.py": "57c41a20f0c726b79a2aa92fdfb323e6a5067b6631edf5ca15da0273b1af3c6c",
+    "docmind/evaluation/risk_control.py": "8a811b47479c9f18327428d6aafa24a10308a4c3c61523c176be35100878b8ea"
+  }
+}

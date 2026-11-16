@@ -1,0 +1,842 @@
+[
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 38,
+      "coverage": 0.08444444444444445,
+      "unsupported_released": 3,
+      "support_release_precision": 0.9210526315789473,
+      "support_release_recall": 0.11627906976744186,
+      "unsupported_risk": 0.07894736842105263,
+      "risk_upper95_nominal": 0.19158811127255082,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 34,
+      "coverage": 0.07555555555555556,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9411764705882353,
+      "support_release_recall": 0.10631229235880399,
+      "unsupported_risk": 0.058823529411764705,
+      "risk_upper95_nominal": 0.17381130653830895,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 33,
+      "coverage": 0.07333333333333333,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9393939393939394,
+      "support_release_recall": 0.10299003322259136,
+      "unsupported_risk": 0.06060606060606061,
+      "risk_upper95_nominal": 0.1787342875974977,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 31,
+      "coverage": 0.06888888888888889,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9354838709677419,
+      "support_release_recall": 0.09634551495016612,
+      "unsupported_risk": 0.06451612903225806,
+      "risk_upper95_nominal": 0.18946446742553869,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 16,
+      "coverage": 0.035555555555555556,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.053156146179401995,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 37,
+      "coverage": 0.08222222222222222,
+      "unsupported_released": 3,
+      "support_release_precision": 0.918918918918919,
+      "support_release_recall": 0.11295681063122924,
+      "unsupported_risk": 0.08108108108108109,
+      "risk_upper95_nominal": 0.19642893982446613,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 33,
+      "coverage": 0.07333333333333333,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9393939393939394,
+      "support_release_recall": 0.10299003322259136,
+      "unsupported_risk": 0.06060606060606061,
+      "risk_upper95_nominal": 0.1787342875974977,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 32,
+      "coverage": 0.07111111111111111,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9375,
+      "support_release_recall": 0.09966777408637874,
+      "unsupported_risk": 0.0625,
+      "risk_upper95_nominal": 0.18394346817692822,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 30,
+      "coverage": 0.06666666666666667,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9333333333333333,
+      "support_release_recall": 0.09302325581395349,
+      "unsupported_risk": 0.06666666666666667,
+      "risk_upper95_nominal": 0.1953260436549266,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 15,
+      "coverage": 0.03333333333333333,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.04983388704318937,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 61,
+      "coverage": 0.13555555555555557,
+      "unsupported_released": 5,
+      "support_release_precision": 0.9180327868852459,
+      "support_release_recall": 0.18604651162790697,
+      "unsupported_risk": 0.08196721311475409,
+      "risk_upper95_nominal": 0.16464785579600075,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 56,
+      "coverage": 0.12444444444444444,
+      "unsupported_released": 3,
+      "support_release_precision": 0.9464285714285714,
+      "support_release_recall": 0.1760797342192691,
+      "unsupported_risk": 0.05357142857142857,
+      "risk_upper95_nominal": 0.13267832130213186,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 51,
+      "coverage": 0.11333333333333333,
+      "unsupported_released": 3,
+      "support_release_precision": 0.9411764705882353,
+      "support_release_recall": 0.15946843853820597,
+      "unsupported_risk": 0.058823529411764705,
+      "risk_upper95_nominal": 0.14507500299119722,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 49,
+      "coverage": 0.10888888888888888,
+      "unsupported_released": 3,
+      "support_release_precision": 0.9387755102040817,
+      "support_release_recall": 0.15282392026578073,
+      "unsupported_risk": 0.061224489795918366,
+      "risk_upper95_nominal": 0.1507063969826994,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 23,
+      "coverage": 0.051111111111111114,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.07641196013289037,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 59,
+      "coverage": 0.13111111111111112,
+      "unsupported_released": 4,
+      "support_release_precision": 0.9322033898305084,
+      "support_release_recall": 0.18272425249169436,
+      "unsupported_risk": 0.06779661016949153,
+      "risk_upper95_nominal": 0.14846360146715304,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 54,
+      "coverage": 0.12,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9629629629629629,
+      "support_release_recall": 0.17275747508305647,
+      "unsupported_risk": 0.037037037037037035,
+      "risk_upper95_nominal": 0.11203669158882297,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 49,
+      "coverage": 0.10888888888888888,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9591836734693877,
+      "support_release_recall": 0.15614617940199335,
+      "unsupported_risk": 0.04081632653061224,
+      "risk_upper95_nominal": 0.12296750440536515,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 47,
+      "coverage": 0.10444444444444445,
+      "unsupported_released": 2,
+      "support_release_precision": 0.9574468085106383,
+      "support_release_recall": 0.14950166112956811,
+      "unsupported_risk": 0.0425531914893617,
+      "risk_upper95_nominal": 0.12796053954565026,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 0,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 22,
+      "coverage": 0.04888888888888889,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.07308970099667775,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 11,
+      "coverage": 0.024444444444444446,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.03322259136212625,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 10,
+      "coverage": 0.022222222222222223,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.029900332225913623,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 8,
+      "coverage": 0.017777777777777778,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.026578073089700997,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 8,
+      "coverage": 0.017777777777777778,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.026578073089700997,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": false,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 3,
+      "coverage": 0.006666666666666667,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.009966777408637873,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 10,
+      "coverage": 0.022222222222222223,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.029900332225913623,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 10,
+      "coverage": 0.022222222222222223,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.029900332225913623,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 8,
+      "coverage": 0.017777777777777778,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.026578073089700997,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 8,
+      "coverage": 0.017777777777777778,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.026578073089700997,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 1,
+      "numeric_guard": true,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 3,
+      "coverage": 0.006666666666666667,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.009966777408637873,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 25,
+      "coverage": 0.05555555555555555,
+      "unsupported_released": 3,
+      "support_release_precision": 0.88,
+      "support_release_recall": 0.07308970099667775,
+      "unsupported_risk": 0.12,
+      "risk_upper95_nominal": 0.2817225079777141,
+      "quality_problem_released": 0,
+      "risk_evidence": "Component-only under the stated binomial assumptions"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 15,
+      "coverage": 0.03333333333333333,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.046511627906976744,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 13,
+      "coverage": 0.028888888888888888,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.04318936877076412,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 10,
+      "coverage": 0.022222222222222223,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.03322259136212625,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": false,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 3,
+      "coverage": 0.006666666666666667,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.009966777408637873,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.5
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 24,
+      "coverage": 0.05333333333333334,
+      "unsupported_released": 3,
+      "support_release_precision": null,
+      "support_release_recall": 0.06976744186046512,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.8
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 15,
+      "coverage": 0.03333333333333333,
+      "unsupported_released": 1,
+      "support_release_precision": null,
+      "support_release_recall": 0.046511627906976744,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.9
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 13,
+      "coverage": 0.028888888888888888,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.04318936877076412,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.95
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 10,
+      "coverage": 0.022222222222222223,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.03322259136212625,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  },
+  {
+    "policy": {
+      "model_index": 1,
+      "depth": 4,
+      "numeric_guard": true,
+      "threshold": 0.99
+    },
+    "heldout": {
+      "requested": 450,
+      "completed": 390,
+      "released": 3,
+      "coverage": 0.006666666666666667,
+      "unsupported_released": 0,
+      "support_release_precision": null,
+      "support_release_recall": 0.009966777408637873,
+      "unsupported_risk": null,
+      "risk_upper95_nominal": 1,
+      "quality_problem_released": 0,
+      "risk_evidence": "insufficient evidence"
+    }
+  }
+]

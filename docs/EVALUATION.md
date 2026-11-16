@@ -2,6 +2,8 @@
 
 Measured 13 November 2026. Code and derived records are public; runs used available local compute, private free T4 notebooks and a bounded free hosted API allowance. No paid capacity was used. The frozen records are under `reports/benchmarks`; their manifest is checked in CI by `scripts/verify_benchmark_reports.py`.
 
+This dated report preserves the original experiments. Later runtime behavior, human reviews and deployment checks are tracked in [current core evidence](CORE_RESULTS.md), [quality follow-up](../reports/releases/r5/README.md) and the [public response-support comparison](../reports/releases/r6/README.md). Statements about unmeasured work below describe the original snapshot unless a follow-up is identified.
+
 ## Scope and reproducibility
 
 The question is whether additional retrieval machinery, attribution checks and selective review improve a small document QA system under constrained compute. The evidence does not support a new state of the art or a useful calibrated automatic-answer gate. Publishing the failures is the main result.
@@ -112,3 +114,12 @@ A separate 50,000 by 384 synthetic normalized-vector test uses 100 queries, four
 Auth is required by default, pending answers are withheld, parsing and queues are bounded, corpus replacement is atomic and index snapshots are coherent. Optional HNSW provides ANN search, but refresh still loads the corpus and rebuilds caches. Multi-process coherence, incremental index updates, sustained ANN scale, distributed queues, tenant ACLs, full tracing infrastructure and measured production recovery are not established. SQLite remains a deliberate single-process pilot boundary. Document deletion does not erase independent backups or provider retention.
 
 The current evidence favors simple dense retrieval and explicit review over unsupported complexity claims. Larger independent human attribution labels, a real timed reviewer study, context-grouped calibration with adequate sample size, broader injection tests and a full-service load run are the next experiments. They are not claimed as completed.
+
+
+## Public response-support follow-up, 16 November 2026
+
+A separately frozen RAGTruth component compares two pinned NLI models on existing recorded responses and original human annotations. Six hundred calibration sources and 450 official held-out sources are disjoint by source ID and context hash. There are three task strata, so only 150 held-out responses are QA. All 1,050 requested rows per model remain available, including 155 above the fixed twelve-span ceiling. Each model completed scoring 390 of 450 held-out responses; there were no unserved or failed cases.
+
+Neither the primary task-stratified criterion nor the predeclared pooled sensitivity selected a policy. Selected coverage is zero and risk is undefined. The all-response baseline has 149 unsupported of 450 responses, with a nominal one-sided 95% upper bound of 36.9%. A fixed legacy NLI condition releases 61/450, with five unsupported and an upper bound of 16.5%; the same numeric threshold on the comparison model releases 25/450, with three unsupported and an upper bound of 28.2%. These are descriptive fixed-grid points, not operating policies selected on test outcomes. No safe coverage, PDF transfer or general model superiority is established.
+
+The [full report](../reports/releases/r6/README.md) includes support precision/recall, task failures, clipping, exact bounds, original source rights and execution hashes. The model-free command `python scripts/verify_support_risk.py reports/releases/r6/component` recomputes saved selections and metrics. It checks internal consistency, not annotation correctness or independent replication. Standard public CPU runners were used, with no new reader, hosted or GPU calls. The product keeps NLI diagnostic-only; realistic PDF correctness, claim-extraction recall and independent human risk validation remain separate requirements.

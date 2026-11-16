@@ -112,3 +112,24 @@ def test_verifier_rejects_changed_published_counts(tmp_path):
     saved.write_text(json.dumps(data))
     with pytest.raises(AssertionError):
         verify(tmp_path, path)
+
+
+def test_verifier_rejects_modified_publication_bytes(tmp_path):
+    path = fixture(tmp_path)
+    saved = tmp_path / "summary.json"
+    digest = hashlib.sha256(saved.read_bytes()).hexdigest()
+    (tmp_path / "publication_manifest.json").write_text(
+        json.dumps({"sha256": {"summary.json": digest}})
+    )
+    saved.write_text(saved.read_text() + "\n")
+    with pytest.raises(AssertionError):
+        verify(tmp_path, path)
+
+
+def test_float_tolerance_preserves_exact_counts_and_rejects_metric_changes():
+    from scripts.verify_support_risk import same
+
+    assert same({"bound": 0.1894644674255387}, {"bound": 0.18946446742553869})
+    assert not same({"count": 100.0}, {"count": 100})
+    assert not same({"bound": 0.19}, {"bound": 0.18946446742553869})
+    assert not same({"count": 101}, {"count": 100})
