@@ -29,7 +29,7 @@ Five recovered answer/evidence inputs differ from the originally reviewed placeh
 - Numeric checks hold literal numbers absent from quoted evidence and explicit opposing bounds at the same value. Common exact time/length conversions are handled. These checks do not verify entities, arithmetic inference, authority, general negation or semantic entailment. Passing is not verification.
 - A bounded PDF geometry check flags repeated within-line column jumps. Flagged pages are quarantined with original text preserved; unavailable geometry is explicit. Tests include an actual interleaved two-column PDF and native-worker postprocessing. This does not implement general layout reconstruction, table semantics, OCR or header removal.
 - A fresh 92-page parser equivalence input has no observed layout warning. This is not proof that every page has correct reading order. Changed layout metadata receives a new transport manifest; prior neural artifacts are not declared extraction-equivalent.
-- Existing chunk metadata stays readable. Previously cached PDFs need an explicit reparse to acquire layout assessment. No old stored answer is silently relabeled.
+- Existing chunk metadata stays readable. Previously cached PDFs need an explicit reparse to acquire layout assessment and refreshed document-language metadata. Cached text and DOCX recipes remain readable. No old stored answer is silently relabeled.
 - Changed runtime modules are formatted and have additional F, B, I, E701 and E702 checks in CI. This is scoped cleanup, not a claim that the whole repository has adopted every lint rule.
 
 ## Reproduction

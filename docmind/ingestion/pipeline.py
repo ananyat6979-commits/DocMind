@@ -149,7 +149,7 @@ def _ingest_file(
             in (quality_version, "extraction-quality-v2")
         )
         if not compatible or any(
-            prior.get(key) != preprocessing[key]
+            prior.get(key) != preprocessing.get(key)
             for key in ("expected_language", "encoding", "pdf_layout")
         ):
             raise ValueError(
