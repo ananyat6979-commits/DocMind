@@ -18,7 +18,7 @@ The reviewer works alone, without discussing ratings or consulting prior results
 
 ## Analysis
 
-Validate packet hashes, answer/evidence fingerprints, task IDs, exact questions, label domains, timer bounds and reviewer context. Match primary judgments from their original and changed-answer packets only for identical inputs. A changed answer, question or evidence set cannot inherit a reference judgment. Repeated matching references require adjudication.
+Validate packet hashes, answer/evidence fingerprints, task IDs, exact questions, label domains, timer bounds and reviewer context. Aggregate outputs retain hashes of every input label export and the executed analysis sources, plus the Python version; private absolute paths are not published. Match primary judgments from their original and changed-answer packets only for identical inputs. A changed answer, question or evidence set cannot inherit a reference judgment. Repeated matching references require adjudication.
 
 Report paired answer correctness using correct/incorrect/unclear, and claim support using supported/unsupported/unclear. Retain unclear as its own category. Publish counts, confusion matrices, observed agreement and multiclass Cohen's kappa. Kappa is undefined for zero pairs or degenerate marginals; perfect constant-label agreement is not silently reported as kappa=1.
 

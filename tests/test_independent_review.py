@@ -198,3 +198,51 @@ def test_kappa_reference_value_and_cluster_interval():
     interval = bootstrap(clusters, "claims")
     assert interval["resamples"] == 2000 and interval["paired_answer_clusters"] == 12
     assert interval["kappa_interval95"] is not None
+
+
+def test_synthetic_cli_records_export_and_code_provenance(tmp_path):
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    first, second = paired_sources(tmp_path)
+    first_export = tmp_path / "first-labels.json"
+    second_export = tmp_path / "second-labels.json"
+    first_export.write_text(json.dumps(first[2]))
+    second_export.write_text(json.dumps(second[2]))
+    output = tmp_path / "agreement.json"
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.analyze_independent_review",
+            "--second-root",
+            str(tmp_path / "second"),
+            "--second-labels",
+            str(second_export),
+            "--primary-roots",
+            str(tmp_path / "first"),
+            "--primary-labels",
+            str(first_export),
+            "--out",
+            str(output),
+        ],
+        cwd=Path(__file__).resolve().parents[1],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    report = json.loads(result.stdout)
+    assert json.loads(output.read_text()) == report
+    assert (
+        report["input_export_sha256"]["second"]
+        == hashlib.sha256(second_export.read_bytes()).hexdigest()
+    )
+    assert report["input_export_sha256"]["primary"] == [
+        hashlib.sha256(first_export.read_bytes()).hexdigest()
+    ]
+    assert set(report["analysis_code_sha256"]) == {
+        "analyze_independent_review.py",
+        "analyze_own_answer_review.py",
+    }
+    assert report["population_false_release_risk"] is None

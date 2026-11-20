@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import platform
 import random
 from collections import Counter
 from pathlib import Path
@@ -202,6 +203,26 @@ if __name__ == "__main__":
         ],
         load(args.second_root, args.second_labels),
     )
+    result["input_export_sha256"] = {
+        "second": hashlib.sha256(args.second_labels.read_bytes()).hexdigest(),
+        "primary": [
+            hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in args.primary_labels
+        ],
+    }
+    result["primary_packet_sha256"] = [
+        json.loads(
+            (root / "actual-answer-packet.private.json").read_text(encoding="utf-8")
+        )["sha256"]
+        for root in args.primary_roots
+    ]
+    result["python_version"] = platform.python_version()
+    result["analysis_code_sha256"] = {
+        name: hashlib.sha256(
+            (Path(__file__).parent / name).read_bytes().replace(b"\r\n", b"\n")
+        ).hexdigest()
+        for name in ("analyze_independent_review.py", "analyze_own_answer_review.py")
+    }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result))
