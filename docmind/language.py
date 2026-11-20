@@ -5,7 +5,7 @@ import unicodedata
 from functools import lru_cache
 from typing import Any
 
-VERSION = "language-v3"
+VERSION = "language-v4"
 _ROMAN_HINDI = frozenset(
     "kya hai hain nahi nahin kaise kitna kitni chahiye hoga mujhe iska uska karna batao".split()
 )
@@ -83,7 +83,7 @@ def _english_corroborated(value):
 def detection_sample(value: str, limit: int = 4000) -> str:
     """Sample across the document and suppress duplicated sentences, without changing source text."""
     parts = re.split(
-        r"(?<=[.!?ÃƒÆ’Ã‚Â Ãƒâ€šÃ‚Â¥Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â Ãƒâ€šÃ‚Â¥Ãƒâ€šÃ‚Â¥])\s+|[\r\n]+",
+        r"(?<=[.!?\u0964\u0965])\s+|[\r\n]+",
         value,
     )
     unique = list(dict.fromkeys(part.strip() for part in parts if part.strip()))

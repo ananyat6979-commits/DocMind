@@ -8,8 +8,8 @@ from fastapi.testclient import TestClient
 
 from docmind.agent.reader import CitedReader
 from docmind.config import CONFIG
-from docmind.llm.execution import DeadlineExceeded
 from docmind.llm.demo import DemoLLM
+from docmind.llm.execution import DeadlineExceeded
 from docmind.models import Chunk, SearchResult
 from docmind.review.store import ReviewStore
 
@@ -98,8 +98,8 @@ def test_concurrent_requests_are_independent_and_unblocked(monkeypatch):
 
 
 def test_real_short_language_veto():
-    from tests.test_draft_release import response
     from docmind.review.release import apply_policy
+    from tests.test_draft_release import response
 
     assert apply_policy(response()).release_state == "draft"
     for text in ("Deux secondes.", "Zwei Sekunden.", "Kaksi sekuntia."):
@@ -125,8 +125,9 @@ def test_current_api_persists_quotes_and_hides_held_evidence(monkeypatch):
         "docmind.language.language_info", lambda text: {"language": "en"}
     )
     monkeypatch.setattr(m, "_agent", CitedReader(Retriever(), DemoLLM()))
-    from docmind.store import CorpusStore
     import numpy as np
+
+    from docmind.store import CorpusStore
 
     chunk = source().chunk
     CorpusStore().add_document(
@@ -141,7 +142,9 @@ def test_current_api_persists_quotes_and_hides_held_evidence(monkeypatch):
         np.ones((1, 384), dtype="float32") / np.sqrt(384),
     )
     client = TestClient(m.app, headers={"X-API-Key": "test-key"})
-    item = client.post("/query", json={"question": "What is the closing time?"}).json()
+    reply = client.post("/query", json={"question": "What is the closing time?"})
+    assert reply.status_code == 200, reply.text
+    item = reply.json()
     assert item["review_status"] == "draft" and item["evidence"]
     fetched = client.get("/responses/" + item["response_id"]).json()
     assert fetched["evidence"] == item["evidence"]
@@ -227,9 +230,9 @@ def test_api_cancels_stalled_upstream_and_returns_504(monkeypatch):
 
 def test_sqlite_rejects_deleted_evidence_and_removes_abstention_context(make_file):
     from docmind.ingestion.pipeline import ingest
-    from docmind.store import CorpusStore
     from docmind.models import AgentResponse
     from docmind.services import erase_document
+    from docmind.store import CorpusStore
     from tests.conftest import ALPHA
 
     store = CorpusStore()
@@ -258,9 +261,11 @@ def test_sqlite_rejects_deleted_evidence_and_removes_abstention_context(make_fil
 
 
 def test_cancellation_closes_a_real_stalled_http_connection():
-    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
     import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
     import httpx
+
     from docmind.llm.execution import CompletionSession
 
     closed = threading.Event()
@@ -323,8 +328,9 @@ def test_cancellation_closes_a_real_stalled_http_connection():
 
 
 def test_react_protocol_markers_inside_json_quotes_are_data(monkeypatch, scripted):
-    from docmind.agent.reader import CitedReActReader
     from dataclasses import replace
+
+    from docmind.agent.reader import CitedReActReader
 
     monkeypatch.setattr(
         "docmind.language.language_info", lambda text: {"language": "en"}
@@ -401,6 +407,7 @@ def test_unknown_selected_document_does_not_become_a_not_found_answer(monkeypatc
 
 def test_complete_reader_prompt_schema_is_valid_json_with_root_short_answer():
     import json
+
     from docmind.agent.reader import SYSTEM
 
     example = SYSTEM.split("complete example: ", 1)[1].split("\n", 1)[0].rstrip(".")

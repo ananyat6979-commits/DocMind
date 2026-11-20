@@ -6,7 +6,7 @@ Design (fixes the old "second upload silently reuses the first file's index" bug
   * Same bytes again  -> no-op (reported as cached). Different bytes -> added to
     the corpus alongside existing documents. Nothing is ever skipped just
     because "an index exists".
-  * rebuild=True deletes that file's rows and re-ingests it.
+  * rebuild_index=True atomically replaces that file after successful re-ingestion.
   * Indexes are derived from the store, so they cannot disagree with it.
 """
 
@@ -144,7 +144,7 @@ def _ingest_file(
         compatible = (
             prior.get("boundaries") == boundary_version
             and prior.get("language")
-            in (language_version, "language-v1", "language-v2")
+            in (language_version, "language-v1", "language-v2", "language-v3")
             and prior.get("extraction_quality")
             in (quality_version, "extraction-quality-v2")
         )

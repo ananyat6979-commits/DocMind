@@ -68,3 +68,11 @@ Recursive chunking applies to a new empty corpus. Existing corpus ingestion inhe
 Extraction quality v3 permits only recognized line-leading Word bullet glyphs followed by text. Other private-use corruption remains quarantined. Cached v2 extraction remains readable with its original metadata; reprocessing is explicit. Historical neural measurements do not validate changed extraction.
 
 The fresh v3 parser equivalence manifest is `reports/releases/r4/parser_equivalence_quality_v3.json`. It compares current extraction only and does not retroactively validate historical downstream outputs.
+
+## Language sampler v4
+
+New ingestion records `language-v4`. This repairs corrupted Hindi danda/double-danda sentence delimiters in the language hint sampler and prevents typographic apostrophes from accidentally splitting sampled text. It changes language-hint sampling, not extracted source text or evidence offsets. Hindi answers still require review; this repair is not Hindi answer-quality validation.
+
+Cached v3 documents remain readable with their recorded metadata and chunk identities. A repeated upload keeps that cache unchanged. To refresh its language metadata, deliberately reprocess retained authorized source files using the existing rebuild path or an isolated corpus. The Python pipeline argument is `ingest(path, store=store, rebuild_index=True)`. An explicit rebuild creates new chunk IDs; old responses referencing removed chunks remain subject to the existing deleted-evidence protections. Do not describe this reprocessing as an identity-preserving re-embedding.
+
+Historical neural measurements retain their original preprocessing versions. Do not silently relabel them as measurements of the new sampler. The frozen second-review packet continues to show its exact original question, answer and evidence inputs.
