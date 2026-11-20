@@ -11,3 +11,6 @@ Future research includes larger independently labeled PDF attribution, claim-ext
 Further production work includes multi-host object storage, regional recovery, external availability monitoring, retention schedules and representative hosted-service load. Those are outside the bounded release and have no completed production claim. Keep all further work inside available free resources and explicit compute caps; no paid fallback is authorized.
 
 The separately frozen [public response-support protocol](../reports/releases/r6/PROTOCOL.md) compares two NLI components using 600 calibration responses and 450 source-disjoint held-out responses across three tasks. Its bounded free CPU run completed with no qualifying pooled or task-stratified policy. Selected coverage is zero and risk is undefined. This is existing public human annotation, not a new own-document or Hindi reader evaluation. The product keeps NLI diagnostic-only regardless of this component result.
+
+
+A [bounded second-review protocol](SECOND_REVIEW_PROTOCOL.md) now freezes a separate blinded packet for the same current English answers. The packet is prepared; independent labels and paired agreement remain pending. No second-reviewer outcome is claimed.
