@@ -7,6 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       PYTHONUTF8: "1"
+      DOCMIND_REQUIRE_COMPOSE: "${{ matrix.os == 'ubuntu-latest' && '1' || '0' }}"
     defaults:
       run:
         shell: bash
