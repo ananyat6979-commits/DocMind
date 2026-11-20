@@ -5,6 +5,8 @@ permissions:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUTF8: "1"
     defaults:
       run:
         shell: bash
