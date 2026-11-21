@@ -154,6 +154,47 @@ def choose(timing):
     }
 
 
+def content_hash(value):
+    return sha(json.dumps(value, sort_keys=True, ensure_ascii=True))
+
+
+def freeze(timing, manifest):
+    decision = choose(timing)
+    size = decision["cohort_size"]
+    selected = manifest["final_pool"][:size]
+    if len(selected) != size or sum(r["answerable"] for r in selected) != size // 2:
+        raise ValueError("Frozen cohort must be available and balanced")
+    return {
+        **decision,
+        "rows": selected,
+        "input_manifest_content_sha256": content_hash(manifest),
+        "cohort_content_sha256": content_hash(selected),
+        "selection_uses_outcomes": False,
+    }
+
+
+def checked_decision(decision, manifest):
+    size = decision["cohort_size"]
+    if (
+        isinstance(size, bool)
+        or not isinstance(size, int)
+        or size < 40
+        or size > 200
+        or size % 2
+    ):
+        raise ValueError("A viable even cohort of forty to two hundred is required")
+    if decision.get("input_manifest_content_sha256") != content_hash(manifest):
+        raise ValueError("Decision refers to different frozen inputs")
+    rows = manifest["final_pool"][:size]
+    if len(rows) != size or sum(r["answerable"] for r in rows) != size // 2:
+        raise ValueError("Selected cohort must be available and balanced")
+    if decision.get("rows") != rows or decision.get(
+        "cohort_content_sha256"
+    ) != content_hash(rows):
+        raise ValueError("Selected cohort differs from the frozen prefix")
+    return rows
+
+
 def run(root, phase, deadline, decision=None):
     import os
 
@@ -173,11 +214,10 @@ def run(root, phase, deadline, decision=None):
     pool = json.loads(raw_pool)
     rows = pool[phase]
     if phase == "final":
-        if not decision or decision["cohort_size"] < 40:
-            raise ValueError(
-                "Freeze a viable timing-only cohort before final generation"
-            )
-        rows = rows[: decision["cohort_size"]]
+        if not decision:
+            raise ValueError("Freeze a timing-only cohort before final generation")
+        selected = checked_decision(decision, manifest)
+        rows = rows[: len(selected)]
     out = root / phase
     out.mkdir(exist_ok=False)
     records = [
@@ -314,6 +354,7 @@ def main():
     p.add_argument("--decision", type=Path)
     p = sub.add_parser("choose")
     p.add_argument("--timing", type=Path, required=True)
+    p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "prepare":
@@ -328,7 +369,14 @@ def main():
     else:
         if args.out.exists():
             raise FileExistsError("Keep the frozen cohort decision")
-        write(args.out, choose(json.loads(args.timing.read_text())))
+        raw = args.timing.read_bytes()
+        decision = freeze(
+            json.loads(raw), json.loads(args.manifest.read_text(encoding="utf-8"))
+        )
+        decision["pilot_timing_sha256"] = hashlib.sha256(raw).hexdigest()
+        with args.out.open("x", encoding="utf-8") as handle:
+            json.dump(decision, handle, indent=2, ensure_ascii=True, allow_nan=False)
+            handle.write("\n")
 
 
 if __name__ == "__main__":

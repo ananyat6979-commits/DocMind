@@ -95,3 +95,70 @@ def test_too_few_usable_timings_do_not_start_a_final_run():
     data = timing()
     data["rows"] = data["rows"][:3]
     assert choose(data)["cohort_size"] == 0
+
+
+def test_frozen_decision_binds_exact_balanced_prefix():
+    from scripts.english_reader_cpu import checked_decision, freeze
+
+    _, rows, _ = select(source(), set())
+    manifest = {
+        "final_pool": [
+            {k: r[k] for k in ("id", "context_sha256", "answerable")} for r in rows
+        ]
+    }
+    result = freeze(timing(), manifest)
+    assert checked_decision(result, manifest) == manifest["final_pool"]
+    changed = deepcopy(result)
+    changed["rows"][0]["id"] = "substituted"
+    with pytest.raises(ValueError):
+        checked_decision(changed, manifest)
+    changed = deepcopy(result)
+    changed["cohort_size"] = 199
+    with pytest.raises(ValueError):
+        checked_decision(changed, manifest)
+    changed = deepcopy(manifest)
+    changed["final_pool"][0]["context_sha256"] = "changed"
+    with pytest.raises(ValueError):
+        checked_decision(result, changed)
+
+
+def test_freeze_command_records_input_hashes_and_refuses_overwrite(tmp_path):
+    import hashlib
+    import json
+    import subprocess
+    import sys
+
+    _, rows, _ = select(source(), set())
+    manifest = {
+        "final_pool": [
+            {k: r[k] for k in ("id", "context_sha256", "answerable")} for r in rows
+        ]
+    }
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest))
+    timing_path = tmp_path / "timing.json"
+    timing_path.write_text(json.dumps(timing()))
+    out = tmp_path / "decision.json"
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.english_reader_cpu",
+        "choose",
+        "--timing",
+        str(timing_path),
+        "--manifest",
+        str(manifest_path),
+        "--out",
+        str(out),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    decision = json.loads(out.read_text())
+    assert decision["cohort_size"] == 200
+    assert (
+        decision["pilot_timing_sha256"]
+        == hashlib.sha256(timing_path.read_bytes()).hexdigest()
+    )
+    before = out.read_bytes()
+    assert subprocess.run(command, capture_output=True).returncode != 0
+    assert out.read_bytes() == before
