@@ -1,0 +1,10 @@
+{
+  "scope": "Pre-final uncertainty supplement; no pilot answers, quality metrics or routing inspected",
+  "primary_protocol_unchanged": true,
+  "reason": "Different source paragraphs may belong to the same Wikipedia article. Question intervals alone can understate dependence.",
+  "additional_intervals": "2000 seed-19 whole-article cluster bootstrap resamples, retaining every selected question from sampled articles and dividing by their sampled question count. Require at least ten distinct article titles. Report group count and insufficient evidence otherwise.",
+  "additional_control": "Paired candidate exact-match difference from always abstain on identical requested questions, including unserved failures, with the original question interval and article-cluster sensitivity.",
+  "publication": "Article titles are represented by SHA-256 identifiers, not copied source text. These nominal selected-sample sensitivities do not establish independent articles, population risk, model superiority or a release guarantee.",
+  "cohort_sizing_unchanged": true,
+  "model_and_inference_unchanged": true
+}

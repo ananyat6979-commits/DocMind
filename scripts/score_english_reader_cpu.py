@@ -1,6 +1,7 @@
 """Score explicit reader decisions without rewarding failed or blank outputs."""
 
 from collections import Counter
+import hashlib
 import random
 import re
 import string
@@ -72,6 +73,32 @@ def interval(values):
     }
 
 
+def article_interval(rows, values):
+    groups = {}
+    for row, value in zip(rows, values):
+        if row.get("article_sha256") is None:
+            return {"ci95": None, "status": "Article identity unavailable"}
+        groups.setdefault(row["article_sha256"], []).append(value)
+    if len(groups) < 10:
+        return {
+            "ci95": None,
+            "article_clusters": len(groups),
+            "status": "Fewer than ten articles; no cluster interval",
+        }
+    clusters = list(groups.values())
+    rng = random.Random(19)
+    means = []
+    for _ in range(2000):
+        sample = [v for _ in clusters for v in clusters[rng.randrange(len(clusters))]]
+        means.append(sum(sample) / len(sample))
+    return {
+        "ci95": [percentile(means, 0.025), percentile(means, 0.975)],
+        "article_clusters": len(groups),
+        "requested_questions": len(rows),
+        "status": "Nominal article-cluster sensitivity, selected sample only",
+    }
+
+
 def summarize(examples, records):
     lookup = {row["id"]: row for row in records}
     expected = {row["id"] for row in examples}
@@ -94,6 +121,9 @@ def summarize(examples, records):
                 "id": example["id"],
                 "context_sha256": example["context_sha256"],
                 "answerable": example["answerable"],
+                "article_sha256": hashlib.sha256(example["title"].encode()).hexdigest()
+                if "title" in example
+                else None,
                 "status": row["status"],
                 "release_state": row.get("release_state"),
                 **score(row, example),
@@ -130,4 +160,14 @@ def summarize(examples, records):
             metric: interval([r[metric] for r in group])
             for metric in ("exact_match", "token_f1")
         }
+    output["article_cluster_sensitivity"] = {
+        metric: article_interval(numeric, [r[metric] for r in numeric])
+        for metric in ("exact_match", "token_f1")
+    }
+    differences = [r["exact_match"] - float(not r["answerable"]) for r in numeric]
+    output["paired_difference_from_always_abstain"] = {
+        "direction": "Reader candidate EM minus always abstain",
+        "question_bootstrap": interval(differences),
+        "article_cluster_sensitivity": article_interval(numeric, differences),
+    }
     return output

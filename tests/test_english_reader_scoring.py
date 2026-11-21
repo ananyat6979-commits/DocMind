@@ -77,3 +77,34 @@ def test_changed_or_duplicate_reference_identity_fails():
         summarize([example()], [row])
     with pytest.raises(ValueError):
         summarize([example()], [row, row])
+
+
+def test_article_sensitivity_does_not_treat_claims_as_independent_examples():
+    from scripts.score_english_reader_cpu import article_interval
+
+    rows = [{"article_sha256": str(i // 2)} for i in range(20)]
+    values = [float(i >= 10) for i in range(20)]
+    out = article_interval(rows, values)
+    assert out["article_clusters"] == 10
+    assert out["requested_questions"] == 20
+    assert out["ci95"][0] <= 0.5 <= out["ci95"][1]
+    assert article_interval(rows[:4], values[:4])["ci95"] is None
+
+
+def test_paired_baseline_difference_keeps_the_same_requested_rows():
+    a, b = example(), example(False)
+    a["title"] = "one article"
+    b.update(id="two", context_sha256="other", title="second article")
+    rows = [
+        {
+            "id": "one",
+            "context_sha256": "paragraph",
+            "status": "completed",
+            "short_answer": "two seconds",
+        }
+    ]
+    out = summarize([a, b], rows)
+    assert (
+        out["paired_difference_from_always_abstain"]["question_bootstrap"]["mean"] == 0
+    )
+    assert out["article_cluster_sensitivity"]["exact_match"]["article_clusters"] == 2
