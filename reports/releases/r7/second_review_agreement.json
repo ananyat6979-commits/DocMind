@@ -1,0 +1,84 @@
+{
+  "scope": "Same-input paired human judgments on a selected English diagnostic cohort; not independent study replication",
+  "independence_self_report": {
+    "different_person": "yes",
+    "prior_involvement": "no",
+    "seen_prior_results": "no"
+  },
+  "independence_status": "Second-person independent judgments self-reported, not externally verified",
+  "requested_second_review_answers": 17,
+  "finished_second_review_answers": 16,
+  "paired_answers": 16,
+  "completed_without_matching_reference": 0,
+  "unfinished_answers": 1,
+  "recorded_second_review_seconds": 600.0,
+  "active_work_independently_observed": false,
+  "packet_sha256": "49688553dc9c5c58949ead87a65f6f28749e34fe4a09cfa351418ac655d2aae5",
+  "adjudication": "Not performed; neither reviewer overwrites the other",
+  "population_false_release_risk": null,
+  "limitations": [
+    "Small selected cohort; incomplete time-based completion has no population weights",
+    "Unclear labels remain a separate category rather than being discarded",
+    "Claim intervals resample answer clusters, not individual claims",
+    "No claim-extraction gold, new reader generation or Hindi validation",
+    "Agreement is not correctness or calibrated release safety"
+  ],
+  "answers": {
+    "paired_labels": 16,
+    "observed_agreement": 0.875,
+    "cohen_kappa": 0.5492957746478874,
+    "confusion": {
+      "incorrect|incorrect": 1,
+      "correct|correct": 13,
+      "incorrect|unclear": 1,
+      "incorrect|correct": 1
+    },
+    "kappa_status": "defined, exploratory",
+    "kappa_interval95": [
+      0.0,
+      1.0
+    ],
+    "resamples": 2000,
+    "defined_resamples": 1920,
+    "undefined_resamples": 80,
+    "paired_answer_clusters": 16,
+    "status": "Nominal answer-cluster bootstrap, conditional on defined kappa; descriptive only"
+  },
+  "claims": {
+    "paired_labels": 33,
+    "observed_agreement": 0.9090909090909091,
+    "cohen_kappa": 0.4677419354838706,
+    "confusion": {
+      "supported|supported": 29,
+      "unsupported|supported": 2,
+      "unsupported|unsupported": 1,
+      "unsupported|unclear": 1
+    },
+    "kappa_status": "defined, exploratory",
+    "kappa_interval95": [
+      0.0,
+      1.0
+    ],
+    "resamples": 2000,
+    "defined_resamples": 1986,
+    "undefined_resamples": 14,
+    "paired_answer_clusters": 16,
+    "status": "Nominal answer-cluster bootstrap, conditional on defined kappa; descriptive only"
+  },
+  "input_export_sha256": {
+    "second": "bffaad9621b236d10c2e6e0ff922f71ef3b9f498bf165efbaf2b22fba1572085",
+    "primary": [
+      "69a21365c1a74d19a21ccb0b82c9c72fde05aaed5bca5a89660c73513ff1220f",
+      "4a664fb26fbcd2bc315b24320cca97f4a05f4c61b20cdba9af5a77e4df80a72a"
+    ]
+  },
+  "primary_packet_sha256": [
+    "c178486d14fd1a642207d80b0ef646b5d9f61a6b51e6e93f6c44361d69a1c845",
+    "f40009abb4ec1083b5b54729364de27e1a930771440b856f14eae2ad674f15fc"
+  ],
+  "python_version": "3.11.9",
+  "analysis_code_sha256": {
+    "analyze_independent_review.py": "61015900791885c3b5eb8474a72b9d78ad72384a51e14d74320be4f10274a8eb",
+    "analyze_own_answer_review.py": "459465806d78e022c5ae0987a79d66a535e4b67ed9293be1a639ea8ec7382d2c"
+  }
+}

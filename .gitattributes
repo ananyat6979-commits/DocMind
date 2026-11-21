@@ -30,3 +30,6 @@ reports/releases/r4/** -text
 reports/releases/r5/** -text
 
 reports/releases/r6/** -text
+
+# Keep current and future release snapshots byte-identical across platforms.
+reports/releases/** -text

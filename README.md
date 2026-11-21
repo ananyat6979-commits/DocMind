@@ -1,6 +1,6 @@
 # DocMind
 
-DocMind answers questions over PDF, DOCX and text documents using dense retrieval, a single reader call and quoted source passages. Drafts are explicitly unverified: deterministic quote matching locates evidence, while human review handles missing citations, incomplete-document abstentions and unmeasured languages. Published experiments include negative retrieval, attribution and calibration results; the quoted-draft path has a small frozen-evidence local-reader control, with only a small selected single-reviewer end-to-end study.
+DocMind answers questions over PDF, DOCX and text documents using dense retrieval, a single reader call and quoted source passages. Drafts are explicitly unverified: deterministic quote matching locates evidence, while human review handles missing citations, incomplete-document abstentions and unmeasured languages. Published experiments include negative retrieval, attribution and calibration results; the quoted-draft path has a small frozen-evidence local-reader control, with only a small selected end-to-end study and a partial blinded second review.
 
 The [current core evidence](docs/CORE_RESULTS.md) records completed results and remaining measurement limits. The [locked core-release plan](docs/CORE_RELEASE_PLAN.md) separates engineering checks from experimental and human evidence. The authenticated API and isolated parser are the deployment path; [centralized deployment](docs/DOCKER_CLOUD.md) documents setup. Native parsing and direct local UI require explicit trusted-development overrides. An opt-in [PostgreSQL profile](docs/POSTGRES_DEPLOYMENT.md) adds tenant isolation and persistent incremental vectors.
 
@@ -8,11 +8,11 @@ The default is pinned E5-small with dense retrieval. The Hindi comparison uses a
 
 See the [English/Hindi release evidence](docs/RELEASE_EVIDENCE.md) for fresh component intervals, the bounded T4 pilot, extraction failures and the single-reviewer label audit. Hindi PDF attribution and a balanced English/Hindi local-reader cohort remain unmeasured. The [fresh English protocol control](reports/releases/r4/paired_core_t4/README.md) completed 35 paired questions: candidate EM was 14.3% for single-call and 22.9% for ReAct, with an uncertain paired difference. Both used one call per question, so adaptive retrieval was not exercised.
 
-The [latest quality follow-up](reports/releases/r5/README.md) reduced holds from 40 to 11 in a fixed 100-question English reference-input confirmation. In the selected own-document replay, one reviewer judged 14/17 current answers correct, but three incorrect drafts remain visible. These are routing and small-cohort diagnostics, not calibrated safety or independent reader accuracy.
+The [latest quality follow-up](reports/releases/r5/README.md) reduced holds from 40 to 11 in a fixed 100-question English reference-input confirmation. In the selected own-document replay, the first reviewer judged 14/17 current answers correct and three drafts incorrect. These are routing and small-cohort diagnostics, not calibrated safety or independent reader accuracy.
+
+The [second-review follow-up](reports/releases/r7/README.md) paired 16 answers and 33 claim units. Raw agreement was 87.5% and 90.9%, but kappa was only 0.55 and 0.47 with wide intervals. Two answer judgments and three claim judgments remain disputed; the initial labels have not been overwritten.
 
 The [public human-annotated support benchmark](reports/releases/r6/README.md) compares two NLI models on 600 calibration and 450 source-disjoint held-out responses. Neither met the frozen calibration requirements. Selected coverage is zero, with undefined risk; this mixed-task component does not establish PDF safety.
-
-A [source-disjoint public support-component study](reports/releases/r6/README.md) compared two NLI models using 600 calibration and 450 held-out recorded responses. Neither selected a qualifying policy. Fixed-policy curves, support precision/recall and exact upper bounds are published; this does not validate current PDF answers.
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
@@ -21,7 +21,7 @@ See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new dis
 [![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
 [![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)
 
-Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:ed9e123036983af3b380253e9a75616fe39b7ff7d060611096bdd067dd0cf750`. [Inventory and signed provenance](reports/releases/r5/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
+Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:8d20a92758f474a8c339518eabd9e0a9af96f0c695944570708003c6de4f22dc`. [Inventory and signed provenance](reports/releases/r7/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
 
 ## Workflow demo
 
