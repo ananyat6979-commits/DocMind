@@ -45,6 +45,7 @@ def test_separate_references_and_paired_differences():
     first = out["models"][0]["references"]["first"]
     assert first["unclear_labels"] == 1 and first["decisive_labels"] == 2
     assert first["thresholds"]["0.8"]["precision"] == 0.5
+    assert first["always_support_baseline_same_scored_inputs"]["precision"] == 0.5
     assert (
         out["models"][1]["references"]["first"]["thresholds"]["0.8"]["precision"] == 1
     )

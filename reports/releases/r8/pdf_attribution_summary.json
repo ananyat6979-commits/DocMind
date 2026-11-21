@@ -1,0 +1,561 @@
+{
+  "requested_answers": 17,
+  "requested_claims": 36,
+  "scope": "Exploratory English PDF claim-support diagnostic on frozen displayed evidence; no new reader generation or policy validation",
+  "population_false_release_risk": null,
+  "models": [
+    {
+      "identity": {
+        "id": "legacy_nli",
+        "model": "typeform/distilbert-base-uncased-mnli",
+        "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90"
+      },
+      "prediction_statuses": {
+        "completed": 35,
+        "missing_evidence": 1
+      },
+      "premise_clipped_completed": 0,
+      "references": {
+        "first": {
+          "decisive_labels": 36,
+          "unclear_labels": 0,
+          "missing_or_excluded_labels": 0,
+          "completed_without_decisive_reference": 0,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 16,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 32,
+            "fp": 3,
+            "fn": 0,
+            "tn": 0,
+            "n": 35,
+            "precision": 0.9142857142857143,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 32,
+              "fp": 3,
+              "fn": 0,
+              "tn": 0,
+              "n": 35,
+              "precision": 0.9142857142857143,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    0.8285714285714286,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 32,
+              "fp": 3,
+              "fn": 0,
+              "tn": 0,
+              "n": 35,
+              "precision": 0.9142857142857143,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    0.8285714285714286,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        },
+        "second": {
+          "decisive_labels": 32,
+          "unclear_labels": 1,
+          "missing_or_excluded_labels": 3,
+          "completed_without_decisive_reference": 4,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 15,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 31,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "n": 31,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 31,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 31,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 31,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 31,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        },
+        "concordant": {
+          "decisive_labels": 30,
+          "unclear_labels": 0,
+          "missing_or_excluded_labels": 6,
+          "completed_without_decisive_reference": 6,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 15,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 29,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "n": 29,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 29,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 29,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 29,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 29,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "id": "comparison_nli",
+        "model": "cross-encoder/nli-deberta-v3-small",
+        "revision": "fa2804872c3b4bd748f38c0185cc85775361e735"
+      },
+      "prediction_statuses": {
+        "completed": 35,
+        "missing_evidence": 1
+      },
+      "premise_clipped_completed": 0,
+      "references": {
+        "first": {
+          "decisive_labels": 36,
+          "unclear_labels": 0,
+          "missing_or_excluded_labels": 0,
+          "completed_without_decisive_reference": 0,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 16,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 32,
+            "fp": 3,
+            "fn": 0,
+            "tn": 0,
+            "n": 35,
+            "precision": 0.9142857142857143,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 32,
+              "fp": 3,
+              "fn": 0,
+              "tn": 0,
+              "n": 35,
+              "precision": 0.9142857142857143,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    0.8285714285714286,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 32,
+              "fp": 3,
+              "fn": 0,
+              "tn": 0,
+              "n": 35,
+              "precision": 0.9142857142857143,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    0.8285714285714286,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        },
+        "second": {
+          "decisive_labels": 32,
+          "unclear_labels": 1,
+          "missing_or_excluded_labels": 3,
+          "completed_without_decisive_reference": 4,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 15,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 31,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "n": 31,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 31,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 31,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 31,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 31,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        },
+        "concordant": {
+          "decisive_labels": 30,
+          "unclear_labels": 0,
+          "missing_or_excluded_labels": 6,
+          "completed_without_decisive_reference": 6,
+          "decisive_labels_without_prediction": 1,
+          "answer_clusters_with_scored_labels": 15,
+          "always_support_baseline_same_scored_inputs": {
+            "tp": 29,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "n": 29,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "thresholds": {
+            "0.8": {
+              "tp": 29,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 29,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            },
+            "0.5": {
+              "tp": 29,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "n": 29,
+              "precision": 1.0,
+              "recall": 1.0,
+              "cluster_bootstrap": {
+                "precision": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                },
+                "recall": {
+                  "ci95": [
+                    1.0,
+                    1.0
+                  ],
+                  "defined_resamples": 2000,
+                  "undefined_resamples": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "paired_common_input_differences": {
+    "first": {
+      "direction": "comparison minus legacy, primary threshold only",
+      "threshold": 0.8,
+      "common_claims": 35,
+      "metrics": {
+        "precision": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        },
+        "recall": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        }
+      }
+    },
+    "second": {
+      "direction": "comparison minus legacy, primary threshold only",
+      "threshold": 0.8,
+      "common_claims": 31,
+      "metrics": {
+        "precision": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        },
+        "recall": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        }
+      }
+    },
+    "concordant": {
+      "direction": "comparison minus legacy, primary threshold only",
+      "threshold": 0.8,
+      "common_claims": 29,
+      "metrics": {
+        "precision": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        },
+        "recall": {
+          "difference": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "defined_resamples": 2000,
+          "undefined_resamples": 0
+        }
+      }
+    }
+  },
+  "uncertainty": "Nominal seed-19 answer-cluster bootstrap, 2000 resamples; undefined ratios remain explicit. Selected cohort, no population guarantee.",
+  "input_exports_sha256": {
+    "first-original": "69a21365c1a74d19a21ccb0b82c9c72fde05aaed5bca5a89660c73513ff1220f",
+    "first-changed": "4a664fb26fbcd2bc315b24320cca97f4a05f4c61b20cdba9af5a77e4df80a72a",
+    "second": "bffaad9621b236d10c2e6e0ff922f71ef3b9f498bf165efbaf2b22fba1572085"
+  },
+  "analysis_sha256": "289d00bfa4a610bd4db114f1f287ed2bfe4c1bb732ea029cdcdaff9bd42896ad",
+  "numeric_records_sha256": "baec6aad9d246139c9704a3078c3d15dc95c41f7db1a2c8d492d5013d1e3c79d",
+  "identity_sha256": "2141a5478f023aea546a6c999347fae00c219e8bd1ed7180691a60e1a7fdfeed",
+  "reference_snapshot_sha256": "134194569814d81dcf19fe4b9f3699341d5e23ab5648093dc9843d6d1ca246b6"
+}

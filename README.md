@@ -12,11 +12,13 @@ The [latest quality follow-up](reports/releases/r5/README.md) reduced holds from
 
 The [second-review follow-up](reports/releases/r7/README.md) paired 16 answers and 33 claim units. Raw agreement was 87.5% and 90.9%, but kappa was only 0.55 and 0.47 with wide intervals. Two answer judgments and three claim judgments remain disputed; the initial labels have not been overwritten.
 
+The [real-PDF support diagnostic](reports/releases/r8/README.md) found both judges accepted all 35 scored claims, matching an always-support baseline; one missing-evidence claim stayed unscored. The scored subset has no decisive second-review negative labels, so it cannot validate false-positive detection or justify a release gate.
+
 The [public human-annotated support benchmark](reports/releases/r6/README.md) compares two NLI models on 600 calibration and 450 source-disjoint held-out responses. Neither met the frozen calibration requirements. Selected coverage is zero, with undefined risk; this mixed-task component does not establish PDF safety.
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
-[Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) · [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
+[Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) Â· [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
 
 [![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
 [![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)

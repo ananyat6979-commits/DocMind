@@ -1,6 +1,6 @@
 # Core reader release evidence
 
-This report separates completed measurements, implemented behavior and unmeasured claims. All work uses local resources, free public CI or free private T4 notebooks. No new hosted evaluation calls, paid inference or paid annotation were used.
+This report separates completed measurements, implemented behavior and unmeasured claims. All work uses local resources, free public CI or free private CPU or T4 notebooks. No new hosted evaluation calls, paid inference or paid annotation were used.
 
 ## Product behavior
 
@@ -74,3 +74,8 @@ The [R6 comparison](../reports/releases/r6/README.md) completed two fixed CPU NL
 The [R7 snapshot](../reports/releases/r7/README.md) matches sixteen completed second-review answers and 33 claim units to identical first-review inputs. Raw agreement is 14/16 answers and 30/33 claims; Cohen's kappa is 0.549 and 0.468, with nominal answer-cluster intervals [0, 1]. Thirteen answers were marked correct by both reviewers and one incorrect by both. Two first-review incorrect answers are disputed: the second reviewer marked one correct and one unclear. Three claim judgments also differ. The initial labels remain immutable and no source adjudication is claimed. One answer and three claim units have no completed second judgment.
 
 The second reviewer self-reported different-person status and no earlier involvement or result exposure. The first reviewer helped confirm questions. This remains a selected seventeen-question cohort, not independent study replication or a validated risk estimate. Ten recorded minutes were charged within the expanded review cap. The separate language-v4 sampler repair preserves the frozen review inputs and does not validate Hindi answers.
+
+
+## Fixed-input real-PDF attribution diagnostic
+
+The [R8 CPU diagnostic](../reports/releases/r8/README.md) evaluated the same 36 displayed claims from 17 current English PDF answers. Both pinned judges scored 35 claims and left one missing-evidence claim unscored. Both marked all 35 as supported at 0.8 and 0.5, matching an always-support baseline. Against original first-review judgments, precision is 32/35 (nominal answer-cluster interval [82.86%, 100%]); the three scored unsupported labels are all disputed by the second review. The only jointly unsupported claim has no evidence and was not scored, leaving no decisive negative examples in the second-review scored subset. Apparent 100% conditional recall and degenerate intervals do not validate false-positive detection, extraction recall or release safety. This free CPU run used no new reader, GPU or hosted calls and leaves R1-R7 artifacts unchanged.

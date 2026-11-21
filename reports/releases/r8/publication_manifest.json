@@ -1,0 +1,10 @@
+{
+  "sha256": {
+    "compute.json": "3773fccbd4680baad0e103499c386a24663ae8a2d11130eeb69fbe0a2de2712b",
+    "numeric_records.json": "baec6aad9d246139c9704a3078c3d15dc95c41f7db1a2c8d492d5013d1e3c79d",
+    "pdf_attribution_design.json": "8644ec24415d645bf89216b970edc97ea15394c0fef5861c34e84c52ab2aeeb7",
+    "pdf_attribution_summary.json": "aad003a01135d75a9d1ba6a47c8266e8d4d2bdb6bd4cc2f0893bd56dbc9ee45a",
+    "README.md": "e78c47205de8665ad305e8bb6e466c3fe5dc6ab1ee5cf1cefe106a225940583b",
+    "scoring_identity.json": "2141a5478f023aea546a6c999347fae00c219e8bd1ed7180691a60e1a7fdfeed"
+  }
+}

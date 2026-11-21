@@ -479,3 +479,52 @@ def test_numeric_conflict_is_held_separately_from_valid_quote_location(monkeypat
     assert result.citation_report["invalid"] == []
     assert "numeric_evidence_conflict" in result.hold_reasons
     assert result.release_state == "held"
+
+
+def test_optional_nli_counts_claims_separately_from_evidence_pairs(monkeypatch):
+    monkeypatch.setenv("DOCMIND_ATTRIBUTION", "1")
+    monkeypatch.setattr(
+        "docmind.language.language_info", lambda text: {"language": "en"}
+    )
+    judge = SimpleNamespace(identity={"model": "synthetic", "revision": "fixed"})
+
+    class PairJudge:
+        identity = judge.identity
+
+        def __call__(self, pairs):
+            assert len(pairs) == 2
+            return [0.9, 0.1]
+
+    monkeypatch.setattr("docmind.attribution.default_judge", lambda: PairJudge())
+    first, second = source(), source()
+    second.chunk.chunk_id = "second-id"
+    payload = {
+        "short_answer": "Two seconds.",
+        "claims": [
+            {
+                "text": "Two seconds.",
+                "evidence": [
+                    {"chunk_id": first.chunk.chunk_id, "quote": first.chunk.content},
+                    {"chunk_id": second.chunk.chunk_id, "quote": second.chunk.content},
+                ],
+            }
+        ],
+    }
+    response = CitedReader(Retriever()).assemble(
+        "How long?",
+        [first, second],
+        json.dumps(payload),
+        time.monotonic(),
+        SimpleNamespace(calls=1, usage=lambda: {}),
+    )
+    diagnostic = response.citation_report["attribution"]
+    assert diagnostic["n_claims"] == diagnostic["n_scored_claims"] == 1
+    assert diagnostic["n_evidence_pairs"] == 2
+    assert diagnostic["score_unit"] == "located_evidence_pair"
+    assert (
+        diagnostic["evidence_pair_supported_fraction"]
+        == diagnostic["supported_fraction"]
+        == 0.5
+    )
+    assert diagnostic["purpose"] == "diagnostic_only"
+    assert diagnostic["human_validated"] is False

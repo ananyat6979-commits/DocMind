@@ -1,0 +1,39 @@
+{
+  "kernel_id": "ananyatiwari0212/docmind-pdf-attribution-cpu-20261121",
+  "private": true,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "total_budget_seconds": 1800,
+  "first_attempt": {
+    "platform": "Private Kaggle CPU",
+    "gpu_seconds": 0,
+    "hosted_calls": 0,
+    "started_unix": 1795239139.8205988,
+    "cap_seconds": 1800,
+    "payload_bundle_sha256": "612a7a633511d998513640467d2d86b13e23d64d8c20a7779f8c028b6ff8d78d",
+    "source_commit": "7abb6ff9befe4c9993614ae2b9fcfeffc4a62a61",
+    "status": "failed_or_interrupted",
+    "error_type": "CalledProcessError",
+    "elapsed_seconds": 0.37081098556518555
+  },
+  "second_attempt": {
+    "platform": "Private Kaggle CPU",
+    "gpu_seconds": 0,
+    "hosted_calls": 0,
+    "started_unix": 1795239345.6971517,
+    "cap_seconds": 1740,
+    "prior_attempt_reserved_seconds": 60,
+    "payload_bundle_sha256": "612a7a633511d998513640467d2d86b13e23d64d8c20a7779f8c028b6ff8d78d",
+    "source_commit": "7abb6ff9befe4c9993614ae2b9fcfeffc4a62a61",
+    "setup_seconds": 211.10626459121704,
+    "elapsed_seconds": 242.86169743537903,
+    "status": "completed"
+  },
+  "first_attempt_conservative_reservation_seconds": 60,
+  "conservatively_charged_seconds": 302.861697435379,
+  "remaining_seconds": 1497.138302564621,
+  "first_attempt_predictions": 0,
+  "failed_inference_reruns": 0,
+  "bootstrap_repair": "Create venv without pip; host pip --python installs the same hash-locked packages. No model, cohort, threshold or scorer change.",
+  "bootstrap_code_sha256": "2eebf7498a08b86cb1e5b744265cd4b78ab57418118fe536ce514ed4559f59f6"
+}

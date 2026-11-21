@@ -175,6 +175,9 @@ def summarize(records, design, refs):
                 "answer_clusters_with_scored_labels": sum(
                     bool(v) for v in clusters.values()
                 ),
+                "always_support_baseline_same_scored_inputs": confusion(
+                    [(1.0, label) for _, label in pairs], design["primary_threshold"]
+                ),
                 "thresholds": {
                     str(threshold): {
                         **confusion(pairs, threshold),

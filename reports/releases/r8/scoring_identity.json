@@ -1,0 +1,33 @@
+{
+  "python": "3.13.18",
+  "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+  "design_sha256": "4a4e338bfa17a329ec728e8bb664dfc6dd377b72342b742697000fa8c03309d5",
+  "payload_sha256": "6b78da6f25286034bf1ce683efe7aa24a6c4a0be5df1ebc88a9f378b876c5a6c",
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "models": [
+    {
+      "model": "typeform/distilbert-base-uncased-mnli",
+      "revision": "cfa538a0fddbbd978fefe8966c1aeff7ad409c90",
+      "model_index": 0,
+      "dtype": "torch.float32",
+      "load_seconds": 9.640292277000015
+    },
+    {
+      "model": "cross-encoder/nli-deberta-v3-small",
+      "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+      "model_index": 1,
+      "dtype": "torch.float32",
+      "load_seconds": 7.937182415999985
+    }
+  ],
+  "versions": {
+    "torch": "2.13.0+cpu",
+    "transformers": "5.23.0",
+    "tokenizers": "0.23.3",
+    "numpy": "2.5.4",
+    "sentencepiece": "0.2.3"
+  },
+  "finished_unix": 1795239586.972992,
+  "deadline_unix": 1795241085.6971517
+}

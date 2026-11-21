@@ -76,3 +76,8 @@ New ingestion records `language-v4`. This repairs corrupted Hindi danda/double-d
 Cached v3 documents remain readable with their recorded metadata and chunk identities. A repeated upload keeps that cache unchanged. To refresh its language metadata, deliberately reprocess retained authorized source files using the existing rebuild path or an isolated corpus. The Python pipeline argument is `ingest(path, store=store, rebuild_index=True)`. An explicit rebuild creates new chunk IDs; old responses referencing removed chunks remain subject to the existing deleted-evidence protections. Do not describe this reprocessing as an identity-preserving re-embedding.
 
 Historical neural measurements retain their original preprocessing versions. Do not silently relabel them as measurements of the new sampler. The frozen second-review packet continues to show its exact original question, answer and evidence inputs.
+
+
+## Optional support-diagnostic units
+
+The quote-first reader's optional NLI diagnostic now distinguishes `n_claims`, `n_scored_claims` and `n_evidence_pairs`. One claim may cite multiple evidence entries, so their counts can differ. `score_unit` is `located_evidence_pair`; `scores` and `evidence_pair_supported_fraction` use that denominator. `supported_fraction` remains an equal compatibility alias for existing consumers. This is not a claim-support probability or human-verification status. Historical saved diagnostics retain their recorded fields. NLI remains off by default and does not change release decisions.

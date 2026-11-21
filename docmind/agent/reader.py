@@ -86,11 +86,17 @@ class CitedReader:
             try:
                 from docmind.attribution import default_judge
                 judge = default_judge()
-                pairs = [(e["text"], e["claim"]) for e in response.evidence if e["status"] in ("literal", "normalized")]
+                located = [e for e in response.evidence if e["status"] in ("literal", "normalized")]
+                pairs = [(e["text"], e["claim"]) for e in located]
                 scores = judge(pairs)
+                fraction = sum(s >= .8 for s in scores)/len(scores) if scores else None
                 response.citation_report["attribution"] = {
-                    "scores": scores, "n_claims": len(pairs), "judge": judge.identity, "human_validated": False,
-                    "purpose": "diagnostic_only", "supported_fraction": sum(s >= .8 for s in scores)/len(scores) if scores else None}
+                    "scores": scores, "score_unit": "located_evidence_pair",
+                    "n_claims": len({e["claim_index"] for e in response.evidence}),
+                    "n_scored_claims": len({e["claim_index"] for e in located}),
+                    "n_evidence_pairs": len(pairs), "judge": judge.identity, "human_validated": False,
+                    "purpose": "diagnostic_only", "evidence_pair_supported_fraction": fraction,
+                    "supported_fraction": fraction}
             except Exception as exc:
                 response.citation_report["attribution"] = {"error": type(exc).__name__, "human_validated": False, "purpose": "diagnostic_only"}
         return apply_policy(response)
