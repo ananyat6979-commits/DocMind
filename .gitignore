@@ -85,3 +85,4 @@ reports/release_review/
 .kaggle-quoted-complete-schema/
 
 .site-dist/
+.kaggle-pdf-attribution-cpu/
