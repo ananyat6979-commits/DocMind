@@ -162,3 +162,49 @@ def test_freeze_command_records_input_hashes_and_refuses_overwrite(tmp_path):
     before = out.read_bytes()
     assert subprocess.run(command, capture_output=True).returncode != 0
     assert out.read_bytes() == before
+
+
+@pytest.mark.parametrize("line_endings", ["lf", "crlf"])
+def test_committed_cohort_reconstruction_is_byte_identical(
+    tmp_path, monkeypatch, line_endings
+):
+    import hashlib
+    import json
+    import scripts.english_reader_cpu as module
+
+    data = source()
+    raw = json.dumps(data).encode()
+    monkeypatch.setattr(module, "SOURCE_SHA", hashlib.sha256(raw).hexdigest())
+    pilot, final, _ = select(data, set())
+    pool = {"pilot": pilot, "final": final}
+    payload = (
+        json.dumps(pool, indent=2, ensure_ascii=True, allow_nan=False) + "\n"
+    ).encode()
+    if line_endings == "crlf":
+        payload = payload.replace(b"\n", b"\r\n")
+    manifest = {
+        "source_sha256": module.SOURCE_SHA,
+        "private_pool_sha256": hashlib.sha256(payload).hexdigest(),
+        "pilot": [
+            {k: r[k] for k in ("id", "context_sha256", "answerable")} for r in pilot
+        ],
+        "final_pool": [
+            {k: r[k] for k in ("id", "context_sha256", "answerable")} for r in final
+        ],
+    }
+    source_path, manifest_path = tmp_path / "source.json", tmp_path / "manifest.json"
+    source_path.write_bytes(raw)
+    manifest_path.write_text(json.dumps(manifest))
+    out = tmp_path / "reconstructed"
+    module.reconstruct(source_path, manifest_path, out)
+    assert (out / "private/pool.json").read_bytes() == payload
+    assert (out / "input_manifest.json").read_bytes() == manifest_path.read_bytes()
+    with pytest.raises(FileExistsError):
+        module.reconstruct(source_path, manifest_path, out)
+    manifest["final_pool"][0]["answerable"] = not manifest["final_pool"][0][
+        "answerable"
+    ]
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError):
+        module.reconstruct(source_path, manifest_path, tmp_path / "changed")
+    assert not (tmp_path / "changed").exists()

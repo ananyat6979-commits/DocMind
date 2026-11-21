@@ -126,6 +126,63 @@ def prepare(source, out):
     return manifest
 
 
+def reconstruct(source, frozen_manifest, out):
+    """Rebuild committed inputs without treating their own IDs as historical data."""
+    if out.exists():
+        raise FileExistsError("Keep previously frozen cohorts unchanged")
+    raw = source.read_bytes()
+    manifest_raw = frozen_manifest.read_bytes()
+    manifest = json.loads(manifest_raw)
+    if (
+        hashlib.sha256(raw).hexdigest() != SOURCE_SHA
+        or manifest["source_sha256"] != SOURCE_SHA
+    ):
+        raise ValueError("Public source hash changed")
+    lookup = {}
+    for article in json.loads(raw)["data"]:
+        for paragraph in article["paragraphs"]:
+            for question in paragraph["qas"]:
+                row = {
+                    "id": question["id"],
+                    "title": article["title"],
+                    "context": paragraph["context"],
+                    "context_sha256": sha(paragraph["context"]),
+                    "question": question["question"],
+                    "answerable": not question["is_impossible"],
+                    "answers": question["answers"],
+                }
+                if row["id"] in lookup:
+                    raise ValueError("Repeated public question identity")
+                lookup[row["id"]] = row
+    pool = {}
+    for split, key in (("pilot", "pilot"), ("final", "final_pool")):
+        pool[split] = []
+        for expected in manifest[key]:
+            row = lookup[expected["id"]]
+            if {k: row[k] for k in ("id", "context_sha256", "answerable")} != expected:
+                raise ValueError("Frozen paragraph or label identity changed")
+            pool[split].append(row)
+    payload = (
+        json.dumps(pool, indent=2, ensure_ascii=True, allow_nan=False) + "\n"
+    ).encode()
+    # Older Windows preparation wrote CRLF JSON layout. Source strings remain
+    # escaped and unchanged; only the serialization layout may differ.
+    candidates = (payload, payload.replace(b"\n", b"\r\n"))
+    matched = [
+        candidate
+        for candidate in candidates
+        if hashlib.sha256(candidate).hexdigest() == manifest["private_pool_sha256"]
+    ]
+    if not matched:
+        raise ValueError("Reconstructed question, paragraph or reference bytes differ")
+    payload = matched[0]
+    out.mkdir(parents=True)
+    (out / "private").mkdir()
+    (out / "private/pool.json").write_bytes(payload)
+    (out / "input_manifest.json").write_bytes(manifest_raw)
+    return manifest
+
+
 def choose(timing):
     served = [
         r["elapsed_seconds"] for r in timing["rows"] if r.get("generation_completed")
@@ -346,6 +403,7 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("prepare")
     p.add_argument("--source", type=Path, required=True)
+    p.add_argument("--frozen-manifest", type=Path)
     p.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("run")
     p.add_argument("--root", type=Path, required=True)
@@ -358,7 +416,10 @@ def main():
     p.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "prepare":
-        prepare(args.source, args.out)
+        if args.frozen_manifest:
+            reconstruct(args.source, args.frozen_manifest, args.out)
+        else:
+            prepare(args.source, args.out)
     elif args.command == "run":
         run(
             args.root,
