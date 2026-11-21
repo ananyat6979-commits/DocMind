@@ -1,0 +1,54 @@
+{
+  "rows": [
+    {
+      "id": "5a7b3dd921c2de001afe9dfa",
+      "elapsed_seconds": 297.049736744,
+      "generation_completed": true,
+      "input_tokens": 646,
+      "output_tokens": 96,
+      "numerical_failure": false
+    },
+    {
+      "id": "5733a6ac4776f41900660f59",
+      "elapsed_seconds": 229.20736306899994,
+      "generation_completed": true,
+      "input_tokens": 461,
+      "output_tokens": 121,
+      "numerical_failure": false
+    },
+    {
+      "id": "5acfeb2577cf76001a6864b3",
+      "elapsed_seconds": 251.12750250300007,
+      "generation_completed": true,
+      "input_tokens": 421,
+      "output_tokens": 171,
+      "numerical_failure": false
+    },
+    {
+      "id": "5733dc95d058e614000b644d",
+      "elapsed_seconds": 249.75878539099995,
+      "generation_completed": true,
+      "input_tokens": 447,
+      "output_tokens": 152,
+      "numerical_failure": false
+    },
+    {
+      "id": "5ad568175b96ef001a10ae12",
+      "elapsed_seconds": 355.81164083499993,
+      "generation_completed": true,
+      "input_tokens": 433,
+      "output_tokens": 328,
+      "numerical_failure": false
+    },
+    {
+      "id": "57109275b654c5140001f9a1",
+      "elapsed_seconds": 107.14949464797974,
+      "generation_completed": false,
+      "input_tokens": null,
+      "output_tokens": null,
+      "numerical_failure": null
+    }
+  ],
+  "setup_seconds": 250.58532857894897,
+  "charged_pilot_seconds": 1740.7976751327515
+}

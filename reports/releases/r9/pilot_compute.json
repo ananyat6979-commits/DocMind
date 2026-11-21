@@ -1,0 +1,15 @@
+{
+  "scope": "Fresh English supplied-paragraph CPU feasibility pilot",
+  "source_commit": "5b98590a1ee8f1cb2c857da20f3df0c7b4dda5b7",
+  "bundle_sha256": "1453eae70e19665d157597449f2bf56a615b05f46b87ff1b626a41495c5b7788",
+  "cpu_budget_reserved_seconds": 1800,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "started_unix": 1795241426.008503,
+  "cpu_count": 4,
+  "memory_bytes": 33658159104,
+  "status": "failed_or_interrupted",
+  "elapsed_seconds": 1740.8002705574036,
+  "environment_setup_seconds": 183.86557865142822,
+  "error_type": "TimeoutExpired"
+}

@@ -1,0 +1,14 @@
+{
+  "cohort_size": 0,
+  "timing_supported_size": 30,
+  "conservative_seconds_per_question": 502.25500500600015,
+  "reserved_setup_seconds": 501.17065715789795,
+  "remaining_cpu_seconds": 19800,
+  "reserve_fraction": 0.2,
+  "reason": "CPU timing cannot support forty cases within the frozen ceiling",
+  "rows": [],
+  "input_manifest_content_sha256": "0c5f5f68814d9b0ad79d422db38c0e1496d01897672ec60a492fcae349ba7ec9",
+  "cohort_content_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "selection_uses_outcomes": false,
+  "pilot_timing_sha256": "5c3b9da3eb452efbd137c703c9b99c8c5bcfccbd8de7a5458b1b392a3399afce"
+}
