@@ -18,12 +18,12 @@ The [public human-annotated support benchmark](reports/releases/r6/README.md) co
 
 See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new disjoint calibration study, broader attack suite and persistent-backend checks. The follow-up includes 27 human study labels with censored timings and a 50000-paragraph persistent-index profile.
 
-[Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) Â· [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
+[Explore recorded evidence](https://ananyat6979-commits.github.io/DocMind/) · [Hosting decision](docs/HOSTING_DECISION.md). The showcase replays real frozen outputs; it does not run inference or accept uploads.
 
 [![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
 [![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)
 
-Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:8d20a92758f474a8c339518eabd9e0a9af96f0c695944570708003c6de4f22dc`. [Inventory and signed provenance](reports/releases/r7/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
+Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:f0771fd5914dd781b338e6d8baeaf1aba9a7db19845253ab9de75c50b620ce9f`. [Inventory and signed provenance](reports/releases/r8/deployment/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
 
 ## Workflow demo
 

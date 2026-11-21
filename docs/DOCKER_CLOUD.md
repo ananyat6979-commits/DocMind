@@ -59,7 +59,7 @@ After publication, verify the immutable digest with `gh attestation verify oci:/
 After pulling the image, this runs the actual default retrieval/quote pipeline on a tiny original synthetic corpus, using cached E5 and an extractive demonstration reader:
 
 ```sh
-docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,size=512m ghcr.io/ananyat6979-commits/docmind@sha256:8d20a92758f474a8c339518eabd9e0a9af96f0c695944570708003c6de4f22dc python scripts/offline_demo.py
+docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,size=512m ghcr.io/ananyat6979-commits/docmind@sha256:f0771fd5914dd781b338e6d8baeaf1aba9a7db19845253ab9de75c50b620ce9f python scripts/offline_demo.py
 ```
 
 It requires no API key, opens no listening port and makes no hosted call. It prints an explicitly unverified draft and exact quoted evidence. It is a component demonstration, not a generative accuracy baseline or a substitute for the authenticated UI/API/parser deployment. Use a published immutable digest in place of latest for a fixed source version. A fresh image pull downloads the baked model weights; they are not fetched at runtime.
