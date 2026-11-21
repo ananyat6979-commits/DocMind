@@ -1,0 +1,64 @@
+{
+  "scope": "Fresh English public-label supplied-paragraph CPU reader profile. Not PDF ingestion, retrieval quality, hosted default inference or a CPU production SLA.",
+  "source": {
+    "url": "https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json",
+    "sha256": "80a5225e94905956a6446d296ca1093975c4d3b3260f1d6c8f68bc2ab77182d8",
+    "license": "CC BY-SA 4.0; SQuAD authors and underlying Wikipedia",
+    "labels": "Original public crowdworker answer spans and impossible flags, not independently reviewed here"
+  },
+  "cohort": {
+    "pilot_questions": 10,
+    "pilot_answerable": 5,
+    "final_pool_questions": 200,
+    "final_pool_answerable": 100,
+    "historical_contexts_excluded": 800,
+    "one_question_per_context": true,
+    "pilot_and_final_contexts_disjoint": true,
+    "historical_question_ids_and_all_their_source_contexts_excluded": true,
+    "article_disjointness": false,
+    "model_training_contamination": "Unknown; public dev data may occur in pretraining"
+  },
+  "reader": {
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "dtype": "float16",
+    "device": "cpu",
+    "seed": 7,
+    "temperature": 0,
+    "do_sample": false,
+    "max_input_tokens": 8192,
+    "max_new_tokens": 512,
+    "attention": "sdpa",
+    "implementation": "Unmodified LocalReader with actual CitedReader assembly, quote validation and draft policy; one complete supplied paragraph as evidence",
+    "thinking": "Pinned Instruct-2507 non-thinking model; no alternate reader or precision fallback"
+  },
+  "environment": {
+    "torch_threads": 2,
+    "lockfiles_sha256": {
+      "locks/cpu-linux-py311.txt": "c164187236137b94768b21f77bd3be548d745af97e9b15adb8b9ff1f2e670335",
+      "locks/cpu-linux-py313.txt": "4eee5d9c244fad27f57afa15a8cffe6282af442ac8290cd2f1c0aaaf3f7ebfe1"
+    },
+    "installation": "Fresh hash-locked CPU environment; Python 3.11 or 3.13 only; no unlocked fallback"
+  },
+  "cpu_budget": {
+    "total_wall_seconds": 21600,
+    "pilot_reserved_wall_seconds": 1800,
+    "final_max_wall_seconds": 19800,
+    "includes_installation_and_model_loading": true,
+    "per_question_deadline_seconds": 600,
+    "platform": "Private free Kaggle CPU",
+    "gpu_seconds": 0,
+    "hosted_calls": 0,
+    "paid_fallback": false
+  },
+  "cohort_sizing": "Before inspecting answers, correctness or routing, use pilot timing only. Require at least four completed generations. Cost per question = max(longest attempted question including timeouts, twice the median completed-generation question time). Reserve twice measured total setup and 20 percent of the remaining 19800 seconds. Freeze the largest even cohort at most 200 supported by that cost, taking a balanced prefix of the frozen pool. Below forty cases, do not run final evaluation.",
+  "pilot_outcomes": "Private raw outputs retained but not inspected for cohort sizing. Pilot questions never enter the final cohort. A feasibility failure does not justify retrying generated failures or quietly changing precision.",
+  "metrics": "Requested-cohort candidate short-answer EM and token F1 using official answer normalization and max over public references. An impossible example is correct only after explicit valid abstention. Format/runtime failures, invalid auxiliary metric fields and unserved requests are failures in requested-cohort metrics, with categories reported separately. Completed-only metrics and their denominators are separate. Report answerable/unanswerable strata, false abstention, draft/hold counts, token counts, latency and numerical/truncation/format failures.",
+  "baselines": [
+    "Always abstain, evaluated on the same balanced requested cohort",
+    "Historical readers reported only as unmatched context-disjoint studies, not paired model superiority"
+  ],
+  "intervals": "Nominal 2000 seed-19 question bootstrap and per-stratum descriptive intervals. One question per paragraph does not establish independent articles or a user population.",
+  "publication": "Numeric records and aggregate metrics only. Raw text, gold spans and model responses stay private and outside Git. Human labels are public reference labels, not new private review. R1-R8 artifacts remain immutable.",
+  "release_effect": "No default model, gate, language support or deployment behavior changes from this research profile."
+}

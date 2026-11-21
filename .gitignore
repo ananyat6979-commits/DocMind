@@ -86,3 +86,4 @@ reports/release_review/
 
 .site-dist/
 .kaggle-pdf-attribution-cpu/
+.kaggle-english-reader-cpu/
