@@ -6,7 +6,7 @@ The original system prompt, source serialization, quote checks and draft policy 
 
 ## Inputs and labels
 
-The final pool is the same balanced 200-question pool that R9 never generated. The new ten-question pilot uses different source paragraphs, excluding all prior planned and attempted contexts. Source bytes, input identities and the unused-pool condition are checked. Source/reference strings stay private. Public SQuAD2 labels have not been independently audited here and possible pretraining contamination is unknown.
+The final pool is the same balanced 200-question pool that R9 never generated. The new twelve-question pilot (three complete batches) uses different source paragraphs, excluding all prior planned and attempted contexts. Source bytes, input identities and the unused-pool condition are checked. Source/reference strings stay private. Public SQuAD2 labels have not been independently audited here and possible pretraining contamination is unknown.
 
 The frozen-manifest reconstruction command in `scripts.english_reader_cpu` also reconstructs these inputs byte for byte from the pinned public source. The private input-pool hash must match before inference. The [design](english_batch_design.json) and [input manifest](input_manifest.json) are frozen before model execution.
 
@@ -14,7 +14,7 @@ The frozen-manifest reconstruction command in `scripts.english_reader_cpu` also 
 
 The original cumulative CPU-study ceiling remains 21600 seconds: R9 reserved 1800, this new pilot reserves 1800 and a possible final session receives at most 18000. All limits include environment setup and model loading. No GPU, hosted-model calls, paid fallback or new human annotation is used.
 
-After the pilot, inspect timing only. Require at least eight completed native generations. Use 1.25 times the worst attempted batch time per requested sequence, including failed or interrupted batches. Reserve twice setup plus 20 percent of the remaining final-session allowance. Select a balanced prefix in complete batches, at most 200 questions. A supported size below forty stops final evaluation. Commit that decision before inspecting pilot answers, correctness or routing. No failed generation is rerun.
+After the pilot, inspect timing only. Require at least eight completed native generations in fully finished batches. Use 1.25 times the worst attempted batch time per requested sequence, including failed or interrupted batches. Reserve twice setup plus 20 percent of the remaining final-session allowance. Select a balanced prefix in complete batches, at most 200 questions. A supported size below forty stops final evaluation. Commit that decision before inspecting pilot answers, correctness or routing. No failed generation is rerun.
 
 Batch calls and logical sequence completions have different units. EOS padding is excluded from generated-token counts. All raw completions are checkpointed before assembly. A native batch failure affects the batch; it does not establish that every sequence had nonfinite logits. Interrupted counts and unknown outcomes stay unknown. These are offline throughput measurements, not a production concurrency or latency claim.
 

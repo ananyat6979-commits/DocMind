@@ -152,6 +152,7 @@ def test_new_pilot_excludes_prior_planned_pool_and_reconstructs_exactly(
     out = tmp_path / "new"
     actual = batch.prepare(source, prior, out)
     assert actual["final_pool"] == previous["final_pool"]
+    assert len(actual["pilot"]) == 12
     assert not {r["context_sha256"] for r in actual["pilot"]} & {
         r["context_sha256"] for r in previous["pilot"] + previous["final_pool"]
     }
@@ -203,3 +204,9 @@ def test_actual_assembly_retains_selected_language_for_explicit_absence(monkeypa
     )
     assert french.document_context["languages"] == ["fr"]
     assert french.release_state == "held"
+
+
+def test_interrupted_assembly_cannot_qualify_a_final_run():
+    data = timing()
+    data["batches"][0]["batch_completed"] = False
+    assert choose(data, manifest())["cohort_size"] == 0

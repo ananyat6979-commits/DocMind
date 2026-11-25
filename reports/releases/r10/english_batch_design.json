@@ -35,7 +35,7 @@
     "gpu_seconds": 0,
     "hosted_calls": 0
   },
-  "cohort_rule": "Use timing only before inspecting answers, correctness or routing. Require at least eight completed native generations. Conservative per-question cost is 1.25 times the worst attempted batch time divided by its requested sequence count, including failed/interrupted batches. Reserve twice total setup and 20 percent of the remaining 18000 seconds. Select a balanced prefix in complete batches, at most 200 questions. Below forty, stop without a final run.",
+  "cohort_rule": "Use timing only before inspecting answers, correctness or routing. Require at least eight completed native generations in fully finished batches. Conservative per-question cost is 1.25 times the worst attempted batch time divided by its requested sequence count, including failed/interrupted batches. Reserve twice total setup and 20 percent of the remaining 18000 seconds. Select a balanced prefix in complete batches, at most 200 questions. Below forty, stop without a final run.",
   "failure_policy": "No retry of failed generations. Retain all requested slots. Batch-wide failures remain batch-wide unknown outcomes; never assign a single bad sequence to every row without that qualification. Raw successful generations are checkpointed before assembly. Interrupted native token counts remain unknown.",
   "metrics": "The same strict candidate short-answer EM/F1 and public-reference abstention rules as R9. Report requested and completed-only denominators, answerability strata, invalid metric fields, format/runtime failures, output-cap reaches, unknown/interrupted rows and draft/hold states. Always-abstain is the same-cohort control.",
   "uncertainty": "2000 seed-19 nominal question bootstrap, paired differences from always abstain, and whole-article cluster sensitivity with a minimum ten article clusters. These selected public dev questions may occur in model training and are not new human gold.",
@@ -44,5 +44,7 @@
     "locks/cpu-linux-py311.txt": "c164187236137b94768b21f77bd3be548d745af97e9b15adb8b9ff1f2e670335",
     "locks/cpu-linux-py313.txt": "4eee5d9c244fad27f57afa15a8cffe6282af442ac8290cd2f1c0aaaf3f7ebfe1"
   },
-  "publication": "Only numeric records, hashes, identities and bounded aggregates. Source text, reference spans and raw model outputs remain private. Earlier reports remain unchanged."
+  "publication": "Only numeric records, hashes, identities and bounded aggregates. Source text, reference spans and raw model outputs remain private. Earlier reports remain unchanged.",
+  "pilot_questions": 12,
+  "preexecution_revision": "Twelve pilot questions fill three complete batches. The earlier ten-question draft was never executed; model outputs did not inform this revision."
 }

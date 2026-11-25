@@ -125,9 +125,9 @@ def prepare(source, prior_root, out):
             if row["answerable"] == answerable and row["context_sha256"] not in seen:
                 chosen.append(row)
                 seen.add(row["context_sha256"])
-                if len(chosen) == 5:
+                if len(chosen) == 6:
                     break
-        if len(chosen) != 5:
+        if len(chosen) != 6:
             raise ValueError("Insufficient fresh pilot paragraphs")
         groups[answerable] = chosen
     pilot = [r for pair in zip(groups[False], groups[True]) for r in pair]
@@ -171,10 +171,16 @@ def through_eos(tokens, eos_ids):
 def choose(timing, manifest):
     batches = timing["batches"]
     complete = sum(
-        b["requested_sequences"] for b in batches if b["generation_completed"]
+        b["requested_sequences"]
+        for b in batches
+        if b["generation_completed"] and b.get("batch_completed", True)
     )
     if complete < 8:
-        size, reason, cost = 0, "Fewer than eight completed native generations", None
+        size, reason, cost = (
+            0,
+            "Fewer than eight native generations in finished batches",
+            None,
+        )
     else:
         costs = [b["elapsed_seconds"] / b["requested_sequences"] for b in batches]
         if not costs or not all(math.isfinite(v) and v > 0 for v in costs):
@@ -410,19 +416,9 @@ def run(root, phase, deadline, design_path, decision=None):
                     ],
                 )
             save(out / "private/records.json", records)
-            for index, (example, record) in enumerate(zip(group, batch_records)):
-                tokens = through_eos(output[index, length:].tolist(), eos)
-                raw_answer = tokenizer.decode(tokens, skip_special_tokens=True)
-                counts = {
-                    "input_tokens": int(encoded.attention_mask[index].sum()),
-                    "output_tokens": len(tokens),
-                    "status": "completed",
-                    "generation_attempted": True,
-                    "max_length_reached": len(tokens) >= 512,
-                    "numerical_failure": False,
-                    "timing_unit": "shared native batch",
-                }
-                record.update(raw_output=raw_answer, call_records=[counts])
+            for example, record in zip(group, batch_records):
+                raw_answer = record["raw_output"]
+                counts = record["call_records"][0]
                 try:
                     hint = language_info(example["context"])
                     source = SearchResult(
@@ -466,6 +462,7 @@ def run(root, phase, deadline, design_path, decision=None):
             batch["error"] = type(exc).__name__
         batch.update(
             generation_completed=generated,
+            batch_completed=True,
             elapsed_seconds=time.monotonic() - batch_start,
         )
         timing["batches"].append(batch)
