@@ -75,3 +75,6 @@ jobs:
 
       - name: Verify paired second-review aggregates
         run: python -m scripts.verify_second_review reports/releases/r7
+
+      - name: Verify quantized English CPU records
+        run: python -m scripts.verify_quantized_english reports/releases/r11
