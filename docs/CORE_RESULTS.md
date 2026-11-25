@@ -84,3 +84,8 @@ The [R8 CPU diagnostic](../reports/releases/r8/README.md) evaluated the same 36 
 ## Fresh English CPU feasibility limit
 
 The [R9 pilot](../reports/releases/r9/README.md) froze ten fresh public-reference questions and a separate 200-question candidate pool. It completed five pilot requests before its guarded CPU deadline; one was interrupted and four were unserved. The timing-only rule supported thirty final questions, below the declared minimum of forty, so zero final questions were selected. That stop was committed before answer inspection. One short-answer exact match among five completed requests is a tiny pilot diagnostic, not the larger independent English evaluation. No final session, GPU time, hosted calls or paid fallback was used. The unused candidate pool and the larger evaluation remain open rather than being reported as completed.
+
+
+## English FP32 batch feasibility
+
+The offline FP32 batch pilot completed four of twelve requested sequences. Two batches timed out. The timing rule selected zero final questions, leaving the larger English evaluation open. See the [R10 findings](../reports/releases/r10/README.md).

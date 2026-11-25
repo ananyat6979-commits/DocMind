@@ -1,0 +1,23 @@
+{
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "dtype": "float32",
+  "device": "cpu",
+  "batch_size": 4,
+  "cpu_threads": 4,
+  "seed": 7,
+  "attention": "sdpa",
+  "torch_version": "2.13.0+cpu",
+  "python": "3.13.18",
+  "versions": {
+    "transformers": "5.23.0",
+    "tokenizers": "0.23.3",
+    "numpy": "2.5.4"
+  },
+  "parameter_bytes": 16089872384,
+  "system_prompt_sha256": "7b51b34926fc9469402183a0639613cfb3944d1434a5c71a56174d47ca96cc59",
+  "gpu_seconds": 0,
+  "max_input_tokens": 8192,
+  "max_new_tokens": 512,
+  "generation_calls_unit": "native batch, up to four independent sequences"
+}

@@ -1,0 +1,13 @@
+{
+  "sha256": {
+    "cohort_decision.json": "b48c163b94f46cd2383c6387fb62ee31e5fef2e868bb4f0e9876abbb05f193d1",
+    "english_batch_design.json": "42f38baf52caf61cf8b817451461e91d4a8771d9f49c51dc7b86e4982704a4e3",
+    "input_manifest.json": "d4b961a41928327beb3060ebf81756e31c74031787e17ab53d886c98e478a411",
+    "pilot_compute.json": "8d5f769886cd9a8d5c4a56eeb508b390b269cad1a5d9ff57e610347668abe379",
+    "pilot_diagnostics.json": "de5fe5ddbddbe5346d033aa0db736a98def16c13b38f2c914ea0759dc6570fb6",
+    "pilot_timing.json": "19fc80d6954d3cc50d5a3f55b210b04e3ddfaf0c9a12ecbe2f57adf19ca49010",
+    "PROTOCOL.md": "4063f7221dca80b42b212ed9e467247427db90516673bc0380893974c378d900",
+    "reader_identity.json": "ca05b82bb668d4075b74115cf165a5caa995095685bac44964319a7056d9051e",
+    "README.md": "d317680157ddcadee16e09727248d52bcb8255f7a2a15af116354f75d56f16fc"
+  }
+}

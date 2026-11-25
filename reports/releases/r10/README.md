@@ -1,0 +1,11 @@
+# The FP32 batch pilot stopped before final evaluation
+
+One of three batches completed generation on private free CPU compute. Two batches reached their deadlines, leaving eight of twelve requested sequences without results. The frozen rule required at least eight completed sequences in finished batches. The four observed completions yielded a [zero-question final cohort](cohort_decision.json). The separate 200-question candidate pool remains unused.
+
+The [protocol](PROTOCOL.md) fixed the FP32 profile before generation. The [timing checkpoint](pilot_timing.json) supported the stop decision in commit `e9ad09f`, before answer files were downloaded. The completed batch took 569.60 seconds, and the two timed-out batches took 600.45 and 398.98 seconds. Environment and model setup took 167.70 seconds. The guarded job took 1739.34 seconds against its 1800-second reservation. Together the FP16 and FP32 English pilots reserved 3600 CPU seconds. They used zero GPU seconds and zero hosted calls.
+
+The [pilot diagnostics](pilot_diagnostics.json) show zero exact short-answer matches among twelve requested questions and among four completed questions. Token F1 was 4.62% across the requested cohort and 13.87% across completions. Two auxiliary short-answer fields were invalid, and the other two fields were scored. All four completed responses had draft status. The timed-out batches have unknown generation token counts and outcomes. Nine distinct articles were represented, below the threshold for an article-cluster interval.
+
+This supplied-paragraph pilot measures service and candidate short-answer behavior on a small public-label sample. It leaves reader quality on the larger English cohort, PDF answer correctness, and Hindi end-to-end quality unmeasured. Precision, thread count, batch size and pilot questions differed from the [FP16 pilot](../r9/README.md), so the timings cannot isolate the effect of batching.
+
+The [compute record](pilot_compute.json), [reader identity](reader_identity.json) and [manifest](publication_manifest.json) identify the execution and published files. The numeric scorer records hashes of the original private inputs and records. Raw answers and reference spans remain private.
