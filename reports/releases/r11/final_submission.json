@@ -1,0 +1,12 @@
+{
+  "kernel_id": "ananyatiwari0212/docmind-quantized-english-cpu-evaluation",
+  "source_commit": "424ccc51fecb4777d19ba747d198b17ec988caa7",
+  "bundle_sha256": "e0f75c90981c55e66c777c30f15daf537a0905317358cf2b12c49e2eb8a3f4a5",
+  "bootstrap_sha256": "699f02004c8a3e0f91291657508cd6521c34643903aa8cd3857d75b3bf304ca6",
+  "decision_sha256": "608c9505252732071f38fad406b9f6026d5101b108aadfc124112db90d866b4b",
+  "requested_questions": 92,
+  "wall_reservation_seconds": 16200,
+  "gpu_enabled": false,
+  "private": true,
+  "version": 1
+}
