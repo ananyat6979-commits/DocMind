@@ -1,0 +1,30 @@
+{
+  "batches": [
+    {
+      "batch_index": 0,
+      "requested_sequences": 4,
+      "generation_completed": false,
+      "error": "TimeoutError",
+      "batch_completed": true,
+      "elapsed_seconds": 600.4466770399999
+    },
+    {
+      "batch_index": 1,
+      "requested_sequences": 4,
+      "generation_completed": true,
+      "batch_completed": true,
+      "elapsed_seconds": 569.5993821679999
+    },
+    {
+      "batch_index": 2,
+      "requested_sequences": 4,
+      "generation_completed": false,
+      "error": "TimeoutError",
+      "batch_completed": true,
+      "elapsed_seconds": 398.9758285199998
+    }
+  ],
+  "setup_seconds": 167.7015664577484,
+  "worker_elapsed_seconds": 1626.4417922496796,
+  "charged_pilot_seconds": 1739.3400084972382
+}

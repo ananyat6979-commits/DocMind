@@ -1,0 +1,15 @@
+{
+  "cohort_size": 0,
+  "rows": [],
+  "reason": "Fewer than eight native generations in finished batches",
+  "conservative_seconds_per_question": null,
+  "final_wall_cap_seconds": 18000,
+  "pilot_reservation_seconds": 1800,
+  "prior_fp16_reservation_seconds": 1800,
+  "cumulative_cpu_cap_seconds": 21600,
+  "reserve_fraction": 0.2,
+  "input_manifest_content_sha256": "c5c5d3a4e0344b6190ef9d9848ed9dbc0d3898f4fa5260d435a7b3a62d0ab85b",
+  "cohort_content_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "selection_uses_outcomes": false,
+  "pilot_timing_sha256": "19fc80d6954d3cc50d5a3f55b210b04e3ddfaf0c9a12ecbe2f57adf19ca49010"
+}
