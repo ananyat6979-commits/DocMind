@@ -88,3 +88,5 @@ reports/release_review/
 .kaggle-pdf-attribution-cpu/
 .kaggle-english-reader-cpu/
 .kaggle-english-batch-cpu/
+
+.kaggle-english-gguf-cpu/

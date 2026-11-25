@@ -1,0 +1,9 @@
+# Quantized English CPU feasibility profile
+
+This profile evaluates a third-party Q4_K_M conversion of Qwen3-4B-Instruct-2507 using the pinned llama.cpp CPU runtime. The pinned original tokenizer and current reader prompt, JSON serialization, quote checks and release policy are reused. Runtime and weight SHA-256 hashes are checked before loading. Generation is sequential with four CPU threads, greedy decoding, seed seven and the existing 8192 input and 512 output token limits.
+
+Twelve fresh pilot paragraphs are disjoint from previous pilot and final questions. The 200-question final pool is the unused, balanced SQuAD2 pool from R9 and R10. Each run gets a complete supplied paragraph. Public short-answer labels measure candidate EM and token F1 alongside a paired always-abstain control. Use the existing question intervals and article-cluster sensitivity. This controlled profile leaves retrieval quality, PDF answer correctness and Hindi end-to-end behavior to separate evaluations.
+
+The pilot reserves 1800 seconds. The final run may reserve up to 16200 seconds, for a cumulative ceiling of 21600 seconds including both earlier pilots. The rule in the design determines cohort size from timing and setup only. Freeze the decision before downloading answers. Timed-out and unserved questions remain in the denominator. CPU, generation runtime, quantization and pilot inputs differ across profiles, so timings cannot isolate a quantization effect.
+
+The source and reference spans, model outputs and runtime logs stay private. Publish numeric diagnostics and hashes. Source attribution and dataset license are recorded in the R9 design. The [conversion card](https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/tree/ae44f08e1392f39c0e474af10c3ff8355c8b6688) identifies the weights. The [runtime release](https://github.com/ggml-org/llama.cpp/releases/tag/b8500) identifies the engine.

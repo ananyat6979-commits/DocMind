@@ -1,0 +1,29 @@
+{
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "base_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "system_prompt_sha256": "7b51b34926fc9469402183a0639613cfb3944d1434a5c71a56174d47ca96cc59",
+  "lockfiles_sha256": {
+    "locks/cpu-linux-py311.txt": "c164187236137b94768b21f77bd3be548d745af97e9b15adb8b9ff1f2e670335",
+    "locks/cpu-linux-py313.txt": "4eee5d9c244fad27f57afa15a8cffe6282af442ac8290cd2f1c0aaaf3f7ebfe1"
+  },
+  "engine": {
+    "url": "https://github.com/ggml-org/llama.cpp/releases/download/b8500/llama-b8500-bin-ubuntu-x64.tar.gz",
+    "sha256": "f143ec751cc9cb5b2276305dd7264d02d95cb8f825e1b914a18d8cc08f1a0039",
+    "bytes": 31142291
+  },
+  "weights": {
+    "url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "bytes": 2497280736
+  },
+  "cpu_budget": {
+    "cumulative_seconds": 21600,
+    "prior_reserved_seconds": 3600,
+    "pilot_reserved_seconds": 1800,
+    "gpu_seconds": 0,
+    "hosted_calls": 0
+  },
+  "final_reserved_seconds": 16200,
+  "sizing": "At least eight completed native sequences. Apply the larger of worst observed elapsed and twice median completed elapsed. Reserve twice setup and an additional 20 percent. Select a balanced prefix in groups of four, between forty and two hundred. Below forty stops the final run.",
+  "selection_uses_outcomes": false
+}
