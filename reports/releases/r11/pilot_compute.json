@@ -1,0 +1,12 @@
+{
+  "source_commit": "424ccc51fecb4777d19ba747d198b17ec988caa7",
+  "bundle_sha256": "c6677d368ae039432e2e022c0de2710c936b07f2c54621738059ac8d2b9a4304",
+  "scope": "Quantized sequential CPU pilot",
+  "wall_reservation_seconds": 1800,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "started_unix": 1795592344.6910772,
+  "status": "completed",
+  "environment_setup_seconds": 125.37972140312195,
+  "elapsed_seconds": 993.140064239502
+}
