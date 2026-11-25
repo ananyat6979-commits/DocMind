@@ -14,3 +14,6 @@ The separately frozen [public response-support protocol](../reports/releases/r6/
 
 
 A [bounded second-review protocol](SECOND_REVIEW_PROTOCOL.md) now freezes a separate blinded packet for the same current English answers. The second reviewer completed sixteen answers and 33 claim units. The [paired result](../reports/releases/r7/README.md) retains two answer disputes and three claim disputes, with wide kappa intervals. Source adjudication and larger independent validation remain open.
+
+
+The [fresh English CPU pilot](../reports/releases/r9/README.md) stopped under its frozen timing rule before selecting a final cohort. Five of ten pilot requests completed; the separate 200-question pool remains unused. Larger independently labeled current-reader evaluation therefore remains open. No GPU or hosted-call allowance was spent, and no model-quality conclusion follows from this partial timing pilot.

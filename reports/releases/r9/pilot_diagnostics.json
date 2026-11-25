@@ -1,0 +1,270 @@
+{
+  "requested_questions": 10,
+  "numeric_records": [
+    {
+      "id": "5a7b3dd921c2de001afe9dfa",
+      "context_sha256": "1e7dacb29402442c93e3c2f418a257081737db545af49703fbf284e8616f229c",
+      "answerable": false,
+      "article_sha256": "35ac8b61dc5764fb151060840373dd026a5a201fb84233a6567827947d6caf3a",
+      "status": "completed",
+      "release_state": "draft",
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "answered_unanswerable"
+    },
+    {
+      "id": "5733a6ac4776f41900660f59",
+      "context_sha256": "501203b730c0f3270043cbb23105201ff5376b0fd2de78b257175fa90c937ad8",
+      "answerable": true,
+      "article_sha256": "2d59f8dd13aafd7bc42766de703e6dd4dc2933b802ed3ed743edac6631e4dc8c",
+      "status": "completed",
+      "release_state": "draft",
+      "exact_match": 0.0,
+      "token_f1": 0.6666666666666666,
+      "category": "short_answer_scored"
+    },
+    {
+      "id": "5acfeb2577cf76001a6864b3",
+      "context_sha256": "403b83bcd02b8204d4620813147424fdb54ec54909eb54e867858a16ee0028ec",
+      "answerable": false,
+      "article_sha256": "f3af36a65de39c652dab1c95753f77a67cddac67acf5f76f901980c9883b3597",
+      "status": "completed",
+      "release_state": "held",
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "invalid_metric_field"
+    },
+    {
+      "id": "5733dc95d058e614000b644d",
+      "context_sha256": "c60675200199ca4d14c9f4c048d21e6e502a20e47c3999e1ea557a8e627ac9bb",
+      "answerable": true,
+      "article_sha256": "06eabc30b60dc9ed813ce4c675c3193d976d6cabd95d23b032c21cf7434c0702",
+      "status": "completed",
+      "release_state": "draft",
+      "exact_match": 1.0,
+      "token_f1": 1.0,
+      "category": "short_answer_scored"
+    },
+    {
+      "id": "5ad568175b96ef001a10ae12",
+      "context_sha256": "57ea608fc0f4249a93c9de52fc73db3ff0e90f245a9c336159e74c986a34743d",
+      "answerable": false,
+      "article_sha256": "c2d47d9f95109ab90d88ac97a1f87fd6398ad326fd9c801bc4e399e695e9fd58",
+      "status": "completed",
+      "release_state": "draft",
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "invalid_metric_field"
+    },
+    {
+      "id": "57109275b654c5140001f9a1",
+      "context_sha256": "9ff1cf99ff46b4125584133f2aa228433fde124d4049eec612a520abe22e99bb",
+      "answerable": true,
+      "article_sha256": "af0c01d88958e12e2611065d10855bc8ed353385d202753224e5b2d368650d7e",
+      "status": "interrupted",
+      "release_state": null,
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "interrupted"
+    },
+    {
+      "id": "5ad53d705b96ef001a10abd2",
+      "context_sha256": "6233f5ff4a063a8401e5bbc7f802133992c089ea6b276dbbe6462d513f33c086",
+      "answerable": false,
+      "article_sha256": "c2d47d9f95109ab90d88ac97a1f87fd6398ad326fd9c801bc4e399e695e9fd58",
+      "status": "unserved",
+      "release_state": null,
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "unserved"
+    },
+    {
+      "id": "57340549d058e614000b67df",
+      "context_sha256": "83c030609aaae7ee99b65c7e83ec20b9108afd9f06a6c12d3840a14fa398a72f",
+      "answerable": true,
+      "article_sha256": "06eabc30b60dc9ed813ce4c675c3193d976d6cabd95d23b032c21cf7434c0702",
+      "status": "unserved",
+      "release_state": null,
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "unserved"
+    },
+    {
+      "id": "5ad14337645df0001a2d145a",
+      "context_sha256": "47450d0c501c67649dd161f5d7cea2ed48b03534e97e62c2034a4395967f921e",
+      "answerable": false,
+      "article_sha256": "e3988183fe82ff55b61ad2c5a4d2de3f9eabcff56d3ff486405e1f96aed884b0",
+      "status": "unserved",
+      "release_state": null,
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "unserved"
+    },
+    {
+      "id": "572849b4ff5b5019007da0f6",
+      "context_sha256": "4b9be09605e42d27002a52c72f3d8886dd1513d21e40716476c7ce97970e08de",
+      "answerable": true,
+      "article_sha256": "efb2cb56c23d021d97c02f6cab7c7eb476f51f87bcf08d4d1914bc5c3d2b5703",
+      "status": "unserved",
+      "release_state": null,
+      "exact_match": 0.0,
+      "token_f1": 0.0,
+      "category": "unserved"
+    }
+  ],
+  "scope": "Selected public-reference supplied-paragraph CPU profile; short-answer metrics are not human full-answer correctness",
+  "categories": {
+    "answered_unanswerable": 1,
+    "short_answer_scored": 2,
+    "invalid_metric_field": 2,
+    "interrupted": 1,
+    "unserved": 4
+  },
+  "requested_cohort": {
+    "exact_match": {
+      "n": 10,
+      "mean": 0.1,
+      "ci95": [
+        0.0,
+        0.3
+      ]
+    },
+    "token_f1": {
+      "n": 10,
+      "mean": 0.16666666666666666,
+      "ci95": [
+        0.0,
+        0.4
+      ]
+    }
+  },
+  "completed_only": {
+    "exact_match": {
+      "n": 5,
+      "mean": 0.2,
+      "ci95": [
+        0.0,
+        0.6
+      ]
+    },
+    "token_f1": {
+      "n": 5,
+      "mean": 0.3333333333333333,
+      "ci95": [
+        0.0,
+        0.7333333333333333
+      ]
+    }
+  },
+  "strata": {
+    "answerable": {
+      "exact_match": {
+        "n": 5,
+        "mean": 0.2,
+        "ci95": [
+          0.0,
+          0.6
+        ]
+      },
+      "token_f1": {
+        "n": 5,
+        "mean": 0.3333333333333333,
+        "ci95": [
+          0.0,
+          0.7333333333333333
+        ]
+      }
+    },
+    "unanswerable": {
+      "exact_match": {
+        "n": 5,
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "token_f1": {
+        "n": 5,
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "always_abstain_baseline": {
+    "n": 10,
+    "mean": 0.5,
+    "ci95": [
+      0.2,
+      0.8
+    ]
+  },
+  "population_release_risk": null,
+  "completed_release_states": {
+    "draft": 4,
+    "held": 1
+  },
+  "article_cluster_sensitivity": {
+    "exact_match": {
+      "ci95": null,
+      "article_clusters": 8,
+      "status": "Fewer than ten articles; no cluster interval"
+    },
+    "token_f1": {
+      "ci95": null,
+      "article_clusters": 8,
+      "status": "Fewer than ten articles; no cluster interval"
+    }
+  },
+  "paired_difference_from_always_abstain": {
+    "direction": "Reader candidate EM minus always abstain",
+    "question_bootstrap": {
+      "n": 10,
+      "mean": -0.4,
+      "ci95": [
+        -0.8,
+        0.0
+      ]
+    },
+    "article_cluster_sensitivity": {
+      "ci95": null,
+      "article_clusters": 8,
+      "status": "Fewer than ten articles; no cluster interval"
+    }
+  },
+  "source_records_sha256": "5f312570299cf3d0c00bea8895ea1480c3a1d9064fc924b28c7ce1c4fceafc86",
+  "diagnostic_only": true,
+  "final_cohort_size": 0,
+  "not_final_evaluation": true,
+  "format_failures": 0,
+  "completed_generation_truncations": 0,
+  "observed_numerical_failures": 0,
+  "interrupted_native_call_accounting": "Unknown, not imputed as zero",
+  "analysis_code_sha256": {
+    "scripts/score_english_reader_cpu.py": "a83c6182687c418d67afdea7a4f00a5544bfeee0efb1ff10f4cee9f2c04b6129",
+    "scripts/analyze_independent_review.py": "d9865845c747243160d1821a11b0169934abbb6b7d9c6b27c2e4bcac873dbff3"
+  },
+  "input_pool_sha256": "92a34e2492cc9659ad1b6f1aed0b6d2a9e203632cc822f008d908cbf40a9227a",
+  "cohort_decision_sha256": "db727458bf7089cf8f8a2ee5910b2af8932af6f11b41a0630684f8b5d80fbdf7",
+  "decision_commit": "a374702eac562e98ce3599bdfd4272117f72ded3",
+  "quality_inspection_after_decision_commit": true,
+  "runtime_dependency_versions_from_install_log": {
+    "numpy": [
+      "2.5.4"
+    ],
+    "transformers": [
+      "5.23.0"
+    ],
+    "tokenizers": [
+      "0.23.3"
+    ],
+    "torch": [
+      "2.13.0",
+      "2.13.0+cpu"
+    ]
+  },
+  "install_log_sha256": "b13b69747d0c242119901a9fa92b66e11f9214af33659e72d42cf00cd71b2a43"
+}

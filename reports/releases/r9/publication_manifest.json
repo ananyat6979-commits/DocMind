@@ -1,0 +1,14 @@
+{
+  "sha256": {
+    "cohort_decision.json": "db727458bf7089cf8f8a2ee5910b2af8932af6f11b41a0630684f8b5d80fbdf7",
+    "english_reader_design.json": "043f57e076220d0396502edf448f466a165f6b7248a1a2e864330e59cc3b3aae",
+    "input_manifest.json": "357aea80c2b3d682c6fc670754893d663f7578981490eec888f2a96903b3e897",
+    "pilot_compute.json": "dc53a4772c3474a1b5316c101761f5c4447774f77ecb9bae60b022ee685e52f8",
+    "pilot_diagnostics.json": "b156d7dd77ad00763a66c0869bd36109795c1bceb998b9738902e264c1f47b72",
+    "pilot_timing.json": "5c3b9da3eb452efbd137c703c9b99c8c5bcfccbd8de7a5458b1b392a3399afce",
+    "PROTOCOL.md": "d7240791b984b6d74b0830fe7d6678491994356ebb3f7a32bf1663a7223a8bbd",
+    "reader_identity.json": "cd904cc8615071f02330a830eebe42e196d9d65de7e07965aec380537552ebfd",
+    "README.md": "eb5e552e4224c2fb33f2036154492c4c2e9baa2e17389550d73e2219e74f3329",
+    "uncertainty_supplement.json": "5ce0e670a79b7de09874f046d429c19ba2ce0806ee994c84b10cb48ef44987e3"
+  }
+}

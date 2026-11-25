@@ -79,3 +79,8 @@ The second reviewer self-reported different-person status and no earlier involve
 ## Fixed-input real-PDF attribution diagnostic
 
 The [R8 CPU diagnostic](../reports/releases/r8/README.md) evaluated the same 36 displayed claims from 17 current English PDF answers. Both pinned judges scored 35 claims and left one missing-evidence claim unscored. Both marked all 35 as supported at 0.8 and 0.5, matching an always-support baseline. Against original first-review judgments, precision is 32/35 (nominal answer-cluster interval [82.86%, 100%]); the three scored unsupported labels are all disputed by the second review. The only jointly unsupported claim has no evidence and was not scored, leaving no decisive negative examples in the second-review scored subset. Apparent 100% conditional recall and degenerate intervals do not validate false-positive detection, extraction recall or release safety. This free CPU run used no new reader, GPU or hosted calls and leaves R1-R7 artifacts unchanged.
+
+
+## Fresh English CPU feasibility limit
+
+The [R9 pilot](../reports/releases/r9/README.md) froze ten fresh public-reference questions and a separate 200-question candidate pool. It completed five pilot requests before its guarded CPU deadline; one was interrupted and four were unserved. The timing-only rule supported thirty final questions, below the declared minimum of forty, so zero final questions were selected. That stop was committed before answer inspection. One short-answer exact match among five completed requests is a tiny pilot diagnostic, not the larger independent English evaluation. No final session, GPU time, hosted calls or paid fallback was used. The unused candidate pool and the larger evaluation remain open rather than being reported as completed.
