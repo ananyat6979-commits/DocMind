@@ -1,0 +1,15 @@
+{
+  "source_commit": "c8d2e3c44732062328fb28341e66e6293bab7e2e",
+  "image": "ghcr.io/ananyat6979-commits/docmind",
+  "digest": "sha256:fd9bb28d8bca40d9e7a652384d7305a2b2f8e785abdc6444bdca9b3faf152ab4",
+  "buildkit_predicate_types": [
+    "https://slsa.dev/provenance/v1",
+    "https://spdx.dev/Document"
+  ],
+  "signed_provenance_workflow": "https://github.com/ananyat6979-commits/DocMind/actions/runs/45759369869",
+  "main_only_attestation_job": "success",
+  "offline_demo_network_disabled_test": "passed",
+  "scope": "Build origin and inventory, not model safety or vulnerability certification",
+  "anonymous_manifest_access_verified": true,
+  "verification_scope": "Verified anonymous manifest access and digest equality. The cited workflow built and exercised the image."
+}

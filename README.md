@@ -23,7 +23,7 @@ See the [bounded gap-closure evidence](docs/CLOSURE_EVIDENCE.md) for the new dis
 [![CI](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/ci.yml)
 [![Container and provenance](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ananyat6979-commits/DocMind/actions/workflows/docker.yml)
 
-Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:f0771fd5914dd781b338e6d8baeaf1aba9a7db19845253ab9de75c50b620ce9f`. [Inventory and signed provenance](reports/releases/r8/deployment/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
+Public image: `ghcr.io/ananyat6979-commits/docmind@sha256:fd9bb28d8bca40d9e7a652384d7305a2b2f8e785abdc6444bdca9b3faf152ab4`. [Inventory and signed provenance](reports/releases/r13/deployment/image_publication.json) identify the tested build. The image includes cached model weights; the static showcase is the lightweight entry point.
 
 ## Workflow demo
 
