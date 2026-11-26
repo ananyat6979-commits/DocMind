@@ -362,7 +362,16 @@ def test_react_protocol_markers_inside_json_quotes_are_data(monkeypatch, scripte
         )
 
 
-def test_complete_abstention_does_not_claim_a_found_citation(monkeypatch):
+@pytest.mark.parametrize(
+    ("partial", "expected_status", "expected_hold"),
+    [
+        (False, "draft", None),
+        (True, "held", "incomplete_document_abstention"),
+    ],
+)
+def test_empty_retrieval_abstains_without_initializing_provider(
+    monkeypatch, partial, expected_status, expected_hold
+):
     import docmind.api.main as m
 
     monkeypatch.setenv("DOCMIND_API_KEY", "test-key")
@@ -370,9 +379,14 @@ def test_complete_abstention_does_not_claim_a_found_citation(monkeypatch):
         "docmind.language.language_info", lambda text: {"language": "en"}
     )
 
+    def unexpected_provider():
+        pytest.fail("Empty retrieval must not initialize a generation provider")
+
+    monkeypatch.setattr("docmind.llm.groq_client.get_llm", unexpected_provider)
+
     class EnglishCorpus:
         def document_context(self, file_ids=None):
-            return {"partial": False, "languages": ["en"], "documents": []}
+            return {"partial": partial, "languages": ["en"], "documents": []}
 
     class Empty(Retriever):
         store = EnglishCorpus()
@@ -380,16 +394,20 @@ def test_complete_abstention_does_not_claim_a_found_citation(monkeypatch):
         def search(self, question, file_ids=None):
             return []
 
-    monkeypatch.setattr(m, "_agent", CitedReader(Empty(), DemoLLM()))
+    monkeypatch.setattr(m, "_agent", CitedReader(Empty()))
     client = TestClient(m.app, headers={"X-API-Key": "test-key"})
-    result = client.post("/query", json={"question": "What is the absent fact?"}).json()
-    assert result["abstained"] and result["review_status"] == "draft"
-    assert (
-        result["attribution_status"] == "absence_not_verified"
-        and not result["evidence"]
-    )
-    saved = client.get("/responses/" + result["response_id"]).json()
-    assert saved["attribution_status"] == "absence_not_verified"
+    query = client.post("/query", json={"question": "What is the absent fact?"})
+    assert query.status_code == 200
+    result = query.json()
+    assert result["abstained"] and result["release_state"] == expected_status
+    assert result["llm_calls"] == 0 and not result["evidence"]
+    if expected_hold:
+        assert expected_hold in result["review_reasons"]
+        assert result["review_status"] == "pending"
+    else:
+        assert result["attribution_status"] == "absence_not_verified"
+        saved = client.get("/responses/" + result["response_id"]).json()
+        assert saved["attribution_status"] == "absence_not_verified"
 
 
 def test_unknown_selected_document_does_not_become_a_not_found_answer(monkeypatch):

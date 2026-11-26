@@ -41,13 +41,21 @@ class CitedReader:
         seconds = self.deadline_seconds or float(os.getenv("DOCMIND_QUERY_TIMEOUT_SECONDS", "30"))
         backend = self.llm
         owned = backend is None
-        if owned:
-            from docmind.llm.groq_client import get_llm
-            backend = get_llm()
-        session = CompletionSession(backend, started + seconds)
         try:
             async with asyncio.timeout(seconds):
                 sources = await cpu_work(self.retriever.search, question, file_ids=file_ids)
+                if not sources:
+                    session = CompletionSession(None, started + seconds)
+                    return await cpu_work(
+                        self.assemble, question, sources,
+                        '{"abstained":true,"short_answer":"","claims":[]}',
+                        started, session, file_ids,
+                    )
+                if owned:
+                    from docmind.llm.groq_client import get_llm
+
+                    backend = get_llm()
+                session = CompletionSession(backend, started + seconds)
                 messages = [{"role":"system","content":SYSTEM}, {"role":"user","content":untrusted_json({
                     "question":question,"untrusted_evidence":[{"chunk_id":r.chunk.chunk_id,"text":r.chunk.content} for r in sources]})}]
                 raw = await session.complete(messages, temperature=0, max_tokens=self.output_tokens)
