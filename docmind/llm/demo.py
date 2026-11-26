@@ -18,14 +18,30 @@ class DemoLLM(BaseLLM):
     is_demo = True
 
     def complete(self, messages: List[Dict[str, str]], stop=None, **kwargs) -> str:
-        if any('Return only JSON.' in m['content'] for m in messages if m['role'] == 'system'):
-            payload = json.loads(messages[-1]['content'])
-            evidence = payload.get('untrusted_evidence', [])
+        last = messages[-1]
+        payload = None
+        if last["role"] == "user" and last["content"].lstrip().startswith("{"):
+            try:
+                payload = json.loads(last["content"])
+            except json.JSONDecodeError:
+                pass
+        if (
+            isinstance(payload, dict)
+            and isinstance(payload.get("question"), str)
+            and isinstance(payload.get("untrusted_evidence"), list)
+        ):
+            evidence = payload["untrusted_evidence"]
             if not evidence:
-                return json.dumps({'abstained': True, 'claims': []})
+                return json.dumps({"abstained": True, "short_answer": "", "claims": []})
             passage = evidence[0]
-            quote = passage['text'][:400]
-            return json.dumps({'short_answer': quote[:128], 'claims': [{'text': quote, 'evidence': [{'chunk_id': passage['chunk_id'], 'quote': quote}]}]}, ensure_ascii=False)
+            quote = passage["text"][:400]
+            return json.dumps(
+                {"abstained": False, "short_answer": quote[:128], "claims": [{
+                    "text": quote,
+                    "evidence": [{"chunk_id": passage["chunk_id"], "quote": quote}],
+                }]},
+                ensure_ascii=False,
+            )
         observations = [m["content"] for m in messages if m["role"] == "user" and m["content"].startswith("Observation:")]
         if not observations:
             q = re.search(r"Question:\s*(.*?)\n", messages[-1]["content"] + "\n", re.S)

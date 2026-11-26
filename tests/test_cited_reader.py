@@ -405,16 +405,23 @@ def test_unknown_selected_document_does_not_become_a_not_found_answer(monkeypatc
     assert result.status_code == 404 and "refresh" in result.json()["detail"]
 
 
-def test_complete_reader_prompt_schema_is_valid_json_with_root_short_answer():
-    import json
-
+def test_reader_prompt_shows_both_complete_root_response_shapes():
     from docmind.agent.reader import SYSTEM
+    from docmind.evidence import parse_payload
 
-    example = SYSTEM.split("complete example: ", 1)[1].split("\n", 1)[0].rstrip(".")
-    payload = json.loads(example)
-    assert isinstance(payload["claims"], list) and len(payload["claims"]) == 1
-    assert payload["short_answer"] in payload["claims"][0]["text"]
-    assert "short_answer" not in payload["claims"][0]
+    examples = {
+        label: parse_payload(line.split(": ", 1)[1])
+        for line in SYSTEM.splitlines()
+        for label in ("Insufficient evidence example", "Sufficient evidence example")
+        if line.startswith(label + ": ")
+    }
+    abstention = examples["Insufficient evidence example"]
+    answer = examples["Sufficient evidence example"]
+    assert abstention == {"abstained": True, "short_answer": "", "claims": []}
+    assert set(answer) == set(abstention) and answer["abstained"] is False
+    assert len(answer["claims"]) == 1
+    assert answer["short_answer"] in answer["claims"][0]["text"]
+    assert "short_answer" not in answer["claims"][0]
 
 
 def test_invalid_auxiliary_summary_does_not_release_unmatched_evidence(monkeypatch):
