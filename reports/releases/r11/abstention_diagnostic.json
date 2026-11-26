@@ -1,0 +1,22 @@
+{
+  "phase": "Post hoc frozen-output diagnostic",
+  "source_records_sha256": "0bf31d05a3fe37ee92b67524f89d97beaa43045eb83407fa37afc5719febed86",
+  "scored_records_sha256": "1431c18f1d08d4714d77980a28f630b2cd18bfda5f0e4a8b150b35c541111038",
+  "groups": {
+    "answerable": {
+      "missing_abstention_field": 46,
+      "parser_returned_abstention": 0
+    },
+    "unanswerable": {
+      "missing_abstention_field": 46,
+      "parser_returned_abstention": 0,
+      "valid_short_answer_on_unanswerable": 30,
+      "such_outputs_released_as_draft": 25
+    }
+  },
+  "limitations": [
+    "Field omission was observed in parsed raw objects. A format validator may still reject an object.",
+    "The diagnostic does not label semantic refusals or establish the effect of changing the prompt.",
+    "Draft status is a routing outcome and does not establish correctness."
+  ]
+}
