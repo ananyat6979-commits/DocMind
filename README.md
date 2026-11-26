@@ -41,6 +41,7 @@ Runs used available local compute and private free-tier T4 notebooks. No paid in
 | HotpotQA, hybrid plus reranker, same questions | Recall@5 **89.00% [85.75, 92.00]** | Reranking hurt support coverage in this setting |
 | HotpotQA, 1.5B reader, dense top five | Exact match **20.0% [14.5, 25.5]** | High retrieval recall did not imply good answers |
 | [SQuAD2, quantized CPU reader, 92 supplied passages](reports/releases/r11/final/README.md) | Exact match **23.9% [15.2, 32.6]** | Below 50.0% always-abstain baseline; zero of 46 unanswerable matched |
+| [SQuAD2, quantized CPU prompt comparison, 24 paired questions](reports/releases/r13/final/README.md) | Exact match **29.2% to 50.0%** | Correct abstentions **0/12 to 4/12**. Revised EM tied always abstaining. |
 | SQuAD2, 3B reader, 200 human-labeled questions | Exact match **57.5% [50.5, 64.5]** | Includes 100 answerable and 100 unanswerable items |
 | SQuAD2, exploratory 7B reader, 200 fresh contexts | Exact match **66.5% [60.0, 73.0]** | Different held-out set; not a paired model comparison |
 | CLIMATE-FEVER, selected span judge, 200 claims / 1,000 pairs | Attribution precision **72.7% [46.7, 100]**, recall **3.39% [1.28, 5.86]** | Human evidence labels, very low support recall |

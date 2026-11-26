@@ -1,0 +1,12 @@
+{
+  "source_commit": "4076c11a5f95f01147e60056cfd3c07c694c62c8",
+  "bundle_sha256": "7d8be0adf769a33c4a7ddbd553232760c7a972bd0f5e748811ba9d2a50e54859",
+  "scope": "Quantized paired CPU comparison",
+  "wall_reservation_seconds": 7080,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "started_unix": 1795689681.7014112,
+  "status": "completed",
+  "environment_setup_seconds": 132.66349387168884,
+  "elapsed_seconds": 3415.779423713684
+}

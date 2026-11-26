@@ -78,3 +78,6 @@ jobs:
 
       - name: Verify quantized English CPU records
         run: python -m scripts.verify_quantized_english reports/releases/r11
+
+      - name: Verify paired CPU abstention records
+        run: python -m scripts.verify_paired_abstention_cpu reports/releases/r13
