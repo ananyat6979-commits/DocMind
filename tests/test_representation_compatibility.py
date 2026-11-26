@@ -43,3 +43,18 @@ def test_word_bullets_are_not_a_general_private_use_bypass():
     from docmind.ingestion.quality import extraction_quality
     assert not extraction_quality('\uf0b7 An ordinary list item.\n\uf0a7 Another ordinary item.')['quarantined']
     assert extraction_quality('Broken text ' + '\uf0b7' * 20)['quarantined']
+
+
+def test_preexisting_extraction_lineage_remains_cache_compatible(make_file):
+    path = make_file("manual.txt", ALPHA)
+    store = CorpusStore()
+    file_id, = ingest(path, store=store).file_ids
+    original = [chunk.chunk_id for chunk in store.load_corpus()[0]]
+    prior = store.get_document(file_id)["lineage"]
+    prior["preprocessing"]["extraction_quality"] = "extraction-quality-v3"
+    with connect(store.db_path) as conn:
+        conn.execute("UPDATE documents SET lineage = ? WHERE file_id = ?", (json.dumps(prior), file_id))
+
+    assert ingest(path, store=store).n_cached == 1
+    assert [chunk.chunk_id for chunk in store.load_corpus()[0]] == original
+    assert store.get_document(file_id)["lineage"]["preprocessing"]["extraction_quality"] == "extraction-quality-v3"

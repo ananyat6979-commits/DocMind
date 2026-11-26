@@ -4,7 +4,7 @@ from collections import Counter
 import unicodedata
 from typing import Any, Iterable
 
-VERSION = "extraction-quality-v3"
+VERSION = "extraction-quality-v4"
 _LEGACY = ("krutidev", "kruti dev", "devlys", "chanakya", "shusha", "preeti", "kantipur", "kirtidev", "shree-dev", "shreedev", "walkman-chanakya")
 _SGR = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -43,7 +43,7 @@ def extraction_quality(text: str, expected_language: str | None = None,
     if not text.strip(): status = "image_only_or_empty"
     else:
         legacy_font = any(any(name in font.casefold() for name in _LEGACY) for font in fonts)
-        malformed = bool(re.search(r"(?:^|\s)[\u093a-\u094f\u0962\u0963]",text))
+        malformed = bool(re.search(r"(?:^|\s)[\u0900-\u0903\u093a-\u094f\u0962\u0963]",text))
         if legacy_font: flags.append("legacy_font_name")
         # Multiple independent legacy-font byte-patterns are a warning, never
         # a decoder or a certificate for pages that do not trigger it.

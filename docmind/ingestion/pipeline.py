@@ -146,7 +146,7 @@ def _ingest_file(
             and prior.get("language")
             in (language_version, "language-v1", "language-v2", "language-v3")
             and prior.get("extraction_quality")
-            in (quality_version, "extraction-quality-v2")
+            in (quality_version, "extraction-quality-v2", "extraction-quality-v3")
         )
         if not compatible or any(
             prior.get(key) != preprocessing.get(key)
