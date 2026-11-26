@@ -89,3 +89,8 @@ The [R9 pilot](../reports/releases/r9/README.md) froze ten fresh public-referenc
 ## English FP32 batch feasibility
 
 The offline FP32 batch pilot completed four of twelve requested sequences. Two batches timed out. The timing rule selected zero final questions, leaving the larger English evaluation open. See the [R10 findings](../reports/releases/r10/README.md).
+
+
+## English quantized CPU reader
+
+The supplied-passage quantized reader completed all 92 frozen English SQuAD2 questions on free CPU compute. Candidate exact match was 23.9% versus 50.0% for always abstaining, a paired difference of -26.1 points [95% question bootstrap: -42.4, -8.7]. It matched 22 of 46 answerable questions and none of 46 unanswerable questions. This result leaves PDF correctness and Hindi end-to-end quality open. See the [R11 final results](../reports/releases/r11/final/README.md).

@@ -1,0 +1,12 @@
+{
+  "source_commit": "424ccc51fecb4777d19ba747d198b17ec988caa7",
+  "bundle_sha256": "e0f75c90981c55e66c777c30f15daf537a0905317358cf2b12c49e2eb8a3f4a5",
+  "scope": "Quantized sequential CPU evaluation",
+  "wall_reservation_seconds": 16200,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "started_unix": 1795619009.3004463,
+  "status": "completed",
+  "environment_setup_seconds": 141.68343019485474,
+  "elapsed_seconds": 7510.778167963028
+}
