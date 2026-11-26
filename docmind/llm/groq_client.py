@@ -142,7 +142,9 @@ class GroqLLM(BaseLLM):
         if not hasattr(self, "_async_client"):
             self._async_client = AsyncGroq(api_key=CONFIG.llm.groq_api_key, max_retries=0)
         self.last_usage = {"input_tokens": None, "output_tokens": None}
-        deadline = deadline if deadline is not None else time.monotonic() + 30
+        default_timeout = deadline is None
+        if deadline is None:
+            deadline = time.monotonic() + 30
         retries = int(kwargs.pop("retries", 1))
         request = dict(model=self._model, messages=messages, temperature=kwargs.get("temperature", CONFIG.llm.temperature),
                        max_tokens=kwargs.get("max_tokens", CONFIG.llm.max_tokens))
@@ -156,8 +158,14 @@ class GroqLLM(BaseLLM):
                 async with asyncio.timeout(min(.1, remaining)):await semaphore.acquire()
             except TimeoutError as exc:
                 raise CapacityExceeded("Hosted inference capacity is busy") from exc
-            record = {"input_tokens": None, "output_tokens": None, "status": "error"}
             attempt_started = time.monotonic()
+            remaining = deadline - attempt_started
+            if default_timeout:
+                remaining = min(30.0, remaining)
+            if remaining <= 0:
+                semaphore.release()
+                raise DeadlineExceeded("Query deadline exceeded while waiting for capacity")
+            record = {"input_tokens": None, "output_tokens": None, "status": "error"}
             try:
                 self.calls += 1
                 async with asyncio.timeout(remaining):

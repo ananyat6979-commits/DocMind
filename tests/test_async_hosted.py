@@ -55,3 +55,37 @@ def test_evaluation_zero_retry_and_capacity_bound(monkeypatch):
     assert asyncio.run(run()) == ['answer']*8
     assert state.peak == 4 and state.calls == 8
     assert all(option['timeout'] <= 30 for option in state.options)
+
+
+def test_default_provider_timeout_caps_monotonic_rounding(monkeypatch):
+    import docmind.llm.groq_client as module
+
+    now = 5.999999999999997
+    assert (now + 30.0) - now > 30.0
+    monkeypatch.setattr(module, "time", SimpleNamespace(monotonic=lambda: now))
+    instance, state = backend(monkeypatch, ["default", "explicit"])
+    assert asyncio.run(instance.acomplete([], retries=0)) == "default"
+    assert asyncio.run(instance.acomplete([], deadline=now + 45, retries=0)) == "explicit"
+    assert [option["timeout"] for option in state.options] == [30.0, 45.0]
+
+
+def test_expired_capacity_wait_releases_slot_without_provider_attempt(monkeypatch):
+    import docmind.llm.execution as execution
+    import docmind.llm.groq_client as module
+
+    clock = SimpleNamespace(now=0.0, released=0)
+
+    class Slot:
+        async def acquire(self):
+            clock.now = 2.0
+
+        def release(self):
+            clock.released += 1
+
+    monkeypatch.setattr(module, "time", SimpleNamespace(monotonic=lambda: clock.now))
+    monkeypatch.setattr(execution, "limit", lambda *args: Slot())
+    instance, state = backend(monkeypatch, [])
+    with pytest.raises(DeadlineExceeded):
+        asyncio.run(instance.acomplete([], deadline=1.0, retries=0))
+    assert clock.released == 1 and state.calls == instance.calls == 0
+    assert instance.call_records == []
