@@ -88,21 +88,48 @@ def run(profile, design, phase, deadline, scratch, decision):
     started = time.time()
     manifest = json.loads((profile / "input_manifest.json").read_bytes())
     raw = (profile / "private/pool.json").read_bytes()
-    if (
-        sha(SYSTEM) != design["system_prompt_sha256"]
-        or hashlib.sha256(raw).hexdigest() != manifest["private_pool_sha256"]
-    ):
-        raise ValueError("Prompt or inputs changed")
+    if hashlib.sha256(raw).hexdigest() != manifest["private_pool_sha256"]:
+        raise ValueError("Inputs changed")
+    prompts = {"current": SYSTEM}
+    if phase == "paired":
+        prompts = {
+            "previous": (profile / "previous-prompt.txt").read_text(encoding="utf-8"),
+            "revised": SYSTEM,
+        }
+        if {arm: sha(prompt) for arm, prompt in prompts.items()} != design[
+            "prompt_sha256"
+        ]:
+            raise ValueError("Paired prompts changed")
+    elif sha(SYSTEM) != design["system_prompt_sha256"]:
+        raise ValueError("Prompt changed")
     if MODEL != design["base_model"] or REVISION != design["base_revision"]:
         raise ValueError("Base model identity changed")
     examples = json.loads(raw)[phase]
     if phase == "final":
         examples = examples[: checked_decision(decision, manifest)]
+    if phase == "paired":
+        identities = [
+            {k: row[k] for k in ("id", "context_sha256", "answerable")}
+            for row in examples
+        ]
+        if identities != design["rows"]:
+            raise ValueError("Paired cohort differs from frozen design")
+    schedule = []
+    for index, example in enumerate(examples):
+        arms = tuple(prompts)
+        if phase == "paired" and (index // 2 + index % 2) % 2:
+            arms = arms[::-1]
+        schedule.extend((example, arm) for arm in arms)
     out = profile / phase
     out.mkdir(exist_ok=False)
     records = [
-        {"id": r["id"], "context_sha256": r["context_sha256"], "status": "unserved"}
-        for r in examples
+        {
+            "id": r["id"],
+            "context_sha256": r["context_sha256"],
+            "status": "unserved",
+            **({"arm": arm} if phase == "paired" else {}),
+        }
+        for r, arm in schedule
     ]
     save(out / "private/records.json", records)
     timing = {"setup_seconds": None, "attempts": []}
@@ -168,7 +195,7 @@ def run(profile, design, phase, deadline, scratch, decision):
                 raise RuntimeError("CPU reader failed to become ready")
             timing["setup_seconds"] = time.time() - started
             save(out / "timing.json", timing)
-            for index, (example, row) in enumerate(zip(examples, records)):
+            for index, ((example, arm), row) in enumerate(zip(schedule, records)):
                 if time.time() >= deadline - 5:
                     break
                 begin = time.monotonic()
@@ -179,7 +206,7 @@ def run(profile, design, phase, deadline, scratch, decision):
                 attempt = {"index": index, "generation_completed": False}
                 try:
                     messages = [
-                        {"role": "system", "content": SYSTEM},
+                        {"role": "system", "content": prompts[arm]},
                         {
                             "role": "user",
                             "content": untrusted_json(
@@ -282,7 +309,7 @@ def run(profile, design, phase, deadline, scratch, decision):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("phase", choices=("pilot", "final", "choose"))
+    parser.add_argument("phase", choices=("pilot", "final", "choose", "paired"))
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument("--design", type=Path, required=True)
     parser.add_argument("--deadline", type=float)

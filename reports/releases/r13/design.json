@@ -1,0 +1,168 @@
+{
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "base_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "system_prompt_sha256": "7b51b34926fc9469402183a0639613cfb3944d1434a5c71a56174d47ca96cc59",
+  "lockfiles_sha256": {
+    "locks/cpu-linux-py311.txt": "c164187236137b94768b21f77bd3be548d745af97e9b15adb8b9ff1f2e670335",
+    "locks/cpu-linux-py313.txt": "4eee5d9c244fad27f57afa15a8cffe6282af442ac8290cd2f1c0aaaf3f7ebfe1"
+  },
+  "engine": {
+    "url": "https://github.com/ggml-org/llama.cpp/releases/download/b8500/llama-b8500-bin-ubuntu-x64.tar.gz",
+    "sha256": "f143ec751cc9cb5b2276305dd7264d02d95cb8f825e1b914a18d8cc08f1a0039",
+    "bytes": 31142291
+  },
+  "weights": {
+    "url": "https://huggingface.co/bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF/resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "bytes": 2497280736
+  },
+  "cpu_budget": {
+    "cumulative_seconds": 21600,
+    "prior_reserved_seconds": 3600,
+    "pilot_reserved_seconds": 1800,
+    "gpu_seconds": 0,
+    "hosted_calls": 0
+  },
+  "final_reserved_seconds": 16200,
+  "sizing": "At least eight completed native sequences. Apply the larger of worst observed elapsed and twice median completed elapsed. Reserve twice setup and an additional 20 percent. Select a balanced prefix in groups of four, between forty and two hundred. Below forty stops the final run.",
+  "selection_uses_outcomes": false,
+  "rows": [
+    {
+      "id": "5ad4ec305b96ef001a10a669",
+      "context_sha256": "215da96f975d61a3dc7af5d1e2b75129453d3b8e5a3b4af20a46de0b25ce3030",
+      "answerable": false
+    },
+    {
+      "id": "571155ae2419e31400955592",
+      "context_sha256": "babfdcdb4f5e11f89d9b806dc9e84690fc41b249b7a42a6bb189cd52b0be7d24",
+      "answerable": true
+    },
+    {
+      "id": "5a5808ef770dc0001aeeff67",
+      "context_sha256": "d93c7d5b00d35e994837759344de468ee6476cff3aa4d621189ac8123a4b67db",
+      "answerable": false
+    },
+    {
+      "id": "56e1ba41cd28a01900c67ae2",
+      "context_sha256": "a21efd80668b227ef68dd022f77a31b092d02d626d2e188520af3bf6059d57dc",
+      "answerable": true
+    },
+    {
+      "id": "5ad02aff77cf76001a686c7d",
+      "context_sha256": "24e6c613dad838ead406354f2a3968a9b9277f1c58316194ef7bfc596947ee0c",
+      "answerable": false
+    },
+    {
+      "id": "57338160d058e614000b5bfb",
+      "context_sha256": "1ccdc3ecc98f2ce8281960f061b48c4e568a881f46f589eec7f333b13afb85de",
+      "answerable": true
+    },
+    {
+      "id": "5a6ced7d4eec6b001a80a6e1",
+      "context_sha256": "baa0a539daf238508db12b50810d17233a6fc9321763a721dc6986e289b1d436",
+      "answerable": false
+    },
+    {
+      "id": "572a11663f37b31900478694",
+      "context_sha256": "68cd564f9e510dca0c3554774995fc8d352aac44126d4a3d512117ab3b855c6e",
+      "answerable": true
+    },
+    {
+      "id": "5ad3b6d8604f3c001a3fedfd",
+      "context_sha256": "a5fa34951087126c25acb3541e6d73c4b8adce114834d595c12ad94aa258a4b7",
+      "answerable": false
+    },
+    {
+      "id": "572fcb6da23a5019007fc9f1",
+      "context_sha256": "ecf1e1973489bdea861aef055f7038e7972d136b0a3e0815dad277527a4de447",
+      "answerable": true
+    },
+    {
+      "id": "5ad13dbb645df0001a2d1368",
+      "context_sha256": "6fdda2b40ed2d1eb102dbaebbb876c30f89a03d2cf4dc06edd24f4c14fcae328",
+      "answerable": false
+    },
+    {
+      "id": "5726c19add62a815002e8f8b",
+      "context_sha256": "a88c4ac0de00e7997e2a1b06e1cb9264ebde325344bb4578efc14b8e824224c4",
+      "answerable": true
+    },
+    {
+      "id": "5ad02f5777cf76001a686d84",
+      "context_sha256": "e998eef356c2b5074708b8fa85d2d1a12ce0f53d1f90168e87308b61e3d0b6ee",
+      "answerable": false
+    },
+    {
+      "id": "57379a4b1c456719005744ce",
+      "context_sha256": "37c7853eb3100481bf8eb03dc20a277af3908ee8f3eb55e8315e451b7ed2d724",
+      "answerable": true
+    },
+    {
+      "id": "5ad278add7d075001a429573",
+      "context_sha256": "d2a2405509f89d50ca530b173f9cfa53b587151a7df14dc0831f4e7b0a132adb",
+      "answerable": false
+    },
+    {
+      "id": "572843304b864d1900164849",
+      "context_sha256": "76356e52b29acc92b0c35dce4f20450bc523d71a1b1beb49d854c21d052f7bf7",
+      "answerable": true
+    },
+    {
+      "id": "5ad3e8f6604f3c001a3ff66d",
+      "context_sha256": "c3575becd21dc14844269008f4c0df552a9d85114cd7cf6ee48a0b11dd086cea",
+      "answerable": false
+    },
+    {
+      "id": "5729fa40af94a219006aa70f",
+      "context_sha256": "374416a10bbeb03a4bf4e621397e249423ee2b3129054d9c1c003741b4d6e541",
+      "answerable": true
+    },
+    {
+      "id": "5ad56d3e5b96ef001a10ae88",
+      "context_sha256": "fa4f1279877804a3ee0afc8a8e3f12cffab66a695619e9ab4fb87d466f1278f2",
+      "answerable": false
+    },
+    {
+      "id": "572fb059947a6a140053cb84",
+      "context_sha256": "0577e0dcf4d2d18ab7d9a4c7450fa8e061f67a47b2b7377ac280f6b5c429909c",
+      "answerable": true
+    },
+    {
+      "id": "5a8391c7e60761001a2eb7d9",
+      "context_sha256": "ee37f6d5e8ae5ffa71d04ba73f6605a502e38e1deddf19c27c6cdcd7e5b27db0",
+      "answerable": false
+    },
+    {
+      "id": "572a096e6aef0514001551e4",
+      "context_sha256": "f1a8665f96b70d2299f62cd87020dd1ad27dde10867e4d88d875b99d36be62ea",
+      "answerable": true
+    },
+    {
+      "id": "5ad3a3fc604f3c001a3fea7b",
+      "context_sha256": "50310ec9fff1a082120e6ce71994825c1a3eb5590a871e3a69350c7d407b9202",
+      "answerable": false
+    },
+    {
+      "id": "5705e33f52bb891400689650",
+      "context_sha256": "8a148fbb97c8eaaa2ffba94677745201a37bfac096e9222f9299c75c2b5afe76",
+      "answerable": true
+    }
+  ],
+  "prompt_sha256": {
+    "previous": "7b51b34926fc9469402183a0639613cfb3944d1434a5c71a56174d47ca96cc59",
+    "revised": "8e5f88f9a5ffa4c89781f855571cc94c963836783422ff482ae475439420d2d1"
+  },
+  "source_r12_design_sha256": "b8eaf0c1e6c60a2554520a65abef88f657b841d9f9049de36c0107f71801155a",
+  "private_cases_sha256": "42b4f571f312d8abe0d4ead34a966254a7bf90b5462a6cb694dea4213f28a1e1",
+  "wall_cap_seconds": 7200,
+  "worker_wall_cutoff_seconds": 7140,
+  "cpu_ledger": {
+    "prior_pilot_reservations_charged_seconds": 5400,
+    "prior_final_elapsed_rounded_seconds": 7560,
+    "prior_total_seconds": 12960,
+    "new_reservation_seconds": 7200,
+    "ceiling_seconds": 21600
+  },
+  "gpu_seconds": 0,
+  "hosted_calls": 0
+}
