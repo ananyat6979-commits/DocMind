@@ -52,9 +52,16 @@ def verify(release: Path) -> None:
         ):
             raise ValueError(f"Cohort or row summaries differ for {name}")
         for metric in ("exact_match", "token_f1"):
-            if (
-                interval([row[metric] for row in rows])
-                != arm["requested_cohort"][metric]
+            observed = interval([row[metric] for row in rows])
+            published = arm["requested_cohort"][metric]
+            # Python versions differ in floating-point summation for fractional F1.
+            if observed["n"] != published["n"] or any(
+                not math.isclose(a, b, rel_tol=0.0, abs_tol=1e-12)
+                for a, b in zip(
+                    [observed["mean"], *observed["ci95"]],
+                    [published["mean"], *published["ci95"]],
+                    strict=True,
+                )
             ):
                 raise ValueError(f"Metric differs for {name}: {metric}")
 
