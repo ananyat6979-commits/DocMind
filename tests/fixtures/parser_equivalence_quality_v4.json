@@ -1,0 +1,28 @@
+{
+  "schema": "parser-output-equivalence-v1",
+  "quality_policy": "extraction-quality-v4",
+  "sources": [
+    {
+      "filename": "english.pdf",
+      "url": "https://azimpremjiuniversity.edu.in/media/publications/downloads/magazine/i-wonder_Issue-8_June-2022.pdf",
+      "pdf_sha256": "ffb2340fa5e0892ffcf6e754912d44fc2af96083e8d2954dcb856c912e40f899",
+      "expected_semantic_sha256": "865542946fcb175c3bad4e139e5444ab117cc09dfe0d44f083109a1429f496ce",
+      "expected_language": "en",
+      "license": "CC BY-NC 4.0 for articles, with separate image credits; private research cache only",
+      "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "attribution": "i wonder... Issue 8, June 2022, Azim Premji University; article authors as credited in the PDF",
+      "layout_checked_pages": 92,
+      "layout_flagged_pages": 0
+    },
+    {
+      "filename": "docmind-manuscripts-hindi.pdf",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/25/%28HINDI%29_Manuscripts_Digitizing_Manuscripts_Guidelines.pdf",
+      "pdf_sha256": "7744dca0c9759f2c00645a4c052c9bc3f45390178b41a4c4c16285fddd6c4882",
+      "expected_semantic_sha256": "37d57d7297e58fa2e6fb554a376faf1473f8c67231a682bac2c45d4174d4612f",
+      "expected_language": "hi",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "attribution": "Manuscripts Digitizing Manuscripts Guidelines, Hindi version, Ilham.nurwansah, Wikimedia Commons"
+    }
+  ]
+}

@@ -34,7 +34,7 @@ def main():
         if args.manifest:
             for source in json.loads(args.manifest.read_text(encoding="utf-8"))["sources"]:
                 path=root/Path(source["filename"]).name
-                request=urllib.request.Request(source["url"],headers={"User-Agent":"Mozilla/5.0"})
+                request=urllib.request.Request(source["url"],headers={"User-Agent":"DocMindResearch/1.0 (+https://github.com/ananyat6979-commits/DocMind)"})
                 with urllib.request.urlopen(request,timeout=60) as response,path.open("wb") as output:
                     size=0
                     while block:=response.read(65536):

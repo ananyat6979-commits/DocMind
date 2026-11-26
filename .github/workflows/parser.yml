@@ -1,7 +1,7 @@
 name: parser isolation
 on:
   push:
-    paths: ["deployment/**", "docmind/ingestion/**", "scripts/parser_isolation_check.py", "scripts/parser_transport_check.py", "reports/releases/r5/parser_equivalence_layout_v1.json", "tests/test_isolation_identity.py", ".github/workflows/parser.yml"]
+    paths: ["deployment/**", "docmind/ingestion/**", "scripts/parser_isolation_check.py", "scripts/parser_transport_check.py", "tests/fixtures/parser_equivalence_quality_v4.json", "tests/test_isolation_identity.py", ".github/workflows/parser.yml"]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -37,7 +37,7 @@ jobs:
           # The host test user differs from the production API UID 10001.
           # Grant only the CI host permission to connect to this temporary socket.
           sudo chmod o+rw /tmp/dm-parser-socket/parser.sock
-          PYTHONPATH=. python scripts/parser_transport_check.py --socket /tmp/dm-parser-socket/parser.sock --manifest reports/releases/r5/parser_equivalence_layout_v1.json
+          PYTHONPATH=. python scripts/parser_transport_check.py --socket /tmp/dm-parser-socket/parser.sock --manifest tests/fixtures/parser_equivalence_quality_v4.json
       - name: Parser logs
         if: always()
         run: docker logs dm-parser || true
