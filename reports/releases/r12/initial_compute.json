@@ -1,0 +1,14 @@
+{
+  "source_commit": "1c529ef167acd3c2cfbc04e01c93716fba06b0ab",
+  "bundle_sha256": "15fb0995c01215e79bf7a10961a952eff62d12ff9dbb531a8e2dcd563a8b10e6",
+  "platform_wall_cap_seconds": 1500,
+  "allocated_count_reserved": 2,
+  "reserved_gpu_seconds": 3000,
+  "paid_compute": false,
+  "hosted_calls": 0,
+  "status": "failed_or_interrupted",
+  "environment_setup_seconds": 215.74362325668335,
+  "error_type": "CalledProcessError",
+  "elapsed_seconds_including_setup": 218.16575956344604,
+  "charged_gpu_seconds": 480
+}

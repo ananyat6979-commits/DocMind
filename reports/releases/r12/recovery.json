@@ -1,0 +1,12 @@
+{
+  "prior_attempt_record_sha256": "9eb5184de2317c3e8489336ce2b11c013b6bc9298c37c312765df083ae2a61ef",
+  "prior_attempt_gpu_seconds": 480,
+  "prior_attempt_predictions": 0,
+  "issue": "Runtime configuration created the output parent before exclusive directory creation.",
+  "correction": "Create the output directory before importing configuration-dependent modules.",
+  "platform_wall_cap_seconds": 1260,
+  "worker_wall_cutoff_seconds": 1200,
+  "reserved_gpu_seconds": 2520,
+  "total_gpu_cap_for_study": 3000,
+  "prompt_and_cohort_unchanged": true
+}

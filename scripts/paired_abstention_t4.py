@@ -13,6 +13,7 @@ from scripts.english_reader_cpu import sha
 
 
 def run(profile, design, deadline, out):
+    out.mkdir(parents=True, exist_ok=False)
     os.environ.pop("GROQ_API_KEY", None)
     os.environ.update(
         DOCMIND_TEST_MODE="0",
@@ -50,7 +51,6 @@ def run(profile, design, deadline, out):
     if identities != design["rows"]:
         raise ValueError("Cohort changed")
 
-    out.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(2)
     save(
         out / "identity.json",
