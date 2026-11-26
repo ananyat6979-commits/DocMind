@@ -1,0 +1,13 @@
+{
+  "source_commit": "9443a969e081785127842fade21bac90c1e0839c",
+  "bundle_sha256": "4d0241f1d274e8426aa3fc719218aa12a80e1d7bbb9a180fab6371ded813bd2b",
+  "scope": "Quantized paired CPU comparison",
+  "wall_reservation_seconds": 7200,
+  "gpu_seconds": 0,
+  "hosted_calls": 0,
+  "started_unix": 1795670326.2394192,
+  "status": "failed_or_interrupted",
+  "environment_setup_seconds": 104.6024284362793,
+  "error_type": "CalledProcessError",
+  "elapsed_seconds": 107.42802262306213
+}

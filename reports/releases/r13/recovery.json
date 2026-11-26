@@ -1,0 +1,11 @@
+{
+  "issue": "The packaged reader module came from the older CPU bundle, so hash verification rejected the revised prompt before inference.",
+  "previous_attempt_sha256": "d3ea2990086b657f4f8eee4e00fe65b18542d7a88272e4dcdcda48f77cc8927a",
+  "previous_cpu_debit_seconds": 120,
+  "previous_predictions": 0,
+  "retry_wall_reservation_seconds": 7080,
+  "retry_worker_cutoff_seconds": 7020,
+  "frozen_prompts_and_rows_unchanged": true,
+  "gpu_seconds": 0,
+  "hosted_calls": 0
+}
