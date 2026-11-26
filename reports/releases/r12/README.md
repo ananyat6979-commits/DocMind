@@ -1,0 +1,7 @@
+# Both prompt arms failed before returning answers
+
+The 24-question paired T4 check yielded zero usable generations. The first attempt stopped during setup because configuration initialization created the output directory before the runner could create it. Its charge was 480 GPU-seconds. The recovery corrected creation order and produced all 48 checkpoint records, with 24 generation errors in each prompt arm. One device recorded 24 runtime errors and the other recorded 24 floating-point errors. The recorded exception classes do not establish the underlying cause.
+
+The predeclared requested-cohort scorer assigns zero credit to failures. Both arms therefore have zero credited exact matches and zero credited abstentions. The resulting zero paired difference and degenerate bootstrap interval reflect failed service. No prompt quality or abstention effect can be estimated from these data. The [numeric diagnostics](diagnostics.json) show the denominators and unknown token counts.
+
+Recovery took 266.37 wall seconds including setup, with two allocated T4s. Minute-rounded accounting charges 600 GPU-seconds. The combined charge for both attempts was 1080 GPU-seconds, leaving 1920 under the original project ceiling. No hosted or paid compute was used. See the [protocol](PROTOCOL.md), [first attempt](initial_compute.json), [recovery compute](recovery_compute.json) and [ledger](compute_ledger.json).

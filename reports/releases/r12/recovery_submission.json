@@ -1,0 +1,12 @@
+{
+  "kernel_id": "ananyatiwari0212/docmind-paired-abstention-t4",
+  "source_commit": "95044d735cd17ab25045a38154fa347a2b89abe7",
+  "bundle_sha256": "50ff0335cfaf027f6ff6a647173f4d8b550a7833f1117b99b8d4573285cb485e",
+  "bootstrap_sha256": "2e48e1ea0ac6ad68b659918ff3a8509b026c6392abfcb6f581012c32dd4a01c2",
+  "reserved_gpu_seconds": 2520,
+  "expected_allocated_gpu_count": 2,
+  "platform_wall_cap_seconds": 1260,
+  "private": true,
+  "hosted_calls": 0,
+  "prior_attempt_charged_gpu_seconds": 480
+}

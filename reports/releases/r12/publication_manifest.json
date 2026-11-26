@@ -1,0 +1,14 @@
+{
+  "sha256": {
+    "compute_ledger.json": "8e80a69134d359ee76c99c211668b370a5c8d4dff73c4691013444250aa67082",
+    "design.json": "b8eaf0c1e6c60a2554520a65abef88f657b841d9f9049de36c0107f71801155a",
+    "diagnostics.json": "bd97910b9b4f33f2c440096d84351afaa93b49274a4114535b4bc0d964b7969d",
+    "identity.json": "56496943bef402bae74cc6ddfbb59697cbdfb22d082fc64912d5a15e218bd7da",
+    "initial_compute.json": "9eb5184de2317c3e8489336ce2b11c013b6bc9298c37c312765df083ae2a61ef",
+    "PROTOCOL.md": "8913224ffb98aa7f8edd378a2998a0216fe9c01be5d42ea8ef3d0916329d21ea",
+    "README.md": "ee64b2a9741d1624640292f5612bac57184c7962202b8e2f5bec3454f1894653",
+    "recovery.json": "5e78232f80ce0b24be0a5f24baf302e5d1485a598a3556463740564ea1bbe2c6",
+    "recovery_compute.json": "5a286153ae81f7533d923e7af2af413c614893429bd969883e6b6059bc49be12",
+    "recovery_submission.json": "d3797618f0766bcaed1e862a30c0a5bf320321747d52babba7c0ab88b5c21a70"
+  }
+}

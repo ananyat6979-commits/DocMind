@@ -1,0 +1,13 @@
+{
+  "source_commit": "95044d735cd17ab25045a38154fa347a2b89abe7",
+  "bundle_sha256": "50ff0335cfaf027f6ff6a647173f4d8b550a7833f1117b99b8d4573285cb485e",
+  "platform_wall_cap_seconds": 1260,
+  "allocated_count_reserved": 2,
+  "reserved_gpu_seconds": 2520,
+  "paid_compute": false,
+  "hosted_calls": 0,
+  "status": "completed",
+  "environment_setup_seconds": 195.28372430801392,
+  "elapsed_seconds_including_setup": 266.3699507713318,
+  "charged_gpu_seconds": 600
+}

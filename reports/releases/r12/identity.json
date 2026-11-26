@@ -1,0 +1,9 @@
+{
+  "allocated_devices": [
+    "Tesla T4",
+    "Tesla T4"
+  ],
+  "torch": "2.13.0+cu130",
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+}

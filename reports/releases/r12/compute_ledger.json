@@ -1,0 +1,26 @@
+{
+  "prior_gpu_seconds": 18600,
+  "initial_debit_gpu_seconds": 480,
+  "recovery_debit_gpu_seconds": 600,
+  "cumulative_gpu_seconds": 19680,
+  "active_reserved_gpu_seconds": 0,
+  "project_cap_gpu_seconds": 21600,
+  "remaining_gpu_seconds": 1920,
+  "usable_generations": 0,
+  "generation_errors": [
+    {
+      "device_index": 0,
+      "errors": {
+        "RuntimeError": 24
+      }
+    },
+    {
+      "device_index": 1,
+      "errors": {
+        "FloatingPointError": 24
+      }
+    }
+  ],
+  "paid_compute": false,
+  "hosted_calls": 0
+}
