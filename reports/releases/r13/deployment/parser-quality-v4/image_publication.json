@@ -1,0 +1,14 @@
+{
+  "source_commit": "a65968f85323478a30ba7f006f16ddca43866ab2",
+  "image": "ghcr.io/ananyat6979-commits/docmind",
+  "digest": "sha256:d7ace7c78d27652b43f6fa251ead89f0556dd1f4794927e3c698e0b8f220fc9a",
+  "buildkit_predicate_types": [
+    "https://slsa.dev/provenance/v1",
+    "https://spdx.dev/Document"
+  ],
+  "signed_provenance_workflow": "https://github.com/ananyat6979-commits/DocMind/actions/runs/45808688816",
+  "main_only_attestation_job": "success",
+  "offline_demo_network_disabled_test": "passed",
+  "anonymous_manifest_access_verified": true,
+  "verification_scope": "Verified anonymous access, content digest equality and BuildKit predicate references. The linked workflow built, exercised and attested the image."
+}
