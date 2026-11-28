@@ -45,7 +45,7 @@ from pydantic import BaseModel, Field
 
 from docmind.agent.reader import CitedReActReader, CitedReader
 from docmind.config import CONFIG
-from docmind.ingestion.loader import LOADERS
+from docmind.ingestion.loader import LOADERS, UnusablePdfTextError
 from docmind.ingestion.pipeline import ingest
 from docmind.llm.execution import CapacityExceeded, DeadlineExceeded, cpu_work
 from docmind.llm.groq_client import (
@@ -353,6 +353,8 @@ def ingest_documents(req: IngestRequest):
         )
     except HTTPException:
         raise
+    except UnusablePdfTextError as exc:
+        raise HTTPException(status_code=422, detail=f"{exc} {exc.action}") from exc
     except Exception as exc:
         logger.exception("Ingestion failed")
         raise HTTPException(
@@ -449,6 +451,8 @@ def upload(
         )
     except HTTPException:
         raise
+    except UnusablePdfTextError as exc:
+        raise HTTPException(status_code=422, detail=f"{exc} {exc.action}") from exc
     except Exception as exc:
         from docmind.ingestion.parser_client import ParserUnavailable
 

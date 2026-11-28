@@ -6,6 +6,14 @@
 `POST /upload` for multipart document uploads. Ingestion returns `file_ids`,
 `chunks_added`, and `cached` instead of only a chunk count.
 
+### PDF extraction failures
+
+Single-file ingestion distinguishes a PDF with no extractable text from a PDF
+whose extracted text failed quality checks. Synchronous routes return 422 with
+guidance. Background jobs expose code UnusablePdfTextError and the corresponding
+action in error_detail. Both cases require a new usable source export or OCR
+outside DocMind before retrying, depending on the failure.
+
 ## Querying
 
 `POST /query` accepts an optional `file_ids` list to scope retrieval. Its

@@ -4,10 +4,13 @@ import threading
 import time
 import uuid
 from docmind.db import connect
+from docmind.ingestion.loader import UnusablePdfTextError
 from docmind.ingestion.pipeline import ingest
 
 def failure_detail(exc):
     code = type(exc).__name__
+    if isinstance(exc, UnusablePdfTextError):
+        return json.dumps({"code": code, "message": str(exc), "action": exc.action})
     actions = {
         "ParserUnavailable": "Start the isolated parser service, then submit the upload again.",
         "EmbeddingModelMismatch": "Build a separate corpus with the configured representation; retain the original store.",

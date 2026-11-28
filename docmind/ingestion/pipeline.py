@@ -26,6 +26,7 @@ from docmind.ingestion.chunker import chunk_document
 from docmind.ingestion.loader import (
     LOADERS,
     EmptyDocumentError,
+    UnusablePdfTextError,
     file_sha256,
     iter_supported_files,
     load_document,
@@ -173,12 +174,9 @@ def _ingest_file(
 
     units = load_document(path, expected_language=expected_language, encoding=encoding)
     if not units or not any(unit.content.strip() for unit in units):
-        hint = (
-            " Run OCR first if this is a scanned PDF."
-            if path.suffix.lower() == ".pdf"
-            else ""
-        )
-        raise EmptyDocumentError(f"No extractable text in '{path.name}'." + hint)
+        if path.suffix.lower() == ".pdf":
+            raise UnusablePdfTextError(text_extracted=False)
+        raise EmptyDocumentError(f"No extractable text in '{path.name}'.")
 
     lineage: Dict[str, Any] = {
         "preprocessing": preprocessing,
@@ -236,6 +234,11 @@ def _ingest_file(
             chunks.append(c)
 
     if not chunks:
+        if path.suffix.lower() == ".pdf" and all(
+            unit.metadata.get("extraction_quality", {}).get("quarantined")
+            for unit in units
+        ):
+            raise UnusablePdfTextError(text_extracted=True)
         raise EmptyDocumentError(f"'{path.name}' produced zero chunks.")
 
     embeddings = embed_texts(

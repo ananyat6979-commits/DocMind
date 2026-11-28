@@ -242,3 +242,46 @@ def test_numeric_watermark_page_is_quarantined_without_discarding_values():
     for text in ("12345678901234567", "12.5 300 2025 2026", "१२.५ ३०० २०२५"):
         assert not extraction_quality(text)["quarantined"]
     assert not extraction_quality("\n".join(str(1000000000000000+i) for i in range(40)))["quarantined"]
+
+
+
+@pytest.mark.parametrize(
+    ("text", "expected", "action"),
+    [
+        ("", "No text was extractable", "run OCR"),
+        ("private extracted content", "failed extraction quality checks", "Unicode export"),
+    ],
+)
+def test_unusable_pdf_explains_failure_without_retaining_upload(
+    monkeypatch, text, expected, action
+):
+    from docmind.jobs import IngestionQueue
+
+    api, client = _client(monkeypatch)
+    source = Document(
+        content=text,
+        source="source.pdf",
+        metadata={"page": 1, "extraction_quality": {"quarantined": True}},
+    )
+    monkeypatch.setattr(
+        "docmind.ingestion.pipeline.load_document", lambda *args, **kwargs: [source]
+    )
+    payload = {"file": ("source.pdf", b"%PDF-1.4 fixture", "application/pdf")}
+    result = client.post("/upload", files=payload)
+    assert result.status_code == 422
+    assert expected in result.json()["detail"]
+    assert action in result.json()["detail"]
+    assert "private extracted content" not in result.text
+
+    queue = IngestionQueue(api.get_store().db_path)
+    monkeypatch.setattr(api.app.state, "ingestion_queue", queue, raising=False)
+    submitted = client.post("/uploads/jobs", files=payload)
+    assert submitted.status_code == 202
+    assert queue.run_one()
+    job = client.get("/ingest/jobs/" + submitted.json()["job_id"]).json()
+    assert job["status"] == "failed"
+    assert job["error_detail"]["code"] == "UnusablePdfTextError"
+    assert expected in job["error_detail"]["message"]
+    assert action in job["error_detail"]["action"]
+    assert not api.get_store().list_documents()
+    assert not list((CONFIG.data_dir / "uploads").rglob("*.pdf"))

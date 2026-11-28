@@ -24,6 +24,19 @@ class EmptyDocumentError(ValueError):
     """Raised when a file parses but yields no extractable text (e.g. scanned PDF)."""
 
 
+class UnusablePdfTextError(EmptyDocumentError):
+    """A parsed PDF cannot contribute evidence to the corpus."""
+
+    def __init__(self, *, text_extracted: bool) -> None:
+        if text_extracted:
+            message = "The PDF text failed extraction quality checks."
+            self.action = "Upload a Unicode export from the source document."
+        else:
+            message = "No text was extractable from the PDF."
+            self.action = "If this PDF is scanned, run OCR before uploading."
+        super().__init__(message)
+
+
 def file_sha256(path: Union[str, Path], block: int = 1 << 20) -> str:
     h = hashlib.sha256()
     with open(path, "rb") as f:
