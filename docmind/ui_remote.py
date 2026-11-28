@@ -2,6 +2,7 @@
 import json
 import os
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 
@@ -41,7 +42,9 @@ def render():
     if principal.get("generation_mode") == "offline_extractive_demo":
         st.info("Offline workflow demonstration. The extractive reader does not measure generative answer quality.")
     if st.session_state.get("response_actor")!=principal["actor_id"]:
-        st.session_state.response_ids=[];st.session_state.response_actor=principal["actor_id"]
+        st.session_state.response_ids = []
+        st.session_state.response_actor = principal["actor_id"]
+        st.session_state.pop("ingestion_job", None)
     roles=principal["roles"]
     try:
         documents=request("GET","/documents")
@@ -50,13 +53,25 @@ def render():
                 st.warning(document["filename"]+": some pages were quarantined; answers cover readable pages only.")
         if "ingestor" in roles:
             uploaded=st.sidebar.file_uploader("Add a document",type=["pdf","docx","txt","md"])
-            if uploaded is not None and st.sidebar.button("Upload document"):
-                job=request("POST","/uploads/jobs",upload=uploaded)
-                st.session_state.ingestion_job=job["job_id"]
+            if uploaded is not None:
+                languages = {"Auto-detect": None, "English": "en", "Hindi": "hi"}
+                language = st.sidebar.selectbox("Document language", list(languages))
+                if st.sidebar.button("Upload document"):
+                    path = "/uploads/jobs"
+                    if languages[language] is not None:
+                        path += "?" + urllib.parse.urlencode(
+                            {"expected_language": languages[language]}
+                        )
+                    job = request("POST", path, upload=uploaded)
+                    st.session_state.ingestion_job = job["job_id"]
             if st.session_state.get("ingestion_job") and st.sidebar.button("Check upload status"):
                 job=request("GET","/ingest/jobs/"+st.session_state.ingestion_job)
                 st.sidebar.write(job["status"])
-                if job.get("error_detail"):st.sidebar.warning(job["error_detail"].get("action", job["error_detail"].get("message")))
+                error = job.get("error_detail") or {}
+                if error.get("message"):
+                    st.sidebar.warning(error["message"])
+                if error.get("action"):
+                    st.sidebar.caption(error["action"])
                 if job.get("result"):
                     for item in json.loads(job["result"]).get("files", []):
                         st.sidebar.write(item["filename"] + ": " + item["status"])
