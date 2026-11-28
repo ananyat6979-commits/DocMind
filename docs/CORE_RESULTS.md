@@ -98,3 +98,21 @@ The supplied-passage quantized reader completed all 92 frozen English SQuAD2 que
 The post-hoc raw-output check found that all 92 responses omitted the explicit abstention field. None produced a parsed abstention. Of the 30 unanswerable cases scored as valid short answers, 25 reached draft status. The diagnostic counts field presence and routing and does not judge semantic refusals. See the [aggregate abstention diagnostic](../reports/releases/r11/abstention_diagnostic.json).
 
 The reader prompt now asks for the evidence decision first and shows the same three root fields for answers and abstentions. The parser still accepts earlier answer objects that omit the flag. The R11 experiment used its pinned prior prompt. A separate 24-question paired CPU experiment tested the prompt change. Valid abstention improved from 0/12 to 4/12, and exact match rose from 7/24 to 12/24. The revised prompt tied the always-abstain baseline. The nominal paired bootstrap interval for the abstention gain was +8.3 to +58.3 points. With four discordant cases, a two-sided exact sign test gives p = 0.125. See the [paired result and failure counts](../reports/releases/r13/final/README.md). Five of the eight revised outputs that missed a valid abstention were visible drafts. The other three were held. Examples included answering with a different entity or using a related passage that did not establish the requested relation. These are public-label diagnostics on supplied passages.
+
+
+## Question and quote overlap replay
+
+A post-hoc replay tested whether drafts for unanswerable questions could be screened out by looking for question words in their quotes. It uses the saved R11 English outputs and both R13 prompt arms, with no new inference. The replay starts with completed, non-abstaining drafts and unions the words in their uniquely located quotes. Words are distinct NFC case-folded alphanumeric tokens split on punctuation and underscores. The fixed stop list is: a, an, and, are, as, at, be, been, being, by, did, do, does, for, from, had, has, have, how, in, is, it, of, on, or, that, the, their, them, there, this, those, to, was, were, what, when, where, which, who, whom, whose, why, will, with, would. A draft passes if its quotes include the stated fraction of the remaining question words.
+
+Each cell below gives retained unanswerable drafts / retained exact-match answers. Exact match uses the public short-answer reference. The archived numeric records also give total retained drafts.
+
+| Minimum overlap | R11, 92 questions | R13 previous, 24 questions | R13 revised, same 24 questions |
+|---|---:|---:|---:|
+| Current policy | 37 / 17 | 6 / 7 | 5 / 7 |
+| 50% | 20 / 11 | 4 / 3 | 4 / 4 |
+| 75% | 4 / 5 | 0 / 1 | 1 / 1 |
+| 100% | 0 / 1 | 0 / 0 | 0 / 0 |
+
+On the revised arm, 75% overlap removed four of five unanswerable drafts and six of seven exact matches. Requiring every word removed the remaining unanswerable draft and all seven exact matches. This small retrospective replay measures word overlap and short-answer reference agreement. It leaves human correctness, population risk and independently validated thresholds open. The release policy does not use this check.
+
+[Numeric records and threshold counts](../reports/releases/r13/relevance_replay.json)

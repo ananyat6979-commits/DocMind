@@ -1,0 +1,725 @@
+{
+  "r11": {
+    "requested": 92,
+    "thresholds": {
+      "current": {
+        "visible": 74,
+        "answerable": 37,
+        "unanswerable": 37,
+        "exact_match": 17
+      },
+      "half": {
+        "visible": 43,
+        "answerable": 23,
+        "unanswerable": 20,
+        "exact_match": 11
+      },
+      "three_quarters": {
+        "visible": 12,
+        "answerable": 8,
+        "unanswerable": 4,
+        "exact_match": 5
+      },
+      "all": {
+        "visible": 3,
+        "answerable": 3,
+        "unanswerable": 0,
+        "exact_match": 1
+      }
+    },
+    "numeric_records": [
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 3
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 4
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 5,
+        "terms": 11
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 6,
+        "terms": 9
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 2,
+        "terms": 3
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 1
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 6,
+        "terms": 13
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 8
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 4
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 6,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 4
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 9
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 9
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 3
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 1,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 6,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 10,
+        "terms": 11
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 10
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 2
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 3
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 8
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 2
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 6,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 8
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 3
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 1,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 9
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 5,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 12
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 1,
+        "terms": 2
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 12
+      }
+    ]
+  },
+  "r13_previous": {
+    "requested": 24,
+    "thresholds": {
+      "current": {
+        "visible": 16,
+        "answerable": 10,
+        "unanswerable": 6,
+        "exact_match": 7
+      },
+      "half": {
+        "visible": 9,
+        "answerable": 5,
+        "unanswerable": 4,
+        "exact_match": 3
+      },
+      "three_quarters": {
+        "visible": 3,
+        "answerable": 3,
+        "unanswerable": 0,
+        "exact_match": 1
+      },
+      "all": {
+        "visible": 1,
+        "answerable": 1,
+        "unanswerable": 0,
+        "exact_match": 0
+      }
+    },
+    "numeric_records": [
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 7
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 9
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 0,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 5,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 6
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 4,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 6,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 10
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 2,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 2,
+        "terms": 7
+      }
+    ]
+  },
+  "r13_revised": {
+    "requested": 24,
+    "thresholds": {
+      "current": {
+        "visible": 15,
+        "answerable": 10,
+        "unanswerable": 5,
+        "exact_match": 7
+      },
+      "half": {
+        "visible": 10,
+        "answerable": 6,
+        "unanswerable": 4,
+        "exact_match": 4
+      },
+      "three_quarters": {
+        "visible": 4,
+        "answerable": 3,
+        "unanswerable": 1,
+        "exact_match": 1
+      },
+      "all": {
+        "visible": 1,
+        "answerable": 1,
+        "unanswerable": 0,
+        "exact_match": 0
+      }
+    },
+    "numeric_records": [
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 9
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 1,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 0,
+        "terms": 4
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 4,
+        "terms": 5
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 5,
+        "terms": 8
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 0,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 6
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 4,
+        "terms": 5
+      },
+      {
+        "answerable": false,
+        "exact_match": 0.0,
+        "matched": 5,
+        "terms": 9
+      },
+      {
+        "answerable": true,
+        "exact_match": 0.0,
+        "matched": 6,
+        "terms": 7
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 3,
+        "terms": 10
+      },
+      {
+        "answerable": true,
+        "exact_match": 1.0,
+        "matched": 4,
+        "terms": 7
+      }
+    ]
+  }
+}
