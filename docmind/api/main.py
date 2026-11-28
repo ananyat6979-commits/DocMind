@@ -240,7 +240,7 @@ class IngestResponse(BaseModel):
 
 class QueryRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
-    file_ids: Optional[List[str]] = Field(default=None, max_length=100)
+    file_ids: Optional[List[str]] = Field(default=None, min_length=1, max_length=100)
     user: str = Field(default="anonymous", max_length=100)
 
 

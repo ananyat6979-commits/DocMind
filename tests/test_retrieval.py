@@ -117,3 +117,33 @@ def test_concurrent_explicit_modes_keep_their_required_snapshot(make_file):
         return len(hits)
     with ThreadPoolExecutor(max_workers=4) as pool:
         assert all(pool.map(ask,modes))
+
+
+def test_empty_file_selection_returns_no_chunks(make_file):
+    from docmind.agent.tools import ToolBox
+    from docmind.ingestion.pipeline import ingest
+    from docmind.retrieval.hybrid import MODES, HybridRetriever
+    from docmind.store import CorpusStore
+    from tests.conftest import ALPHA, BETA
+
+    store = CorpusStore()
+    alpha_id, = ingest(make_file("alpha.txt", ALPHA), store=store).file_ids
+    beta_id, = ingest(make_file("beta.txt", BETA), store=store).file_ids
+    retriever = HybridRetriever(store)
+    for mode in MODES:
+        assert retriever.search("coolant temperature", mode=mode)
+        scoped = retriever.search("coolant temperature", mode=mode, file_ids=[alpha_id])
+        assert scoped and {item.chunk.file_id for item in scoped} == {alpha_id}
+        assert retriever.search("coolant temperature", mode=mode, file_ids=[]) == []
+
+    retriever.refresh(mode="hybrid")
+    assert retriever.dense.search("coolant temperature", file_ids=[]) == []
+    assert retriever.sparse.search("coolant temperature", file_ids=[]) == []
+    alpha = retriever.search("coolant temperature", file_ids=[alpha_id])[0].chunk
+    beta = retriever.search("lentil", file_ids=[beta_id])[0].chunk
+    empty = ToolBox(retriever, file_ids=[])
+    assert empty.search_documents("coolant temperature")[0] == []
+    assert empty.get_chunk_context(alpha.chunk_id)[0] == []
+    scoped_tools = ToolBox(retriever, file_ids=[alpha_id])
+    assert scoped_tools.get_chunk_context(alpha.chunk_id)[0]
+    assert scoped_tools.get_chunk_context(beta.chunk_id)[0] == []

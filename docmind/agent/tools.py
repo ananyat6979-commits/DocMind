@@ -23,7 +23,7 @@ class ToolBox:
                  file_ids: Optional[Iterable[str]] = None, context_window: int = 1):
         self.retriever = retriever
         self.store = store or retriever.store
-        self.file_ids: Optional[Set[str]] = set(file_ids) if file_ids else None
+        self.file_ids: Optional[Set[str]] = set(file_ids) if file_ids is not None else None
         self.context_window = context_window
         self.seen: Set[str] = set()   # chunk ids already shown to the model
 
@@ -35,7 +35,7 @@ class ToolBox:
 
     def get_chunk_context(self, chunk_id: str) -> Tuple[List[SearchResult], str]:
         chunk = self.store.get_chunk(chunk_id.strip().strip("'\""))
-        if chunk is None or (self.file_ids and chunk.file_id not in self.file_ids):
+        if chunk is None or (self.file_ids is not None and chunk.file_id not in self.file_ids):
             return [], f"Unknown chunk_id '{chunk_id}'. Use an id from a previous search_documents observation."
         neighbours = self.store.neighbors(chunk, window=self.context_window)
         results = [SearchResult(chunk=c, score=0.0, retriever="context") for c in neighbours]

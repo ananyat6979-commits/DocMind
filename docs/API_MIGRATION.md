@@ -10,7 +10,9 @@
 
 `POST /query` accepts an optional `file_ids` list to scope retrieval. Its
 response now includes a response ID, abstention status, review status, review
-reasons, citation validity, cited-source flags, and LLM call count.
+reasons, citation validity, cited-source flags, and LLM call count. Omit
+the field or pass null to search the authenticated corpus. An explicit
+list must contain at least one document ID. An empty list returns 422.
 
 ## Review and feedback
 

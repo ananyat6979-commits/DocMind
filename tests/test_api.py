@@ -92,3 +92,13 @@ def test_embedding_migration_fails_ready_and_query_without_deleting_library(clie
     result=client.post("/query",json={"question":"coolant temperature"})
     assert result.status_code==503 and "isolated corpus" in result.json()["detail"]
     assert len(client.get("/documents").json())==1
+
+
+def test_explicit_empty_query_scope_is_rejected(client):
+    assert _upload(client, "alpha.txt", ALPHA).status_code == 200
+    question = {"question": "coolant temperature"}
+    response = client.post("/query", json={**question, "file_ids": []})
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["loc"] == ["body", "file_ids"]
+    assert client.post("/query", json=question).status_code == 200
+    assert client.post("/query", json={**question, "file_ids": None}).status_code == 200

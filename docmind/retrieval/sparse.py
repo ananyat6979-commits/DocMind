@@ -107,7 +107,7 @@ class SparseRetriever:
         if not q:
             return []
         scores = self._bm25.get_scores(q)
-        if file_ids:
+        if file_ids is not None:
             assert self._file_ids is not None
             scores = np.where(np.isin(self._file_ids, list(file_ids)), scores, 0.0)
         k = min(top_k, len(scores))

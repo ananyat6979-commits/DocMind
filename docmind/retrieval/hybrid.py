@@ -111,12 +111,14 @@ class HybridRetriever:
             raise ValueError(f"mode must be one of {MODES}")
         if mode == "hybrid_rerank" and self.reranker is None:
             raise ValueError("The requested reranker is disabled; enable it explicitly or select dense/hybrid mode")
+        fids = list(file_ids) if file_ids is not None else None
+        if fids == []:
+            return []
         with self._lock:
             self.refresh(mode=mode)
             dense, sparse = self.dense, self.sparse
         cfg = CONFIG.retriever
         top_k = top_k or cfg.top_k_rerank
-        fids = list(file_ids) if file_ids else None
 
         if mode == "dense":
             return dense.search(query, top_k=top_k, file_ids=fids)

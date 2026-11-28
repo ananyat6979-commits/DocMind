@@ -48,19 +48,18 @@ class DenseRetriever:
         import faiss
         top_k = top_k or CONFIG.retriever.top_k_dense
         k = min(top_k, self._index.ntotal)
-        qv = embed_query(query)
 
-        if file_ids:
+        if file_ids is not None:
             assert self._file_ids is not None
             allowed = np.nonzero(np.isin(self._file_ids, list(file_ids)))[0].astype("int64")
             if allowed.size == 0:
                 return []
             # Exact scoped search keeps access filters independent of ANN candidate depth.
-            values = self._matrix[allowed] @ qv[0]
+            values = self._matrix[allowed] @ embed_query(query)[0]
             chosen = np.argsort(-values, kind="stable")[:min(k, allowed.size)]
             scores, idxs = values[chosen][None, :], allowed[chosen][None, :]
         else:
-            scores, idxs = self._index.search(qv, k)
+            scores, idxs = self._index.search(embed_query(query), k)
 
         return [
             SearchResult(chunk=self._chunks[i], score=float(s), retriever="dense")
